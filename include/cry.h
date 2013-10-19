@@ -27,6 +27,7 @@
 #define _CRY_H_
 
 #include "cry_version.h"
+#include "cry_base64.h"
 
 #endif /* _CRY_H_ */
 

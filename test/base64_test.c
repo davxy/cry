@@ -17,25 +17,28 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry_base64.h
- * @brief   Base-64 encoder/decoder.
- */
+#include <cry.h>
+#include <string.h>
+#include <stdio.h>
 
-#ifndef _CRY_BASE64_H_
-#define _CRY_BASE64_H_
+int main(void)
+{
+    char *s = "Hello World";
+    char buf[64];
+    int len;
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+    if ((len = cry_base64_encode(s, strlen(s), buf)) < 0) {
+        printf("Error: encode\n");
+        return 1;
+    }
+    printf("Ecoded:  %.*s\n", len, buf);
+    
+    if ((len = cry_base64_decode(buf, len, buf)) < 0) {
+        printf("Error: encode\n");
+        return 1;
+    }
+    printf("Decoded: %.*s\n", len, buf);
 
-int cry_base64_encode(const char *in, int len, char *out);
-
-int cry_base64_decode(const char *in, int len, char *out);
-
-#ifdef __cplusplus
+    return 0;
 }
-#endif
-
-#endif /* _CRY_BASE64_H_ */
 

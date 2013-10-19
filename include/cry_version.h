@@ -20,7 +20,6 @@
 /**
  * @file    cry_version.h
  * @brief   Library version value.
- *
  */
 
 #ifndef _CRY_VERSION_H_
