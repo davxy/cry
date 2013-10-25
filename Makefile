@@ -7,7 +7,8 @@ CFLAGS := -O0 -g
 CPPFLAGS := -Iinclude
 
 OBJS := src/cry_version.o \
-        src/cry_base64.o
+        src/cry_base64.o \
+        src/cry_des.o
 
 .PHONY: all clean
 

@@ -5,7 +5,8 @@ CPPFLAGS := -I../include
 LDLIBS := ../libcry.a
 
 TESTS := version_test \
-         base64_test
+         base64_test \
+         des_test
 
 .PHONY: all clean
 
