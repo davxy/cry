@@ -321,7 +321,7 @@ void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
     while (size) {
         des_block_operate(dst, src, ctx->key, 1);
         if (ctx->keylen == 24) {
-            des_block_operate(dst, dst, ctx->key + CRY_DES_BLOCK_SIZE, 1);
+            des_block_operate(dst, dst, ctx->key + CRY_DES_BLOCK_SIZE, 0);
             des_block_operate(dst, dst, ctx->key + 2 * CRY_DES_BLOCK_SIZE, 1);
         }
         src  += CRY_DES_BLOCK_SIZE;
@@ -336,7 +336,7 @@ void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
     while (size) {
         if (ctx->keylen == 24) {
             des_block_operate(dst, src, ctx->key + 2 * CRY_DES_BLOCK_SIZE, 0);
-            des_block_operate(dst, dst, ctx->key + CRY_DES_BLOCK_SIZE, 0);
+            des_block_operate(dst, dst, ctx->key + CRY_DES_BLOCK_SIZE, 1);
             des_block_operate(dst, dst, ctx->key, 0);
         }
         else {
