@@ -17,6 +17,11 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+/**
+ * @file    cry_des.h
+ * @brief   DES cipher.
+ */
+
 #ifndef _CRY_DES_H_
 #define _CRY_DES_H_
 
