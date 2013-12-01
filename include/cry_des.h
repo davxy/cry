@@ -19,20 +19,19 @@
 
 /**
  * @file    cry_des.h
- * @brief   DES cipher.
+ * @brief   DES block cipher.
  */
 
 #ifndef _CRY_DES_H_
 #define _CRY_DES_H_
 
-#include <stdint.h>
 #include <string.h>
 
 /** DES algorithm key size in octets (64 bit) */
 #define CRY_DES_BLOCK_SIZE  8
 
 
-/** Triple DES context */
+/** DES context */
 struct cry_des_ctx {
     unsigned int  keylen; /* 8 for normal DES, 24 for triple DES */
     unsigned char key[3*CRY_DES_BLOCK_SIZE];

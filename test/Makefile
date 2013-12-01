@@ -1,16 +1,19 @@
+LIBCRY := ../libcry.a
+
 CC := gcc
 
 CFLAGS := -O0 -g
 CPPFLAGS := -I../include
-LDLIBS := ../libcry.a
+LDLIBS := $(LIBCRY)
 
 TESTS := version_test \
          base64_test \
-         des_test
+         des_test \
+         aes_test
 
 .PHONY: all clean
 
-all: $(TESTS)
+all: $(TESTS) $(LIBCRY)
 
 clean:
 	$(RM) $(TESTS)
