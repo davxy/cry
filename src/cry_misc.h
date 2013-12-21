@@ -17,21 +17,20 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
+/*
+ * A bounch of helper macros and functions meant for internal use.
  */
 
-#ifndef _CRY_H_
-#define _CRY_H_
+#ifndef _CRY_MISC_H_
+#define _CRY_MISC_H_
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_cbc.h"
-#include "cry_ciph.h"
+/** Statically get array number of elements */
+#define CRY_ARRAY_LEN(ar) (sizeof(ar)/sizeof((ar)[0]))
 
-#endif /* _CRY_H_ */
+/** Macro used to compute the minimum of two integral values. */
+#define CRY_MIN(a, b)     (((a) < (b)) ? (a) : (b))
+/** Macro used to compute the maximum of two integral values. */
+#define CRY_MAX(a, b)     (((a) > (b)) ? (a) : (b))
+
+#endif /* _CRY_MISC_H_ */
 

@@ -27,6 +27,8 @@ Unreleased
 
 ### Added
 
+- CBC block cipher mode of operation
 - AES block cipher
 - DES block cipher
 - Base64 encoder/decoder
+

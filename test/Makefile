@@ -9,7 +9,8 @@ LDLIBS := $(LIBCRY)
 TESTS := version_test \
          base64_test \
          des_test \
-         aes_test
+         aes_test \
+         cbc_test
 
 .PHONY: all clean
 
