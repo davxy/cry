@@ -13,6 +13,7 @@ Block ciphers
 
 - ECB
 - CBC
+- GCM
 
 Utilities
 ---------

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -30,8 +30,9 @@
 #include "cry_base64.h"
 #include "cry_des.h"
 #include "cry_aes.h"
-#include "cry_cbc.h"
 #include "cry_ciph.h"
+#include "cry_cbc.h"
+#include "cry_gcm.h"
 
 #endif /* _CRY_H_ */
 

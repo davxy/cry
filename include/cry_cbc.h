@@ -30,7 +30,7 @@
 /** CTR block size. */
 #define CRY_CBC_BLOCK_SIZE      16
 
-/** Convenience macro to initialize a CBC context. */
+/** Initialization helper macro */
 #define CRY_CBC_INIT(ctx, _crypto_ctx, _crypto_itf) do { \
     memset((ctx), 0U, sizeof(struct cry_cbc_ctx)); \
     (ctx)->ciph_ctx = (_crypto_ctx); \
@@ -39,9 +39,12 @@
 
 /** CBC context structure. */
 struct cry_cbc_ctx {
-    const struct cry_ciph_itf *ciph_itf;  /** Block cipher interface. */
-    void                *ciph_ctx;  /** Block cipher context. */
-    unsigned char       v[CRY_CBC_BLOCK_SIZE]; /* Counter. */
+    /** Block cipher interface. */
+    const struct cry_ciph_itf *ciph_itf;
+    /** Block cipher context. */
+    void                      *ciph_ctx;
+    /** Counter */
+    unsigned char             v[CRY_CBC_BLOCK_SIZE];
 };
 
 typedef struct cry_cbc_ctx cry_cbc_ctx;
