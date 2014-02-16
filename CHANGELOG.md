@@ -31,5 +31,6 @@ Unreleased
 - DES block cipher
 - CBC block cipher mode of operation
 - GCM block cipher mode of operation
+- CTR block cipher mode of operation
 - Base64 encoder/decoder
 

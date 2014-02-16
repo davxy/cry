@@ -14,6 +14,7 @@ Block ciphers
 - ECB
 - CBC
 - GCM
+- CTR
 
 Utilities
 ---------
