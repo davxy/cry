@@ -32,16 +32,16 @@
 
 /* Initialization helper macro */
 #define CRY_GCM_INIT(ctx, _ciph_ctx, _ciph_itf) do { \
-    memset((ctx), 0U, sizeof(struct cry_gcm_ctx)); \
+    memset((ctx), 0, sizeof(struct cry_gcm_ctx)); \
     (ctx)->ciph_ctx = (_ciph_ctx); \
     (ctx)->ciph_itf = (_ciph_itf); \
     } while(0)
 
 /** GCM context. */
 struct cry_gcm_ctx {
-    /** Block cipher. */
+    /** Block cipher context. */
     void                      *ciph_ctx;
-    /** Crypto context interface. */
+    /** Block cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Original counter block */
     unsigned char              iv[CRY_GCM_BLOCK_SIZE];

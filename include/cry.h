@@ -33,6 +33,7 @@
 #include "cry_ciph.h"
 #include "cry_cbc.h"
 #include "cry_gcm.h"
+#include "cry_ctr.h"
 
 #endif /* _CRY_H_ */
 

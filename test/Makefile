@@ -11,7 +11,8 @@ TESTS := version_test \
          des_test \
          aes_test \
          cbc_test \
-		 gcm_test
+         gcm_test \
+         ctr_test
 
 .PHONY: all clean
 

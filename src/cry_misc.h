@@ -32,5 +32,15 @@
 /** Macro used to compute the maximum of two integral values. */
 #define CRY_MAX(a, b)     (((a) > (b)) ? (a) : (b))
 
+/**
+ * Increments a big endian value of a give size.
+ * Used to directly increment a value within a buffer.
+ */
+#define CRY_INCREMENT_BE(val_ptr, val_size) do { \
+    int i = (val_size) - 1; \
+    if (++(val_ptr)[i] == 0) \
+        while (++(val_ptr)[--i] == 0 && i > 0); \
+    } while (0)
+
 #endif /* _CRY_MISC_H_ */
 

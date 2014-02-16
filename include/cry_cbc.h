@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -32,17 +32,17 @@
 
 /** Initialization helper macro */
 #define CRY_CBC_INIT(ctx, _crypto_ctx, _crypto_itf) do { \
-    memset((ctx), 0U, sizeof(struct cry_cbc_ctx)); \
+    memset((ctx), 0, sizeof(struct cry_cbc_ctx)); \
     (ctx)->ciph_ctx = (_crypto_ctx); \
     (ctx)->ciph_itf = (_crypto_itf); \
     } while(0)
 
 /** CBC context structure. */
 struct cry_cbc_ctx {
-    /** Block cipher interface. */
-    const struct cry_ciph_itf *ciph_itf;
     /** Block cipher context. */
     void                      *ciph_ctx;
+    /** Block cipher interface. */
+    const struct cry_ciph_itf *ciph_itf;
     /** Counter */
     unsigned char             v[CRY_CBC_BLOCK_SIZE];
 };

@@ -60,8 +60,7 @@ void cry_cbc_encrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
     }
 }
 
-//#define CBC_BUFFER_LIMIT  512
-#define CBC_BUFFER_LIMIT  16
+#define CBC_BUFFER_LIMIT  512
 
 void cry_cbc_decrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, unsigned int size)

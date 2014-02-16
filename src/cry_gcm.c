@@ -19,18 +19,9 @@
 
 #include "cry_gcm.h"
 #include "cry_memxor.h"
+#include "cry_misc.h"
 #include <string.h>
 #include <stdint.h>
-
-/**
- * Increments a big endian value of a give size.
- * Used to directly increment a value within a buffer.
- */
-#define INCREMENT_BE(val_ptr, val_size) do { \
-    int i = (val_size) - 1; \
-    if (++(val_ptr)[i] == 0) \
-        while (++(val_ptr)[--i] == 0 && i > 0); \
-    } while (0)
 
 static void gcm_gf_add(unsigned char *r, const unsigned char *x,
                        const unsigned char *y)
@@ -179,7 +170,7 @@ void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
     }
 
     memcpy(ctx->ctr, ctx->iv, CRY_GCM_BLOCK_SIZE);
-    INCREMENT_BE(ctx->ctr + CRY_GCM_BLOCK_SIZE - 4, 4);
+    CRY_INCREMENT_BE(ctx->ctr + CRY_GCM_BLOCK_SIZE - 4, 4);
 
     /* Reset the rest of the message-dependent state */
     memset(ctx->x, 0, CRY_GCM_BLOCK_SIZE);
@@ -198,14 +189,14 @@ static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
                src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, dst, ctx->ctr, CRY_GCM_BLOCK_SIZE);
             cry_memxor(dst, src, CRY_GCM_BLOCK_SIZE);
-            INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
+            CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     } else {
         for (; size >= CRY_GCM_BLOCK_SIZE; (size -= CRY_GCM_BLOCK_SIZE,
                src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
             cry_memxor3 (dst, src, buffer, CRY_GCM_BLOCK_SIZE);
-            INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
+            CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     }
 
@@ -213,7 +204,7 @@ static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
         /* A final partial block */
         encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
         cry_memxor3(dst, src, buffer, size);
-        INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
+        CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
     }
 }
 
