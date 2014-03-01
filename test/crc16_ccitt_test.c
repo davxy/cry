@@ -17,24 +17,16 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
- */
+#include <cry.h>
+#include <string.h>
+#include <stdio.h>
 
-#ifndef _CRY_H_
-#define _CRY_H_
+int main(void)
+{
+    char *msg = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
+    printf("crc16(%s) = 0x%x\n", msg, cry_crc16_ccitt(msg, strlen(msg)));
 
-#endif /* _CRY_H_ */
+    return 0;
+}
 

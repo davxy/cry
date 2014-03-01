@@ -17,24 +17,31 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
- */
-
-#ifndef _CRY_H_
-#define _CRY_H_
-
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
 #include "cry_crc.h"
 
-#endif /* _CRY_H_ */
+void cry_crc16_init(struct cry_crc16_ctx *ctx, unsigned short start,
+                    const unsigned short *tab, unsigned char flags)
+{
+    ctx->crc = start;
+    ctx->tab = tab;
+    ctx->flags = flags;
+}
+
+#include <stdint.h>
+
+void cry_crc16_update(struct cry_crc16_ctx *ctx,
+                      const unsigned char *ptr, unsigned int n)
+{
+    while (n--)
+        ctx->crc = ctx->tab[(*ptr++ ^ ctx->crc) & 0xFF] ^ (ctx->crc >> 8);
+}
+
+unsigned short cry_crc16_final(struct cry_crc16_ctx *ctx)
+{
+    if (ctx->flags & CRY_CRC_FLAG_COMPLEMENT)
+        ctx->crc ^= 0xffff;
+    if (ctx->flags & CRY_CRC_FLAG_SWAP)
+        ctx->crc = (ctx->crc << 8) | (ctx->crc >> 8);
+    return (ctx->crc & 0Xffff);
+}
 
