@@ -17,25 +17,41 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
- */
+#include <cry.h>
+#include <string.h>
+#include <stdio.h>
 
-#ifndef _CRY_H_
-#define _CRY_H_
+char *ar[] = {
+    "HelloWorld",
+    "Davy",
+    NULL
+};
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
-#include "cry_md5.h"
+int main(int argc, char **argv)
+{
+    char **asc = ar;
+    unsigned int len, totlen;
+    struct cry_md5_ctx md5;
+    unsigned char md[16];
+    int i;
 
-#endif /* _CRY_H_ */
+    totlen = 0;
 
+    cry_md5_init(&md5);
+    if (argc > 1)
+        asc = &argv[1];
+
+    for (i = 0; asc[i] != NULL; i++) {
+        len = strlen(asc[i]);
+        totlen += len;
+        cry_md5_update(&md5, asc[i], len);
+    }
+    cry_md5_digest(&md5, md);
+
+    printf("MD5: ");
+    for (i = 0; i < 16; i++)
+        printf("%x", md[i]);
+    printf("\n");
+
+    return 0;
+}

@@ -13,7 +13,8 @@ TESTS := version_test \
          cbc_test \
          gcm_test \
          ctr_test \
-         crc16_ccitt_test
+         crc16_ccitt_test \
+         md5_test
 
 .PHONY: all clean
 

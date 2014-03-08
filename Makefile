@@ -15,7 +15,8 @@ OBJS := src/cry_version.o \
         src/cry_gcm.o \
         src/cry_ctr.o \
         src/cry_crc16.o \
-        src/cry_crc16_ccitt.o
+        src/cry_crc16_ccitt.o \
+        src/cry_md5.o
 
 .PHONY: all clean
 
