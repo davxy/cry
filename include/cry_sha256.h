@@ -18,25 +18,41 @@
  */
 
 /**
- * @file    cry.h
- * @brief   CRY Library 
- *
+ * @file    cry_sha256.h
+ * @brief   Secure Hash Algorithm (256)
  */
 
-#ifndef _CRY_H_
-#define _CRY_H_
+#ifndef _CRY_SHA256_H_
+#define _CRY_SHA256_H_
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
-#include "cry_md5.h"
-#include "cry_sha256.h"
+#include <stdint.h>
+#include <stddef.h>
 
-#endif /* _CRY_H_ */
+#define CRY_SHA256_DIGEST_SIZE 32
+
+struct cry_sha256_ctx {
+    unsigned char   data[64];
+    uint32_t        datalen;
+    uint64_t        bitlen;
+    uint32_t        state[8];
+};
+
+typedef struct cry_sha256_ctx cry_sha256_ctx;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void cry_sha256_init(struct cry_sha256_ctx *ctx);
+
+void cry_sha256_update(struct cry_sha256_ctx *ctx, const unsigned char *data,
+                       size_t size);
+
+void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *digest);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _CRY_SHA256_H */
 

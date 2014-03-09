@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     cry_md5_digest(&md5, md);
 
     printf("MD5: ");
-    for (i = 0; i < 16; i++)
+    for (i = 0; i < sizeof(md); i++)
         printf("%x", md[i]);
     printf("\n");
 
