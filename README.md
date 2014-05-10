@@ -7,7 +7,7 @@ Block ciphers
 -------------
 
 - AES
-- DES and TDES
+- DES and Triple DES
 
 ### Block cipher mode of operation
 
@@ -15,6 +15,23 @@ Block ciphers
 - CBC
 - GCM
 - CTR
+
+Message authentication code
+---------------------------
+
+- CMAC
+
+Hash
+----
+
+### Cryptographic hash
+
+- MD5
+- SHA-256
+
+### CRC
+
+- CRC16-CCITT
 
 Utilities
 ---------

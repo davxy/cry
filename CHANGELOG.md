@@ -22,8 +22,8 @@ Given a version number MAJOR.MINOR.PATCH
 - PATCH incremented for bug fixes
 
 
-Unreleased
-----------
+[0.0.1] - 2014-05-10
+--------------------
 
 ### Added
 
@@ -32,5 +32,9 @@ Unreleased
 - CBC block cipher mode of operation
 - GCM block cipher mode of operation
 - CTR block cipher mode of operation
+- MD5 message digest
+- SHA256 message digest
+- CMAC message authentication code
 - Base64 encoder/decoder
+- CRC16-CCITT
 
