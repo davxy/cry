@@ -341,7 +341,7 @@ static void aes_block_decrypt(struct cry_aes_ctx *ctx,
 
 
 void cry_aes_key_set(struct cry_aes_ctx *ctx, const unsigned char *key,
-                     unsigned int size)
+                     size_t size)
 {
 
     /* rounds = key size in 4-byte words + 6 */
@@ -350,7 +350,7 @@ void cry_aes_key_set(struct cry_aes_ctx *ctx, const unsigned char *key,
 }
 
 void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     while (size >= CRY_AES_BLOCK_SIZE) { 
         aes_block_encrypt(ctx, dst, src);
@@ -361,7 +361,7 @@ void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
 }
 
 void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     while (size >= CRY_AES_BLOCK_SIZE) {
         aes_block_decrypt(ctx, dst, src);
@@ -376,7 +376,7 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
  */
 
 static void cry_aes_xxx_encrypt(unsigned char *dst, const unsigned char *src,
-                                unsigned int size, const unsigned char *key,
+                                size_t size, const unsigned char *key,
                                 unsigned int keysize)
 {
     struct cry_aes_ctx ctx;
@@ -386,7 +386,7 @@ static void cry_aes_xxx_encrypt(unsigned char *dst, const unsigned char *src,
 }
 
 static void cry_aes_xxx_decrypt(unsigned char *dst, const unsigned char *src,
-                                unsigned int size, const unsigned char *key,
+                                size_t size, const unsigned char *key,
                                 unsigned int keysize)
 {
     struct cry_aes_ctx ctx;
@@ -396,37 +396,37 @@ static void cry_aes_xxx_decrypt(unsigned char *dst, const unsigned char *src,
 }
 
 void cry_aes_128_encrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key)
+                         size_t size, const unsigned char *key)
 {
     cry_aes_xxx_encrypt(dst, src, size, key, 16);
 }
 
 void cry_aes_128_decrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key)
+                         size_t size, const unsigned char *key)
 {
     cry_aes_xxx_decrypt(dst, src, size, key, 16);
 }
 
 void cry_aes_192_encrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key)
+                         size_t size, const unsigned char *key)
 {
     cry_aes_xxx_encrypt(dst, src, size, key, 24);
 }
 
 void cry_aes_192_decrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key)
+                         size_t size, const unsigned char *key)
 {
     cry_aes_xxx_decrypt(dst, src, size, key, 24);
 }
 
 void cry_aes_256_encrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key)
+                         size_t size, const unsigned char *key)
 {
     cry_aes_xxx_encrypt(dst, src, size, key, 32);
 }
 
 void cry_aes_256_decrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key)
+                         size_t size, const unsigned char *key)
 {
     cry_aes_xxx_decrypt(dst, src, size, key, 32);
 }

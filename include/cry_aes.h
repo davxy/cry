@@ -25,6 +25,8 @@
 #ifndef _CRY_AES_H_
 #define _CRY_AES_H_
 
+#include <stddef.h>
+
 #define CRY_AES_BLOCK_SIZE  16
 
 struct cry_aes_ctx {
@@ -46,7 +48,7 @@ extern "C"{
  * @param size  Key size. Must be 16 for AES-128, 24 for AES-192, 32 for AES-256
  */
 void cry_aes_key_set(struct cry_aes_ctx *ctx, const unsigned char *key,
-                     unsigned int size);
+                     size_t size);
 
 /**
  * Encrypt the data pointed by src into dst.
@@ -57,7 +59,7 @@ void cry_aes_key_set(struct cry_aes_ctx *ctx, const unsigned char *key,
  * @param size  Size of the data. Must be a multiple of 16.
  */
 void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+                     const unsigned char *src, size_t size);
 
 /**
  * Decrypt the data pointed by src into dst.
@@ -69,29 +71,29 @@ void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
  * @param size  Size of the data. Must be a multiple of 16.
  */
 void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+                     const unsigned char *src, size_t size);
 
 /*
  * Wrappers
  */
 
 void cry_aes_128_encrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key);
+                         size_t size, const unsigned char *key);
 
 void cry_aes_128_decrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key);
+                         size_t size, const unsigned char *key);
 
 void cry_aes_192_encrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key);
+                         size_t size, const unsigned char *key);
 
 void cry_aes_192_decrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key);
+                         size_t size, const unsigned char *key);
 
 void cry_aes_256_encrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key);
+                         size_t size, const unsigned char *key);
 
 void cry_aes_256_decrypt(unsigned char *dst, const unsigned char *src,
-                         unsigned int size, const unsigned char *key);
+                         size_t size, const unsigned char *key);
 
 #ifdef __cplusplus
 }

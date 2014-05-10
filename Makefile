@@ -17,7 +17,8 @@ OBJS := src/cry_version.o \
         src/cry_crc16.o \
         src/cry_crc16_ccitt.o \
         src/cry_md5.o \
-        src/cry_sha256.o
+        src/cry_sha256.o \
+        src/cry_cmac.o
 
 .PHONY: all clean
 
