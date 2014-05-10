@@ -17,37 +17,24 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry_cmac.h
- * @brief   CMAC algorithm
- *
- * Also known as OMAC1 (One-key mac 1).
- */
+#include <cry.h>
+#include <string.h>
+#include <stdio.h>
 
-#ifndef _CRY_CMAC_H_
-#define _CRY_CMAC_H_
+#define KEY "0123456789abcdef"
+#define MSG "HelloWorld"
 
-#include "cry_aes.h"
+int main(int argc, char **argv)
+{
+    unsigned char md[16];
+    int i;
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+    cry_cmac_digest(md, MSG, strlen(MSG), KEY, sizeof(KEY));
 
-/**
- * Cipher based digest (CMAC).
- *
- * @param mac       Digest output (16 octets).
- * @param input     Input data.
- * @param size      Size of input data.
- * @param key       Key data.
- * @param keysize   Size if key.
- */
-void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
-                     size_t size, const unsigned char *key, size_t keysize);
+    printf("CMAC: ");
+    for (i = 0; i < sizeof(md); i++)
+        printf("%x", md[i]);
+    printf("\n");
 
-#ifdef __cplusplus
+    return 0;
 }
-#endif
-
-#endif /* _CRY_CMAC_H_ */
-

@@ -73,27 +73,28 @@ static void padding(unsigned char *pad, const unsigned char *last,
     }
 }
 
-void cry_aes_digest(struct cry_aes_ctx *aes, unsigned char *mac,
-                    const unsigned char *input, size_t size)
+void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
+                     size_t size, const unsigned char *key, size_t keysize)
 {
+    struct cry_aes_ctx aes;
     unsigned char block[16], last[16], padded[16];
     unsigned char k1[16], k2[16];
     size_t n, i;
     int flag;
 
-    cry_aes_cbc_compute_subkeys(aes, k1, k2);
+    cry_aes_key_set(&aes, key, keysize);
 
-    n = (size + 15) / 16;       /* n is number of rounds */
+    cry_aes_cbc_compute_subkeys(&aes, k1, k2);
+
+    n = (size + 15) / 16;  /* n is number of rounds */
     if (n == 0) {
         n = 1;
         flag = 0;
     } else {
         if ((size % 16) == 0)
-            /* last block is a complete block */
-            flag = 1;
+            flag = 1; /* last block is a complete block */
         else
-            /* last block is not complete block */
-            flag = 0;
+            flag = 0; /* last block is not complete block */
     }
 
     if (flag) {
@@ -107,10 +108,10 @@ void cry_aes_digest(struct cry_aes_ctx *aes, unsigned char *mac,
     memset(mac, 0, 16);
     for (i = 0; i < (n - 1); i++) {
         xor_128(block, mac, &input[16*i]);
-        cry_aes_encrypt(aes, mac, block, 16);
+        cry_aes_encrypt(&aes, mac, block, 16);
     }
 
     xor_128(block, mac, last);
-    cry_aes_encrypt(aes, mac, block, 16);
+    cry_aes_encrypt(&aes, mac, block, 16);
 }
 

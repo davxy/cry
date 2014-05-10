@@ -37,6 +37,7 @@
 #include "cry_crc.h"
 #include "cry_md5.h"
 #include "cry_sha256.h"
+#include "cry_cmac.h"
 
 #endif /* _CRY_H_ */
 

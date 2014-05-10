@@ -15,7 +15,8 @@ TESTS := version_test \
          ctr_test \
          crc16_ccitt_test \
          md5_test \
-         sha256_test
+         sha256_test \
+         cmac_test
 
 .PHONY: all clean
 
