@@ -21,6 +21,13 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+[Unreleased]
+------------
+
+### Added
+
+- LRC
+- 8-bit trivial checksum
 
 [0.0.1] - 2014-05-10
 --------------------

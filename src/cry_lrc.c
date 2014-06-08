@@ -17,28 +17,14 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
- */
-
-#ifndef _CRY_H_
-#define _CRY_H_
-
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
-#include "cry_md5.h"
-#include "cry_sha256.h"
-#include "cry_cmac.h"
 #include "cry_sum.h"
 
-#endif /* _CRY_H_ */
+unsigned char cry_lrc(const unsigned char *in, size_t n)
+{
+    unsigned char cs = 0;
+
+    while (n-- > 0)
+        cs += *in++;
+    return ~cs + 1;
+}
 

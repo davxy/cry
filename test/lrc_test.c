@@ -17,28 +17,15 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
- */
+#include <cry.h>
+#include <string.h>
+#include <stdio.h>
 
-#ifndef _CRY_H_
-#define _CRY_H_
+#define MSG "HelloWorld"
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
-#include "cry_md5.h"
-#include "cry_sha256.h"
-#include "cry_cmac.h"
-#include "cry_sum.h"
+int main(int argc, char **argv)
+{
+    printf("LRC(%s): 0x%02x\n", MSG, cry_lrc(MSG, strlen(MSG)));
 
-#endif /* _CRY_H_ */
-
+    return 0;
+}

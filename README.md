@@ -33,6 +33,11 @@ Hash
 
 - CRC16-CCITT
 
+### Checksums
+
+- LRC
+- 8-bit trivial checksum
+
 Utilities
 ---------
 
