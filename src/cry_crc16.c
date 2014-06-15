@@ -30,7 +30,7 @@ void cry_crc16_init(struct cry_crc16_ctx *ctx, unsigned short start,
 #include <stdint.h>
 
 void cry_crc16_update(struct cry_crc16_ctx *ctx,
-                      const unsigned char *ptr, unsigned int n)
+                      const unsigned char *ptr, size_t n)
 {
     while (n--)
         ctx->crc = ctx->tab[(*ptr++ ^ ctx->crc) & 0xFF] ^ (ctx->crc >> 8);

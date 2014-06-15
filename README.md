@@ -32,6 +32,7 @@ Hash
 ### CRC
 
 - CRC16-CCITT
+- CRC16-IBM
 
 ### Checksums
 

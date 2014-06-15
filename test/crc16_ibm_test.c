@@ -25,7 +25,7 @@
 
 int main(void)
 {
-    printf("crc16(%s) = 0x%04x\n", MSG, cry_crc16_ccitt(MSG, strlen(MSG)));
+    printf("crc16-ibm(%s) = 0x%04x\n", MSG, cry_crc16_ibm(MSG, strlen(MSG)));
 
     return 0;
 }

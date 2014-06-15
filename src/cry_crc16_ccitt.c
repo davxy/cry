@@ -60,12 +60,12 @@ void cry_crc16_ccitt_init(struct cry_crc16_ctx *ctx)
                    CRY_CRC_FLAG_COMPLEMENT | CRY_CRC_FLAG_SWAP);
 }
 
-unsigned short cry_crc16_ccitt(const unsigned char *ptr, unsigned int n)
+unsigned short cry_crc16_ccitt(const unsigned char *in, size_t n)
 {
     struct cry_crc16_ctx ctx;
 
     cry_crc16_ccitt_init(&ctx);
-    cry_crc16_update(&ctx, ptr, n);
+    cry_crc16_update(&ctx, in, n);
     return cry_crc16_final(&ctx);
 }
 

@@ -14,6 +14,7 @@ TESTS := version_test \
          gcm_test \
          ctr_test \
          crc16_ccitt_test \
+         crc16_ibm_test \
          md5_test \
          sha256_test \
          cmac_test \

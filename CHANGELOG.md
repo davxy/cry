@@ -28,6 +28,7 @@ Given a version number MAJOR.MINOR.PATCH
 
 - LRC
 - 8-bit trivial checksum
+- CRC16-IBM
 
 [0.0.1] - 2014-05-10
 --------------------

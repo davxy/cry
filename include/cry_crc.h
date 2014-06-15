@@ -28,6 +28,8 @@
 #ifndef _CRY_CRC_H_
 #define _CRY_CRC_H_
 
+#include <stddef.h>
+
 /** CRC flags @{ */
 /** Complement result during finalization */
 #define CRY_CRC_FLAG_COMPLEMENT     (1 << 0)
@@ -65,11 +67,11 @@ void cry_crc16_init(struct cry_crc16_ctx *ctx, unsigned short start,
  * CRC update
  *
  * @param ctx   CRC-16 context.
- * @param ptr   Buffer pointer.
+ * @param in    Buffer pointer.
  * @param n     Number of octets in the buffer.
  */
 void cry_crc16_update(struct cry_crc16_ctx *ctx,
-                      const unsigned char *ptr, unsigned int n);
+                      const unsigned char *in, size_t n);
 
 /**
  * CRC finalize
@@ -92,11 +94,32 @@ void cry_crc16_ccitt_init(struct cry_crc16_ctx *ctx);
 /**
  * CRC-16-CCITT all in one function.
  *
- * @param ptr   Buffer pointer.
+ * @param in    Buffer pointer.
  * @param n     Number of octets in the buffer.
  * @return      CRC value.
  */
-unsigned short cry_crc16_ccitt(const unsigned char *ptr, unsigned int n);
+unsigned short cry_crc16_ccitt(const unsigned char *in, size_t n);
+
+/**
+ * Initialize as a CRC-16-IBM algorithm
+ *
+ * Also known as CRC-16-ANSI.
+ * Used by: Bisync, Modbus, USB, ANSI X.28 and many others.
+ * Polynomial: x^16 + x^15 + x^2 + 1.
+ *
+ * @param ctx   CRC-16 context.
+ */
+void cry_crc16_ibm_init(struct cry_crc16_ctx *ctx);
+
+/**
+ * CRC-16-IBM all in one function.
+ *
+ *
+ * @param in    Buffer pointer.
+ * @param n     Number of octets in the buffer.
+ * @return      CRC value.
+ */
+unsigned short cry_crc16_ibm(const unsigned char *in, size_t n);
 
 #ifdef __cplusplus
 }
