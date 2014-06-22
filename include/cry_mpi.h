@@ -18,28 +18,48 @@
  */
 
 /**
- * @file    cry.h
- * @brief   CRY Library 
- *
+ * @file    cry_mpi.h
+ * @brief   Multiple precision integers.
  */
 
-#ifndef _CRY_H_
-#define _CRY_H_
+#ifndef _CRY_MPI_H_
+#define _CRY_MPI_H_
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
-#include "cry_md5.h"
-#include "cry_sha256.h"
-#include "cry_cmac.h"
-#include "cry_sum.h"
-#include "cry_mpi.h"
+#include <stddef.h>
 
-#endif /* _CRY_H_ */
+typedef unsigned char cry_mpi_digit;
+
+struct cry_mpi {
+    size_t        used;
+    size_t        alloc;
+    cry_mpi_digit *data;
+};
+
+typedef struct cry_mpi cry_mpi;
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+int cry_mpi_init(cry_mpi *a);
+
+void cry_mpi_clear(cry_mpi *a);
+
+int cry_mpi_copy(cry_mpi *d, const cry_mpi *s);
+
+int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s);
+
+int cry_mpi_init_size(cry_mpi *a, unsigned int size);
+
+int cry_mpi_init_int(cry_mpi *a, long i);
+
+void cry_mpi_set_int(cry_mpi *a, long i);
+
+void cry_mpi_print(const cry_mpi *a);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _CRY_MPI_H_ */
 

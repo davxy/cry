@@ -21,13 +21,16 @@ OBJS := src/cry_version.o \
         src/cry_sha256.o \
         src/cry_cmac.o \
         src/cry_cs.o \
-        src/cry_lrc.o
+		src/cry_lrc.o \
+        src/cry_mpi.o
 
 .PHONY: all clean
 
 all: $(OBJS)
 	$(AR) -rcs $(TARGET) $^
+	make -C test
 
 clean:
 	$(RM) $(TARGET) $(OBJS)
+	make -C test clean
 

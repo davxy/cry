@@ -19,7 +19,8 @@ TESTS := version_test \
          sha256_test \
          cmac_test \
          cs_test \
-         lrc_test
+         lrc_test \
+         mpi_test \
 
 .PHONY: all clean
 

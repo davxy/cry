@@ -17,29 +17,29 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/**
- * @file    cry.h
- * @brief   CRY Library 
- *
- */
+#include <cry.h>
+#include <stdio.h>
 
-#ifndef _CRY_H_
-#define _CRY_H_
+int main(void)
+{
+    cry_mpi a, b;
 
-#include "cry_version.h"
-#include "cry_base64.h"
-#include "cry_des.h"
-#include "cry_aes.h"
-#include "cry_ciph.h"
-#include "cry_cbc.h"
-#include "cry_gcm.h"
-#include "cry_ctr.h"
-#include "cry_crc.h"
-#include "cry_md5.h"
-#include "cry_sha256.h"
-#include "cry_cmac.h"
-#include "cry_sum.h"
-#include "cry_mpi.h"
+    cry_mpi_init(&a);
+    cry_mpi_print(&a);
+    cry_mpi_set_int(&a, 0x1234);
+    cry_mpi_print(&a);
+    cry_mpi_clear(&a);
 
-#endif /* _CRY_H_ */
+    cry_mpi_init_int(&a, 0x12345678);
+    cry_mpi_init_copy(&b, &a);
+    cry_mpi_print(&b);
+    cry_mpi_clear(&a);
+    cry_mpi_clear(&b);
 
+    cry_mpi_init_size(&a, 1);
+    cry_mpi_init(&b);
+    printf("with init_size(1) alloc=%d\n", a.alloc);
+    printf("with init() alloc= %d\n", b.alloc);
+    
+    return 0;
+}
