@@ -41,6 +41,10 @@ typedef struct cry_mpi cry_mpi;
 extern "C"{
 #endif
 
+/*
+ * Construction
+ */
+
 int cry_mpi_init(cry_mpi *a);
 
 void cry_mpi_clear(cry_mpi *a);
@@ -54,6 +58,16 @@ int cry_mpi_init_size(cry_mpi *a, unsigned int size);
 int cry_mpi_init_int(cry_mpi *a, long i);
 
 void cry_mpi_set_int(cry_mpi *a, long i);
+
+/*
+ *  Arithmetic
+ */
+
+int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
+/*
+ * Utilities
+ */
 
 void cry_mpi_print(const cry_mpi *a);
 

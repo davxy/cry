@@ -20,7 +20,19 @@
 #include <cry.h>
 #include <stdio.h>
 
-int main(void)
+static void add_test(void)
+{
+    cry_mpi a, b, r;
+
+    cry_mpi_init_int(&a, 0x1234);
+    cry_mpi_init_int(&b, 0x4321);
+    cry_mpi_add(&r, &a, &b);
+    cry_mpi_print(&r);
+    cry_mpi_clear(&a);
+    cry_mpi_clear(&b);
+}
+
+static void init_test(void)
 {
     cry_mpi a, b;
 
@@ -40,6 +52,12 @@ int main(void)
     cry_mpi_init(&b);
     printf("with init_size(1) alloc=%d\n", a.alloc);
     printf("with init() alloc= %d\n", b.alloc);
+}
+
+int main(void)
+{
+    init_test();
+    add_test();
     
     return 0;
 }
