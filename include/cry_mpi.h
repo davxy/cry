@@ -65,9 +65,13 @@ void cry_mpi_set_int(cry_mpi *a, long i);
 
 int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 /*
  * Utilities
  */
+
+int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b);
 
 void cry_mpi_print(const cry_mpi *a);
 

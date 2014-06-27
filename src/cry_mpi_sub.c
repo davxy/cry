@@ -19,21 +19,19 @@
 
 #include "cry_mpi_pvt.h"
 
-int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
     unsigned int min, max, i;
-    cry_mpi_digit t, l, c, *rp, *ap, *bp;
+    cry_mpi_digit c, t1, t2, *rp, *ap, *bp;
 
-    if (a->used < b->used) {
-        const cry_mpi *t = a;
-        a = b;
-        b = t;
-    }
+    if (cry_mpi_cmp(a, b) < 0)
+        return -1; /* negative results are not allowed */
+
     max = a->used;
     min = b->used;
 
-    if (r->alloc < (max + 1)) {
-        if (cry_mpi_grow(r, max + 1) != 0)
+    if (r->alloc < max) {
+        if (cry_mpi_grow(r, max) != 0)
             return -1;
     }
     r->used = max;
@@ -41,27 +39,28 @@ int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     ap = a->data;
     bp = b->data;
     rp = r->data;
-
     c = 0;
     for (i = 0; i < min; i++) {
-        t = (*ap++ + c);
-        c = (t < c);  /* check for wrap, on overflow t is 0 */
-        l = (t + *bp++);
-        c += (l < t); /* check for wrap, if t is 0 then l >= t  */
-        *rp++ = l;
+        t1 = *ap++;
+        t2 = *bp++;
+        *rp++ = (t1 - t2 - c);
+        if (t1 != t2) /* if are equal the carry is unchanged */
+            c = (t1 < t2);
     }
 
+    /*
+     * If there is a borrow, decrease blocks until one does not
+     * reverse rollover
+     */
     for ( ; i < max && c; i++) {
-        *rp = *ap++ + 1;
-        c = (*rp++ == 0);
+        c = (*ap == 0);
+        *rp++ = *ap++ - 1;
     }
-    if (c) {
-        *rp = 1;
-        r->used++;
-    } else {
-        for ( ; i < max; i++)
-            *rp++ = *ap++;
-    }
+    if (c)
+        return -1; /* negative result not allowed */
+    for ( ; i < max; i++)
+        *rp++ = *ap++;
+    cry_mpi_adjust(r); /* Adjust used counter */
     return 0;
 }
 

@@ -21,9 +21,11 @@ OBJS := src/cry_version.o \
         src/cry_sha256.o \
         src/cry_cmac.o \
         src/cry_cs.o \
-		src/cry_lrc.o \
+        src/cry_lrc.o \
         src/cry_mpi.o \
-        src/cry_mpi_add.o
+        src/cry_mpi_cmp.o \
+        src/cry_mpi_add.o \
+        src/cry_mpi_sub.o
 
 .PHONY: all clean
 

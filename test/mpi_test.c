@@ -20,31 +20,26 @@
 #include <cry.h>
 #include <stdio.h>
 
-static void add_test(void)
-{
-    cry_mpi a, b, r;
-
-    cry_mpi_init_int(&a, 0x1234);
-    cry_mpi_init_int(&b, 0x4321);
-    cry_mpi_add(&r, &a, &b);
-    cry_mpi_print(&r);
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
-}
+#define MPI_PRINT(a, msg) do { \
+    printf("%s:\t", msg); \
+    cry_mpi_print(a); \
+    } while(0)
 
 static void init_test(void)
 {
     cry_mpi a, b;
 
+    printf("> MPI init-test\n");
+
     cry_mpi_init(&a);
-    cry_mpi_print(&a);
+    MPI_PRINT(&a, "pre init");
     cry_mpi_set_int(&a, 0x1234);
-    cry_mpi_print(&a);
+    MPI_PRINT(&a, "post init");
     cry_mpi_clear(&a);
 
     cry_mpi_init_int(&a, 0x12345678);
     cry_mpi_init_copy(&b, &a);
-    cry_mpi_print(&b);
+    MPI_PRINT(&b, "after init-copy");
     cry_mpi_clear(&a);
     cry_mpi_clear(&b);
 
@@ -54,10 +49,77 @@ static void init_test(void)
     printf("with init() alloc= %d\n", b.alloc);
 }
 
+static void cmp_test(void)
+{
+    cry_mpi a, b, r;
+
+    printf("> MPI cmp-test\n");
+
+    cry_mpi_init_int(&a, 0x1234);
+    cry_mpi_init_int(&b, 0x4321);
+    cry_mpi_init(&r);
+
+    MPI_PRINT(&a, "a");
+    MPI_PRINT(&b, "b");
+    printf("cmp(a,b) res=%d\n", cry_mpi_cmp(&a, &b));
+    printf("cmp(b,a) res=%d\n", cry_mpi_cmp(&b, &a));
+
+    cry_mpi_clear(&a);
+    cry_mpi_clear(&b);
+    cry_mpi_clear(&r);
+
+}
+
+static void add_test(void)
+{
+    cry_mpi a, b, r;
+
+    printf("> MPI add-test\n");
+
+    cry_mpi_init_int(&a, 0x1234);
+    cry_mpi_init_int(&b, 0x4321);
+    cry_mpi_init(&r);
+
+    cry_mpi_add(&r, &a, &b);
+
+    MPI_PRINT(&a, "a");
+    MPI_PRINT(&b, "b");
+    MPI_PRINT(&r, "a + b");
+
+    cry_mpi_clear(&a);
+    cry_mpi_clear(&b);
+    cry_mpi_clear(&r);
+}
+
+static void sub_test(void)
+{
+    cry_mpi a, b, r;
+
+    printf("> MPI sub-test\n");
+
+    cry_mpi_init_int(&a, 0x55555555);
+    cry_mpi_init_int(&b, 0x1111);
+    cry_mpi_init(&r);
+
+    cry_mpi_sub(&r, &a, &b);
+
+    MPI_PRINT(&a, "a");
+    MPI_PRINT(&b, "b");
+    MPI_PRINT(&r, "a - b");
+
+    cry_mpi_clear(&a);
+    cry_mpi_clear(&b);
+    cry_mpi_clear(&r);
+}
+
+
+
 int main(void)
 {
     init_test();
+    cmp_test();
     add_test();
+    sub_test();
     
     return 0;
 }

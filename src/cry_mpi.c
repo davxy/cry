@@ -46,13 +46,6 @@ int cry_mpi_grow(cry_mpi *a, unsigned int digs)
     return 0;
 }
 
-void cry_mpi_adjust(cry_mpi *a)
-{
-    /* decrease used while the most significant digit is zero */
-    while (a->used > 0 && a->data[a->used - 1] == 0)
-        (a->used)--;
-}
-
 int cry_mpi_init(cry_mpi *a)
 {
     /* allocate required memory and clear it */
