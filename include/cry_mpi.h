@@ -30,6 +30,7 @@
 typedef unsigned char cry_mpi_digit;
 
 struct cry_mpi {
+    int           sign;
     size_t        used;
     size_t        alloc;
     cry_mpi_digit *data;
@@ -63,17 +64,27 @@ void cry_mpi_set_int(cry_mpi *a, long i);
  *  Arithmetic
  */
 
+int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 /*
  * Utilities
  */
 
+int cry_mpi_cmp_abs(const cry_mpi *a, const cry_mpi *b);
+
 int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b);
 
 void cry_mpi_print(const cry_mpi *a);
+
+#define cry_mpi_zero(a) do { \
+    (a)->sign = 0;           \
+    (a)->used = 0;           \
+    } while(0)
 
 #ifdef __cplusplus
 }

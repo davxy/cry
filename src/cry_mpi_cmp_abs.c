@@ -20,34 +20,29 @@
 #include "cry_mpi_pvt.h"
 
 /*
- * Signed addition
+ * Compare two big numbers absolute values.
  */
-int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+int cry_mpi_cmp_abs(const cry_mpi *a, const cry_mpi *b)
 {
-    int ret, rsign;
+    size_t i;
+    cry_mpi_digit *ap, *bp;
 
-    if (a->sign != b->sign) {
-        rsign = a->sign;
-        ret = cry_mpi_add_abs(r, a, b);
-    } else {
-        switch (cry_mpi_cmp_abs(a, b)) {
-            case 1:  /* a > b */
-                rsign = a->sign;
-                ret = cry_mpi_sub_abs(r, a, b);
-                break;
-            case -1: /* a < b */
-                rsign = 1 - b->sign;
-                ret = cry_mpi_sub_abs(r, b, a);
-                break;
-            default:
-                rsign = 0;
-                cry_mpi_zero(r);
-                ret = 0;
-                break;
-        }
+    if (a->used < b->used)
+        return -1;
+    else if (a->used > b->used)
+        return 1;
+
+    i = a->used;
+    ap = &a->data[i - 1];
+    bp = &b->data[i - 1];
+    while (i-- > 0) {
+       if (*ap < *bp)
+           return -1;
+       if (*ap > *bp)
+           return 1;
+       ap--;
+       bp--;
     }
-    if (ret == 0)
-        r->sign = rsign;
-    return ret;
+    return 0;
 }
 

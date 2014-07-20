@@ -17,7 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include "cry_mpi.h"
+#include "cry_mpi_pvt.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -56,6 +56,7 @@ int cry_mpi_init(cry_mpi *a)
     /* finalize the initialization */
     a->used = 0;
     a->alloc = MPI_PREC;
+    a->sign = 0;
     return 0;
 }
 
@@ -70,6 +71,7 @@ int cry_mpi_init_size(cry_mpi *a, unsigned int size)
 
     a->used = 0;
     a->alloc = size;
+    a->sign = 0;
     return 0;
 }
 
@@ -88,6 +90,13 @@ int cry_mpi_init_int(cry_mpi *a, long i)
 
 void cry_mpi_set_int(cry_mpi *a, long i)
 {
+    if (i < 0) {
+        a->sign = 1;
+        i = -i;
+    } else {
+        a->sign = 0;
+    }
+
     while (i != 0) {
         a->data[a->used++] = (unsigned char) i;
         i >>= 8;
@@ -98,9 +107,11 @@ void cry_mpi_clear(cry_mpi *a)
 {
     if (a->data != NULL)
         free(a->data);
+    /* reset the members to make debugging easier */
     a->data = NULL;
     a->alloc = 0;
     a->used = 0;
+    a->sign = 0;
 }
 
 int cry_mpi_copy(cry_mpi *d, const cry_mpi *s)
@@ -123,6 +134,7 @@ int cry_mpi_copy(cry_mpi *d, const cry_mpi *s)
     for (i = 0; i < s->used; i++)
         d->data[i] = s->data[i];
     d->used = s->used;
+    d->sign = s->sign;
     return 0;
 }
 

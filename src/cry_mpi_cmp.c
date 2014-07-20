@@ -20,29 +20,21 @@
 #include "cry_mpi_pvt.h"
 
 /*
- * Compare two big numbers absolute values.
+ * Compare two big numbers values.
  */
 int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b)
 {
-    size_t i;
-    cry_mpi_digit *ap, *bp;
+    int ret;
 
-    if (a->used < b->used)
-        return -1;
-    else if (a->used > b->used)
-        return 1;
-
-    i = a->used;
-    ap = &a->data[i - 1];
-    bp = &b->data[i - 1];
-    while (i-- > 0) {
-       if (*ap < *bp)
-           return -1;
-       if (*ap > *bp)
-           return 1;
-       ap--;
-       bp--;
+    if (a->sign > b->sign)
+        ret = -1;  /* a is negative and b is positive */
+    else if (a->sign < b->sign)
+        ret = 1;   /* a is positive and b is negative */
+    else {
+        ret = cry_mpi_cmp_abs(a, b);
+        if (a->sign == 1)
+            ret = -ret; /* negative numbers */
     }
-    return 0;
+    return ret;
 }
 

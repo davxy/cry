@@ -23,6 +23,9 @@ OBJS := src/cry_version.o \
         src/cry_cs.o \
         src/cry_lrc.o \
         src/cry_mpi.o \
+        src/cry_mpi_cmp_abs.o \
+        src/cry_mpi_add_abs.o \
+        src/cry_mpi_sub_abs.o \
         src/cry_mpi_cmp.o \
         src/cry_mpi_add.o \
         src/cry_mpi_sub.o

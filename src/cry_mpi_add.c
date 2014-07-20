@@ -21,47 +21,30 @@
 
 int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    unsigned int min, max, i;
-    cry_mpi_digit t, l, c, *rp, *ap, *bp;
+    int ret, rsign;
 
-    if (a->used < b->used) {
-        const cry_mpi *t = a;
-        a = b;
-        b = t;
-    }
-    max = a->used;
-    min = b->used;
-
-    if (r->alloc < (max + 1)) {
-        if (cry_mpi_grow(r, max + 1) != 0)
-            return -1;
-    }
-    r->used = max;
-
-    ap = a->data;
-    bp = b->data;
-    rp = r->data;
-
-    c = 0;
-    for (i = 0; i < min; i++) {
-        t = (*ap++ + c);
-        c = (t < c);  /* check for wrap, on overflow t is 0 */
-        l = (t + *bp++);
-        c += (l < t); /* check for wrap, if t is 0 then l >= t  */
-        *rp++ = l;
-    }
-
-    for ( ; i < max && c; i++) {
-        *rp = *ap++ + 1;
-        c = (*rp++ == 0);
-    }
-    if (c) {
-        *rp = 1;
-        r->used++;
+    if (a->sign == b->sign) {
+        rsign = a->sign;
+        ret = cry_mpi_add_abs(r, a, b);
     } else {
-        for ( ; i < max; i++)
-            *rp++ = *ap++;
+        switch (cry_mpi_cmp_abs(a, b)) {
+        case 1:  /* a > b */
+            rsign = a->sign;
+            ret = cry_mpi_sub_abs(r, a, b);
+            break;
+        case -1: /* a < b */
+            rsign = b->sign;
+            ret = cry_mpi_sub_abs(r, b, a);
+            break;
+        default:
+            rsign = 0;
+            cry_mpi_zero(r);
+            ret = 0;
+            break;
+        }
     }
-    return 0;
+    if (ret == 0)
+        r->sign = rsign;
+    return ret;
 }
 
