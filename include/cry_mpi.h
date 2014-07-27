@@ -27,6 +27,15 @@
 
 #include <stddef.h>
 
+/* Number of bytes in one digit */
+#define MPI_DIGIT_BYTES         sizeof(cry_mpi_digit)
+/* Number of bits in one digit */
+#define MPI_DIGIT_BITS          (MPI_DIGIT_BYTES << 3)
+/* Bits to digits */
+#define MPI_BITS_TO_DIGS(a)     ((a != 0) ? ((a) - 1)/MPI_DIGIT_BITS + 1 : 0)
+/* Octets to digits */
+#define MPI_BYTES_TO_DIGS(a)    ((a != 0) ? ((a) - 1)/MPI_DIGIT_BYTES + 1 : 0)
+
 typedef unsigned char cry_mpi_digit;
 
 struct cry_mpi {
@@ -60,6 +69,11 @@ int cry_mpi_init_int(cry_mpi *a, long i);
 
 void cry_mpi_set_int(cry_mpi *a, long i);
 
+int cry_mpi_init_bin(cry_mpi *a, const void *b, unsigned int size);
+
+int cry_mpi_load_bin(cry_mpi *a, const void *b, unsigned int size);
+
+int cry_mpi_store_bin(const cry_mpi *a, void *b, unsigned int size, int pad);
 /*
  *  Arithmetic
  */
@@ -85,6 +99,11 @@ void cry_mpi_print(const cry_mpi *a);
     (a)->sign = 0;           \
     (a)->used = 0;           \
     } while(0)
+
+size_t cry_mpi_count_bits(const cry_mpi *a);
+
+#define cry_mpi_count_bytes(a) \
+    ((cry_mpi_count_bits(a) + 7) / 8)
 
 #ifdef __cplusplus
 }

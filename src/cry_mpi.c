@@ -149,6 +149,72 @@ int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s)
     return res;
 }
 
+/*
+ * Quick way to get number of bits in a word
+ */
+static size_t word_size_bits(unsigned long l)
+{
+    static const unsigned char bits[256] = {
+        0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+        7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+        7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+        7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+        7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    };
+
+#if __WORDSIZE == 64
+    if (l & 0xffffffff00000000L) {
+        if (l & 0xffff000000000000L) {
+            if (l & 0xff00000000000000L)
+                return (bits[(int)(l >> 56)] + 56);
+            else
+                return (bits[(int)(l >> 48)] + 48);
+        } else {
+            if (l & 0x0000ff0000000000L)
+                return (bits[(int)(l >> 40)] + 40);
+            else
+                return (bits[(int)(l >> 32)] + 32);
+        }
+    } else {
+#endif
+        if (l & 0xffff0000L) {
+            if (l & 0xff000000L)
+                return (bits[(int)(l >> 24L)] + 24);
+            else
+                return (bits[(int)(l >> 16L)] + 16);
+        } else {
+            if (l & 0xff00L)
+                return (bits[(int)(l >> 8)] + 8);
+            else
+                return (bits[(int)(l)]);
+        }
+#if __WORDSIZE == 64
+    }
+#endif
+}
+
+/*
+ * Big number size in bits
+ */
+size_t cry_mpi_count_bits(const cry_mpi *a)
+{
+    if (a->used == 0)
+        return 0;
+    return ((a->used-1) * MPI_DIGIT_BITS) +
+            word_size_bits(a->data[a->used-1]);
+}
+
 void cry_mpi_print(const cry_mpi *a)
 {
     int i;
