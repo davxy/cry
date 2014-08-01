@@ -29,7 +29,8 @@ OBJS := src/cry_version.o \
         src/cry_mpi_cmp.o \
         src/cry_mpi_add.o \
         src/cry_mpi_sub.o \
-        src/cry_mpi_bin.o
+        src/cry_mpi_bin.o \
+        src/cry_mpi_list.o
 
 .PHONY: all clean
 

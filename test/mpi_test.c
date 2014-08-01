@@ -49,6 +49,17 @@ static void init_test(void)
     printf("with init() alloc= %d\n", b.alloc);
 }
 
+static void init_list_test(void)
+{
+    struct cry_mpi a, b, c;
+
+    printf("> MPI init-list-test\n");
+
+    if (cry_mpi_init_list(&a, &b, &c, NULL) != 0)
+        printf("Error: mpi_init_list\n");
+    cry_mpi_clear_list(&a, &b, &c, NULL);
+}
+
 static void init_bin_test(void)
 {
     struct cry_mpi a;
@@ -60,6 +71,8 @@ static void init_bin_test(void)
         0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,
     };
     char buf[sizeof(mpi_be_data)];
+
+    printf("> MPI init-bin-test\n");
 
     printf("load-bin:  ");
     for (i = 0; i < sizeof(mpi_be_data); i++)
@@ -154,6 +167,7 @@ int main(void)
     add_test();
     sub_test();
     init_bin_test();
+    init_list_test();
     
     return 0;
 }
