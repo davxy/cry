@@ -17,17 +17,24 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+#include "mpi_pvt.h"
 
-int main(void)
+/*
+ * Compare two big numbers values.
+ */
+int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b)
 {
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+    int ret;
 
-    return 0;
+    if (a->sign > b->sign)
+        ret = -1;  /* a is negative and b is positive */
+    else if (a->sign < b->sign)
+        ret = 1;   /* a is positive and b is negative */
+    else {
+        ret = cry_mpi_cmp_abs(a, b);
+        if (a->sign == 1)
+            ret = -ret; /* negative numbers */
+    }
+    return ret;
 }
 

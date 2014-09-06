@@ -17,17 +17,18 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+#ifndef _CRY_MPI_PVT_H_
+#define _CRY_MPI_PVT_H_
 
-int main(void)
-{
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+#include "cry/mpi.h"
 
-    return 0;
-}
+int cry_mpi_grow(cry_mpi *a, unsigned int size);
+
+/* decrease used while the most significant digit is zero */
+#define cry_mpi_adjust(a) do { \
+    while ((a)->used > 0 && (a)->data[(a)->used - 1] == 0) \
+        ((a)->used)--; \
+    } while(0)
+
+#endif /* _CRY_MPI_PVT_H_ */
 

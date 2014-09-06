@@ -17,17 +17,14 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+#include "cry/sum.h"
 
-int main(void)
+unsigned char cry_cs8(const unsigned char *in, size_t n)
 {
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+    unsigned char cs = 0;
 
-    return 0;
+    while (n-- > 0)
+        cs += *in++;
+    return cs;
 }
 

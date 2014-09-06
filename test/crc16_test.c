@@ -17,16 +17,17 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
+#include <cry/crc.h>
+#include <string.h>
 #include <stdio.h>
+
+#define MSG "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 int main(void)
 {
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+    printf("Msg: %s\n", MSG);
+    printf("crc16-ccitt = 0x%04x\n", cry_crc16_ccitt(MSG, strlen(MSG)));
+    printf("crc16-ibm   = 0x%04x\n", cry_crc16_ibm(MSG, strlen(MSG)));
 
     return 0;
 }

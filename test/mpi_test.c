@@ -17,7 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry.h>
+#include <cry/mpi.h>
 #include <stdio.h>
 
 #define MPI_PRINT(a, msg) do { \

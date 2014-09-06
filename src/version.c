@@ -17,17 +17,10 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+#include "cry/version.h"
 
-int main(void)
+long cry_version(void)
 {
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
-
-    return 0;
+    return CRY_VERSION;
 }
 

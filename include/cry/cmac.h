@@ -17,17 +17,37 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+/**
+ * @file    cry_cmac.h
+ * @brief   CMAC algorithm
+ *
+ * Also known as OMAC1 (One-key mac 1).
+ */
 
-int main(void)
-{
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+#ifndef _CRY_CMAC_H_
+#define _CRY_CMAC_H_
 
-    return 0;
+#include <stddef.h>
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+/**
+ * Cipher based digest (CMAC).
+ *
+ * @param mac       Digest output (16 octets).
+ * @param input     Input data.
+ * @param size      Size of input data.
+ * @param key       Key data.
+ * @param keysize   Size if key.
+ */
+void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
+                     size_t size, const unsigned char *key, size_t keysize);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* _CRY_CMAC_H_ */
 

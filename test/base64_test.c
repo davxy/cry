@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -17,7 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry.h>
+#include <cry/base64.h>
 #include <string.h>
 #include <stdio.h>
 

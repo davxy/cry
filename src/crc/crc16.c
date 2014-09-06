@@ -17,17 +17,31 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+#include "cry/crc.h"
 
-int main(void)
+void cry_crc16_init(struct cry_crc16_ctx *ctx, unsigned short start,
+                    const unsigned short *tab, unsigned char flags)
 {
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+    ctx->crc = start;
+    ctx->tab = tab;
+    ctx->flags = flags;
+}
 
-    return 0;
+#include <stdint.h>
+
+void cry_crc16_update(struct cry_crc16_ctx *ctx,
+                      const unsigned char *ptr, size_t n)
+{
+    while (n--)
+        ctx->crc = ctx->tab[(*ptr++ ^ ctx->crc) & 0xFF] ^ (ctx->crc >> 8);
+}
+
+unsigned short cry_crc16_final(struct cry_crc16_ctx *ctx)
+{
+    if (ctx->flags & CRY_CRC_FLAG_COMPLEMENT)
+        ctx->crc ^= 0xffff;
+    if (ctx->flags & CRY_CRC_FLAG_SWAP)
+        ctx->crc = (ctx->crc << 8) | (ctx->crc >> 8);
+    return (ctx->crc & 0Xffff);
 }
 

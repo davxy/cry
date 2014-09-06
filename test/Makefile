@@ -13,14 +13,12 @@ TESTS := version_test \
          cbc_test \
          gcm_test \
          ctr_test \
-         crc16_ccitt_test \
-         crc16_ibm_test \
+         crc16_test \
          md5_test \
          sha256_test \
          cmac_test \
-         cs_test \
-         lrc_test \
-         mpi_test \
+         sum_test \
+         mpi_test
 
 .PHONY: all clean
 

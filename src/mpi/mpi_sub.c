@@ -17,41 +17,37 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/sha256.h>
-#include <string.h>
-#include <stdio.h>
+#include "mpi_pvt.h"
 
-char *ar[] = {
-    "HelloWorld",
-    "Davy",
-    NULL
-};
-
-int main(int argc, char **argv)
+/*
+ * Signed addition
+ */
+int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    char **asc = ar;
-    unsigned int len, totlen;
-    struct cry_sha256_ctx sha256;
-    unsigned char md[32];
-    int i;
+    int ret, rsign;
 
-    totlen = 0;
-
-    cry_sha256_init(&sha256);
-    if (argc > 1)
-        asc = &argv[1];
-
-    for (i = 0; asc[i] != NULL; i++) {
-        len = strlen(asc[i]);
-        totlen += len;
-        cry_sha256_update(&sha256, asc[i], len);
+    if (a->sign != b->sign) {
+        rsign = a->sign;
+        ret = cry_mpi_add_abs(r, a, b);
+    } else {
+        switch (cry_mpi_cmp_abs(a, b)) {
+            case 1:  /* a > b */
+                rsign = a->sign;
+                ret = cry_mpi_sub_abs(r, a, b);
+                break;
+            case -1: /* a < b */
+                rsign = 1 - b->sign;
+                ret = cry_mpi_sub_abs(r, b, a);
+                break;
+            default:
+                rsign = 0;
+                cry_mpi_zero(r);
+                ret = 0;
+                break;
+        }
     }
-    cry_sha256_digest(&sha256, md);
-
-    printf("SHA256: ");
-    for (i = 0; i < sizeof(md); i++)
-        printf("%x", md[i]);
-    printf("\n");
-
-    return 0;
+    if (ret == 0)
+        r->sign = rsign;
+    return ret;
 }
+

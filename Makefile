@@ -6,31 +6,31 @@ AR := ar
 CFLAGS := -O0 -g
 CPPFLAGS := -Iinclude
 
-OBJS := src/cry_version.o \
-        src/cry_memxor.o \
-        src/cry_base64.o \
-        src/cry_des.o \
-        src/cry_aes.o \
-        src/cry_cbc.o \
-        src/cry_gcm.o \
-        src/cry_ctr.o \
-        src/cry_crc16.o \
-        src/cry_crc16_ccitt.o \
-        src/cry_crc16_ibm.o \
-        src/cry_md5.o \
-        src/cry_sha256.o \
-        src/cry_cmac.o \
-        src/cry_cs.o \
-        src/cry_lrc.o \
-        src/cry_mpi.o \
-        src/cry_mpi_cmp_abs.o \
-        src/cry_mpi_add_abs.o \
-        src/cry_mpi_sub_abs.o \
-        src/cry_mpi_cmp.o \
-        src/cry_mpi_add.o \
-        src/cry_mpi_sub.o \
-        src/cry_mpi_bin.o \
-        src/cry_mpi_list.o
+OBJS := src/version.o \
+        src/memxor.o \
+        src/base64.o \
+        src/des.o \
+        src/aes.o \
+        src/cbc.o \
+        src/gcm.o \
+        src/ctr.o \
+        src/crc/crc16.o \
+        src/crc/crc16_ccitt.o \
+        src/crc/crc16_ibm.o \
+        src/md5.o \
+        src/sha256.o \
+        src/cmac.o \
+        src/sum/cs8.o \
+        src/sum/lrc.o \
+        src/mpi/mpi_core.o \
+        src/mpi/mpi_cmp_abs.o \
+        src/mpi/mpi_add_abs.o \
+        src/mpi/mpi_sub_abs.o \
+        src/mpi/mpi_cmp.o \
+        src/mpi/mpi_add.o \
+        src/mpi/mpi_sub.o \
+        src/mpi/mpi_bin.o \
+        src/mpi/mpi_list.o
 
 .PHONY: all clean
 

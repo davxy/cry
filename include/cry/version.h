@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -17,17 +17,31 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+/**
+ * @file    cry_version.h
+ * @brief   Library version value.
+ */
 
-int main(void)
-{
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+#ifndef _CRY_VERSION_H_
+#define _CRY_VERSION_H_
 
-    return 0;
-}
+/** Library version major number */
+#define CRY_MAJOR   0
+/** Library version minor number */
+#define CRY_MINOR   0
+/** Library version patch number */
+#define CRY_PATCH   2
+/** Library version number */
+#define CRY_VERSION (((CRY_MAJOR << 8) | (CRY_MINOR << 8)) | CRY_PATCH)
+
+/**
+ * Compile-time library version.
+ *
+ * For consistency, should be equal to the CRY_VERSION value.
+ *
+ * @return	compile time library version.
+ */
+long cry_version(void);
+
+#endif /* _CRY_VERSION_H_ */
 

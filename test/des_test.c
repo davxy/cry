@@ -17,7 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry.h>
+#include <cry/des.h>
 #include <string.h>
 #include <stdio.h>
 

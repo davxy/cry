@@ -17,17 +17,41 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include <cry/version.h>
-#include <stdio.h>
+/**
+ * @file    cry_sum.h
+ * @brief   Common checksum algorithms.
+ */
 
-int main(void)
-{
-    printf("CRY version: %d.%d.%d (%d)\n",
-            CRY_MAJOR, CRY_MINOR, CRY_PATCH, cry_version());
-    printf("CRY version (build-time): %d\n", cry_version());
-    if (cry_version() != CRY_VERSION)
-        printf("Misaligned build/headers version\n");
+#ifndef _CRY_SUM_H_
+#define _CRY_SUM_H_
 
-    return 0;
+#include <stddef.h>
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+/**
+ * Trivial checksum.
+ *
+ * @param in    Input buffer.
+ * @param n     Size of input buffer.
+ * @return      Checksum value.
+ */
+unsigned char cry_cs8(const unsigned char *in, size_t n);
+
+/**
+ * Longitudinal redundancy check (LRC).
+ *
+ * @param in    Input buffer.
+ * @param n     Size of input buffer.
+ * @return      LRC value.
+ */
+unsigned char cry_lrc(const unsigned char *in, size_t n);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* _CRY_SUM_H_ */
 
