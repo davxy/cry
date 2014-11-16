@@ -158,7 +158,21 @@ static void sub_test(void)
     cry_mpi_clear(&r);
 }
 
+static void mul_test(void)
+{
+    cry_mpi a, b, r;
 
+    printf("> MPI sub-test\n");
+
+    cry_mpi_init_list(&a, &b, &r, NULL);
+    cry_mpi_set_int(&a, 0x1234);
+    cry_mpi_set_int(&b, 0x02);
+    cry_mpi_mul(&r, &a, &b);
+    MPI_PRINT(&a, "a");
+    MPI_PRINT(&b, "b");
+    MPI_PRINT(&r, "a * b");
+    cry_mpi_clear_list(&a, &b, &r, NULL);
+}
 
 int main(void)
 {
@@ -168,6 +182,7 @@ int main(void)
     sub_test();
     init_bin_test();
     init_list_test();
+    mul_test();
     
     return 0;
 }

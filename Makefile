@@ -30,7 +30,8 @@ OBJS := src/version.o \
         src/mpi/mpi_add.o \
         src/mpi/mpi_sub.o \
         src/mpi/mpi_bin.o \
-        src/mpi/mpi_list.o
+        src/mpi/mpi_list.o \
+        src/mpi/mpi_mul.o
 
 .PHONY: all clean
 

@@ -29,6 +29,7 @@ Given a version number MAJOR.MINOR.PATCH
 - LRC
 - 8-bit trivial checksum
 - CRC16-IBM
+- MPI add, sub, mul
 
 [0.0.1] - 2014-05-10
 --------------------

@@ -88,7 +88,10 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
+int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 /*
  * Utilities
@@ -109,6 +112,12 @@ size_t cry_mpi_count_bits(const cry_mpi *a);
 
 #define cry_mpi_count_bytes(a) \
     ((cry_mpi_count_bits(a) + 7) / 8)
+
+#define cry_mpi_swap(a, b) do { \
+    cry_mpi __t = *(a);         \
+    *(a) = *(b);                \
+    *(b) = __t;                 \
+    } while(0)
 
 #ifdef __cplusplus
 }

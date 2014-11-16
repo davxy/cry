@@ -3,6 +3,7 @@ CRY(T_T)
 
 A small crypto library
 
+
 Block ciphers
 -------------
 
@@ -16,10 +17,12 @@ Block ciphers
 - GCM
 - CTR
 
+
 Message authentication code
 ---------------------------
 
 - CMAC
+
 
 Hash
 ----
@@ -38,6 +41,13 @@ Hash
 
 - LRC
 - 8-bit trivial checksum
+
+
+Multiple precision integers
+---------------------------
+
+- Basic arithmentic
+
 
 Utilities
 ---------
