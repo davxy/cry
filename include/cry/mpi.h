@@ -75,6 +75,10 @@ int cry_mpi_load_bin(cry_mpi *a, const void *b, unsigned int size);
 
 int cry_mpi_store_bin(const cry_mpi *a, void *b, unsigned int size, int pad);
 
+int cry_mpi_init_str(cry_mpi *a, const char *s);
+
+int cry_mpi_load_str(cry_mpi *a, const char *s);
+
 int cry_mpi_init_list(cry_mpi *a, ...);
 
 void cry_mpi_clear_list(cry_mpi *a, ...);

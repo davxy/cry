@@ -51,7 +51,7 @@ static void init_test(void)
 
 static void init_list_test(void)
 {
-    struct cry_mpi a, b, c;
+    cry_mpi a, b, c;
 
     printf("> MPI init-list-test\n");
 
@@ -62,7 +62,7 @@ static void init_list_test(void)
 
 static void init_bin_test(void)
 {
-    struct cry_mpi a;
+    cry_mpi a;
     int i;
     const char mpi_be_data[] = {
         0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,
@@ -93,6 +93,21 @@ static void init_bin_test(void)
     for (i = 0; i < a.used; i++)
         printf("%02x", buf[i]);
     printf("\n");
+}
+
+static void init_str_test(void)
+{
+   cry_mpi a;
+
+   printf("> MPI init-str-test\n");
+
+   cry_mpi_init_str(&a, "0x123456789abcdef");
+   MPI_PRINT(&a, "a");
+   cry_mpi_clear(&a);
+
+   cry_mpi_init_str(&a, "-0x123456789a");
+   MPI_PRINT(&a, "a");
+   cry_mpi_clear(&a);
 }
 
 static void cmp_test(void)
@@ -162,7 +177,7 @@ static void mul_test(void)
 {
     cry_mpi a, b, r;
 
-    printf("> MPI sub-test\n");
+    printf("> MPI mul-test\n");
 
     cry_mpi_init_list(&a, &b, &r, NULL);
     cry_mpi_set_int(&a, 0x1234);
@@ -181,6 +196,7 @@ int main(void)
     add_test();
     sub_test();
     init_bin_test();
+    init_str_test();
     init_list_test();
     mul_test();
     

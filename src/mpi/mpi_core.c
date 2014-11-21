@@ -225,6 +225,9 @@ void cry_mpi_print(const cry_mpi *a)
     }    
 
     i = a->used;
+    if (a->sign)
+        printf("-");
+    printf("0x");
     while (i-- > 0)
         printf("%02x", a->data[i]);
     printf("\n");
