@@ -22,7 +22,7 @@
 
 #define MPI_PRINT(a, msg) do { \
     printf("%s:\t", msg); \
-    cry_mpi_print(a); \
+    cry_mpi_print(a, 16); \
     } while(0)
 
 static void init_test(void)
@@ -196,7 +196,7 @@ static void div_test(void)
     printf("> MPI div-test\n");
 
     cry_mpi_init_list(&a, &b, &q, &r, NULL);
-    cry_mpi_set_int(&a, 7);
+    cry_mpi_set_int(&a, -7);
     cry_mpi_set_int(&b, 3);
     cry_mpi_div(&q, &r, &a, &b);
     MPI_PRINT(&a, "a");

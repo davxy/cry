@@ -26,14 +26,16 @@ OBJS := src/version.o \
         src/mpi/mpi_cmp_abs.o \
         src/mpi/mpi_add_abs.o \
         src/mpi/mpi_sub_abs.o \
+        src/mpi/mpi_div_abs.o \
         src/mpi/mpi_cmp.o \
         src/mpi/mpi_add.o \
         src/mpi/mpi_sub.o \
+        src/mpi/mpi_mul.o \
+        src/mpi/mpi_div.o \
         src/mpi/mpi_bin.o \
         src/mpi/mpi_str.o \
         src/mpi/mpi_list.o \
-        src/mpi/mpi_mul.o \
-        src/mpi/mpi_div.o
+        src/mpi/mpi_print.o
 
 .PHONY: all clean
 

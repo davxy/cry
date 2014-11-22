@@ -19,29 +19,31 @@
 
 #include "mpi_pvt.h"
 
-int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
-                const cry_mpi *b)
+int cry_mpi_div_abs(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
+                    const cry_mpi *b)
 {
-    int res, sign = a->sign ^ b->sign;
+    int res;
+    cry_mpi tq, tr, one;
 
-    if ((res = cry_mpi_div_abs(q, r, a, b)) != 0)
+    if ((res = cry_mpi_init_list(&tq, &tr, &one, NULL)) < 0)
         return res;
 
-    if (sign) {
-        if (q) {
-            cry_mpi one;
-            cry_mpi_digit one_dig = 1;
+    one.data[0] = 1;
+    one.used = 1;
+    one.sign = 0;
 
-            one.sign = 0;
-            one.used = one.alloc = 1;
-            one.data = &one_dig;
-
-            q->sign = 1;
-            res = cry_mpi_sub(q, q, &one);
-        }
-        if (r)
-            res = cry_mpi_sub_abs(r, b, r);
+    cry_mpi_copy(&tr, a);
+    while (cry_mpi_cmp_abs(b, &tr) <= 0) {
+        if ((res = cry_mpi_sub_abs(&tr, &tr, b)) != 0 ||
+            (res = cry_mpi_add_abs(&tq, &tq, &one)) != 0)
+            goto e;
     }
+
+    if (q)
+        cry_mpi_swap(&tq, q);
+    if (r)
+        cry_mpi_swap(&tr, r);
+e:  cry_mpi_clear_list(&tq, &tr, &one, NULL);
     return res;
 }
 

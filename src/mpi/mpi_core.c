@@ -215,21 +215,3 @@ size_t cry_mpi_count_bits(const cry_mpi *a)
             word_size_bits(a->data[a->used-1]);
 }
 
-void cry_mpi_print(const cry_mpi *a)
-{
-    int i;
-
-    if (a->used == 0) {
-        printf("00\n");
-        return;
-    }    
-
-    i = a->used;
-    if (a->sign)
-        printf("-");
-    printf("0x");
-    while (i-- > 0)
-        printf("%02x", a->data[i]);
-    printf("\n");
-}
-

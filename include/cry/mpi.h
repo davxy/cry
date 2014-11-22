@@ -89,15 +89,19 @@ void cry_mpi_clear_list(cry_mpi *a, ...);
 
 int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
-int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
-
 int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
+int cry_mpi_div_abs(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
+                    const cry_mpi *b);
+
+int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 
 /*
  * Utilities
@@ -107,7 +111,7 @@ int cry_mpi_cmp_abs(const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b);
 
-void cry_mpi_print(const cry_mpi *a);
+void cry_mpi_print(const cry_mpi *a, unsigned int radix);
 
 #define cry_mpi_zero(a) do { \
     (a)->sign = 0;           \
@@ -124,6 +128,15 @@ size_t cry_mpi_count_bits(const cry_mpi *a);
     *(a) = *(b);                \
     *(b) = __t;                 \
     } while(0)
+
+#define cry_mpi_is_zero(a) \
+    ((a)->used == 0)
+
+#define cry_mpi_is_odd(a) \
+    (!cry_mpi_is_zero(a) && ((a)->data[0] & 1))
+
+#define cry_mpi_is_even(a) \
+    (!cry_mpi_is_odd(a))
 
 #ifdef __cplusplus
 }

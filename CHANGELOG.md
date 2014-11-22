@@ -21,15 +21,16 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
-[Unreleased]
-------------
+[0.0.2] - 2014-11-22
+--------------------
 
 ### Added
 
 - LRC
 - 8-bit trivial checksum
 - CRC16-IBM
-- MPI add, sub, mul
+- MPI add, sub, mul, div
+- MPI print
 
 [0.0.1] - 2014-05-10
 --------------------
