@@ -189,6 +189,23 @@ static void mul_test(void)
     cry_mpi_clear_list(&a, &b, &r, NULL);
 }
 
+static void div_test(void)
+{
+    cry_mpi a, b, r, q;
+
+    printf("> MPI div-test\n");
+
+    cry_mpi_init_list(&a, &b, &q, &r, NULL);
+    cry_mpi_set_int(&a, 7);
+    cry_mpi_set_int(&b, 3);
+    cry_mpi_div(&q, &r, &a, &b);
+    MPI_PRINT(&a, "a");
+    MPI_PRINT(&b, "b");
+    MPI_PRINT(&q, "a / b");
+    MPI_PRINT(&r, "a \% b");
+    cry_mpi_clear_list(&a, &b, &q, &r, NULL);
+}
+
 int main(void)
 {
     init_test();
@@ -199,6 +216,7 @@ int main(void)
     init_str_test();
     init_list_test();
     mul_test();
+    div_test();
     
     return 0;
 }

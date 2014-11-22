@@ -97,6 +97,8 @@ int cry_mpi_sub(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 /*
  * Utilities
  */
