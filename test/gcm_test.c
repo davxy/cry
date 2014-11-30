@@ -17,10 +17,9 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/gcm.h>
 #include <cry/aes.h>
-#include <stdio.h>
-#include <string.h>
 
 static const struct cry_ciph_itf aes_itf = {
     .init = NULL,
@@ -76,7 +75,7 @@ void cry_aes_128_gcm_decrypt(unsigned char *dst,
         cry_gcm_digest(&gcm, mac, 16);
 }
 
-int main(void)
+void gcm_test(void)
 {
     char buf[128];
     char *msg = "CRY is free software: you can redistribute it and/or modify";
@@ -89,18 +88,16 @@ int main(void)
     int msglen = strlen(msg);
     int aadlen = strlen(aad);
 
-    printf("Msg len: %d\n", msglen);
+    TRACE("Msg len: %d\n", msglen);
 
-    printf("AES-128-GCM\n");
+    TRACE("AES-128-GCM\n");
     memset(buf, 0, sizeof(buf));
     cry_aes_128_gcm_encrypt(buf, msg, msglen, key, iv,
                             buf+msglen, aad, aadlen);
     cry_aes_128_gcm_decrypt(buf, buf, msglen, key, iv,
                             buf+msglen+16, aad, aadlen);
-    printf("%.*s\n", msglen, buf);
+    TRACE("%.*s\n", msglen, buf);
     if (memcmp(buf+msglen, buf+msglen+16, 16) != 0)
-        printf("Auth failure\n");
-
-    return 0;
+        TRACE("Auth failure\n");
 }
 

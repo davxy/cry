@@ -18,20 +18,14 @@
  */
 
 #include "test.h"
-#include <cry/cmac.h>
+#include <cry/crc.h>
 
-#define KEY "0123456789abcdef"
-#define MSG "HelloWorld"
+#define MSG "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-void cmac_test(void)
+void crc_test(void)
 {
-    unsigned char md[16];
-    int i;
-
-    cry_cmac_digest(md, MSG, strlen(MSG), KEY, sizeof(KEY));
-
-    TRACE("CMAC: ");
-    for (i = 0; i < sizeof(md); i++)
-        TRACE("%x", md[i]);
-    TRACE("\n");
+    TRACE("Msg: %s\n", MSG);
+    TRACE("crc16-ccitt = 0x%04x\n", cry_crc16_ccitt(MSG, strlen(MSG)));
+    TRACE("crc16-ibm   = 0x%04x\n", cry_crc16_ibm(MSG, strlen(MSG)));
 }
+

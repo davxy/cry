@@ -17,41 +17,33 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/sha256.h>
-#include <string.h>
-#include <stdio.h>
 
-char *ar[] = {
+static char *ar[] = {
     "HelloWorld",
     "Davy",
     NULL
 };
 
-int main(int argc, char **argv)
+void sha256_test(void)
 {
     char **asc = ar;
-    unsigned int len, totlen;
+    unsigned int len;
     struct cry_sha256_ctx sha256;
     unsigned char md[32];
     int i;
 
-    totlen = 0;
-
     cry_sha256_init(&sha256);
-    if (argc > 1)
-        asc = &argv[1];
-
     for (i = 0; asc[i] != NULL; i++) {
         len = strlen(asc[i]);
-        totlen += len;
         cry_sha256_update(&sha256, asc[i], len);
     }
     cry_sha256_digest(&sha256, md);
 
-    printf("SHA256: ");
+    TRACE("SHA256: ");
     for (i = 0; i < sizeof(md); i++)
-        printf("%x", md[i]);
-    printf("\n");
-
-    return 0;
+        TRACE("%x", md[i]);
+    TRACE("\n");
 }
+

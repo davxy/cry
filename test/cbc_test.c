@@ -17,10 +17,9 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/cbc.h>
 #include <cry/aes.h>
-#include <stdio.h>
-#include <string.h>
 
 static const struct cry_ciph_itf aes_itf = {
     .init = NULL,
@@ -58,7 +57,7 @@ void cry_aes_128_cbc_decrypt(unsigned char *dst, const unsigned char *src,
     cry_cbc_decrypt(&cbc, dst, src, size);
 }
 
-int main(void)
+void cbc_test(void)
 {
     char buf[128];
     char *msg = "CRY is free software: you can redistribute it and/or modify";
@@ -69,14 +68,12 @@ int main(void)
 
     int msglen = strlen(msg);
 
-    printf("Msg len: %d\n", msglen);
+    TRACE("Msg len: %d\n", msglen);
 
-    printf("AES-128-CBC\n");
+    TRACE("AES-128-CBC\n");
     memset(buf, 0, sizeof(buf));
     cry_aes_128_cbc_encrypt(buf, msg, msglen, key, iv);
     cry_aes_128_cbc_decrypt(buf, buf, msglen, key, iv);
-    printf("%.*s\n", msglen, buf);
-
-    return 0;
+    TRACE("%.*s\n", msglen, buf);
 }
 

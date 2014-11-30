@@ -6,24 +6,25 @@ CFLAGS := -O0 -g
 CPPFLAGS := -I../include
 LDLIBS := $(LIBCRY)
 
-TESTS := version_test \
-         base64_test \
-         des_test \
-         aes_test \
-         cbc_test \
-         gcm_test \
-         ctr_test \
-         crc16_test \
-         md5_test \
-         sha256_test \
-         cmac_test \
-         sum_test \
-         mpi_test
+OBJS := test.o \
+	    version_test.o \
+	    base64_test.o \
+	    des_test.o \
+	    aes_test.o \
+	    cbc_test.o \
+	    gcm_test.o \
+	    ctr_test.o \
+	    crc_test.o \
+	    md5_test.o \
+	    sha256_test.o \
+	    cmac_test.o \
+	    sum_test.o \
+	    mpi_test.o
 
 .PHONY: all clean
 
-all: $(TESTS) $(LIBCRY)
+all: $(OBJS) $(LIBCRY)
+	$(CC) -o test $^
 
 clean:
-	$(RM) $(TESTS)
-
+	$(RM) $(OBJS) test

@@ -17,19 +17,21 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/mpi.h>
-#include <stdio.h>
 
-#define MPI_PRINT(a, msg) do { \
-    printf("%s:\t", msg); \
-    cry_mpi_print(a, 16); \
-    } while(0)
+#ifdef NDEBUG
+# define MPI_PRINT(a, msg)
+#else
+# define MPI_PRINT(a, msg) do { \
+            TRACE("%s:\t", msg); \
+            cry_mpi_print(a, 16); \
+            } while(0)
+#endif
 
-static void init_test(void)
+static void mpi_init_test(void)
 {
     cry_mpi a, b;
-
-    printf("> MPI init-test\n");
 
     cry_mpi_init(&a);
     MPI_PRINT(&a, "pre init");
@@ -45,18 +47,16 @@ static void init_test(void)
 
     cry_mpi_init_size(&a, 1);
     cry_mpi_init(&b);
-    printf("with init_size(1) alloc=%d\n", a.alloc);
-    printf("with init() alloc= %d\n", b.alloc);
+    TRACE("with init_size(1) alloc=%d\n", a.alloc);
+    TRACE("with init() alloc= %d\n", b.alloc);
 }
 
 static void init_list_test(void)
 {
     cry_mpi a, b, c;
 
-    printf("> MPI init-list-test\n");
-
     if (cry_mpi_init_list(&a, &b, &c, NULL) != 0)
-        printf("Error: mpi_init_list\n");
+        TRACE("Error: mpi_init_list\n");
     cry_mpi_clear_list(&a, &b, &c, NULL);
 }
 
@@ -72,34 +72,30 @@ static void init_bin_test(void)
     };
     char buf[sizeof(mpi_be_data)];
 
-    printf("> MPI init-bin-test\n");
-
-    printf("load-bin:  ");
+    TRACE("load-bin:  ");
     for (i = 0; i < sizeof(mpi_be_data); i++)
-        printf("%02x", mpi_be_data[i]);
-    printf("\n");
+        TRACE("%02x", mpi_be_data[i]);
+    TRACE("\n");
 
     cry_mpi_init_bin(&a, mpi_be_data, sizeof(mpi_be_data));
     MPI_PRINT(&a, "a");
 
     cry_mpi_store_bin(&a, buf, sizeof(buf), 1);
-    printf("store-bin (pad=1): ");
+    TRACE("store-bin (pad=1): ");
     for (i = 0; i < sizeof(buf); i++)
-        printf("%02x", buf[i]);
-    printf("\n");
+        TRACE("%02x", buf[i]);
+    TRACE("\n");
 
     cry_mpi_store_bin(&a, buf, a.used, 0);
-    printf("store-bin (pad=0): ");
+    TRACE("store-bin (pad=0): ");
     for (i = 0; i < a.used; i++)
-        printf("%02x", buf[i]);
-    printf("\n");
+        TRACE("%02x", buf[i]);
+    TRACE("\n");
 }
 
 static void init_str_test(void)
 {
    cry_mpi a;
-
-   printf("> MPI init-str-test\n");
 
    cry_mpi_init_str(&a, "0x123456789abcdef");
    MPI_PRINT(&a, "a");
@@ -114,16 +110,14 @@ static void cmp_test(void)
 {
     cry_mpi a, b, r;
 
-    printf("> MPI cmp-test\n");
-
     cry_mpi_init_int(&a, 0x1234);
     cry_mpi_init_int(&b, 0x4321);
     cry_mpi_init(&r);
 
     MPI_PRINT(&a, "a");
     MPI_PRINT(&b, "b");
-    printf("cmp(a,b) res=%d\n", cry_mpi_cmp(&a, &b));
-    printf("cmp(b,a) res=%d\n", cry_mpi_cmp(&b, &a));
+    TRACE("cmp(a,b) res=%d\n", cry_mpi_cmp(&a, &b));
+    TRACE("cmp(b,a) res=%d\n", cry_mpi_cmp(&b, &a));
 
     cry_mpi_clear(&a);
     cry_mpi_clear(&b);
@@ -134,8 +128,6 @@ static void cmp_test(void)
 static void add_test(void)
 {
     cry_mpi a, b, r;
-
-    printf("> MPI add-test\n");
 
     cry_mpi_init_int(&a, 0x1234);
     cry_mpi_init_int(&b, 0x4321);
@@ -156,8 +148,6 @@ static void sub_test(void)
 {
     cry_mpi a, b, r;
 
-    printf("> MPI sub-test\n");
-
     cry_mpi_init_int(&a, 0x55555555);
     cry_mpi_init_int(&b, 0x1111);
     cry_mpi_init(&r);
@@ -177,8 +167,6 @@ static void mul_test(void)
 {
     cry_mpi a, b, r;
 
-    printf("> MPI mul-test\n");
-
     cry_mpi_init_list(&a, &b, &r, NULL);
     cry_mpi_set_int(&a, 0x1234);
     cry_mpi_set_int(&b, 0x02);
@@ -193,8 +181,6 @@ static void div_test(void)
 {
     cry_mpi a, b, r, q;
 
-    printf("> MPI div-test\n");
-
     cry_mpi_init_list(&a, &b, &q, &r, NULL);
     cry_mpi_set_int(&a, -7);
     cry_mpi_set_int(&b, 3);
@@ -206,17 +192,16 @@ static void div_test(void)
     cry_mpi_clear_list(&a, &b, &q, &r, NULL);
 }
 
-int main(void)
+void mpi_test(void)
 {
-    init_test();
-    cmp_test();
-    add_test();
-    sub_test();
-    init_bin_test();
-    init_str_test();
-    init_list_test();
-    mul_test();
-    div_test();
-    
-    return 0;
+    RUN(mpi_init_test);
+    RUN(cmp_test);
+    RUN(add_test);
+    RUN(sub_test);
+    RUN(init_bin_test);
+    RUN(init_str_test);
+    RUN(init_list_test);
+    RUN(mul_test);
+    RUN(div_test);
 }
+

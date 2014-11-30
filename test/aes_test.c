@@ -17,40 +17,37 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/aes.h>
-#include <stdio.h>
-#include <string.h>
 
-int main(void)
+#define MSG "CRY is free software: you can redistribute it and/or modify it"
+#define KEY "0123456789abcdefABCDEF9876543210"
+
+void aes_test(void)
 {
     char buf[128];
-    char *msg = "CRY is free software: you can redistribute it and/or modify";
-    char key[] = {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15,
-                   16,17,18,19,20,21,22,23,
-                   24,25,26,27,28,29,30,31  };
-    int msglen = strlen(msg);
+    int msglen = strlen(MSG);
 
-    printf("Msg len: %d\n", msglen);
+    TRACE("Msg len: %d\n", msglen);
 
-    printf("AES-128\n");
+    TRACE("AES-128\n");
     memset(buf, 0, sizeof(buf));
-    cry_aes_128_encrypt(buf, msg, msglen, key);
-    cry_aes_128_decrypt(buf, buf, msglen, key);
-    printf("%.*s\n", msglen, buf);
+    cry_aes_128_encrypt(buf, MSG, msglen, KEY);
+    print_hex(buf, msglen);
+    cry_aes_128_decrypt(buf, buf, msglen, KEY);
+    print_hex(buf, msglen);
+    TRACE("%.*s\n", msglen, buf);
 
-    printf("AES-192\n");
+    TRACE("AES-192\n");
     memset(buf, 0, sizeof(buf));
-    cry_aes_192_encrypt(buf, msg, msglen, key);
-    cry_aes_192_decrypt(buf, buf, msglen, key);
-    printf("%.*s\n", msglen, buf);
+    cry_aes_192_encrypt(buf, MSG, msglen, KEY);
+    cry_aes_192_decrypt(buf, buf, msglen, KEY);
+    TRACE("%.*s\n", msglen, buf);
 
-    printf("AES-256\n");
+    TRACE("AES-256\n");
     memset(buf, 0, sizeof(buf));
-    cry_aes_256_encrypt(buf, msg, msglen, key);
-    cry_aes_256_decrypt(buf, buf, msglen, key);
-    printf("%.*s\n", msglen, buf);
-
-    return 0;
+    cry_aes_256_encrypt(buf, MSG, msglen, KEY);
+    cry_aes_256_decrypt(buf, buf, msglen, KEY);
+    TRACE("%.*s\n", msglen, buf);
 }
 

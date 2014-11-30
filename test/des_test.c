@@ -17,21 +17,20 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/des.h>
-#include <string.h>
-#include <stdio.h>
 
 #define TXT     "HelloWorldFromDesAlgo"
 #define KEY     "12345678abcdefghILMNOPQR"
 
-int main(void)
+void des_test(void)
 {
     char buf[64] = {0};
     cry_des_ctx des;
     int len = strlen(TXT);
     int pad = 8 - len % 8;
 
-    printf("Single DES\n");
+    TRACE("Single DES\n");
     memcpy(buf, TXT, len);
     memset(buf + len, pad, pad);
     len += pad; /* loose the original len info */
@@ -39,9 +38,9 @@ int main(void)
     cry_des_encrypt(&des, buf, buf, len);
     cry_des_decrypt(&des, buf, buf, len);
     len -= buf[len - 1];
-    printf("%.*s\n", len, buf);
+    TRACE("%.*s\n", len, buf);
 
-    printf("Triple DES\n");
+    TRACE("Triple DES\n");
     memcpy(buf, TXT, len);
     memset(buf + len, pad, pad);
     len += pad; /* loose the original len info */
@@ -49,8 +48,6 @@ int main(void)
     cry_des_encrypt(&des, buf, buf, len);
     cry_des_decrypt(&des, buf, buf, len);
     len -= buf[len - 1];
-    printf("%.*s\n", len, buf);
-
-    return 0;
+    TRACE("%.*s\n", len, buf);
 }
 

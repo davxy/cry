@@ -17,28 +17,22 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/base64.h>
-#include <string.h>
-#include <stdio.h>
 
-int main(void)
+void base64_test(void)
 {
     char *s = "Hello World";
     char buf[64];
     int len;
 
-    if ((len = cry_base64_encode(s, strlen(s), buf)) < 0) {
-        printf("Error: encode\n");
-        return 1;
-    }
-    printf("Ecoded:  %.*s\n", len, buf);
+    len = cry_base64_encode(s, strlen(s), buf);
+    ASSERT(cry_base64_encode(s, strlen(s), buf) == 16);
+    ASSERT(memcmp(buf, "SGVsbG8gV29ybGQ=", 16) == 0);
+    TRACE("Decoded: %s\n", s);
+    TRACE("Ecoded:  %.*s\n", len, buf);
     
-    if ((len = cry_base64_decode(buf, len, buf)) < 0) {
-        printf("Error: encode\n");
-        return 1;
-    }
-    printf("Decoded: %.*s\n", len, buf);
-
-    return 0;
+    ASSERT((len = cry_base64_decode(buf, len, buf)) > 0);
+    TRACE("Decoded: %.*s\n", len, buf);
 }
 

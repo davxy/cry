@@ -17,41 +17,33 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/md5.h>
-#include <string.h>
-#include <stdio.h>
 
-char *ar[] = {
+static char *ar[] = {
     "HelloWorld",
     "Davy",
     NULL
 };
 
-int main(int argc, char **argv)
+void md5_test(void)
 {
     char **asc = ar;
-    unsigned int len, totlen;
+    unsigned int len;
     struct cry_md5_ctx md5;
     unsigned char md[16];
     int i;
 
-    totlen = 0;
-
     cry_md5_init(&md5);
-    if (argc > 1)
-        asc = &argv[1];
-
     for (i = 0; asc[i] != NULL; i++) {
         len = strlen(asc[i]);
-        totlen += len;
         cry_md5_update(&md5, asc[i], len);
     }
     cry_md5_digest(&md5, md);
 
-    printf("MD5: ");
+    TRACE("MD5: ");
     for (i = 0; i < sizeof(md); i++)
-        printf("%x", md[i]);
-    printf("\n");
-
-    return 0;
+        TRACE("%x", md[i]);
+    TRACE("\n");
 }
+

@@ -17,18 +17,15 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
+#include "test.h"
 #include <cry/sum.h>
-#include <string.h>
-#include <stdio.h>
 
 #define MSG "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-int main(void)
+void sum_test(void)
 {
-    printf("Msg: %s\n", MSG);
-    printf("cs8 = 0x%02x\n", cry_cs8(MSG, strlen(MSG)));
-    printf("lrc = 0x%02x\n", cry_lrc(MSG, strlen(MSG)));
-
-    return 0;
+    TRACE("Msg: %s\n", MSG);
+    TRACE("cs8 = 0x%02x\n", cry_cs8(MSG, strlen(MSG)));
+    TRACE("lrc = 0x%02x\n", cry_lrc(MSG, strlen(MSG)));
 }
 
