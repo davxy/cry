@@ -22,6 +22,21 @@
 
 #include "cry/mpi.h"
 
+/* Number of bytes in one digit */
+#define CRY_MPI_DIGIT_BYTES  sizeof(cry_mpi_digit)
+
+/* Number of bits in one digit */
+#define CRY_MPI_DIGIT_BITS   (CRY_MPI_DIGIT_BYTES << 3)
+
+/* Bits to digits */
+#define CRY_MPI_BITS_TO_DIGS(a) \
+        ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BITS + 1) : 0)
+
+/* Octets to digits */
+#define CRY_MPI_BYTES_TO_DIGS(a) \
+        ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BYTES + 1) : 0)
+
+
 int cry_mpi_grow(cry_mpi *a, unsigned int size);
 
 /* decrease used while the most significant digit is zero */

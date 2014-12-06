@@ -27,15 +27,6 @@
 
 #include <stddef.h>
 
-/* Number of bytes in one digit */
-#define MPI_DIGIT_BYTES         sizeof(cry_mpi_digit)
-/* Number of bits in one digit */
-#define MPI_DIGIT_BITS          (MPI_DIGIT_BYTES << 3)
-/* Bits to digits */
-#define MPI_BITS_TO_DIGS(a)     ((a != 0) ? ((a) - 1)/MPI_DIGIT_BITS + 1 : 0)
-/* Octets to digits */
-#define MPI_BYTES_TO_DIGS(a)    ((a != 0) ? ((a) - 1)/MPI_DIGIT_BYTES + 1 : 0)
-
 typedef unsigned char cry_mpi_digit;
 
 struct cry_mpi {
@@ -75,9 +66,12 @@ int cry_mpi_load_bin(cry_mpi *a, const void *b, unsigned int size);
 
 int cry_mpi_store_bin(const cry_mpi *a, void *b, unsigned int size, int pad);
 
-int cry_mpi_init_str(cry_mpi *a, const char *s);
+int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s);
 
-int cry_mpi_load_str(cry_mpi *a, const char *s);
+int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s);
+
+int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
+                      size_t size);
 
 int cry_mpi_init_list(cry_mpi *a, ...);
 
@@ -102,6 +96,9 @@ int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n);
+
+int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);
 
 /*
  * Utilities

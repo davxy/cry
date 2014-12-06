@@ -20,6 +20,9 @@
 #include "test.h"
 #include <cry/mpi.h>
 
+#define BUF_SIZ 512
+unsigned char buf[BUF_SIZ];
+
 #ifdef NDEBUG
 # define MPI_PRINT(a, msg)
 #else
@@ -28,6 +31,12 @@
             cry_mpi_print(a, 16); \
             } while(0)
 #endif
+
+#define MPI_ASSERT_EQUAL(a, radix, string) do { \
+    cry_mpi_store_str(a, radix, buf, sizeof(buf)); \
+    ASSERT(strcmp(buf, string) == 0); \
+    } while (0)
+
 
 static void mpi_init_test(void)
 {
@@ -97,13 +106,24 @@ static void init_str_test(void)
 {
    cry_mpi a;
 
-   cry_mpi_init_str(&a, "0x123456789abcdef");
+   cry_mpi_init_str(&a, 16, "123456789abcdef");
    MPI_PRINT(&a, "a");
+   MPI_ASSERT_EQUAL(&a, 16, "123456789abcdef");
    cry_mpi_clear(&a);
 
-   cry_mpi_init_str(&a, "-0x123456789a");
+   cry_mpi_init_str(&a, 16, "-123456789a");
    MPI_PRINT(&a, "a");
+   MPI_ASSERT_EQUAL(&a, 16, "-123456789a");
    cry_mpi_clear(&a);
+}
+
+static void load_str_test(void)
+{
+    cry_mpi a;
+
+    cry_mpi_init_str(&a, 16, "0123456789abcdef");
+    cry_mpi_store_str(&a, 16, buf, 6);
+    ASSERT(memcmp("1234*\x00", buf, 6) == 0);
 }
 
 static void cmp_test(void)
@@ -192,8 +212,32 @@ static void div_test(void)
     cry_mpi_clear_list(&a, &b, &q, &r, NULL);
 }
 
+static void shl_test(void)
+{
+    cry_mpi a;
+
+    cry_mpi_init_str(&a, 16, "0102030405060708090a0b0c0d0e0f");
+    MPI_PRINT(&a, "a     ");
+    cry_mpi_shl(&a, &a, 3);
+    MPI_PRINT(&a, "a << 3");
+    MPI_ASSERT_EQUAL(&a, 16, "81018202830384048505860687078");
+}
+
+static void shr_test(void)
+{
+    cry_mpi a;
+
+    cry_mpi_init_str(&a, 16, "0102030405060708090a0b0c0d0e0f");
+    MPI_PRINT(&a, "a     ");
+    cry_mpi_shr(&a, &a, 3);
+    MPI_PRINT(&a, "a >> 3");
+    MPI_ASSERT_EQUAL(&a, 16, "20406080a0c0e10121416181a1c1");
+}
+
+
 void mpi_test(void)
 {
+    RUN(load_str_test);
     RUN(mpi_init_test);
     RUN(cmp_test);
     RUN(add_test);
@@ -203,5 +247,7 @@ void mpi_test(void)
     RUN(init_list_test);
     RUN(mul_test);
     RUN(div_test);
+    RUN(shl_test);
+    RUN(shr_test);
 }
 

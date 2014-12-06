@@ -34,8 +34,8 @@ int cry_mpi_load_bin(cry_mpi *x, const void *b, unsigned int size)
     if (size == 0)
         return 0;
 
-    i = ((size - 1) / MPI_DIGIT_BYTES) + 1;  /* Number of required octets */
-    m =  (size - 1) % MPI_DIGIT_BYTES;       /* Remainder */
+    i = ((size - 1) / CRY_MPI_DIGIT_BYTES) + 1; /* Number of required octets */
+    m =  (size - 1) % CRY_MPI_DIGIT_BYTES;      /* Remainder */
 
     if (x->alloc < i) {
         if ((res = cry_mpi_grow(x, i)) != 0)
@@ -49,7 +49,7 @@ int cry_mpi_load_bin(cry_mpi *x, const void *b, unsigned int size)
         if (m-- == 0) {
             x->data[--i] = l;
             l = 0;
-            m = MPI_DIGIT_BYTES - 1;
+            m = CRY_MPI_DIGIT_BYTES - 1;
         }
     }
     return 0;
@@ -76,8 +76,8 @@ int cry_mpi_store_bin(const cry_mpi *x, void *buf,
         d += bufsiz - i;
     }
     while (i--) {
-        l = x->data[i / MPI_DIGIT_BYTES];
-        *d++ = (unsigned char)(l >> (8 * (i % MPI_DIGIT_BYTES))) & 0xff;
+        l = x->data[i / CRY_MPI_DIGIT_BYTES];
+        *d++ = (unsigned char)(l >> (8 * (i % CRY_MPI_DIGIT_BYTES))) & 0xff;
     }
     return bufsiz;
 }
@@ -86,7 +86,7 @@ int cry_mpi_init_bin(cry_mpi *x, const void *b, unsigned int size)
 {
     int res;
 
-    res = cry_mpi_init_size(x, MPI_BYTES_TO_DIGS(size));
+    res = cry_mpi_init_size(x, CRY_MPI_BYTES_TO_DIGS(size));
     if (res == 0) {
         res = cry_mpi_load_bin(x, b, size);
         if (res != 0)

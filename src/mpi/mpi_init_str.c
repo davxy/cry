@@ -17,28 +17,21 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include "cry/mpi.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "mpi_pvt.h"
 
-void cry_mpi_print(const cry_mpi *a, unsigned int radix)
+/*
+ * Initialize a big number from a null terminated ASCII string.
+ */
+int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s)
 {
-    char *s;
-    size_t n = BUFSIZ;
-    char fallback[16];
-    int ret;
+    int res;
 
-    if ((s = malloc(BUFSIZ)) == NULL) {
-        s = fallback;
-        n = sizeof(fallback);
+    res = cry_mpi_init(a);
+    if (res == 0) {
+        res = cry_mpi_load_str(a, radix, s);
+        if (res != 0)
+            cry_mpi_clear(a);
     }
-
-    if ((ret = cry_mpi_store_str(a, radix, s, n)) == 0)
-        printf("%s\n", s);
-    else
-        printf("cry_mpi_print unexpected error (%d)\n", ret);
-
-    if (s != fallback)
-        free(s);
+    return res;
 }
 

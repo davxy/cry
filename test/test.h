@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NDEBUG
+//#define NDEBUG
 
 extern int test_runs;
 extern int test_level;

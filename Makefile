@@ -32,8 +32,12 @@ OBJS := src/version.o \
         src/mpi/mpi_sub.o \
         src/mpi/mpi_mul.o \
         src/mpi/mpi_div.o \
+        src/mpi/mpi_shl.o \
+        src/mpi/mpi_shr.o \
         src/mpi/mpi_bin.o \
-        src/mpi/mpi_str.o \
+        src/mpi/mpi_init_str.o \
+        src/mpi/mpi_load_str.o \
+        src/mpi/mpi_store_str.o \
         src/mpi/mpi_list.o \
         src/mpi/mpi_print.o
 
