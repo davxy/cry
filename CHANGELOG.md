@@ -21,6 +21,13 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+[Unreleased]
+------------
+
+- MPI abs, shl/shr, gcd
+- MPI load/store from string and binary buffer
+- Unit test framework
+
 [0.0.2] - 2014-11-22
 --------------------
 

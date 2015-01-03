@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -81,6 +81,8 @@ void cry_mpi_clear_list(cry_mpi *a, ...);
  *  Arithmetic
  */
 
+int cry_mpi_abs(cry_mpi *d, const cry_mpi *s);
+
 int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
@@ -99,6 +101,12 @@ int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n);
 
 int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);
+
+/*
+ * More advanced arithmetic algorithms
+ */
+
+int cry_mpi_gcd(cry_mpi *r, const cry_mpi *x, const cry_mpi *y);
 
 /*
  * Utilities

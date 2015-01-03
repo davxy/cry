@@ -126,6 +126,17 @@ static void load_str_test(void)
     ASSERT(memcmp("1234*\x00", buf, 6) == 0);
 }
 
+static void abs_test(void)
+{
+    cry_mpi a, b;
+
+    cry_mpi_init_str(&a, 16, "-123456789a");
+    ASSERT(a.sign != 0);
+    cry_mpi_init(&b);
+    cry_mpi_abs(&b, &a);
+    ASSERT(b.sign == 0);
+}
+
 static void cmp_test(void)
 {
     cry_mpi a, b, r;
@@ -234,20 +245,33 @@ static void shr_test(void)
     MPI_ASSERT_EQUAL(&a, 16, "20406080a0c0e10121416181a1c1");
 }
 
+static void gcd_test(void)
+{
+    cry_mpi a, b, c;
+
+    cry_mpi_init_str(&a, 10, "53667");
+    cry_mpi_init_str(&b, 10, "25527");
+    cry_mpi_init(&c);
+    cry_mpi_gcd(&c, &a, &b);
+    MPI_PRINT(&c, "gcd(a,b)");
+    MPI_ASSERT_EQUAL(&c, 10, "201");
+}
 
 void mpi_test(void)
 {
-    RUN(load_str_test);
     RUN(mpi_init_test);
+    RUN(abs_test);
     RUN(cmp_test);
     RUN(add_test);
     RUN(sub_test);
     RUN(init_bin_test);
     RUN(init_str_test);
+    RUN(load_str_test);
     RUN(init_list_test);
     RUN(mul_test);
     RUN(div_test);
     RUN(shl_test);
     RUN(shr_test);
+    RUN(gcd_test);
 }
 
