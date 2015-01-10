@@ -245,6 +245,18 @@ static void shr_test(void)
     MPI_ASSERT_EQUAL(&a, 16, "20406080a0c0e10121416181a1c1");
 }
 
+static void exp_test(void)
+{
+    cry_mpi r, b, e;
+
+    cry_mpi_init_str(&b, 10, "123");
+    cry_mpi_init_str(&e, 10, "4");
+    cry_mpi_init(&r);
+    cry_mpi_exp(&r, &b, &e);
+    MPI_PRINT(&r, "exp(a,b)");
+    MPI_ASSERT_EQUAL(&r, 16, "da48871");
+}
+
 static void gcd_test(void)
 {
     cry_mpi a, b, c;
@@ -273,5 +285,6 @@ void mpi_test(void)
     RUN(shl_test);
     RUN(shr_test);
     RUN(gcd_test);
+    RUN(exp_test);
 }
 

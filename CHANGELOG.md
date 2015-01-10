@@ -24,7 +24,7 @@ Given a version number MAJOR.MINOR.PATCH
 [Unreleased]
 ------------
 
-- MPI abs, shl/shr, gcd
+- MPI abs, shl/shr, gcd, exp
 - MPI load/store from string and binary buffer
 - Unit test framework
 

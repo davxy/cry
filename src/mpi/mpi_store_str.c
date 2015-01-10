@@ -67,11 +67,12 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
     cry_mpi tmp, rad, rem;
     unsigned int i = 0, j, d;
 
-    if (radix < 2 || radix > 16 || size == 0)
+    if (radix < 2 || radix > 16 || size < 2)
         return -1;
 
     if (a->used == 0) {
         s[i++] = '0';
+        s[i] = '\0';
         return 0;
     }
 

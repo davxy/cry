@@ -27,6 +27,7 @@ OBJS := src/version.o \
         src/mpi/mpi_cmp_abs.o \
         src/mpi/mpi_add_abs.o \
         src/mpi/mpi_sub_abs.o \
+        src/mpi/mpi_mul_abs.o \
         src/mpi/mpi_div_abs.o \
         src/mpi/mpi_cmp.o \
         src/mpi/mpi_add.o \
@@ -39,6 +40,7 @@ OBJS := src/version.o \
         src/mpi/mpi_init_str.o \
         src/mpi/mpi_load_str.o \
         src/mpi/mpi_store_str.o \
+        src/mpi/mpi_exp.o \
         src/mpi/mpi_gcd.o \
         src/mpi/mpi_list.o \
         src/mpi/mpi_print.o

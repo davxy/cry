@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -19,13 +19,34 @@
 
 #include "mpi_pvt.h"
 
-int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    int res, sign = a->sign ^ b->sign;
+    int res;
+    cry_mpi t, c, one;
 
-    res = cry_mpi_mul_abs(r, a, b);
-    if (res == 0)
-        r->sign = sign;
-    return res;
+    if (a < b) {
+        const cry_mpi *tmp = a;
+        a = b;
+        b = tmp;
+    }
+
+    if ((res = cry_mpi_init_list(&t, &one, &c, NULL)) != 0)
+        return res;
+    
+    if ((res = cry_mpi_copy(&c, b)) != 0)
+        goto e;
+
+    one.data[0] = 1;
+    one.used = 1;
+    one.sign = 0;
+    while (c.used != 0) {
+        if ((res = cry_mpi_add_abs(&t, &t, a)) != 0 ||
+            (res = cry_mpi_sub_abs(&c, &c, &one)) != 0)
+            goto e;
+    }
+
+    cry_mpi_swap(&t, r);
+e:  cry_mpi_clear_list(&t, &one, &c, NULL);
+    return 0;
 }
 

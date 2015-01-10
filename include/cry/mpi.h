@@ -87,6 +87,8 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 int cry_mpi_div_abs(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
                     const cry_mpi *b);
 
@@ -106,7 +108,9 @@ int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);
  * More advanced arithmetic algorithms
  */
 
-int cry_mpi_gcd(cry_mpi *r, const cry_mpi *x, const cry_mpi *y);
+int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e);
+
+int cry_mpi_gcd(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 /*
  * Utilities
