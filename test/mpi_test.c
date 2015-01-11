@@ -20,9 +20,6 @@
 #include "test.h"
 #include <cry/mpi.h>
 
-#define BUF_SIZ 512
-unsigned char buf[BUF_SIZ];
-
 #ifdef NDEBUG
 # define MPI_PRINT(a, msg)
 #else

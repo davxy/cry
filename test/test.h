@@ -28,6 +28,7 @@
 extern int test_runs;
 extern int test_level;
 extern const char *test_msg;
+extern unsigned char buf[BUFSIZ];
 
 #define ASSERT(test) do { \
     if (!(test)) { \

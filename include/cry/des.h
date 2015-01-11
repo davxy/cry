@@ -40,7 +40,7 @@ struct cry_des_ctx {
 typedef struct cry_des_ctx cry_des_ctx;
 
 
-#define cry_des_init(ctx, _key, _keylen) do { \
+#define cry_des_key_set(ctx, _key, _keylen) do { \
     (ctx)->keylen = _keylen; \
     memcpy((ctx)->key, _key, _keylen); \
     } while(0)

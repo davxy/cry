@@ -77,6 +77,7 @@ void print_hex(unsigned char *p, size_t size)
 int test_runs;
 int test_level;
 const char *test_msg;
+unsigned char buf[BUFSIZ];
 
 int main(int argc, char *argv[])
 {
@@ -90,13 +91,21 @@ int main(int argc, char *argv[])
     printf("\nCRY(T_T)EST\n");
 
     if (argc == 1) {
-        for (j = 0; j < TESTS_NUM; j++)
+        for (j = 0; j < TESTS_NUM; j++) {
             tests[j].func();
+            if (test_msg != NULL)
+                break;
+        }
     } else {
         for (i = 1; i < argc; i++) {
             for (j = 0; j < TESTS_NUM; j++) {
-                if (strcmp(argv[i], tests[j].name) == 0)
+                if (strcmp(argv[i], tests[j].name) == 0) {
                     tests[j].func();
+                    if (test_msg != NULL) {
+                        i = argc;
+                        break;
+                    }
+                }
             }
         }
     }

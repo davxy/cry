@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -20,34 +20,41 @@
 #include "test.h"
 #include <cry/des.h>
 
-#define TXT     "HelloWorldFromDesAlgo"
-#define KEY     "12345678abcdefghILMNOPQR"
+#define KEY   "12345678abcdefghILMNOPQR"
+#define MSG   "CRY is free soft"
+#define LEN   16
+#define CDES  "\x04\xcf\xf8\x8a\xd8\x95\x79\x5c\x2e\x8d\xf1\xd9\xf5\xbd\x94\x54"
+#define CTDES "\x93\x7c\x8d\xf0\xa1\xa4\x77\x61\x11\x4d\xb3\x17\x71\xdb\x10\x19"
+
+static cry_des_ctx des;
+
+static void single(void)
+{
+    memcpy(buf, MSG, LEN); /* test in place */
+    cry_des_key_set(&des, KEY, 8);
+    cry_des_encrypt(&des, buf, buf, LEN);
+    ASSERT(memcmp(buf, CDES, LEN) == 0);
+    print_hex(buf, LEN);
+    cry_des_decrypt(&des, buf, buf, LEN);
+    ASSERT(memcmp(buf, MSG, LEN) == 0);
+    TRACE("%.*s\n", LEN, buf);
+}
+
+static void triple(void)
+{
+    memcpy(buf, MSG, LEN); /* test in place */
+    cry_des_key_set(&des, KEY, 24);
+    cry_des_encrypt(&des, buf, buf, LEN);
+    ASSERT(memcmp(buf, CTDES, LEN) == 0);
+    print_hex(buf, LEN);
+    cry_des_decrypt(&des, buf, buf, LEN);
+    ASSERT(memcmp(buf, MSG, LEN) == 0);
+    TRACE("%.*s\n", LEN, buf);
+}
 
 void des_test(void)
 {
-    char buf[64] = {0};
-    cry_des_ctx des;
-    int len = strlen(TXT);
-    int pad = 8 - len % 8;
-
-    TRACE("Single DES\n");
-    memcpy(buf, TXT, len);
-    memset(buf + len, pad, pad);
-    len += pad; /* loose the original len info */
-    cry_des_init(&des, KEY, 8);
-    cry_des_encrypt(&des, buf, buf, len);
-    cry_des_decrypt(&des, buf, buf, len);
-    len -= buf[len - 1];
-    TRACE("%.*s\n", len, buf);
-
-    TRACE("Triple DES\n");
-    memcpy(buf, TXT, len);
-    memset(buf + len, pad, pad);
-    len += pad; /* loose the original len info */
-    cry_des_init(&des, KEY, 24);
-    cry_des_encrypt(&des, buf, buf, len);
-    cry_des_decrypt(&des, buf, buf, len);
-    len -= buf[len - 1];
-    TRACE("%.*s\n", len, buf);
+    RUN(single);
+    RUN(triple);
 }
 
