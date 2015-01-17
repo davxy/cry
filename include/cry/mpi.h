@@ -100,6 +100,8 @@ int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+#define cry_mpi_mod(r, a, b) cry_mpi_div(NULL, r, a, b)
+
 int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n);
 
 int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);

@@ -20,21 +20,6 @@
 #include "test.h"
 #include <cry/mpi.h>
 
-#ifdef NDEBUG
-# define MPI_PRINT(a, msg)
-#else
-# define MPI_PRINT(a, msg) do { \
-            TRACE("%s:\t", msg); \
-            cry_mpi_print(a, 16); \
-            } while(0)
-#endif
-
-#define MPI_ASSERT_EQUAL(a, radix, string) do { \
-    cry_mpi_store_str(a, radix, buf, sizeof(buf)); \
-    ASSERT(strcmp(buf, string) == 0); \
-    } while (0)
-
-
 static void mpi_init_test(void)
 {
     cry_mpi a, b;

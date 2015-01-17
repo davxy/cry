@@ -19,7 +19,8 @@ OBJS := test.o \
 	    sha256_test.o \
 	    cmac_test.o \
 	    sum_test.o \
-	    mpi_test.o
+	    mpi_test.o \
+	    rsa_test.o
 
 .PHONY: all clean
 

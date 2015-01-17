@@ -39,6 +39,7 @@ TEST_WRAP(cmac)
 TEST_WRAP(crc)
 TEST_WRAP(sum)
 TEST_WRAP(mpi)
+TEST_WRAP(rsa)
 
 
 struct test_def {
@@ -62,6 +63,7 @@ static struct test_def tests[] = {
     TEST_ELEM(crc),
     TEST_ELEM(sum),
     TEST_ELEM(mpi),
+    TEST_ELEM(rsa),
 };
 
 #define TESTS_NUM   (sizeof(tests)/sizeof(*tests))
