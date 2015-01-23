@@ -17,25 +17,32 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include "test.h"
-#include <cry/crc.h>
+#include "cry/rsa.h"
+#include <string.h>
 
-#define MSG "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-#define CRC16_CCITT 0xad3b
-#define CRC16_IBM   0xfe85
-
-void crc_test(void)
+static int rsa_operate(unsigned char *out, unsigned char *in,
+                       size_t siz, cry_mpi *exp, cry_mpi *mod)
 {
-    unsigned short crc;
+    int ret;
+    cry_mpi a;
 
-    TRACE("msg: %s\n", MSG);
+    if ((ret = cry_mpi_init_bin(&a, in, siz)) != 0)
+        return ret;
+    if ((ret = cry_mpi_mod_exp(&a, &a, exp, mod)) == 0)
+        ret = cry_mpi_store_bin(&a, out, siz, 1);
+    cry_mpi_clear(&a);
+    return ret;
+}
 
-    crc = cry_crc16_ccitt(MSG, strlen(MSG));
-    TRACE("crc16-ccitt = 0x%04x\n", crc);
-    ASSERT_EQ(crc, CRC16_CCITT);
+int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out, unsigned char *in,
+                    size_t siz)
+{
+    return rsa_operate(out, in, siz, &ctx->e, &ctx->m);
+}
 
-    crc = cry_crc16_ibm(MSG, strlen(MSG));
-    TRACE("crc16-ibm   = 0x%04x\n", crc);
-    ASSERT_EQ(crc, CRC16_IBM);
+int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out, unsigned char *in,
+                    size_t siz)
+{
+    return rsa_operate(out, in, siz, &ctx->d, &ctx->m);
 }
 

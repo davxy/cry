@@ -23,25 +23,21 @@
 #include <stdio.h>
 #include <string.h>
 
-//#define NDEBUG
+#define NDEBUG
 
 extern int test_runs;
 extern int test_level;
+extern int test_cont;
 extern const char *test_msg;
 extern unsigned char buf[BUFSIZ];
 
-#define ASSERT(test) do { \
-    if (!(test)) { \
-        test_msg = #test; \
-        return; \
-    } \
-    } while (0)
+#define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
 #define RUN(test) do { \
     int i; \
     if (test_level == 0) \
         printf("\n"); \
-    for (i = 0; i < test_level + 3; i++) \
+    for (i = 0; i < test_level + 2; i++) \
         printf("%c", '-'); \
     printf(" %s\n", #test); \
     test_level++; \
@@ -52,27 +48,58 @@ extern unsigned char buf[BUFSIZ];
         return; \
     } while (0)
 
+#define ASSERT(test) do { \
+    if (!(test)) { \
+        printf(">>> ASSERTION FAIL: %s\n", #test); \
+        if (!test_cont) { test_msg = #test; return; } \
+    } \
+    } while (0)
+
+#define ASSERT_EQ(i1, i2) \
+    ASSERT(i1 == i2)
+
+#define ASSERT_EQ_BUF(b1, b2, len) \
+    ASSERT(memcmp(b1, b2, len) == 0)
+
+#define ASSERT_EQ_MPI(mpi, rad, str) do { \
+    cry_mpi_store_str(mpi, rad, buf, sizeof(buf)); \
+    ASSERT(strcmp(buf, str) == 0); \
+    } while (0)
+
 
 #ifdef NDEBUG
-# define TRACE(fmt, ...)
-#else
-# define TRACE(...) fprintf(stdout, __VA_ARGS__)
-#endif
 
-void print_hex(unsigned char *p, size_t n);
+#define TRACE(fmt, ...)
+#define PRINT_HEX(msg, buf, siz)
+#define PRINT_ASC(msg, buf, siz)
+#define PRINT_MPI(msg, mpi, rad)
 
-#ifdef NDEBUG
-# define MPI_PRINT(a, msg)
-#else
-# define MPI_PRINT(a, msg) do { \
-            TRACE("%s:\t", msg); \
-            cry_mpi_print(a, 16); \
-            } while(0)
-#endif
+#else /* !NDEBUG */
 
-#define MPI_ASSERT_EQUAL(a, radix, string) do { \
-    cry_mpi_store_str(a, radix, buf, sizeof(buf)); \
-    ASSERT(strcmp(buf, string) == 0); \
+# define TRACE(...) \
+    fprintf(stdout, __VA_ARGS__)
+
+# define PRINT_HEX(msg, buf, siz) do { \
+    size_t __siz = siz; \
+    unsigned char *__p = buf; \
+    if (msg) TRACE("%s: ", msg); \
+    while (__siz-- > 0) TRACE("%02x", *__p++); \
+    TRACE("\n"); \
+    } while(0)
+
+# define PRINT_ASC(msg, buf, siz) \
+    TRACE("%s: %.*s\n", msg, siz, buf)
+
+# define PRINT_MPI(msg, mpi, rad) do { \
+    TRACE("%s:\t", msg); \
+    cry_mpi_print(mpi, rad); \
+    } while(0)
+
+#endif /* NDEBUG */
+
+#define WARN(...) do { \
+    fprintf(stdout, "!!!!!!!!! "); \
+    fprintf(stdout, __VA_ARGS__); \
     } while (0)
 
 #endif /* _TEST_H_ */

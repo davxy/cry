@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -20,30 +20,30 @@
 #include "test.h"
 #include <cry/md5.h>
 
-static char *ar[] = {
-    "HelloWorld",
-    "Davy",
-    NULL
+static char *input[] = {
+    "This file is part of CRY software.",
+    "CRY is free software",
+};
+
+static const char md5_hash[] = {
+    0x48,0x6a,0xc6,0x00,0x0e,0xf1,0x6f,0x00,
+    0x12,0x0d,0x02,0x46,0xeb,0x4d,0xa6,0x69
 };
 
 void md5_test(void)
 {
-    char **asc = ar;
-    unsigned int len;
     struct cry_md5_ctx md5;
-    unsigned char md[16];
-    int i;
+    unsigned int len, i;
 
     cry_md5_init(&md5);
-    for (i = 0; asc[i] != NULL; i++) {
-        len = strlen(asc[i]);
-        cry_md5_update(&md5, asc[i], len);
+    for (i = 0; i < ARLEN(input); i++) {
+        len = strlen(input[i]);
+        PRINT_ASC("input", input[i], len);
+        cry_md5_update(&md5, input[i], len);
     }
-    cry_md5_digest(&md5, md);
-
-    TRACE("MD5: ");
-    for (i = 0; i < sizeof(md); i++)
-        TRACE("%x", md[i]);
-    TRACE("\n");
+    cry_md5_digest(&md5, buf);
+    
+    PRINT_HEX("md5", buf, 16);
+    ASSERT_EQ_BUF(buf, md5_hash, 16);
 }
 

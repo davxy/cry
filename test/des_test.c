@@ -33,11 +33,11 @@ static void single(void)
     memcpy(buf, MSG, LEN); /* test in place */
     cry_des_key_set(&des, KEY, 8);
     cry_des_encrypt(&des, buf, buf, LEN);
-    ASSERT(memcmp(buf, CDES, LEN) == 0);
-    print_hex(buf, LEN);
+    PRINT_HEX("ciphertext", buf, LEN);
+    ASSERT_EQ_BUF(buf, CDES, LEN);
     cry_des_decrypt(&des, buf, buf, LEN);
-    ASSERT(memcmp(buf, MSG, LEN) == 0);
-    TRACE("%.*s\n", LEN, buf);
+    PRINT_ASC("cleartext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, MSG, LEN);
 }
 
 static void triple(void)
@@ -45,11 +45,11 @@ static void triple(void)
     memcpy(buf, MSG, LEN); /* test in place */
     cry_des_key_set(&des, KEY, 24);
     cry_des_encrypt(&des, buf, buf, LEN);
-    ASSERT(memcmp(buf, CTDES, LEN) == 0);
-    print_hex(buf, LEN);
+    PRINT_HEX("ciphertext", buf, LEN);
+    ASSERT_EQ_BUF(buf, CTDES, LEN);
     cry_des_decrypt(&des, buf, buf, LEN);
-    ASSERT(memcmp(buf, MSG, LEN) == 0);
-    TRACE("%.*s\n", LEN, buf);
+    PRINT_ASC("cleartext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, MSG, LEN);
 }
 
 void des_test(void)

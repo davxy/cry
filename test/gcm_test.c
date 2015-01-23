@@ -75,29 +75,31 @@ void cry_aes_128_gcm_decrypt(unsigned char *dst,
         cry_gcm_digest(&gcm, mac, 16);
 }
 
+
+
 void gcm_test(void)
 {
-    char buf[128];
-    char *msg = "CRY is free software: you can redistribute it and/or modify";
+    char *msg = "This file is part of CRY software.";
     char key[] = {  0, 1, 2, 3, 4, 5, 6, 7,
                     8, 9,10,11,12,13,14,15 };
     char iv[] =  {  0, 1, 2, 3, 4, 5, 6, 7,
                     8, 9,10,11,12,13,14,15 };
     char *aad = "Hello";
-
     int msglen = strlen(msg);
     int aadlen = strlen(aad);
 
-    TRACE("Msg len: %d\n", msglen);
+    memcpy(buf, msg, msglen);
 
-    TRACE("AES-128-GCM\n");
-    memset(buf, 0, sizeof(buf));
     cry_aes_128_gcm_encrypt(buf, msg, msglen, key, iv,
                             buf+msglen, aad, aadlen);
+    PRINT_HEX("ciphertext", buf, msglen);
+
     cry_aes_128_gcm_decrypt(buf, buf, msglen, key, iv,
                             buf+msglen+16, aad, aadlen);
-    TRACE("%.*s\n", msglen, buf);
-    if (memcmp(buf+msglen, buf+msglen+16, 16) != 0)
-        TRACE("Auth failure\n");
+    PRINT_ASC("plaintext ", buf, msglen);
+
+    /* GMAC check */
+    PRINT_HEX("gmac", buf+msglen, 16);
+    ASSERT_EQ_BUF(buf+msglen, buf+msglen+16, 16);
 }
 

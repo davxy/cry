@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -21,11 +21,21 @@
 #include <cry/sum.h>
 
 #define MSG "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define CS8 0xdf
+#define LRC 0x21
 
 void sum_test(void)
 {
-    TRACE("Msg: %s\n", MSG);
-    TRACE("cs8 = 0x%02x\n", cry_cs8(MSG, strlen(MSG)));
-    TRACE("lrc = 0x%02x\n", cry_lrc(MSG, strlen(MSG)));
+    unsigned char cs;
+
+    TRACE("msg: %s\n", MSG);
+
+    cs = cry_cs8(MSG, strlen(MSG));
+    TRACE("cs8 = 0x%02x\n", cs);
+    ASSERT_EQ(cs, CS8);
+
+    cs = cry_lrc(MSG, strlen(MSG));
+    TRACE("lrc = 0x%02x\n", cs);
+    ASSERT_EQ(cs, LRC);
 }
 

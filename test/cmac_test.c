@@ -22,16 +22,12 @@
 
 #define KEY "0123456789abcdef"
 #define MSG "HelloWorld"
+#define LEN strlen(MSG)
 
 void cmac_test(void)
 {
-    unsigned char md[16];
-    int i;
+    cry_cmac_digest(buf, MSG, strlen(MSG), KEY, strlen(KEY));
 
-    cry_cmac_digest(md, MSG, strlen(MSG), KEY, sizeof(KEY));
-
-    TRACE("CMAC: ");
-    for (i = 0; i < sizeof(md); i++)
-        TRACE("%x", md[i]);
-    TRACE("\n");
+    PRINT_HEX("cmac", buf, 16);
+    WARN("...not sure\n");
 }

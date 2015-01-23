@@ -33,14 +33,13 @@ TEST_WRAP(aes)
 TEST_WRAP(cbc)
 TEST_WRAP(ctr)
 TEST_WRAP(gcm)
+TEST_WRAP(crc)
 TEST_WRAP(md5)
 TEST_WRAP(sha256)
 TEST_WRAP(cmac)
-TEST_WRAP(crc)
 TEST_WRAP(sum)
 TEST_WRAP(mpi)
 TEST_WRAP(rsa)
-
 
 struct test_def {
     const char *name;
@@ -57,10 +56,10 @@ static struct test_def tests[] = {
     TEST_ELEM(cbc),
     TEST_ELEM(ctr),
     TEST_ELEM(gcm),
+    TEST_ELEM(crc),
     TEST_ELEM(md5),
     TEST_ELEM(sha256),
     TEST_ELEM(cmac),
-    TEST_ELEM(crc),
     TEST_ELEM(sum),
     TEST_ELEM(mpi),
     TEST_ELEM(rsa),
@@ -68,16 +67,9 @@ static struct test_def tests[] = {
 
 #define TESTS_NUM   (sizeof(tests)/sizeof(*tests))
 
-void print_hex(unsigned char *p, size_t size)
-{
-    while (size-- > 0)
-        TRACE("%02x", *p++);
-    TRACE("\n");
-}
-
-
 int test_runs;
 int test_level;
+int test_cont;
 const char *test_msg;
 unsigned char buf[BUFSIZ];
 
@@ -89,6 +81,7 @@ int main(int argc, char *argv[])
     test_runs = 0;
     test_level = 0;
     test_msg = NULL;
+    test_cont = 1;
 
     printf("\nCRY(T_T)EST\n");
 
@@ -112,11 +105,9 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (test_msg)
-        printf("Assertion failure: \"%s\"\n\n", test_msg);
-    else
-        printf("\nALL TESTS PASSED!!!\n");
-    printf("Tests run: %d\n", test_runs);
+    if (!test_msg)
+        printf("\n|| ALL TESTS PASSED!!!\n");
+    printf("|| Tests run: %d\n", test_runs);
     printf("\n-------------------------------------\n\n");
 
     return test_msg != NULL;

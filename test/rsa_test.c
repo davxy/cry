@@ -64,15 +64,15 @@ const unsigned char public[] = {
 
 #endif
 
-#define MSG "\x09"
-#define LEN 1
+#define MSG     "\x09"
+#define CIPHTXT "\x30"
+#define LEN     1
 
 void rsa_test(void)
 {
     cry_rsa_ctx rsa;
-    cry_mpi c;
 
-    printf("TODO: improve performance!!!\n");
+    WARN("improve performance\n");
 
     cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
     cry_mpi_init_bin(&rsa.e, public, sizeof(public));
@@ -81,18 +81,18 @@ void rsa_test(void)
     TRACE("m-bits: %d\n", cry_mpi_count_bits(&rsa.m));
     TRACE("e-bits: %d\n", cry_mpi_count_bits(&rsa.e));
     TRACE("d-bits: %d\n", cry_mpi_count_bits(&rsa.d));
-    MPI_PRINT(&rsa.m, "m");
-    MPI_PRINT(&rsa.e, "e");
-    MPI_PRINT(&rsa.d, "d");
+    PRINT_MPI("m", &rsa.m, 10);
+    PRINT_MPI("e", &rsa.e, 10);
+    PRINT_MPI("d", &rsa.d, 10);
 
-    cry_mpi_init_bin(&c, MSG, LEN);
-    MPI_PRINT(&c, "msg");
-    cry_mpi_exp(&c, &c, &rsa.e);
-    cry_mpi_mod(&c, &c, &rsa.m);
-    MPI_PRINT(&c, "c");
+    cry_rsa_encrypt(&rsa, buf, MSG, LEN);
+    PRINT_HEX("ciphertext", buf, LEN);
+    ASSERT_EQ_BUF(buf, CIPHTXT, LEN);
 
-    cry_mpi_exp(&c, &c, &rsa.d);
-    cry_mpi_mod(&c, &c, &rsa.m);
-    MPI_PRINT(&c, "c");
+    cry_rsa_decrypt(&rsa, buf, buf, LEN);
+    PRINT_HEX("plaintext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, MSG, LEN);
+
+    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, 0);
 }
 

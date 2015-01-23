@@ -64,20 +64,19 @@ void cry_aes_128_ctr_decrypt(unsigned char *dst,
 void ctr_test(void)
 {
     char buf[128];
-    char *msg = "CRY is free software: you can redistribute it and/or modify";
+    char *msg = "This file is part of CRY software.";
     char key[] = {  0, 1, 2, 3, 4, 5, 6, 7,
                     8, 9,10,11,12,13,14,15 };
     char iv[] =  {  0, 1, 2, 3, 4, 5, 6, 7,
                     8, 9,10,11,12,13,14,15 };
-
     int msglen = strlen(msg);
 
-    TRACE("Msg len: %d\n", msglen);
+    memcpy(buf, msg, sizeof(msg));
+    cry_aes_128_ctr_encrypt(buf, buf, msglen, key, iv);
+    PRINT_HEX("ciphertext", buf, msglen);
 
-    TRACE("AES-128-CTR\n");
-    memset(buf, 0, sizeof(buf));
-    cry_aes_128_ctr_encrypt(buf, msg, msglen, key, iv);
     cry_aes_128_ctr_decrypt(buf, buf, msglen, key, iv);
-    TRACE("%.*s\n", msglen, buf);
+    PRINT_ASC("plaintext ", buf, msglen);
+    ASSERT_EQ_BUF(msg, buf, msglen);
 }
 

@@ -112,6 +112,9 @@ int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);
 
 int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e);
 
+int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
+                    const cry_mpi *m);
+
 int cry_mpi_gcd(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 /*

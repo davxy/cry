@@ -30,36 +30,33 @@
 static void aes_128(void)
 {
     cry_aes_128_encrypt(buf, MSG, LEN, KEY);
-    ASSERT(memcmp(buf, C128, LEN) == 0);
-    print_hex(buf, LEN);
+    PRINT_HEX("ciphertext", buf, LEN);
+    ASSERT_EQ_BUF(buf, C128, LEN);
     cry_aes_128_decrypt(buf, buf, LEN, KEY);
-    ASSERT(memcmp(buf, MSG, LEN) == 0);
-    TRACE("%.*s\n", LEN, buf);
+    PRINT_ASC("cleartext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, MSG, LEN);
 }
 
 
 static void aes_192(void)
 {
-#if 0
     cry_aes_192_encrypt(buf, MSG, LEN, KEY);
-    ASSERT(memcmp(buf, C192, LEN) == 0);
-    print_hex(buf, LEN);
+    PRINT_HEX("ciphertext", buf, LEN);
+    PRINT_HEX("should be ", C192, LEN);
+    ASSERT_EQ_BUF(buf, C192, LEN);
     cry_aes_192_decrypt(buf, buf, LEN, KEY);
-    ASSERT(memcmp(buf, MSG, LEN) == 0);
-    TRACE("%.*s\n", LEN, buf);
-#else
-    printf("FIXME!!!\n");
-#endif
+    PRINT_ASC("cleartext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, MSG, LEN);
 }
 
 static void aes_256(void)
 {
     cry_aes_256_encrypt(buf, MSG, LEN, KEY);
-    ASSERT(memcmp(buf, C256, LEN) == 0);
-    print_hex(buf, LEN);
+    PRINT_HEX("ciphertext", buf, LEN);
+    ASSERT_EQ_BUF(buf, C256, LEN);
     cry_aes_256_decrypt(buf, buf, LEN, KEY);
-    ASSERT(memcmp(buf, MSG, LEN) == 0);
-    TRACE("%.*s\n", LEN, buf);
+    PRINT_ASC("cleartext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, MSG, LEN);
 }
 
 void aes_test(void)

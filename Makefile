@@ -41,9 +41,11 @@ OBJS := src/version.o \
         src/mpi/mpi_load_str.o \
         src/mpi/mpi_store_str.o \
         src/mpi/mpi_exp.o \
+		src/mpi/mpi_mod_exp.o \
         src/mpi/mpi_gcd.o \
         src/mpi/mpi_list.o \
-        src/mpi/mpi_print.o
+        src/mpi/mpi_print.o \
+        src/rsa.o
 
 .PHONY: all clean
 

@@ -30,8 +30,8 @@ static const struct cry_ciph_itf aes_itf = {
 };
 
 void cry_aes_128_cbc_encrypt(unsigned char *dst, const unsigned char *src,
-                             unsigned int size, unsigned char *key,
-                             unsigned char *iv)
+                             unsigned int size, const unsigned char *key,
+                             const unsigned char *iv)
 {
     struct cry_aes_ctx aes;
     struct cry_cbc_ctx cbc;
@@ -44,8 +44,8 @@ void cry_aes_128_cbc_encrypt(unsigned char *dst, const unsigned char *src,
 }
 
 void cry_aes_128_cbc_decrypt(unsigned char *dst, const unsigned char *src,
-                             unsigned int size, unsigned char *key,
-                             unsigned char *iv)
+                             unsigned int size, const unsigned char *key,
+                             const unsigned char *iv)
 {
     struct cry_aes_ctx aes;
     struct cry_cbc_ctx cbc;
@@ -57,23 +57,40 @@ void cry_aes_128_cbc_decrypt(unsigned char *dst, const unsigned char *src,
     cry_cbc_decrypt(&cbc, dst, src, size);
 }
 
+const char key[] = {
+    0xc2,0x86,0x69,0x6d,0x88,0x7c,0x9a,0xa0,
+    0x61,0x1b,0xbb,0x3e,0x20,0x25,0xa4,0x5a
+};
+
+const char iv[] = {
+    0x56,0x2e,0x17,0x99,0x6d,0x09,0x3d,0x28,
+    0xdd,0xb3,0xba,0x69,0x5a,0x2e,0x6f,0x58
+};
+
+const char plaintext[] = {
+    0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,
+    0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,
+    0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,
+    0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f
+};
+
+const char ciphertext[] = {
+    0xd2,0x96,0xcd,0x94,0xc2,0xcc,0xcf,0x8a,
+    0x3a,0x86,0x30,0x28,0xb5,0xe1,0xdc,0x0a,
+    0x75,0x86,0x60,0x2d,0x25,0x3c,0xff,0xf9,
+    0x1b,0x82,0x66,0xbe,0xa6,0xd6,0x1a,0xb1
+};
+
+#define LEN sizeof(plaintext)
+
 void cbc_test(void)
 {
-    char buf[128];
-    char *msg = "CRY is free software: you can redistribute it and/or modify";
-    char key[] = {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15 };
-    char iv[] =  {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15 };
-
-    int msglen = strlen(msg);
-
-    TRACE("Msg len: %d\n", msglen);
-
-    TRACE("AES-128-CBC\n");
-    memset(buf, 0, sizeof(buf));
-    cry_aes_128_cbc_encrypt(buf, msg, msglen, key, iv);
-    cry_aes_128_cbc_decrypt(buf, buf, msglen, key, iv);
-    TRACE("%.*s\n", msglen, buf);
+    memcpy(buf, plaintext, LEN);
+    cry_aes_128_cbc_encrypt(buf, buf, LEN, key, iv);
+    PRINT_HEX("ciphertext", buf, LEN);
+    ASSERT_EQ_BUF(buf, ciphertext, LEN);
+    cry_aes_128_cbc_decrypt(buf, buf, LEN, key, iv);
+    PRINT_HEX("plaintext ", buf, LEN);
+    ASSERT_EQ_BUF(buf, plaintext, LEN);
 }
 

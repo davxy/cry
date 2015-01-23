@@ -19,7 +19,8 @@
 
 #include "mpi_pvt.h"
 
-int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
+int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
+                    const cry_mpi *m)
 {
     int res;
     int sign = b->sign ? cry_mpi_is_odd(e) : 0;
@@ -39,6 +40,8 @@ int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
     t.sign = 0;
     while (c.used != 0) {
         if ((res = cry_mpi_mul_abs(&t, &t, b)) != 0)
+            break;
+        if ((res = cry_mpi_mod(&t, &t, m)) != 0)
             break;
         if ((res = cry_mpi_sub_abs(&c, &c, &one)) != 0)
             break;

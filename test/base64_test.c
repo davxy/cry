@@ -20,19 +20,18 @@
 #include "test.h"
 #include <cry/base64.h>
 
+#define MSG "Hello World"
+#define MLEN strlen(MSG)
+#define ELEN 16
+
 void base64_test(void)
 {
-    char *s = "Hello World";
-    char buf[64];
-    int len;
+    ASSERT(cry_base64_encode(MSG, strlen(MSG), buf) == ELEN);
+    PRINT_ASC("encoded", buf, ELEN);
+    ASSERT_EQ_BUF(buf, "SGVsbG8gV29ybGQ=", ELEN);
 
-    len = cry_base64_encode(s, strlen(s), buf);
-    ASSERT(cry_base64_encode(s, strlen(s), buf) == 16);
-    ASSERT(memcmp(buf, "SGVsbG8gV29ybGQ=", 16) == 0);
-    TRACE("Decoded: %s\n", s);
-    TRACE("Ecoded:  %.*s\n", len, buf);
-    
-    ASSERT((len = cry_base64_decode(buf, len, buf)) > 0);
-    TRACE("Decoded: %.*s\n", len, buf);
+    ASSERT(cry_base64_decode(buf, ELEN, buf) == MLEN);
+    PRINT_ASC("decoded", buf, MLEN);
+    ASSERT_EQ_BUF(buf, MSG, MLEN);
 }
 
