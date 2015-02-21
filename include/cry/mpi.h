@@ -117,6 +117,8 @@ int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
 
 int cry_mpi_gcd(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_lcm(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 /*
  * Utilities
  */

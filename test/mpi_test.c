@@ -252,6 +252,18 @@ static void gcd_test(void)
     ASSERT_EQ_MPI(&c, 10, "201");
 }
 
+static void lcm_test(void)
+{
+    cry_mpi a, b, c;
+
+    cry_mpi_init_str(&a, 10, "53667");
+    cry_mpi_init_str(&b, 10, "25527");
+    cry_mpi_init(&c);
+    cry_mpi_lcm(&c, &a, &b);
+    PRINT_MPI("lcm(a,b)", &c, 16);
+    ASSERT_EQ_MPI(&c, 10, "6815709");
+}
+
 void mpi_test(void)
 {
     RUN(mpi_init_test);
@@ -268,6 +280,7 @@ void mpi_test(void)
     RUN(shl_test);
     RUN(shr_test);
     RUN(gcd_test);
+    RUN(lcm_test);
     RUN(exp_test);
 }
 
