@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -21,6 +21,10 @@
 #define _CRY_MPI_PVT_H_
 
 #include "cry/mpi.h"
+#include <string.h> /* memset */
+
+/* Double precision digits */
+typedef unsigned short cry_mpi_dword;
 
 /* Number of bytes in one digit */
 #define CRY_MPI_DIGIT_BYTES  sizeof(cry_mpi_digit)
@@ -43,6 +47,11 @@ int cry_mpi_grow(cry_mpi *a, unsigned int size);
 #define cry_mpi_adjust(a) do { \
     while ((a)->used > 0 && (a)->data[(a)->used - 1] == 0) \
         ((a)->used)--; \
+    } while(0)
+
+#define cry_mpi_set_used(a, n) do { \
+    (a)->used = (n); \
+    memset((a)->data, 0, (n) * CRY_MPI_DIGIT_BYTES); \
     } while(0)
 
 #endif /* _CRY_MPI_PVT_H_ */

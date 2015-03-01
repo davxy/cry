@@ -18,35 +18,55 @@
  */
 
 #include "mpi_pvt.h"
+#include "misc.h"
 
 int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    int res;
-    cry_mpi t, c, one;
+    cry_mpi t;
+    int res, pa, pb, i, j;
+    cry_mpi_digit u, tmpx, *tmpt, *tmpy;
+    cry_mpi_dword dw;
+    size_t digs = a->used + b->used;
 
-    if (a < b) {
-        const cry_mpi *tmp = a;
-        a = b;
-        b = tmp;
-    }
-
-    if ((res = cry_mpi_init_list(&t, &one, &c, NULL)) != 0)
+    if ((res = cry_mpi_init_size(&t, digs)) != 0)
         return res;
-    
-    if ((res = cry_mpi_copy(&c, b)) != 0)
-        goto e;
+    cry_mpi_set_used(&t, digs);
 
-    one.data[0] = 1;
-    one.used = 1;
-    one.sign = 0;
-    while (c.used != 0) {
-        if ((res = cry_mpi_add_abs(&t, &t, a)) != 0 ||
-            (res = cry_mpi_sub_abs(&c, &c, &one)) != 0)
-            goto e;
+    /* compute the digits of the product directly */
+    pa = a->used;
+    /* iterate through every digit in the first operand */
+    for (i = 0; i < pa; i++) {
+        /* limit ourselves to making digs digits of output */
+        pb = CRY_MIN(b->used, digs - i);
+        if (pb < 0)
+            break;
+        /* copy of the digit to be used within the nested loop */
+        tmpx = a->data[i];
+        /* an alias for the destination shifted i places */
+        tmpt = t.data + i;
+        /* an alias for the digits of b */
+        tmpy = b->data;
+
+        /* set initial carry to zero */
+        u = 0;
+        /* compute the columns of the output and propagate the carry */
+        for (j = 0; j < pb; j++) {
+            /* compute the column as a cry_mpi_dword */
+            dw = (cry_mpi_dword)*tmpt +
+                 (cry_mpi_dword)tmpx * (cry_mpi_dword)(*tmpy++) +
+                 (cry_mpi_dword)u;
+            /* the new column is the lower part of the result */
+            *tmpt++ = (cry_mpi_digit)(dw & (cry_mpi_digit)-1);
+            /* get the carry digit from the result */
+            u = (cry_mpi_digit)(dw >> CRY_MPI_DIGIT_BITS);
+        }
+        /* set the carry if it fits within the required digs */
+        if (i + j < digs)
+            *tmpt = u;
     }
-
+    cry_mpi_adjust(&t);
     cry_mpi_swap(&t, r);
-e:  cry_mpi_clear_list(&t, &one, &c, NULL);
+    cry_mpi_clear(&t);
     return 0;
 }
 

@@ -4,7 +4,7 @@ CC := gcc
 AR := ar
 
 CFLAGS := -O0 -g
-CPPFLAGS := -Iinclude
+CPPFLAGS := -Iinclude -Isrc
 
 OBJS := src/version.o \
         src/memxor.o \
