@@ -81,9 +81,9 @@ void rsa_test(void)
     TRACE("m-bits: %d\n", cry_mpi_count_bits(&rsa.m));
     TRACE("e-bits: %d\n", cry_mpi_count_bits(&rsa.e));
     TRACE("d-bits: %d\n", cry_mpi_count_bits(&rsa.d));
-    PRINT_MPI("m", &rsa.m, 10);
-    PRINT_MPI("e", &rsa.e, 10);
-    PRINT_MPI("d", &rsa.d, 10);
+    PRINT_MPI("m", &rsa.m, 16);
+    PRINT_MPI("e", &rsa.e, 16);
+    PRINT_MPI("d", &rsa.d, 16);
 
     cry_rsa_encrypt(&rsa, buf, MSG, LEN);
     PRINT_HEX("ciphertext", buf, LEN);
