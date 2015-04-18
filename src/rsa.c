@@ -20,7 +20,7 @@
 #include "cry/rsa.h"
 #include <string.h>
 
-static int rsa_operate(unsigned char *out, unsigned char *in,
+static int rsa_operate(unsigned char *out, const unsigned char *in,
                        size_t siz, cry_mpi *exp, cry_mpi *mod)
 {
     int ret;
@@ -29,19 +29,19 @@ static int rsa_operate(unsigned char *out, unsigned char *in,
     if ((ret = cry_mpi_init_bin(&a, in, siz)) != 0)
         return ret;
     if ((ret = cry_mpi_mod_exp(&a, &a, exp, mod)) == 0)
-        ret = cry_mpi_store_bin(&a, out, siz, 1);
+        ret = cry_mpi_store_bin(&a, out, a.used, 1);
     cry_mpi_clear(&a);
     return ret;
 }
 
-int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out, unsigned char *in,
-                    size_t siz)
+int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out,
+                    const unsigned char *in, size_t siz)
 {
     return rsa_operate(out, in, siz, &ctx->e, &ctx->m);
 }
 
-int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out, unsigned char *in,
-                    size_t siz)
+int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out,
+                    const unsigned char *in, size_t siz)
 {
     return rsa_operate(out, in, siz, &ctx->d, &ctx->m);
 }

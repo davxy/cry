@@ -42,11 +42,11 @@ typedef struct cry_rsa_ctx cry_rsa_ctx;
 extern "C"{
 #endif
 
-int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out, unsigned char *in,
-                    size_t siz);
+int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out,
+                    const unsigned char *in, size_t siz);
 
-int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out, unsigned char *in,
-                    size_t siz);
+int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out,
+                    const unsigned char *in, size_t siz);
 
 #ifdef __cplusplus
 }

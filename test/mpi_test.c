@@ -231,7 +231,6 @@ static void exp_test(void)
 {
     cry_mpi r, b, e, m;
 
-    WARN("improve performance\n");
     cry_mpi_init_str(&b, 10, "123");
     cry_mpi_init_str(&e, 10, "4");
     cry_mpi_init(&r);
