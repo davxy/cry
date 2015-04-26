@@ -20,7 +20,8 @@ OBJS := test.o \
 	    cmac_test.o \
 	    sum_test.o \
 	    mpi_test.o \
-	    rsa_test.o
+	    rsa_test.o \
+	    rand_test.o
 
 .PHONY: all clean
 

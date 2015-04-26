@@ -46,7 +46,8 @@ OBJS := src/version.o \
 		src/mpi/mpi_lcm.o \
         src/mpi/mpi_list.o \
         src/mpi/mpi_print.o \
-        src/rsa.o
+        src/rsa.o \
+		src/rand.o
 
 .PHONY: all clean
 
