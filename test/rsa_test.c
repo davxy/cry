@@ -68,6 +68,9 @@ static const unsigned char cipher_text[] = {
 void rsa_test(void)
 {
     cry_rsa_ctx rsa;
+    size_t outlen;
+    unsigned char *outbuf;
+    unsigned char *plainbuf;
 
     cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
     cry_mpi_init_bin(&rsa.e, public, sizeof(public));
@@ -80,6 +83,14 @@ void rsa_test(void)
     PRINT_MPI("e", &rsa.e, 16);
     PRINT_MPI("d", &rsa.d, 16);
 
+#if 1
+    rsa.flags = 0;
+    cry_rsa_encrypt(&rsa, &outbuf, &outlen, plain_text, PLAIN_LEN);
+    PRINT_HEX("ciphertext", outbuf, outlen);
+
+    cry_rsa_decrypt(&rsa, &plainbuf, &outlen, outbuf, outlen);
+    PRINT_HEX("plaintext ", plainbuf, outlen);
+#else
     cry_rsa_encrypt(&rsa, buf, plain_text, PLAIN_LEN);
     PRINT_HEX("ciphertext", buf, CIPHER_LEN);
     ASSERT_EQ_BUF(buf, cipher_text, CIPHER_LEN);
@@ -87,6 +98,7 @@ void rsa_test(void)
     cry_rsa_decrypt(&rsa, buf, buf, CIPHER_LEN);
     PRINT_HEX("plaintext ", buf, PLAIN_LEN);
     ASSERT_EQ_BUF(buf, plain_text, PLAIN_LEN);
+#endif
 
     cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, 0);
 }

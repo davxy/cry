@@ -27,6 +27,8 @@
 
 #include "cry/mpi.h"
 
+#define CRY_RSA_FLAG_SIGN   (1 << 0)
+
 /**
  * Structure used for both private and public key.
  */
@@ -34,6 +36,7 @@ struct cry_rsa_ctx {
     cry_mpi m;      /**< Public modulus */
     cry_mpi e;      /**< Public exponent */
     cry_mpi d;      /**< Private exponent */
+    int     flags;  /**< Behaviour flags */
 };
 
 typedef struct cry_rsa_ctx cry_rsa_ctx;
@@ -42,11 +45,11 @@ typedef struct cry_rsa_ctx cry_rsa_ctx;
 extern "C"{
 #endif
 
-int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out,
-                    const unsigned char *in, size_t siz);
+int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                    const unsigned char *in, size_t inlen);
 
-int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out,
-                    const unsigned char *in, size_t siz);
+int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                    const unsigned char *in, size_t inlen);
 
 #ifdef __cplusplus
 }
