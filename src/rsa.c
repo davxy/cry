@@ -42,8 +42,6 @@
  * long block of data, you need to pad it to complicate brute-force attacks.
  */
 
-#if 1
-
 #include <stdio.h>
 
 static int nozero_rand(unsigned char *dst, unsigned int n)
@@ -78,17 +76,18 @@ static int nozero_rand(unsigned char *dst, unsigned int n)
 /*
  * Encrypts a sequence of characters
  */
-int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
-                    const unsigned char *in, size_t inlen)
+int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
+                    const unsigned char *in, size_t in_siz)
 {
     cry_mpi c, m;
-    int res, modulus_siz, block_siz, encrypt_siz = 0;
-    unsigned char *padded_block, *tmp;
+    int res, mod_siz, block_siz;
+    unsigned char *padded_block;
 
     *out = NULL;
+    *out_siz = 0;
 
-    modulus_siz = cry_mpi_count_bytes(&ctx->m);
-    padded_block = malloc(modulus_siz);
+    mod_siz = cry_mpi_count_bytes(&ctx->m);
+    padded_block = malloc(mod_siz);
     if (!padded_block)
         return -1;
 
@@ -97,62 +96,66 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
         return res;
     }
 
-    while (inlen) {
-        encrypt_siz += modulus_siz;
-        block_siz = (inlen < modulus_siz - 11) ?
-                    inlen : (modulus_siz - 11);
-        memset(padded_block, 0, modulus_siz);
-        memcpy(padded_block + (modulus_siz - block_siz), in, block_siz);
+    while (in_siz) {
+        *out_siz += mod_siz;
+        block_siz = (in_siz < mod_siz - 11) ?
+                    in_siz : (mod_siz - 11);
+        memset(padded_block, 0, mod_siz);
+        memcpy(padded_block + (mod_siz - block_siz), in, block_siz);
         padded_block[1] = 0x02; /* Block type */
 
         if (ctx->flags & CRY_RSA_FLAG_SIGN) {
-            memset(padded_block + 2, 0xFF, modulus_siz - block_siz - 3);
+            memset(padded_block + 2, 0xFF, mod_siz - block_siz - 3);
         } else {
             if ((res = nozero_rand(padded_block + 2,
-                            modulus_siz - block_siz - 3)) < 0)
+                            mod_siz - block_siz - 3)) < 0)
                 return res;
         }
 
-        if ((res = cry_mpi_load_bin(&m, padded_block, modulus_siz)) != 0)
-            break;
-        if ((res = cry_mpi_mod_exp(&c, &m, &ctx->e, &ctx->m)) != 0)
-            break;
-
-        tmp = realloc(*out, encrypt_siz);
-        if (tmp == NULL) {
+        *out = realloc(*out, *out_siz);
+        if (*out == NULL) {
             res = -1;
             break;
         }
-        *out = tmp;
 
-        if ((res = cry_mpi_store_bin(&c, *out + (encrypt_siz - modulus_siz),
-                                     modulus_siz, 1)) < 0)
+        if ((res = cry_mpi_load_bin(&m, padded_block, mod_siz)) != 0)
             break;
+        if ((res = cry_mpi_mod_exp(&c, &m, &ctx->e, &ctx->m)) != 0)
+            break;
+        if (cry_mpi_store_bin(&c, *out + (*out_siz - mod_siz), 
+                              mod_siz, 1) != mod_siz) {
+            res = -1;
+            break;
+        }
 
-        inlen -= block_siz;
+        in_siz -= block_siz;
         in += block_siz;
     }
 
     free(padded_block);
-    cry_mpi_clear_list(&c, &m, 0);
-    *outlen = encrypt_siz;
+    cry_mpi_clear_list(&c, &m, NULL);
+    if (res != 0) {
+        *out_siz = 0;
+        *out = NULL;
+    }
     return res;
 }
 
 /*
  * Decrypts a sequence of characters
  */
-int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
-                    const unsigned char *in, size_t inlen)
+int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
+                    const unsigned char *in, size_t in_siz)
 {
     cry_mpi c, m;
-    int res, i, modulus_siz, out_siz = 0;
-    unsigned char *padded_block, *tmp;
+    int res, i, mod_siz;
+    unsigned char *padded_block;
 
     *out = NULL;
+    *out_siz = 0;
 
-    modulus_siz = cry_mpi_count_bytes(&ctx->m);
-    padded_block = malloc(modulus_siz);
+    mod_siz = cry_mpi_count_bytes(&ctx->m);
+    padded_block = malloc(mod_siz);
     if (!padded_block)
         return -1;
 
@@ -161,19 +164,21 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
         return res;
     }
 
-    while (inlen) {
-        if (inlen < modulus_siz) {
+    while (in_siz) {
+        if (in_siz < mod_siz) {
             /* Input must be an even multiple of key modulus */
             res = -1;
             break;
         }
 
-        if ((res = cry_mpi_load_bin(&c, in, modulus_siz)) != 0)
+        if ((res = cry_mpi_load_bin(&c, in, mod_siz)) != 0)
             break;
         if ((res = cry_mpi_mod_exp(&m, &c, &ctx->d, &ctx->m)) != 0)
             break;
-        if (cry_mpi_store_bin(&m, padded_block, modulus_siz, 1) != modulus_siz)
+        if (cry_mpi_store_bin(&m, padded_block, mod_siz, 1) != mod_siz) {
+            res = -1;
             break;
+        }
 
         if (padded_block[1] > 0x02) {
             /* Decryption error or unrecognized block type */
@@ -189,56 +194,25 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
         while (padded_block[i++])
             ;
 
-        out_siz += modulus_siz - i;
-        tmp = realloc(*out, out_siz);
-        if (tmp == NULL) {
+        *out_siz += mod_siz - i;
+        *out = realloc(*out, *out_siz);
+        if (*out == NULL) {
             res = -1;
             break;
         }
-        *out = tmp;
-        memcpy(*out + (out_siz - (modulus_siz - i)),
-                padded_block + i, modulus_siz - i);
+        memcpy(*out + (*out_siz - (mod_siz - i)),
+                padded_block + i, mod_siz - i);
 
-        inlen -= modulus_siz;
-        in += modulus_siz;
+        in_siz -= mod_siz;
+        in += mod_siz;
     }
 
     free(padded_block);
     cry_mpi_clear_list(&c, &m, 0);
-    *outlen = out_siz;
+    if (res != 0) {
+        *out_siz = 0;
+        *out = NULL;
+    }
     return res;
 }
-
-
-#else
-
-/* Textbook implementation */
-
-static int rsa_operate(unsigned char *out, const unsigned char *in,
-                       size_t siz, cry_mpi *exp, cry_mpi *mod)
-{
-    int ret;
-    cry_mpi a;
-
-    if ((ret = cry_mpi_init_bin(&a, in, siz)) != 0)
-        return ret;
-    if ((ret = cry_mpi_mod_exp(&a, &a, exp, mod)) == 0)
-        ret = cry_mpi_store_bin(&a, out, a.used, 1);
-    cry_mpi_clear(&a);
-    return ret;
-}
-
-int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char *out,
-                    const unsigned char *in, size_t siz)
-{
-    return rsa_operate(out, in, siz, &ctx->e, &ctx->m);
-}
-
-int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char *out,
-                    const unsigned char *in, size_t siz)
-{
-    return rsa_operate(out, in, siz, &ctx->d, &ctx->m);
-}
-
-#endif
 
