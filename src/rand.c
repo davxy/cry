@@ -46,19 +46,21 @@ int __attribute__((weak)) cry_rand_init(void)
 
 int __attribute__((weak)) cry_rand(unsigned char *buf, unsigned int siz)
 {
+    static int init = 0;
     int i, iter = siz / 4;
     uint32_t *buf32 = (uint32_t *) buf;
     uint32_t r;
 
-    if (z1 == 0)
+    if (!init) {
+        init = 1;
         cry_rand_init();
+    }
 
     for (i = 0; i < iter; i++, buf32++)
-        RAND_GET(*buf);
+        RAND_GET(*buf32);
 
-    if (siz & 0x03) {
+    if (iter = (siz & 0x03)) {
         RAND_GET(r);
-        iter = siz & 0x03;
         buf = (unsigned char *)buf32;
         for (i = 0; i < iter; i++, r >>= 8)
             *buf++ = (unsigned char)r;

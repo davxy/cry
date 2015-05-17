@@ -24,8 +24,6 @@
 
 void rand_test(void)
 {
-    int ret;
-    
     ASSERT_EQ(cry_rand(buf, 64), 0);
     PRINT_HEX("rand", buf, 64);
 }
