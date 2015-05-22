@@ -50,19 +50,15 @@ int cry_mpi_rand(cry_mpi *r, unsigned int bits)
     return 0;
 }
 
-int cry_mpi_rand_range(cry_mpi *r, const cry_mpi *max)
+int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max)
 {
     int n, ret;
 
     n = cry_mpi_count_bits(max);
-    if ((ret = cry_mpi_rand(r, n)) != 0)
+    if ((ret = cry_mpi_rand(a, n)) != 0)
         return ret;
-    if (cry_mpi_cmp_abs(r, max) >= 0) {
-        if ((ret = cry_mpi_mod(r, r, max)) != 0) {
-            cry_mpi_zero(r);
-            return ret;
-        }
-    }
+    if (cry_mpi_cmp_abs(a, max) >= 0)
+        ret = cry_mpi_mod(a, a, max);
     return 0;
 }
 

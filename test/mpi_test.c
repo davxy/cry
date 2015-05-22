@@ -289,21 +289,36 @@ static void lcm_test(void)
 
 static void rand_test(void)
 {
-    cry_mpi r;
+    cry_mpi a;
     int bits;
 
     srand(time(NULL));
     bits = rand() % 4096;
 
-    cry_mpi_init(&r);
+    cry_mpi_init(&a);
 
-    cry_mpi_rand(&r, bits);
+    cry_mpi_rand(&a, bits);
 
     TRACE("bits: %d\n", bits);
-    ASSERT_EQ(cry_mpi_count_bits(&r), bits);
-    PRINT_MPI("rand-mpi", &r, 16);
+    PRINT_MPI("rand-mpi", &a, 16);
+    ASSERT_EQ(cry_mpi_count_bits(&a), bits);
 
-    cry_mpi_clear(&r);
+    cry_mpi_clear(&a);
+}
+
+static void prime_test(void)
+{
+    cry_mpi a;
+    int bits = 32;
+
+    cry_mpi_init(&a);
+    
+    cry_mpi_prime(&a, bits);
+    TRACE("bits: %d\n", bits);
+    ASSERT_EQ(cry_mpi_count_bits(&a), bits);
+    PRINT_MPI("prime-mpi", &a, 16);
+
+    cry_mpi_clear(&a);
 }
 
 void mpi_test(void)
@@ -325,5 +340,6 @@ void mpi_test(void)
     RUN(lcm_test);
     RUN(exp_test);
     RUN(rand_test);
+    RUN(prime_test);
 }
 

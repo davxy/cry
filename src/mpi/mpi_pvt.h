@@ -54,5 +54,9 @@ int cry_mpi_grow(cry_mpi *a, unsigned int size);
     memset((a)->data, 0, (n) * CRY_MPI_DIGIT_BYTES); \
     } while(0)
 
+#define cry_mpi_set_bit(a, bit) \
+    ((a)->data[(bit) / CRY_MPI_DIGIT_BITS] |= \
+         1U << ((bit) % CRY_MPI_DIGIT_BITS))
+
 #endif /* _CRY_MPI_PVT_H_ */
 
