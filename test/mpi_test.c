@@ -19,6 +19,8 @@
 
 #include "test.h"
 #include <cry/mpi.h>
+#include <stdlib.h> /* rand */
+#include <time.h>   /* time */
 
 static void mpi_init_test(void)
 {
@@ -33,8 +35,7 @@ static void mpi_init_test(void)
     cry_mpi_init_int(&a, 0x12345678);
     cry_mpi_init_copy(&b, &a);
     PRINT_MPI("after init-copy", &b, 16);
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
+    cry_mpi_clear_list(&a, &b, NULL);
 
     cry_mpi_init_size(&a, 1);
     cry_mpi_init(&b);
@@ -82,6 +83,8 @@ static void init_bin_test(void)
     for (i = 0; i < a.used; i++)
         TRACE("%02x", buf[i]);
     TRACE("\n");
+
+    cry_mpi_clear(&a);
 }
 
 static void init_str_test(void)
@@ -106,6 +109,7 @@ static void load_str_test(void)
     cry_mpi_init_str(&a, 16, "0123456789abcdef");
     cry_mpi_store_str(&a, 16, buf, 6);
     ASSERT(memcmp("1234*\x00", buf, 6) == 0);
+    cry_mpi_clear(&a);
 }
 
 static void abs_test(void)
@@ -117,6 +121,7 @@ static void abs_test(void)
     cry_mpi_init(&b);
     cry_mpi_abs(&b, &a);
     ASSERT(b.sign == 0);
+    cry_mpi_clear_list(&a, &b, NULL);
 }
 
 static void cmp_test(void)
@@ -132,10 +137,7 @@ static void cmp_test(void)
     TRACE("cmp(a,b) res=%d\n", cry_mpi_cmp(&a, &b));
     TRACE("cmp(b,a) res=%d\n", cry_mpi_cmp(&b, &a));
 
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
-    cry_mpi_clear(&r);
-
+    cry_mpi_clear_list(&a, &b, &r, NULL);
 }
 
 static void add_test(void)
@@ -152,9 +154,7 @@ static void add_test(void)
     PRINT_MPI("b", &b, 16);
     PRINT_MPI("a + b", &r, 16);
 
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
-    cry_mpi_clear(&r);
+    cry_mpi_clear_list(&a, &b, &r, NULL);
 }
 
 static void sub_test(void)
@@ -171,9 +171,7 @@ static void sub_test(void)
     PRINT_MPI("b", &b, 16);
     PRINT_MPI("a - b", &r, 16);
 
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
-    cry_mpi_clear(&r);
+    cry_mpi_clear_list(&a, &b, &r, NULL);
 }
 
 static void mul_test(void)
@@ -183,10 +181,13 @@ static void mul_test(void)
     cry_mpi_init_list(&a, &b, &r, NULL);
     cry_mpi_set_int(&a, 0x1234);
     cry_mpi_set_int(&b, 0x02);
+
     cry_mpi_mul(&r, &a, &b);
+
     PRINT_MPI("a", &a, 16);
     PRINT_MPI("b", &b, 16);
     PRINT_MPI("a * b", &r, 16);
+
     cry_mpi_clear_list(&a, &b, &r, NULL);
 }
 
@@ -197,11 +198,14 @@ static void div_test(void)
     cry_mpi_init_list(&a, &b, &q, &r, NULL);
     cry_mpi_set_int(&a, -7);
     cry_mpi_set_int(&b, 3);
+
     cry_mpi_div(&q, &r, &a, &b);
+
     PRINT_MPI("a", &a, 16);
     PRINT_MPI("b", &b, 16);
     PRINT_MPI("a / b", &q, 16);
     PRINT_MPI("a \% b", &r, 16);
+
     cry_mpi_clear_list(&a, &b, &q, &r, NULL);
 }
 
@@ -211,9 +215,13 @@ static void shl_test(void)
 
     cry_mpi_init_str(&a, 16, "0102030405060708090a0b0c0d0e0f");
     PRINT_MPI("a     ", &a, 16);
+
     cry_mpi_shl(&a, &a, 3);
+
     PRINT_MPI("a << 3", &a, 16);
     ASSERT_EQ_MPI(&a, 16, "81018202830384048505860687078");
+
+    cry_mpi_clear(&a);
 }
 
 static void shr_test(void)
@@ -222,21 +230,29 @@ static void shr_test(void)
 
     cry_mpi_init_str(&a, 16, "0102030405060708090a0b0c0d0e0f");
     PRINT_MPI("a     ", &a, 16);
+
     cry_mpi_shr(&a, &a, 3);
+
     PRINT_MPI("a >> 3", &a, 16);
     ASSERT_EQ_MPI(&a, 16, "20406080a0c0e10121416181a1c1");
+
+    cry_mpi_clear(&a);
 }
 
 static void exp_test(void)
 {
-    cry_mpi r, b, e, m;
+    cry_mpi r, b, e;
 
     cry_mpi_init_str(&b, 10, "123");
     cry_mpi_init_str(&e, 10, "4");
     cry_mpi_init(&r);
+
     cry_mpi_exp(&r, &b, &e);
+
     PRINT_MPI("exp(a,b)", &r, 16);
     ASSERT_EQ_MPI(&r, 16, "da48871");
+
+    cry_mpi_clear_list(&r, &b, &e, NULL);
 }
 
 static void gcd_test(void)
@@ -246,9 +262,13 @@ static void gcd_test(void)
     cry_mpi_init_str(&a, 10, "53667");
     cry_mpi_init_str(&b, 10, "25527");
     cry_mpi_init(&c);
+
     cry_mpi_gcd(&c, &a, &b);
+
     PRINT_MPI("gcd(a,b)", &c, 16);
     ASSERT_EQ_MPI(&c, 10, "201");
+
+    cry_mpi_clear_list(&a, &b, &c, NULL);
 }
 
 static void lcm_test(void)
@@ -258,9 +278,32 @@ static void lcm_test(void)
     cry_mpi_init_str(&a, 10, "53667");
     cry_mpi_init_str(&b, 10, "25527");
     cry_mpi_init(&c);
+
     cry_mpi_lcm(&c, &a, &b);
+
     PRINT_MPI("lcm(a,b)", &c, 16);
     ASSERT_EQ_MPI(&c, 10, "6815709");
+
+    cry_mpi_clear_list(&a, &b, &c, NULL);
+}
+
+static void rand_test(void)
+{
+    cry_mpi r;
+    int bits;
+
+    srand(time(NULL));
+    bits = rand() % 4096;
+
+    cry_mpi_init(&r);
+
+    cry_mpi_rand(&r, bits);
+
+    TRACE("bits: %d\n", bits);
+    ASSERT_EQ(cry_mpi_count_bits(&r), bits);
+    PRINT_MPI("rand-mpi", &r, 16);
+
+    cry_mpi_clear(&r);
 }
 
 void mpi_test(void)
@@ -281,5 +324,6 @@ void mpi_test(void)
     RUN(gcd_test);
     RUN(lcm_test);
     RUN(exp_test);
+    RUN(rand_test);
 }
 
