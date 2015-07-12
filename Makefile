@@ -1,3 +1,5 @@
+RAND := weak
+
 TARGET := libcry.a
 
 CC := gcc
@@ -48,8 +50,17 @@ OBJS := src/version.o \
         src/mpi/mpi_rand.o \
         src/mpi/mpi_prime.o \
         src/mpi/mpi_print.o \
-        src/rsa.o \
-		src/rand.o
+        src/rsa.o
+
+ifeq ($(RAND),unix)
+OBJS += src/rand/rand_unix.o
+else ifeq ($(RAND),win)
+OBJS += src/rand/rand_win.o
+else ifeq ($(RAND),strong)
+OBJS += src/rand/rand_strong.o
+else
+OBJS += src/rand/rand_weak.o
+endif
 
 .PHONY: all clean
 

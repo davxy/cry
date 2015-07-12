@@ -38,13 +38,13 @@ static uint32_t z1, z2, z3, z4;
     ((r) = (z1 ^ z2 ^ z3 ^ z4)); \
     } while(0)
 
-int __attribute__((weak)) cry_rand_init(void)
+int cry_rand_init(void)
 {
     z1 = z2 = z3 = z4 = time(NULL);
     return 0;
 }
 
-int __attribute__((weak)) cry_rand(unsigned char *buf, unsigned int siz)
+int cry_rand(unsigned char *buf, unsigned int siz)
 {
     static int init = 0;
     int i, iter = siz / 4;

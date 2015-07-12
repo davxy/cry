@@ -297,7 +297,7 @@ static void rand_test(void)
 
     cry_mpi_init(&a);
 
-    cry_mpi_rand(&a, bits);
+    ASSERT_EQ(cry_mpi_rand(&a, bits), 0);
 
     TRACE("bits: %d\n", bits);
     PRINT_MPI("rand-mpi", &a, 16);
@@ -313,7 +313,7 @@ static void prime_test(void)
 
     cry_mpi_init(&a);
     
-    cry_mpi_prime(&a, bits);
+    ASSERT_EQ(cry_mpi_prime(&a, bits), 0);
     TRACE("bits: %d\n", bits);
     ASSERT_EQ(cry_mpi_count_bits(&a), bits);
     PRINT_MPI("prime-mpi", &a, 16);
