@@ -22,9 +22,24 @@
 
 #include "cry/mpi.h"
 #include <string.h> /* memset */
+#include <limits.h>
+#include <stdint.h>
 
-/* Double precision digits */
-typedef unsigned short cry_mpi_dword;
+/*
+ * Double precision digits
+ */
+
+#if ULONG_MAX == 18446744073709551615UL
+# if defined(_WIN32) || defined(__GNUC__)
+typedef unsigned __int128 cry_mpi_dword;
+# else
+typedef uint128_t cry_mpi_dword;
+# endif
+#elif ULONG_MAX == 4294967295UL
+typedef uint64_t cry_mpi_dword;
+#else
+# error "Invalid ULONG_MAX value"
+#endif
 
 /* Number of bytes in one digit */
 #define CRY_MPI_DIGIT_BYTES  sizeof(cry_mpi_digit)

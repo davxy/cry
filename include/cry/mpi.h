@@ -27,7 +27,11 @@
 
 #include <stddef.h>
 
+#if 1
+typedef unsigned long cry_mpi_digit;
+#else
 typedef unsigned char cry_mpi_digit;
+#endif
 
 struct cry_mpi {
     int           sign;
@@ -58,7 +62,7 @@ int cry_mpi_init_size(cry_mpi *a, unsigned int size);
 
 int cry_mpi_init_int(cry_mpi *a, long i);
 
-void cry_mpi_set_int(cry_mpi *a, long i);
+int cry_mpi_set_int(cry_mpi *a, long i);
 
 int cry_mpi_init_bin(cry_mpi *a, const void *b, unsigned int size);
 

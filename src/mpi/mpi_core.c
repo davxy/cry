@@ -82,14 +82,21 @@ int cry_mpi_init_int(cry_mpi *a, long i)
 {
     int res;
 
-    if ((res = cry_mpi_init(a)) != 0)
-        return res;
-    cry_mpi_set_int(a, i);
+    if ((res = cry_mpi_init(a)) == 0) {
+        if ((res = cry_mpi_set_int(a, i)) < 0)
+            cry_mpi_clear(a);
+    }
     return 0;
 }
 
-void cry_mpi_set_int(cry_mpi *a, long i)
+int cry_mpi_set_int(cry_mpi *a, long i)
 {
+    int res;
+    size_t used = CRY_MPI_BYTES_TO_DIGS(sizeof(i));
+
+    if ((res = cry_mpi_grow(a, used)) < 0)
+        return res;
+
     if (i < 0) {
         a->sign = 1;
         i = -i;
@@ -97,10 +104,11 @@ void cry_mpi_set_int(cry_mpi *a, long i)
         a->sign = 0;
     }
 
-    while (i != 0) {
-        a->data[a->used++] = (unsigned char) i;
-        i >>= 8;
+    while (a->used < used) {
+        a->data[a->used++] = (cry_mpi_digit) i;
+        i >>= CRY_MPI_DIGIT_BITS;
     }
+    return res;
 }
 
 void cry_mpi_clear(cry_mpi *a)
