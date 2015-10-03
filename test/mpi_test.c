@@ -287,6 +287,26 @@ static void lcm_test(void)
     cry_mpi_clear_list(&a, &b, &c, NULL);
 }
 
+static void inv_test(void)
+{
+    cry_mpi a, b, c;
+
+    ASSERT_EQ(cry_mpi_init_int(&a, 7), 0);
+    ASSERT_EQ(cry_mpi_init_int(&b, 15), 0);
+    ASSERT_EQ(cry_mpi_init(&c), 0);
+    ASSERT_EQ(cry_mpi_inv(&c, &a, &b), 0);
+
+    PRINT_MPI("a", &a, 16);
+    PRINT_MPI("b", &b, 16);
+    PRINT_MPI("inv(a) (mod b)", &c, 16);
+
+    ASSERT_EQ(cry_mpi_mul(&a, &a, &c), 0);
+    ASSERT_EQ(cry_mpi_mod(&a, &a, &b), 0);
+    ASSERT(a.used == 1 && a.data[0] == 1);
+
+    cry_mpi_clear_list(&a, &b, &c, NULL);
+}
+
 static void rand_test(void)
 {
     cry_mpi a;
@@ -338,6 +358,7 @@ void mpi_test(void)
     RUN(shr_test);
     RUN(gcd_test);
     RUN(lcm_test);
+    RUN(inv_test);
     RUN(exp_test);
     RUN(rand_test);
     RUN(prime_test);
