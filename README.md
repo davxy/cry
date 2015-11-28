@@ -1,7 +1,18 @@
 CRY(T_T)
 ========
 
-A small crypto library
+A small crypto library.
+
+
+Multiple precision integers
+---------------------------
+
+- Basic arithmentic (add,sub,mul,div,mod,abs,exp)
+- Modular exponentiation
+- Modular inverse (Euclidean)
+- GCD and LCM
+- Probabilistic prime numbers generator (Miller-Rabin)
+- Random mpi generator
 
 
 Block ciphers
@@ -17,6 +28,18 @@ Block ciphers
 - GCM
 - CTR
 
+Public key ciphers
+------------------
+
+- RSA (PKCS#1 v1.5)
+
+
+Pseudo random numbers generators
+--------------------------------
+
+- Weak portable PRNG
+- Posix CSPRNG (using '/dev/urandom')
+- Windows CSPRNG (using 'CryptGenRandom')
 
 Message authentication code
 ---------------------------
@@ -41,12 +64,6 @@ Hash
 
 - LRC
 - 8-bit trivial checksum
-
-
-Multiple precision integers
----------------------------
-
-- Basic arithmentic
 
 
 Utilities

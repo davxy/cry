@@ -21,12 +21,16 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
-[Unreleased]
-------------
+[0.0.3] - 2015-11-28
+--------------------
 
 - MPI abs, shl/shr, gcd, lcm, exp, mod-exp
 - MPI load/store from string and binary buffer
+- MPI inverse (Euclidean algorithm)
 - Unit test framework
+- Improved build system using non recursive make
+- CSPRNG wrapper around OS specific PRNG.
+- RSA (PKCS#1 v1.5)
 
 [0.0.2] - 2014-11-22
 --------------------
