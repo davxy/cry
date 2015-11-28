@@ -242,7 +242,6 @@ int cry_mpi_is_prime(const cry_mpi *p)
 int cry_mpi_prime(cry_mpi *p, unsigned int bits)
 {
     int res = -1, count = ITER_LIMIT;
-    int shift;
 
     if (bits & 0x07 || bits == 0)
         return -1; /* Not a multiple of 8 bit */

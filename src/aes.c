@@ -20,12 +20,6 @@
 #include "cry/aes.h"
 #include <string.h>
 
-static void xor(unsigned char *target, const unsigned char *src, int len)
-{
-    while (len--)
-        *target++ ^= *src++;
-}
-
 static void rot_word(unsigned char *w)
 {
     unsigned char tmp;

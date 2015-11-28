@@ -107,5 +107,6 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
         j++;
         i--;
     }
+    return ret;
 }
 

@@ -59,7 +59,8 @@ int cry_rand(unsigned char *buf, unsigned int siz)
     for (i = 0; i < iter; i++, buf32++)
         RAND_GET(*buf32);
 
-    if (iter = (siz & 0x03)) {
+
+    if ((iter = (siz & 0x03)) != 0) {
         RAND_GET(r);
         buf = (unsigned char *)buf32;
         for (i = 0; i < iter; i++, r >>= 8)
