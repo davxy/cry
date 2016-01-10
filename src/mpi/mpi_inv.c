@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2016, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -19,8 +19,10 @@
 
 #include "mpi_pvt.h"
 
+#ifdef CRY_MPI_INV_EUCLID
+
 /*
- * Modular inverse
+ * Modular inverse.
  *
  * Classic extended Euclidean algorithm.
  */
@@ -63,4 +65,75 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m)
     cry_mpi_clear_list(&r0, &r1, &s0, &s1, 0);
     return ret;
 }
+
+#else
+
+/*
+ * Modular inverse.
+ *
+ * Binary extended gcd algorithm (HAC 14.4.3).
+ */
+int cry_mpi_inv(cry_mpi *r, const cry_mpi *x, const cry_mpi *m)
+{
+    int res;
+    cry_mpi TA, TU, U1, U2, TB, TV, V1, V2;
+
+    if ((res = cry_mpi_init_list(&TA, &TU, &U1, &U2,
+                                 &TB, &TV, &V1, &V2, 0)) != 0)
+        return res;
+
+    if ((res = cry_mpi_mod(&TA, x, m)) != 0)
+        goto cleanup;
+    cry_mpi_copy(&TU, &TA);
+    cry_mpi_copy(&TB, m);
+    cry_mpi_copy(&TV, m);
+
+    cry_mpi_set_int(&U1, 1);
+    cry_mpi_set_int(&U2, 0);
+    cry_mpi_set_int(&V1, 0);
+    cry_mpi_set_int(&V2, 1);
+
+    do {
+        while (cry_mpi_is_even(&TU)) {
+            cry_mpi_shr(&TU, &TU, 1);
+            if (cry_mpi_is_odd(&U1) || cry_mpi_is_odd(&U2)) {
+                cry_mpi_add(&U1, &U1, &TB);
+                cry_mpi_sub(&U2, &U2, &TA);
+            }
+            cry_mpi_shr(&U1, &U1, 1);
+            cry_mpi_shr(&U2, &U2, 1);
+        }
+        while (cry_mpi_is_even(&TV)) {
+            cry_mpi_shr(&TV, &TV, 1);
+            if (cry_mpi_is_odd(&V1) || cry_mpi_is_odd(&V2)) {
+                cry_mpi_add(&V1, &V1, &TB);
+                cry_mpi_sub(&V2, &V2, &TA);
+            }
+            cry_mpi_shr(&V1, &V1, 1);
+            cry_mpi_shr(&V2, &V2, 1);
+        }
+        if (cry_mpi_cmp(&TU, &TV) >= 0) {
+            cry_mpi_sub(&TU, &TU, &TV);
+            cry_mpi_sub(&U1, &U1, &V1);
+            cry_mpi_sub(&U2, &U2, &V2);
+        } else {
+            cry_mpi_sub(&TV, &TV, &TU);
+            cry_mpi_sub(&V1, &V1, &U1);
+            cry_mpi_sub(&V2, &V2, &U2);
+        }
+    } while (TU.used != 0);
+
+    while (V1.used && V1.sign)
+        cry_mpi_add(&V1, &V1, m);
+
+    while (cry_mpi_cmp(&V1, m) >= 0)
+        cry_mpi_sub(&V1, &V1, m);
+
+    cry_mpi_swap(r, &V1);
+cleanup:
+    cry_mpi_clear_list(&TA, &TB, &TU, &TV, &U1, &U2, &V1, &V2, 0);
+    return res;
+}
+
+#endif /* CRY_MPI_INV_EUCLID */
 
