@@ -24,3 +24,6 @@ CRY_RAND=weak
 # If not defined the faster Binary Extended Algorithm (HAC 14.4.3) is used.
 #CRY_MPI_INV_EUCLID=y
 
+# Comba as baseline multiplier
+#CRY_MPI_MUL_COMBA=y
+

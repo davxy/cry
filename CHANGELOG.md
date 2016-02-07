@@ -21,6 +21,11 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+[Unreleased]
+------------
+
+- MPI Comba multiplier
+
 [0.0.3] - 2015-11-28
 --------------------
 
