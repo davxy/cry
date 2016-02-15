@@ -22,15 +22,42 @@
 
 #ifdef CRY_MPI_MUL_COMBA
 
-#define MULADD(i, j) do {                               \
-   cry_mpi_dword t;                                     \
+#if defined(CRY_ARCH_X86)
+
+#define MULADD(i, j) asm(                           \
+     "movl  %6, %%eax    \n\t"                      \
+     "mull  %7           \n\t"                      \
+     "addl  %%eax, %0    \n\t"                      \
+     "adcl  %%edx, %1    \n\t"                      \
+     "adcl  $0, %2       \n\t"                      \
+     : "=r"(c0), "=r"(c1), "=r"(c2)                 \
+     : "0"(c0), "1"(c1), "2"(c2), "m"(i), "m"(j)    \
+     : "%eax","%edx","cc")
+
+#elif defined(CRY_ARCH_X86_64)
+
+#define MULADD(i, j) asm(                           \
+     "movq  %6, %%rax    \n\t"                      \
+     "mulq  %7           \n\t"                      \
+     "addq  %%rax, %0    \n\t"                      \
+     "adcq  %%rdx, %1    \n\t"                      \
+     "adcq  $0, %2       \n\t"                      \
+     : "=r"(c0), "=r"(c1), "=r"(c2)                 \
+     : "0"(c0), "1"(c1), "2"(c2), "g"(i), "g"(j)    \
+     : "%rax", "%rdx", "cc")
+
+#else /* ISO C code */
+
+#define MULADD(i, j) do {                           \
+   cry_mpi_dword t;                                 \
    t = (cry_mpi_dword)c0 + ((cry_mpi_dword)(i)) * ((cry_mpi_dword)(j)); \
-   c0 = t;                                              \
-   t = (cry_mpi_dword)c1 + (t >> CRY_MPI_DIGIT_BITS);   \
-   c1 = t;                                              \
-   c2 += t >> CRY_MPI_DIGIT_BITS;                       \
+   c0 = t;                                          \
+   t = (cry_mpi_dword)c1 + (t >> CRY_MPI_DIGIT_BITS); \
+   c1 = t;                                          \
+   c2 += t >> CRY_MPI_DIGIT_BITS;                   \
    } while (0);
 
+#endif
 
 int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
