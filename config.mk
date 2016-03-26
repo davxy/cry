@@ -33,4 +33,7 @@ CRY_RAND=weak
 
 # Comba as baseline multiplier
 CRY_MPI_MUL_COMBA=y
+#
+# Karatsuba multiplier enabled, see the mpi_mul.c to set the CUTOFF
+CRY_MPI_MUL_KARATSUBA=y
 

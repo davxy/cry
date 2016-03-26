@@ -19,7 +19,7 @@
 
 #include "mpi_pvt.h"
 
-static void cry_mpi_shrd(cry_mpi *a, int n)
+void cry_mpi_shrd(cry_mpi *a, int n)
 {
     int x;
 

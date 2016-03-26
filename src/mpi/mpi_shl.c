@@ -22,7 +22,7 @@
 /*
  * Shift left by a certain amount of digits
  */
-static int cry_mpi_shld(cry_mpi *a, int n)
+int cry_mpi_shld(cry_mpi *a, int n)
 {
     int x, res;
 

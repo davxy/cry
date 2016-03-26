@@ -59,7 +59,7 @@
 
 #endif
 
-int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+static int mul_base(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
     int res, ix, iy, iz, tx, ty, pa;
     cry_mpi_digit c0, c1, c2, *tmpx, *tmpy;
@@ -121,7 +121,7 @@ int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
 #else /* !CRY_MPI_MUL_COMBA */
 
-int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+static int mul_base(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
     cry_mpi t;
     int res, pa, pb, i, j;
@@ -172,4 +172,143 @@ int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 }
 
 #endif /* CRY_MPI_MUL_COMBA */
+
+#ifdef CRY_MPI_MUL_KARATSUBA
+
+#define KARATSUBA_CUTOFF    64
+
+static int mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+{
+    cry_mpi x0, x1, y0, y1, t1, x0y0, x1y1;
+    int B, hB, res;
+
+    /* minimum number of digits */
+    B = CRY_MIN(a->used, b->used);
+    /* divide by two */
+    hB = B >> 1;
+    B = hB << 1;
+
+    /* init copy all the temporaries */
+    if ((res = cry_mpi_init_size(&x0, hB)) < 0)
+        goto e0;
+    if ((res = cry_mpi_init_size(&x1, a->used - hB)) < 0)
+        goto e1;
+    if ((res = cry_mpi_init_size(&y0, hB)) < 0)
+        goto e2;
+    if ((res = cry_mpi_init_size(&y1, b->used - hB)) < 0)
+        goto e3;
+
+    if ((res = cry_mpi_init_size(&t1, B)) < 0)
+        goto e4;
+    if ((res = cry_mpi_init_size(&x0y0, B)) < 0)
+        goto e5;
+    if ((res = cry_mpi_init_size(&x1y1, B)) < 0)
+        goto e6;
+
+    /* Shift the digits */
+    x0.used = y0.used = hB;
+    x1.used = a->used - hB;
+    y1.used = b->used - hB;
+
+#if 1
+    {
+        register int x;
+        register cry_mpi_digit *tmpa, *tmpb, *tmpx, *tmpy;
+
+        /*
+         * We copy the digits directly instead of using higher level functions
+         * since we also need to shift digits.
+         */
+        tmpa = a->data;
+        tmpb = b->data;
+
+        tmpx = x0.data;
+        tmpy = y0.data;
+
+        /* TODO: use memcpy? */
+        for (x = 0; x < hB; x++) {
+            *tmpx++ = *tmpa++;
+            *tmpy++ = *tmpb++;
+        }
+
+        tmpx = x1.data;
+        for (x = hB; x < a->used; x++)
+            *tmpx++ = *tmpa++;
+
+        tmpy = y1.data;
+        for (x = hB; x < b->used; x++)
+            *tmpy++ = *tmpb++;
+
+    }
+#else
+    int x = hB * sizeof(cry_mpi_digit);
+    memcpy(x0.data, a->data, x);
+    memcpy(x1.data, a->data + x, a->used * sizeof(cry_mpi_digit) - x);
+    memcpy(y0.data, b->data, x);
+    memcpy(y1.data, b->data + x, b->used * sizeof(cry_mpi_digit) - x);
+#endif
+
+    /*
+     * Only need to clamp the lower words since by definition the upper
+     * words x1/y1 must have a known number of digits
+     */
+    cry_mpi_adjust(&x0);
+    cry_mpi_adjust(&y0);
+
+    /*
+     * Now calc the products x0y0 and x1y1.
+     * After this x0 is no longer required, free temp [x0==t2]
+     */
+    if ((res = cry_mpi_mul(&x0y0, &x0, &y0)) < 0)
+        goto e7;
+    if ((res = cry_mpi_mul(&x1y1, &x1, &y1)) < 0)
+        goto e7;
+
+    /* Now calc x1+x0 and y1+y0 */
+    if ((res = cry_mpi_add(&t1, &x1, &x0)) < 0)        /* t1 = x1 + x0 */
+        goto e7;
+    if ((res = cry_mpi_add(&x0, &y1, &y0)) < 0)     /* t2 = y1 + y0 */
+        goto e7;
+
+    if ((res = cry_mpi_mul(&t1, &x0, &t1)) < 0)      /* t1 = (x1+x0)*(y1+y0) */
+        goto e7;
+
+    /* Add x0y0 */
+    if ((res = cry_mpi_add(&x0, &x0y0, &x1y1)) < 0)  /* t2 = x0y0 + x1y1 */
+        goto e7;
+    if ((res = cry_mpi_sub(&t1, &t1, &x0)) < 0)
+        goto e7;                    /* t1 = (x1+x0)*(y1+y0) - (x0y0+x1y1) */
+
+    /* Shift by hB */
+    if ((res = cry_mpi_shld(&t1, hB)) < 0)
+        goto e7;
+    if ((res = cry_mpi_shld(&x1y1, B)) < 0)
+        goto e7;
+
+    if ((res = cry_mpi_add(&t1, &x0y0, &t1)) < 0)
+        goto e7;
+    if ((res = cry_mpi_add(r, &t1, &x1y1)) < 0)    /* r = x0y0 + t1 + x1y1 */
+        goto e7;
+
+e7: cry_mpi_clear(&x1y1);
+e6: cry_mpi_clear(&x0y0);
+e5: cry_mpi_clear(&t1);
+e4: cry_mpi_clear(&y1);
+e3: cry_mpi_clear(&y0);
+e2: cry_mpi_clear(&x1);
+e1: cry_mpi_clear(&x0);
+e0: return res;
+}
+
+#endif /* CRY_MPI_MUL_KARATSUBA */
+
+int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
+{
+#if defined(CRY_MPI_MUL_KARATSUBA)
+    if (CRY_MIN(a->used, b->used) > KARATSUBA_CUTOFF)
+        return mul_karatsuba(r, a, b);
+#endif
+
+    return mul_base(r, a, b);
+}
 
