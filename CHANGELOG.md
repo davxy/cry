@@ -25,6 +25,8 @@ Given a version number MAJOR.MINOR.PATCH
 ------------
 
 - MPI Comba multiplier
+- MPI Karatsuba multiplier
+- MPI fast division
 
 [0.0.3] - 2015-11-28
 --------------------

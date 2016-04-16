@@ -31,9 +31,12 @@ CRY_RAND=weak
 # If not defined the faster Binary Extended Algorithm (HAC 14.4.3) is used.
 #CRY_MPI_INV_EUCLID=y
 
+# Small footprint division. Slower.
+#CRY_MPI_DIV_SMALL=y
+
 # Comba as baseline multiplier
 CRY_MPI_MUL_COMBA=y
-#
+
 # Karatsuba multiplier enabled, see the mpi_mul.c to set the CUTOFF
 CRY_MPI_MUL_KARATSUBA=y
 
