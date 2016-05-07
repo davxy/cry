@@ -49,7 +49,7 @@ int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
                     (m && (res = cry_mpi_mod(&exp, &exp, m)) != 0))
                     goto e;
             }
-            if ((res = cry_mpi_mul(&tmp, &tmp, &tmp)) != 0 ||
+            if ((res = cry_mpi_sqr(&tmp, &tmp)) != 0 ||
                 (m && (res = cry_mpi_mod(&tmp, &tmp, m)) != 0))
                 goto e;
         }
