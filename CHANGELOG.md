@@ -21,12 +21,14 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
-[Unreleased]
-------------
+[0.0.4] - 2016-05-07
+--------------------
 
 - MPI Comba multiplier
 - MPI Karatsuba multiplier
 - MPI fast division
+- MPI square algorithm
+- HMAC with generic hash function
 
 [0.0.3] - 2015-11-28
 --------------------

@@ -7,7 +7,7 @@ A small crypto library.
 Multiple precision integers
 ---------------------------
 
-- Basic arithmentic (add,sub,mul,div,mod,abs,exp)
+- Basic arithmentic (add,sub,mul,div,mod,abs,exp,sqr)
 - Modular exponentiation
 - Modular inverse (Euclidean)
 - GCD and LCM
@@ -41,10 +41,12 @@ Pseudo random numbers generators
 - Posix CSPRNG (using '/dev/urandom')
 - Windows CSPRNG (using 'CryptGenRandom')
 
+
 Message authentication code
 ---------------------------
 
 - CMAC
+- HMAC
 
 
 Hash
