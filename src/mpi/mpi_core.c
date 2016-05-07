@@ -93,20 +93,24 @@ int cry_mpi_set_int(cry_mpi *a, long i)
 {
     int res;
     size_t used = CRY_MPI_BYTES_TO_DIGS(sizeof(i));
+    cry_mpi_dword dd;
 
     if ((res = cry_mpi_grow(a, used)) < 0)
         return res;
 
     if (i < 0) {
         a->sign = 1;
-        i = -i;
+        dd = -i;
     } else {
         a->sign = 0;
+        dd = i;
     }
 
     while (a->used < used) {
-        a->data[a->used++] = (cry_mpi_digit) i;
-        i >>= CRY_MPI_DIGIT_BITS;
+        a->data[a->used++] = (cry_mpi_digit) dd;
+        dd >>= CRY_MPI_DIGIT_BITS;
+        if (dd == 0)
+            break;
     }
     return res;
 }
