@@ -8,6 +8,7 @@ objs-y := mpi_core.o \
           mpi_sub_abs.o \
           mpi_mul_abs.o \
           mpi_div_abs.o \
+		  mpi_sqr.o \
           mpi_cmp.o \
           mpi_add.o \
           mpi_sub.o \

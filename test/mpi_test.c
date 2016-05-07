@@ -770,6 +770,16 @@ static void karatsuba_test(void)
 
 }
 
+static void sqr_test(void)
+{
+    cry_mpi a;
+
+    ASSERT_EQ(cry_mpi_init_int(&a, 0xFF), 0);
+    ASSERT_EQ(cry_mpi_sqr(&a, &a), 0);
+    PRINT_MPI("a", &a, 16);
+    cry_mpi_clear(&a);
+}
+
 void mpi_test(void)
 {
     RUN(mpi_init_test);
@@ -792,5 +802,6 @@ void mpi_test(void)
     RUN(rand_test);
     RUN(prime_test);
     RUN(karatsuba_test);
+    RUN(sqr_test);
 }
 
