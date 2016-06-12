@@ -15,8 +15,10 @@ Multiple precision integers
 - Random mpi generator
 
 
-Block ciphers
--------------
+Symmetric ciphers
+-----------------
+
+### Block ciphers
 
 - AES
 - DES and Triple DES
@@ -28,10 +30,17 @@ Block ciphers
 - GCM
 - CTR
 
-Public key ciphers
-------------------
+
+Public key algorithms
+---------------------
+
+### Ciphers
 
 - RSA (PKCS#1 v1.5)
+
+### Secret exchange
+
+- Diffie-Hellman
 
 
 Pseudo random numbers generators

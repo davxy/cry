@@ -21,6 +21,11 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+[Unreleased]
+------------
+
+- Diffie-Hellman secret exchange
+
 [0.0.4] - 2016-05-07
 --------------------
 

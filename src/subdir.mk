@@ -12,7 +12,8 @@ objs-y := version.o \
           sha256.o \
           cmac.o \
 		  hmac.o \
-          rsa.o
+          rsa.o \
+		  dh.o
 
 subdirs-y += mpi crc rand sum
 

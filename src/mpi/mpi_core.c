@@ -106,6 +106,7 @@ int cry_mpi_set_int(cry_mpi *a, long i)
         dd = i;
     }
 
+    a->used = 0;
     while (a->used < used) {
         a->data[a->used++] = (cry_mpi_digit) dd;
         dd >>= CRY_MPI_DIGIT_BITS;

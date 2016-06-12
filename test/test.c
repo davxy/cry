@@ -18,8 +18,12 @@
  */
 
 #include "test.h"
-#include <stdlib.h>
-#include <string.h>
+
+int test_runs;
+int test_level;
+int test_cont;
+const char *test_msg;
+unsigned char buf[BUFSIZ];
 
 
 #define TEST_WRAP(name) \
@@ -41,6 +45,7 @@ TEST_WRAP(sum)
 TEST_WRAP(mpi)
 TEST_WRAP(rsa)
 TEST_WRAP(rand)
+TEST_WRAP(dh)
 
 struct test_def {
     const char *name;
@@ -65,15 +70,10 @@ static struct test_def tests[] = {
     TEST_ELEM(mpi),
     TEST_ELEM(rsa),
     TEST_ELEM(rand),
+    TEST_ELEM(dh),
 };
 
 #define TESTS_NUM   (sizeof(tests)/sizeof(*tests))
-
-int test_runs;
-int test_level;
-int test_cont;
-const char *test_msg;
-unsigned char buf[BUFSIZ];
 
 int main(int argc, char *argv[])
 {
