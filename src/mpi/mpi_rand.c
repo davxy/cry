@@ -18,7 +18,7 @@
  */
 
 #include "mpi_pvt.h"
-#include "cry/rand.h"
+#include "cry/prng.h"
 
 /*
  * Generate a random integer with a given number of bits.
@@ -39,7 +39,7 @@ int cry_mpi_rand(cry_mpi *r, unsigned int bits)
     }
     r->used = digs;
 
-    if ((res = cry_rand((unsigned char *)r->data,
+    if ((res = cry_prng_rand((unsigned char *)r->data,
                     digs * sizeof(cry_mpi_digit))) != 0)
         return res;
 

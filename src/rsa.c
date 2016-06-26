@@ -18,7 +18,7 @@
  */
 
 #include "cry/rsa.h"
-#include "cry/rand.h"
+#include "cry/prng.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -49,11 +49,11 @@ static int nozero_rand(unsigned char *dst, unsigned int n)
     int res, k;
     unsigned char buf[16];
 
-    if ((res = cry_rand(dst, n)) < 0)
+    if ((res = cry_prng_rand(dst, n)) < 0)
         return res;
     while (n-- > 0) {
         if (dst[n] == 0) {
-            cry_rand(buf, sizeof(buf));
+            cry_prng_rand(buf, sizeof(buf));
             for (k = 0; k < sizeof(buf); k++) {
                 if (buf[k] != 0) {
                     dst[n] = buf[k];

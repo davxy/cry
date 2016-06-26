@@ -24,8 +24,8 @@ CRY_DEBUG=y
 # Algorithms
 ################################################################################
 
-# Options: weak|unix|win|strong
-CRY_RAND=weak
+# Options: aes|weak|posix|win
+CRY_PRNG=aes
 
 # Use Extended Euclidean Algorithm to compute inverse.
 # If not defined the faster Binary Extended Algorithm (HAC 14.4.3) is used.

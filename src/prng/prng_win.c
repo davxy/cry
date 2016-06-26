@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2016, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -17,9 +17,26 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-/* TODOL using HMAC-SHA or HMAC-MD5 */
-int cry_rand(unsigned char *buf, unsigned int siz)
+#include <windows.h>
+#include <wincrypt.h>
+
+static HCRYPTPROV hProvider = 0;
+
+int cry_prng_init(const unsigned char *seed, size_t seed_siz)
 {
-    return -1;
+    if (!CryptAcquireContext(&hProvider, 0, 0, PROV_RSA_FULL,
+                             CRYPT_VERIFYCONTEXT)) {
+        return -1;
+    }
+    return 0;
+}
+
+int cry_prng_rand(unsigned char *buf, size_t siz)
+{
+    if (!hProvider && cry_prng_init(NULL, 0) != 0)
+        return -1;
+    if (!CryptGenRandom(hProvider, siz, buf))
+        return -1;
+    return 0;
 }
 

@@ -84,16 +84,50 @@ void rsa_test(void)
     PRINT_MPI("e", &rsa.e, 16);
     PRINT_MPI("d", &rsa.d, 16);
 
-    rsa.flags = CRY_RSA_FLAG_SIGN;
-    cry_rsa_encrypt(&rsa, &cipher_buf, &outlen, plain_text, PLAIN_LEN);
-    PRINT_HEX("ciphertext", cipher_buf, outlen);
-    ASSERT_EQ(outlen, CIPHER_LEN);
-    ASSERT_EQ_BUF(cipher_buf, cipher_text, outlen);
+    /*
+     * ES-PKCS1-v1.5
+     */
 
-    cry_rsa_decrypt(&rsa, &plain_buf, &outlen, cipher_buf, outlen);
-    PRINT_HEX("plaintext ", plain_buf, outlen);
-    ASSERT_EQ(outlen, PLAIN_LEN);
-    ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
+    rsa.flags = 0;
+    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+                              plain_text, PLAIN_LEN));
+    if (cipher_buf) {
+        PRINT_HEX("ciphertext", cipher_buf, outlen);
+        ASSERT_EQ(outlen, CIPHER_LEN);
+
+        ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
+                                   cipher_buf, outlen));
+        if (plain_buf) {
+            PRINT_HEX("plaintext ", plain_buf, outlen);
+            ASSERT_EQ(outlen, PLAIN_LEN);
+            ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
+            free(plain_buf);
+        }
+        free(cipher_buf);
+    }
+
+    /*
+     * SSA-PKCS1-v1.5
+     */
+
+    rsa.flags = CRY_RSA_FLAG_SIGN;
+    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+                              plain_text, PLAIN_LEN));
+    if (cipher_buf) {
+        PRINT_HEX("ciphertext", cipher_buf, outlen);
+        ASSERT_EQ(outlen, CIPHER_LEN);
+        ASSERT_EQ_BUF(cipher_buf, cipher_text, outlen);
+
+        ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
+                    cipher_buf, outlen));
+        if (plain_buf) {
+            PRINT_HEX("plaintext ", plain_buf, outlen);
+            ASSERT_EQ(outlen, PLAIN_LEN);
+            ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
+            free(plain_buf);
+        }
+        free(cipher_buf);
+    }
 
     cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, 0);
 }

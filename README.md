@@ -46,10 +46,10 @@ Public key algorithms
 Pseudo random numbers generators
 --------------------------------
 
+- OS agnostic CSPRNG with AES-CTR
 - Weak portable PRNG
 - Posix CSPRNG (using '/dev/urandom')
 - Windows CSPRNG (using 'CryptGenRandom')
-
 
 Message authentication code
 ---------------------------

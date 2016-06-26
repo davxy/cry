@@ -77,6 +77,7 @@ extern unsigned char buf[BUFSIZ];
     ASSERT(strcmp(buf, str) == 0); \
     } while (0)
 
+#define ASSERT_OK(e) ASSERT_EQ(e, 0)
 
 #ifdef NDEBUG
 

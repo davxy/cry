@@ -18,13 +18,15 @@
  */
 
 #include "test.h"
-#include <cry/rand.h>
+#include <cry/prng.h>
 
 /* TODO: insert a real randomness test */
 
 void rand_test(void)
 {
-    ASSERT_EQ(cry_rand(buf, 64), 0);
+    unsigned char *seed = "0123456789abcdef";
+    ASSERT_EQ(cry_prng_init(seed, 16), 0);
+    ASSERT_EQ(cry_prng_rand(buf, 64), 0);
     PRINT_HEX("rand", buf, 64);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2016, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -21,40 +21,47 @@
  * Weak fallback random functions
  */
 
-#include <time.h>
+#include <cry/prng.h>
+#include "misc.h"
 #include <stdint.h>
+#include <string.h>
 
-static uint32_t z1, z2, z3, z4;
+static uint32_t z[4];
+static int init = 0;
 
 #define RAND_GET(r) do { \
-    ((r) = ((z1 << 6) ^ z1) >> 13); \
-    (z1 = ((z1 & 4294967294UL) << 18) ^ (r)); \
-    ((r) = ((z2 << 2) ^ z2) >> 27); \
-    (z2 = ((z2 & 4294967288UL) << 2) ^ (r)); \
-    ((r) = ((z3 << 13) ^ z3) >> 21); \
-    (z3 = ((z3 & 4294967280UL) << 7) ^ (r)); \
-    ((r) = ((z4 << 3) ^ z4) >> 12); \
-    (z4 = ((z4 & 4294967168UL) << 13) ^ (r)); \
-    ((r) = (z1 ^ z2 ^ z3 ^ z4)); \
+    ((r) = ((z[0] << 6) ^ z[0]) >> 13); \
+    (z[0] = ((z[0] & 4294967294UL) << 18) ^ (r)); \
+    ((r) = ((z[1] << 2) ^ z[1]) >> 27); \
+    (z[1] = ((z[1] & 4294967288UL) << 2) ^ (r)); \
+    ((r) = ((z[2] << 13) ^ z[2]) >> 21); \
+    (z[2] = ((z[2] & 4294967280UL) << 7) ^ (r)); \
+    ((r) = ((z[3] << 3) ^ z[3]) >> 12); \
+    (z[3] = ((z[3] & 4294967168UL) << 13) ^ (r)); \
+    ((r) = (z[0] ^ z[1] ^ z[2] ^ z[3])); \
     } while(0)
 
-int cry_rand_init(void)
+int cry_prng_init(const unsigned char *seed, size_t seed_siz)
 {
-    z1 = z2 = z3 = z4 = time(NULL);
+    init = 1;
+    uint32_t fallback[4] = {1,2,3,4};
+
+    if (!seed) {
+        seed = (unsigned char *)fallback;
+        seed_siz = sizeof(fallback);
+    }
+    memcpy(z, seed, CRY_MIN(seed_siz, sizeof(z)));
     return 0;
 }
 
-int cry_rand(unsigned char *buf, unsigned int siz)
+int cry_prng_rand(unsigned char *buf, size_t siz)
 {
-    static int init = 0;
     int i, iter = siz / 4;
     uint32_t *buf32 = (uint32_t *) buf;
     uint32_t r;
 
-    if (!init) {
-        init = 1;
-        cry_rand_init();
-    }
+    if (!init)
+        cry_prng_init(NULL, 0);
 
     for (i = 0; i < iter; i++, buf32++)
         RAND_GET(*buf32);
