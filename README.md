@@ -70,6 +70,7 @@ Hash
 
 - CRC16-CCITT
 - CRC16-IBM
+- CRC32-Ethernet
 
 ### Checksums
 

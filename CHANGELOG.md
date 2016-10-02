@@ -26,6 +26,7 @@ Given a version number MAJOR.MINOR.PATCH
 
 - Diffie-Hellman secret exchange
 - OS agnostic CSPRNG with AES-CTR
+- CRC32 Ethernet
 
 [0.0.4] - 2016-05-07
 --------------------
