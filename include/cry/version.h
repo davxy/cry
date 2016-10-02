@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2016, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -19,7 +19,7 @@
 
 /**
  * @file    cry_version.h
- * @brief   Library version value.
+ * @brief   Library version.
  */
 
 #ifndef _CRY_VERSION_H_
@@ -30,7 +30,7 @@
 /** Library version minor number */
 #define CRY_MINOR   0
 /** Library version patch number */
-#define CRY_PATCH   4
+#define CRY_PATCH   5
 /** Library version number */
 #define CRY_VERSION (((CRY_MAJOR << 8) | (CRY_MINOR << 8)) | CRY_PATCH)
 

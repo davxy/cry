@@ -21,8 +21,8 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
-[Unreleased]
-------------
+[0.0.5] - 2016-10-02
+--------------------
 
 - Diffie-Hellman secret exchange
 - OS agnostic CSPRNG with AES-CTR
