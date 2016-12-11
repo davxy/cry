@@ -22,7 +22,8 @@ OBJS := test.o \
 	    mpi_test.o \
 	    rsa_test.o \
 	    rand_test.o \
-		dh_test.o
+		dh_test.o \
+		ecp_test.o
 
 .PHONY: all clean
 

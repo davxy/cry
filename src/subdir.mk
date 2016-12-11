@@ -15,5 +15,5 @@ objs-y := version.o \
           rsa.o \
 		  dh.o
 
-subdirs-y += mpi crc prng sum
+subdirs-y += mpi crc prng sum ecp
 
