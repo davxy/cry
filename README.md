@@ -43,6 +43,13 @@ Public key algorithms
 - Diffie-Hellman
 
 
+Elliptic Curve
+--------------
+
+- Basic arithmetic (add,dbl,mul)
+- Load of NIST-P256 EC parameters
+
+
 Pseudo random numbers generators
 --------------------------------
 

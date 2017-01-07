@@ -21,6 +21,12 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+[Unreleased]
+------------
+
+- ECP core arithmetic (add,dbl,mul)
+- Load NIST-P256 EC parameters
+
 [0.0.5] - 2016-10-02
 --------------------
 

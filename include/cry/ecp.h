@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2016, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2017, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * @file    ec.h
+ * @file    ecp.h
  * @brief   Elliptic curve point arithmetic
  */
 
@@ -54,6 +54,12 @@ int cry_ecp_copy(cry_ecp *pr, const cry_ecp *p1);
 
 int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
                 const cry_mpi *p);
+
+int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *a,
+                const cry_mpi *p);
+
+int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
+                const cry_mpi *a, const cry_mpi *p);
 
 #ifdef __cplusplus
 }
