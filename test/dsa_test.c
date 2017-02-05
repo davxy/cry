@@ -66,24 +66,30 @@ static const unsigned char G[] = {
     0x99, 0xd8, 0xa8, 0x19, 0x96, 0xf7, 0x7f, 0x99
 };
 
+static const unsigned char *msg = "abc123";
+
 void dsa_test(void)
 {
     cry_dsa_ctx dsa;
-    cry_dsa_signature signature;
-    unsigned char *msg = "abc123";
+    cry_dsa_signature sign;
 
+    ASSERT_OK(cry_mpi_init_list(&sign.r, &sign.s, 0));
     ASSERT_OK(cry_mpi_init_bin(&dsa.g, G, sizeof(G)));
     ASSERT_OK(cry_mpi_init_bin(&dsa.p, P, sizeof(P)));
     ASSERT_OK(cry_mpi_init_bin(&dsa.q, Q, sizeof(Q)));
     ASSERT_OK(cry_mpi_init_bin(&dsa.pvt, pvt, sizeof(pvt)));
     ASSERT_OK(cry_mpi_init_bin(&dsa.pub, pub, sizeof(pub)));
 
-    ASSERT_OK(cry_dsa_sign(&dsa, &signature, msg, strlen(msg)));
+    ASSERT_OK(cry_dsa_sign(&dsa, &sign, msg, strlen(msg)));
 
     TRACE("DSA signature of '%s' is:\n", msg);
-    PRINT_MPI("r", &signature.r, 16);
-    PRINT_MPI("s", &signature.s, 16);
- 
-    ASSERT_OK(cry_dsa_verify(&dsa, &signature, msg, strlen(msg)));
+    PRINT_MPI("r", &sign.r, 16);
+    PRINT_MPI("s", &sign.s, 16);
+
+    ASSERT_OK(cry_dsa_verify(&dsa, &sign, msg, strlen(msg)));
+
+    cry_mpi_clear_list(&sign.r, &sign.s,
+                       &dsa.g, &dsa.p, &dsa.q,
+                       &dsa.pvt, &dsa.pub, 0);
 }
 

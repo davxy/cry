@@ -55,7 +55,7 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
     int res;
     cry_mpi k, z;
 
-    if ((res = cry_mpi_init_list(&k, &z, &sign->r, &sign->s, 0)) != 0)
+    if ((res = cry_mpi_init_list(&k, &z, 0)) != 0)
         return res;
 
     /* k = c mod (q-1) + 1 */
@@ -78,9 +78,8 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
     CHK(cry_mpi_add(&sign->s, &sign->s, &z));
     CHK(cry_mpi_mul(&sign->s, &sign->s, &k));
     CHK(cry_mpi_mod(&sign->s, &sign->s, &ctx->q));
+
 e:  cry_mpi_clear_list(&k, &z, 0);
-    if (res != 0)
-        cry_mpi_clear_list(&sign->r, &sign->s, 0);
     return res;
 }
 

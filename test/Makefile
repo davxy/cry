@@ -24,7 +24,8 @@ OBJS := test.o \
 	    rand_test.o \
 		dh_test.o \
 		ecp_test.o \
-		dsa_test.o
+		dsa_test.o \
+		ecdsa_test.o
 
 .PHONY: all clean
 

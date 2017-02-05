@@ -1,3 +1,5 @@
 libcry.a
 build
 src/config.h
+test/test
+*.o

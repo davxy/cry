@@ -14,7 +14,8 @@ objs-y := version.o \
 		  hmac.o \
           rsa.o \
 		  dh.o \
-		  dsa.o
+		  dsa.o \
+		  ecdsa.o
 
 subdirs-y += mpi crc prng sum ecp
 

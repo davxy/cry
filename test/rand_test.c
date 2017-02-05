@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2017, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -19,14 +19,17 @@
 
 #include "test.h"
 #include <cry/prng.h>
+#include <time.h>
 
 /* TODO: insert a real randomness test */
 
 void rand_test(void)
 {
-    unsigned char *seed = "0123456789abcdef";
-    ASSERT_EQ(cry_prng_init(seed, 16), 0);
-    ASSERT_EQ(cry_prng_rand(buf, 64), 0);
+    time_t t[4];
+
+    t[0] = t[1] = t[2] = t[3] = time(NULL);
+    ASSERT_OK(cry_prng_init((unsigned char *)t, sizeof(t)));
+    ASSERT_OK(cry_prng_rand(buf, 64));
     PRINT_HEX("rand", buf, 64);
 }
 
