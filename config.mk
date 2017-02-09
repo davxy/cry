@@ -24,6 +24,10 @@ CRY_DEBUG=y
 # Algorithms
 ################################################################################
 
+# Use one octet digit in place of sizeof(unsigned long) octets.
+# Warning: NO ADVANTAGES, just for testing purposes
+CRY_MPI_SMALL_DIGIT=y
+
 # Options: aes|weak|posix|win
 CRY_PRNG=aes
 

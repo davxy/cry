@@ -27,7 +27,7 @@
 
 #include <stddef.h>
 
-#if 1
+#ifndef CRY_MPI_SMALL_DIGIT
 typedef unsigned long cry_mpi_digit;
 #else
 typedef unsigned char cry_mpi_digit;
