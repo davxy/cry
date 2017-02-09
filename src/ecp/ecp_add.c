@@ -36,7 +36,7 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     CHK(cry_mpi_inv(&den, &den, p));        /* den^(-1) (mod p) */
     CHK(cry_mpi_mul(&lam, &num, &den));     /* lam = num / den */
 
-    CHK(cry_mpi_mul(&r.x, &lam, &lam));     /* x =  lam^2 */
+    CHK(cry_mpi_sqr(&r.x, &lam));           /* x =  lam^2 */
     CHK(cry_mpi_sub(&r.x, &r.x, &p1->x));   /* x =  lam^2 - x1 */
     CHK(cry_mpi_sub(&r.x, &r.x, &p2->x));   /* x =  lam^2 - x1 - x2 */
     CHK(cry_mpi_mod(&r.x, &r.x, p));        /* x = (lam^2 - x1 - x2) % p */

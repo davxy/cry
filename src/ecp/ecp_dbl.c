@@ -42,7 +42,7 @@ int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *a,
 
     CHK(cry_mpi_mul(&lam, &num, &den));   /* lam = num / den */
 
-    CHK(cry_mpi_mul(&r.x, &lam, &lam));   /* x =  lam^2 */
+    CHK(cry_mpi_sqr(&r.x, &lam));         /* x =  lam^2 */
     CHK(cry_mpi_sub(&r.x, &r.x, &p1->x)); /* x =  lam^2 - x1 */
     CHK(cry_mpi_sub(&r.x, &r.x, &p1->x)); /* x =  lam^2 - 2*x1 */
     CHK(cry_mpi_mod(&r.x, &r.x, p));      /* x = (lam^2 - 2*x1) % p */
