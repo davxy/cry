@@ -42,6 +42,12 @@ Public key algorithms
 
 - Diffie-Hellman
 
+### Digital signature
+
+- RSA (PKCS#1 v1.5)
+- DSA
+- ECDSA
+
 
 Elliptic Curve
 --------------

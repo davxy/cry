@@ -26,6 +26,8 @@ Given a version number MAJOR.MINOR.PATCH
 
 - ECP core arithmetic (add,dbl,mul)
 - Load NIST-P256 EC parameters
+- DSA end ECDSA digital signature
+- ECP multiplication with windowed algorithm
 
 [0.0.5] - 2016-10-02
 --------------------

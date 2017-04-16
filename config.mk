@@ -26,7 +26,7 @@ CRY_DEBUG=y
 
 # Use one octet digit in place of sizeof(unsigned long) octets.
 # Warning: NO ADVANTAGES, just for testing purposes
-CRY_MPI_SMALL_DIGIT=y
+#CRY_MPI_SMALL_DIGIT=y
 
 # Options: aes|weak|posix|win
 CRY_PRNG=aes
@@ -43,4 +43,7 @@ CRY_MPI_MUL_COMBA=y
 
 # Karatsuba multiplier enabled, see the mpi_mul.c to set the CUTOFF
 CRY_MPI_MUL_KARATSUBA=y
+
+# Elliptic curve point multiplication with windowed algorithm (faster)
+CRY_ECP_MUL_WIN=y
 
