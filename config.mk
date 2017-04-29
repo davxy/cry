@@ -44,6 +44,10 @@ CRY_MPI_MUL_COMBA=y
 # Karatsuba multiplier enabled, see the mpi_mul.c to set the CUTOFF
 CRY_MPI_MUL_KARATSUBA=y
 
-# Elliptic curve point multiplication with windowed algorithm (faster)
+# Elliptic curve point multiplication with windowed algorithm
 CRY_ECP_MUL_WIN=y
+
+# Elliptic curve point multiplication with sliding window algorithm (faster)
+# Have precedence against the simple windowed one.
+CRY_ECP_MUL_SLIDING_WIN=y
 
