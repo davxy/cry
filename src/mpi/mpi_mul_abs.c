@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2016, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2017, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
@@ -45,6 +45,17 @@
      : "=r"(c0), "=r"(c1), "=r"(c2)                 \
      : "0"(c0), "1"(c1), "2"(c2), "g"(i), "g"(j)    \
      : "%rax", "%rdx", "cc")
+
+#elif defined(CRY_ARCH_ARM)
+
+#define MULADD(i, j) asm(                           \
+    "umull  r0, r1, %6, %7  \n\t"                   \
+    "adds   %0, %0, r0      \n\t"                   \
+    "adcs   %1, %1, r1      \n\t"                   \
+    "adc    %2, %2, #0      \n\t"                   \
+    : "=r"(c0), "=r"(c1), "=r"(c2)                  \
+    : "0"(c0), "1"(c1), "2"(c2), "r"(i), "r"(j)     \
+    : "r0", "r1", "cc")
 
 #else /* ISO C code */
 
