@@ -14,6 +14,7 @@ objs-y := version.o \
 		  hmac.o \
           rsa.o \
 		  dh.o \
+		  ecdh.o \
 		  dsa.o \
 		  ecdsa.o
 

@@ -109,13 +109,6 @@ static void cry_gcm_hash(const unsigned char *key, unsigned char *x,
     }
 }
 
-#define WRITE32_BE(val, dst) do { \
-    ((unsigned char *)(dst))[0] = (unsigned char)(((val) >> 24U) & 0xffU); \
-    ((unsigned char *)(dst))[1] = (unsigned char)(((val) >> 16U) & 0xffU); \
-    ((unsigned char *)(dst))[2] = (unsigned char)(((val) >> 8U) & 0xffU); \
-    ((unsigned char *)(dst))[3] = (unsigned char) ((val) & 0xff); \
-    } while(0)
-
 static void cry_gcm_hash_sizes(const unsigned char *key,
                                unsigned char *x,
                                unsigned long auth_size,
@@ -127,8 +120,8 @@ static void cry_gcm_hash_sizes(const unsigned char *key,
     ciph_size <<= 3;
     auth_size <<= 3;
 
-    WRITE32_BE(auth_size, buffer + 4);
-    WRITE32_BE(ciph_size, buffer + 12);
+    CRY_WRITE32_BE(auth_size, buffer + 4);
+    CRY_WRITE32_BE(ciph_size, buffer + 12);
 
     cry_gcm_hash(key, x, CRY_GCM_BLOCK_SIZE, buffer);
 }

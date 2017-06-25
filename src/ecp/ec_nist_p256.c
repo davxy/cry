@@ -21,9 +21,9 @@
 
 /* NIST Curve P-256 parameters */
 
-int cry_ec_init_nist_p256(cry_ec *ec)
+int cry_ec_set_nist_p256(cry_ec *ec)
 {
-    int ret;
+    int res;
 
     unsigned char p[] = {
         0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x01,
@@ -60,31 +60,29 @@ int cry_ec_init_nist_p256(cry_ec *ec)
         0xCB, 0xB6, 0x40, 0x68, 0x37, 0xBF, 0x51, 0xF5
     };
 
-    ret = cry_mpi_init_bin(&ec->p, p, sizeof(p));
-    if (ret != 0)
-        goto e0;
-    ret = cry_mpi_init_int(&ec->a, -3);
-    if (ret != 0)
-        goto e1;
-    ret = cry_mpi_init_bin(&ec->b, b, sizeof(b));
-    if (ret != 0)
-        goto e2;
-    ret = cry_mpi_init_bin(&ec->g.x, gx, sizeof(gx));
-    if (ret != 0)
-        goto e3;
-    ret = cry_mpi_init_bin(&ec->g.y, gy, sizeof(gy));
-    if (ret != 0)
-        goto e4;
-    ret = cry_mpi_init_bin(&ec->n, n, sizeof(n));
-    if (ret != 0)
-        goto e5;
+    if ((res = cry_mpi_load_bin(&ec->p, p, sizeof(p))) != 0)
+        return res;
+    if ((res = cry_mpi_set_int(&ec->a, -3)) != 0)
+        return res;
+    if ((res = cry_mpi_load_bin(&ec->b, b, sizeof(b))) != 0)
+        return res;
+    if ((res = cry_mpi_load_bin(&ec->g.x, gx, sizeof(gx))) != 0)
+        return res;
+    if ((res = cry_mpi_load_bin(&ec->g.y, gy, sizeof(gy))) != 0)
+        return res;
+    if ((res = cry_mpi_load_bin(&ec->n, n, sizeof(n))) != 0)
+        return res;
     return 0;
+}
 
-e5: cry_mpi_clear(&ec->g.y);
-e4: cry_mpi_clear(&ec->g.x);
-e3: cry_mpi_clear(&ec->b);
-e2: cry_mpi_clear(&ec->a);
-e1: cry_mpi_clear(&ec->p);
-e0: return ret;
+int cry_ec_init_nist_p256(cry_ec *ec)
+{
+    int res;
+
+    if ((res = cry_ec_init(ec)) == 0) {
+        if ((res = cry_ec_set_nist_p256(ec)) != 0)
+            cry_ec_clear(ec);
+    }
+    return res;
 }
 

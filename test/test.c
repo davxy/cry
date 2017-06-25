@@ -46,9 +46,10 @@ TEST_WRAP(mpi)
 TEST_WRAP(rsa)
 TEST_WRAP(rand)
 TEST_WRAP(dh)
-TEST_WRAP(ecp)
 TEST_WRAP(dsa)
+TEST_WRAP(ecp)
 TEST_WRAP(ecdsa)
+TEST_WRAP(ecdh)
 
 struct test_def {
     const char *name;
@@ -74,9 +75,10 @@ static struct test_def tests[] = {
     TEST_ELEM(rsa),
     TEST_ELEM(rand),
     TEST_ELEM(dh),
-    TEST_ELEM(ecp),
     TEST_ELEM(dsa),
+    TEST_ELEM(ecp),
     TEST_ELEM(ecdsa),
+    TEST_ELEM(ecdh),
 };
 
 #define TESTS_NUM   (sizeof(tests)/sizeof(*tests))

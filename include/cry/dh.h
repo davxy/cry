@@ -38,19 +38,27 @@ struct cry_dh_ctx {
 
 typedef struct cry_dh_ctx cry_dh_ctx;
 
-int cry_dh_init(cry_dh_ctx *dh);
+#ifdef __cplusplus
+extern "C"{
+#endif
 
-void cry_dh_clear(cry_dh_ctx *dh);
+int cry_dh_init(cry_dh_ctx *ctx);
 
-int cry_dh_agree(cry_dh_ctx *dh);
+void cry_dh_clear(cry_dh_ctx *ctx);
 
-int cry_dh_finalize(cry_dh_ctx *dh);
+int cry_dh_agree(cry_dh_ctx *ctx);
 
-int cry_dh_get_tok(cry_dh_ctx *dh, unsigned char *out, size_t out_len);
+int cry_dh_finalize(cry_dh_ctx *ctx);
 
-int cry_dh_set_tok(cry_dh_ctx *dh, unsigned char *in, size_t in_len);
+int cry_dh_get_tok(cry_dh_ctx *ctx, unsigned char *out, size_t out_len);
 
-int cry_dh_get_key(cry_dh_ctx *dh, unsigned char *out, size_t out_len);
+int cry_dh_set_tok(cry_dh_ctx *ctx, unsigned char *in, size_t in_len);
+
+int cry_dh_get_key(cry_dh_ctx *ctx, unsigned char *out, size_t out_len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _CRY_DH_ */
 
