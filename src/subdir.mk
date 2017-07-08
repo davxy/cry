@@ -5,6 +5,7 @@ objs-y := version.o \
           base64.o \
           des.o \
           aes.o \
+		  aes_wrap.o \
           cbc.o \
           gcm.o \
           ctr.o \
