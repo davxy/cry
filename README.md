@@ -40,7 +40,8 @@ Public key algorithms
 
 ### Secret exchange
 
-- Diffie-Hellman
+- Diffie-Hellman (DH)
+- ECDH
 
 ### Digital signature
 

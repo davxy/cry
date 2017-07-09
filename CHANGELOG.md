@@ -21,13 +21,14 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
-[Unreleased]
-------------
+[0.0.6] - 2017-07-09
+--------------------
 
 - ECP core arithmetic (add,dbl,mul)
 - Load NIST-P256 EC parameters
 - DSA end ECDSA digital signature
 - ECP multiplication with sliding window algorithm
+- ECDH secret exchange
 
 [0.0.5] - 2016-10-02
 --------------------
