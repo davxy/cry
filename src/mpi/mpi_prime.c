@@ -206,9 +206,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     /* If z = p-1, pass! */
     if ((res = cry_mpi_add(&z, &z, &one) < 0))
         goto e;
-    if ((res = cry_mpi_cmp(&z, p)) == 0)
-        res = 1;
-
+    res = (cry_mpi_cmp(&z, p) == 0) ? 1 : 0;
 e:  cry_mpi_clear_list(&a, &m, &z, &tmp, NULL);
     return res;
 }
@@ -223,7 +221,6 @@ int cry_mpi_is_prime(const cry_mpi *p)
         return res;
     else if (res == 1)
         return 0;
-
     /* Is not obviously prime, proceed to Miller Rabin test */
     for (i = 0; i < MILLER_ITER_NO; i++) {
         if ((res = passes_miller_rabin(p)) <= 0)
@@ -233,20 +230,24 @@ int cry_mpi_is_prime(const cry_mpi *p)
 }
 
 /* Avoid infinite loops in bad machines */
-#define ITER_LIMIT  5000
+#define ITERMAX  5000
 
 /*
  * Assumes we only ever want to generate primes with the number of bits
  * multiple of 8.
  */
-int cry_mpi_prime(cry_mpi *p, unsigned int bits)
+int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
 {
-    int res = -1, count = ITER_LIMIT;
+    int res = -1;
+    unsigned int i, itermax;
 
     if (bits & 0x07 || bits == 0)
         return -1; /* Not a multiple of 8 bit */
 
-    while (count--) {
+    itermax = (iter) ? *iter : ITERMAX;
+    i = 0;
+    while (i < itermax) {
+        i++;
         if ((res = cry_mpi_rand(p, bits)) < 0)
             break;
         /*
@@ -269,8 +270,10 @@ int cry_mpi_prime(cry_mpi *p, unsigned int bits)
             break;
         }
     }
-    if (count < 0)
+    if (i == itermax)
         res = -1;
+    if (iter)
+        *iter = i;
     return res;
 }
 

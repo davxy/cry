@@ -329,12 +329,14 @@ static void rand_test(void)
 static void prime_test(void)
 {
     cry_mpi a;
-    int bits = 32;
+    unsigned int bits = 256;
+    unsigned int iter = 2000; /* max interations */
 
     cry_mpi_init(&a);
     
-    ASSERT_EQ(cry_mpi_prime(&a, bits), 0);
-    TRACE("bits: %d\n", bits);
+    ASSERT_EQ(cry_mpi_prime(&a, bits, &iter), 0);
+    TRACE("bits: %u\n", bits);
+    TRACE("iter: %u\n", iter);
     ASSERT_EQ(cry_mpi_count_bits(&a), bits);
     PRINT_MPI("prime-mpi", &a, 16);
 
