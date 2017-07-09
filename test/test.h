@@ -28,6 +28,7 @@
 //#define NDEBUG
 
 extern int test_runs;
+extern int test_fails;
 extern int test_level;
 extern int test_cont;
 extern const char *test_msg;
@@ -38,31 +39,18 @@ extern unsigned char buf[BUFSIZ];
 #define TS2US(ts) \
         ((unsigned long)(ts)->tv_sec * 1000000 + (ts)->tv_nsec / 1000)
 
-#define RUN(test) do { \
-    int i; \
-    struct timespec t1, t2; \
-    if (test_level == 0) \
-        printf("\n"); \
-    for (i = 0; i < test_level + 2; i++) \
-        printf("%c", '-'); \
-    printf(" %s\n", #test); \
-    test_level++; \
-    clock_gettime(CLOCK_MONOTONIC, &t1); \
-    test(); \
-    clock_gettime(CLOCK_MONOTONIC, &t2); \
-    test_level--; \
-    test_runs++; \
-    for (i = 0; i < test_level + 2; i++) \
-        printf("%c", '-'); \
-    printf(" %lu us\n", TS2US(&t2) - TS2US(&t1)); \
-    if (test_msg) \
-        return; \
-    } while (0)
+typedef void (* test_func)(void);
+
+void run(const char *name, test_func func);
+
+#define RUN(test) run(#test, test)
+
 
 #define ASSERT(test) do { \
     if (!(test)) { \
         printf(">>> ASSERTION FAIL: %s\n", #test); \
         if (!test_cont) { test_msg = #test; return; } \
+        else { test_fails++; } \
     } \
     } while (0)
 
@@ -78,6 +66,7 @@ extern unsigned char buf[BUFSIZ];
     } while (0)
 
 #define ASSERT_OK(e) ASSERT_EQ(e, 0)
+
 
 #ifdef NDEBUG
 
