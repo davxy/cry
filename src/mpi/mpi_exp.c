@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Davide Galassi. All rights reserved.
+ * Copyright (c) 2013-2017, Davide Galassi. All rights reserved.
  *
  * This file is part of CRY software.
  *
