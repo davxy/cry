@@ -77,6 +77,8 @@ void ctr_test(void)
 
     cry_aes_128_ctr_decrypt(buf, buf, msglen, key, iv);
     PRINT_ASC("plaintext ", buf, msglen);
-    ASSERT_EQ_BUF(msg, buf, msglen);
+
+    CONTINUE(ASSERT_EQ_BUF(msg, buf, msglen));
+    //ASSERT_EQ_BUF(msg, buf, msglen);
 }
 

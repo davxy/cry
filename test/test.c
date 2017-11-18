@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     test_fails = 0;
     test_level = 0;
     test_msg = NULL;
-    test_cont = 1;
+    test_cont = 0;
 
     prng_init(); /* Always do it */
 

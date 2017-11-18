@@ -45,6 +45,12 @@ void run(const char *name, test_func func);
 
 #define RUN(test) run(#test, test)
 
+#define CONTINUE(exp) do { \
+    int __tmp = test_cont; \
+    test_cont = 1; \
+    exp; \
+    test_cont = __tmp; \
+    } while (0)
 
 #define ASSERT(test) do { \
     if (!(test)) { \
@@ -55,7 +61,10 @@ void run(const char *name, test_func func);
     } while (0)
 
 #define ASSERT_EQ(i1, i2) \
-    ASSERT(i1 == i2)
+    ASSERT((i1) == (i2))
+
+#define ASSERT_NE(i1, i2) \
+    ASSERT((i1) != (i2))
 
 #define ASSERT_EQ_BUF(b1, b2, len) \
     ASSERT(memcmp(b1, b2, len) == 0)
