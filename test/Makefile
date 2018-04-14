@@ -8,6 +8,7 @@ LDLIBS := $(LIBCRY)
 
 OBJS := test.o \
 		version_test.o \
+		memxor_test.o \
 		base64_test.o \
 		des_test.o \
 		aes_test.o \
@@ -31,7 +32,7 @@ OBJS := test.o \
 .PHONY: all clean
 
 all: $(OBJS) $(LIBCRY)
-	$(CC) -o test $^
+	$(CC) $(LDFLAGS) -o test $(OBJS) $(LDLIBS)
 
 clean:
 	$(RM) $(OBJS) test

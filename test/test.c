@@ -61,6 +61,7 @@ void run(const char *name, test_func func)
     void name ## _wrap(void) { RUN( name ## _test ); }
 
 TEST_WRAP(version)
+TEST_WRAP(memxor)
 TEST_WRAP(base64)
 TEST_WRAP(des)
 TEST_WRAP(aes)
@@ -90,6 +91,7 @@ struct test_def {
 
 static struct test_def tests[] = {
     TEST_ELEM(version),
+    TEST_ELEM(memxor),
     TEST_ELEM(base64),
     TEST_ELEM(des),
     TEST_ELEM(aes),
