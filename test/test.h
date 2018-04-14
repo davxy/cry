@@ -54,7 +54,7 @@ void run(const char *name, test_func func);
 
 #define ASSERT(test) do { \
     if (!(test)) { \
-        printf(">>> ASSERTION FAIL: %s\n", #test); \
+        TRACE(">>> ASSERTION FAIL: %s\n", #test); \
         if (!test_cont) { test_msg = #test; return; } \
         else { test_fails++; } \
     } \
@@ -86,8 +86,10 @@ void run(const char *name, test_func func);
 
 #else /* !NDEBUG */
 
-# define TRACE(...) \
-    fprintf(stdout, __VA_ARGS__)
+# define TRACE(...) do { \
+    fprintf(stdout, __VA_ARGS__); \
+    fflush(stdout); \
+    } while(0)
 
 # define PRINT_HEX(msg, buf, siz) do { \
     size_t __siz = siz; \
@@ -107,10 +109,6 @@ void run(const char *name, test_func func);
 
 #endif /* NDEBUG */
 
-#define WARN(...) do { \
-    fprintf(stdout, "!!!!!!!!! "); \
-    fprintf(stdout, __VA_ARGS__); \
-    } while (0)
 
 #endif /* _TEST_H_ */
 
