@@ -83,9 +83,11 @@ LDFLAGS = 	$(lflags-y)
 
 DATE 	:= $(shell date +'%y%m%d')
 
-.PHONY: all release clean test
+.PHONY: all cry clean test
 
-all: $(target)
+all: cry
+
+cry: $(target)
 
 clean:
 	$(RM) $(binary_dir) $(config) *.a
