@@ -3,3 +3,6 @@ build
 src/config.h
 test/test
 *.o
+*.gcda
+*.gcno
+

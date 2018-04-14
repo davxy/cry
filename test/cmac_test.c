@@ -29,5 +29,4 @@ void cmac_test(void)
     cry_cmac_digest(buf, MSG, strlen(MSG), KEY, strlen(KEY));
 
     PRINT_HEX("cmac", buf, 16);
-    WARN("...not sure\n");
 }

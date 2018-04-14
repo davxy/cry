@@ -33,6 +33,7 @@ target = $(binary_dir)/libcry.a
 includes-y	:= -Iinclude -Isrc -include $(config)
 
 cflags-y := -Wall -MMD -MP
+cflags-y += -fprofile-arcs -ftest-coverage
 cflags-$(CRY_SHORT_ENUMS) += -fshort-enums
 cflags-$(CRY_OMIT_FRAME_POINTER) += -fomit-frame-pointer
 

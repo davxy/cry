@@ -1,38 +1,40 @@
-LIBCRY := ../libcry.a
+libcry := ../libcry.a
 
 CC := gcc
 
-CFLAGS := -O0 -g
+CFLAGS := -O0 -g3 -Wall -fprofile-arcs -ftest-coverage
 CPPFLAGS := -I../include
-LDLIBS := $(LIBCRY)
+LDFLAGS := --coverage
 
-OBJS := test.o \
-		version_test.o \
-		memxor_test.o \
-		base64_test.o \
-		des_test.o \
-		aes_test.o \
-	    cbc_test.o \
-	    ctr_test.o \
-	    gcm_test.o \
-	    crc_test.o \
-	    md5_test.o \
-	    sha256_test.o \
-	    cmac_test.o \
-	    sum_test.o \
-	    mpi_test.o \
-	    rsa_test.o \
-	    rand_test.o \
-		dh_test.o \
-		dsa_test.o \
-		ecp_test.o \
-		ecdsa_test.o \
-		ecdh_test.o \
+
+objs := \
+	test.o \
+	version_test.o \
+	memxor_test.o \
+	base64_test.o \
+	des_test.o \
+	aes_test.o \
+	cbc_test.o \
+	ctr_test.o \
+	gcm_test.o \
+	crc_test.o \
+	md5_test.o \
+	sha256_test.o \
+	cmac_test.o \
+	sum_test.o \
+	mpi_test.o \
+	rsa_test.o \
+	rand_test.o \
+	dh_test.o \
+	dsa_test.o \
+	ecp_test.o \
+	ecdsa_test.o \
+	ecdh_test.o \
 
 .PHONY: all clean
 
-all: $(OBJS) $(LIBCRY)
-	$(CC) $(LDFLAGS) -o test $(OBJS) $(LDLIBS)
+all: $(objs) $(libcry)
+	$(CC) $(LDFLAGS) -o test $^
 
 clean:
-	$(RM) $(OBJS) test
+	$(RM) $(objs) test *.gcda *.gcno *.gcov
