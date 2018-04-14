@@ -73,7 +73,7 @@ void dsa_test(void)
     cry_dsa_ctx dsa;
     cry_dsa_signature sign;
 
-    ASSERT_OK(cry_mpi_init_list(&sign.r, &sign.s, 0));
+    ASSERT_OK(cry_mpi_init_list(&sign.r, &sign.s, NULL));
     ASSERT_OK(cry_mpi_init_bin(&dsa.g, G, sizeof(G)));
     ASSERT_OK(cry_mpi_init_bin(&dsa.p, P, sizeof(P)));
     ASSERT_OK(cry_mpi_init_bin(&dsa.q, Q, sizeof(Q)));
@@ -90,6 +90,6 @@ void dsa_test(void)
 
     cry_mpi_clear_list(&sign.r, &sign.s,
                        &dsa.g, &dsa.p, &dsa.q,
-                       &dsa.pvt, &dsa.pub, 0);
+                       &dsa.pvt, &dsa.pub, NULL);
 }
 

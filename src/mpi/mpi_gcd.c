@@ -44,7 +44,7 @@ int cry_mpi_gcd(cry_mpi *r, const cry_mpi *x, const cry_mpi *y)
     cry_mpi tx, ty;
     int res, lz, lzt;
 
-    if ((res = cry_mpi_init_list(&tx, &ty, 0)) != 0)
+    if ((res = cry_mpi_init_list(&tx, &ty, NULL)) != 0)
         return res;
 
     if ((res = cry_mpi_copy(&tx, x)) != 0 ||
@@ -77,7 +77,7 @@ int cry_mpi_gcd(cry_mpi *r, const cry_mpi *x, const cry_mpi *y)
     }
     res = cry_mpi_shl(&ty, &ty, lz);
     cry_mpi_swap(r, &ty);
-e:  cry_mpi_clear_list(&tx, &ty, 0);
+e:  cry_mpi_clear_list(&tx, &ty, NULL);
     return res;
 }
 

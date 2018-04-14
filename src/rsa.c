@@ -91,7 +91,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     if (!padded_block)
         return -1;
 
-    if ((res = cry_mpi_init_list(&c, &m, 0)) != 0) {
+    if ((res = cry_mpi_init_list(&c, &m, NULL)) != 0) {
         free(padded_block);
         return res;
     }
@@ -159,7 +159,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     if (!padded_block)
         return -1;
 
-    if ((res = cry_mpi_init_list(&c, &m, 0)) != 0) {
+    if ((res = cry_mpi_init_list(&c, &m, NULL)) != 0) {
         free(padded_block);
         return res;
     }
@@ -208,7 +208,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     }
 
     free(padded_block);
-    cry_mpi_clear_list(&c, &m, 0);
+    cry_mpi_clear_list(&c, &m, NULL);
     if (res != 0) {
         *out_siz = 0;
         *out = NULL;

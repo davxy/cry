@@ -43,11 +43,11 @@ typedef struct cry_ec cry_ec;
 
 #define cry_ec_init(ec) \
         cry_mpi_init_list(&(ec)->p, &(ec)->a, &(ec)->b, \
-                          &(ec)->n, &(ec)->g.x, &(ec)->g.y, 0)
+                          &(ec)->n, &(ec)->g.x, &(ec)->g.y, NULL)
 
 #define cry_ec_clear(ec) \
         cry_mpi_clear_list(&(ec)->p, &(ec)->a, &(ec)->b, \
-                           &(ec)->n, &(ec)->g.x, &(ec)->g.y, 0)
+                           &(ec)->n, &(ec)->g.x, &(ec)->g.y, NULL)
 
 #ifdef __cplusplus
 extern "C"{

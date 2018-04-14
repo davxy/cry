@@ -35,7 +35,7 @@ void ecdsa_test(void)
     cry_ecdsa_ctx ecdsa;
     cry_ecdsa_signature sign;
 
-    ASSERT_OK(cry_mpi_init_list(&sign.r, &sign.s, 0));
+    ASSERT_OK(cry_mpi_init_list(&sign.r, &sign.s, NULL));
 
     /* Load a well known curve params */
     ASSERT_OK(cry_ec_init_nist_p256(&ecdsa.ec));
@@ -52,7 +52,7 @@ void ecdsa_test(void)
 
     ASSERT_OK(cry_ecdsa_verify(&ecdsa, &sign, msg, strlen(msg)));
 
-    cry_mpi_clear_list(&sign.r, &sign.s, 0);
+    cry_mpi_clear_list(&sign.r, &sign.s, NULL);
     /* TODO: release ecdsa context data */
 }
 

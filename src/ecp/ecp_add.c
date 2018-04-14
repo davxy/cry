@@ -28,7 +28,7 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     cry_mpi num, den, lam;
     cry_ecp r;
 
-    if ((res = cry_mpi_init_list(&num, &den, &lam, &r.x, &r.y, 0)) != 0)
+    if ((res = cry_mpi_init_list(&num, &den, &lam, &r.x, &r.y, NULL)) != 0)
         return res;
 
     CHK(cry_mpi_sub(&num, &p2->y, &p1->y)); /* num = y2 - y1 */
@@ -47,7 +47,7 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     CHK(cry_mpi_mod(&r.y, &r.y, p));        /* y = ((x1 - x) * lam - y1) % p */
 
     cry_ecp_swap(pr, &r);
-e:  cry_mpi_clear_list(&num, &den, &lam, &r.x, &r.y, 0);
+e:  cry_mpi_clear_list(&num, &den, &lam, &r.x, &r.y, NULL);
     return res;
 }
 

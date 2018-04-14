@@ -42,7 +42,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
         return res;
     }
 
-    if ((res = cry_mpi_init_list(&ta, &tb, &tq, &q, 0)) != 0)
+    if ((res = cry_mpi_init_list(&ta, &tb, &tq, &q, NULL)) != 0)
         return res;
 
     cry_mpi_set_int(&tq, 1);
@@ -94,7 +94,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
         rr->sign = 0;
     }
 cleanup:
-    cry_mpi_clear_list(&ta, &tb, &tq, &q, 0);
+    cry_mpi_clear_list(&ta, &tb, &tq, &q, NULL);
     return res;
 }
 

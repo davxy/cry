@@ -79,17 +79,17 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
     if (radix == 16)
         return cry_mpi_store_str_hex(a, s, size);
 
-    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, 0)) != 0) {
+    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, NULL)) != 0) {
         return ret;
     }
 
     if ((ret = cry_mpi_copy(&tmp, a)) != 0)
-        return ret;
+        goto e;
     cry_mpi_set_int(&rad, radix);
 
     while (!cry_mpi_is_zero(&tmp) && i < size) {
         if ((ret = cry_mpi_div_abs(&tmp, &rem, &tmp, &rad)) != 0)
-            return ret;
+            goto e;
         d = rem.used ? rem.data[0] : 0;
         s[i++] = RAW_TO_ASC_CHAR(d);
     }
@@ -107,6 +107,8 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
         j++;
         i--;
     }
+
+e:  cry_mpi_clear_list(&tmp, &rad, &rem, NULL);
     return ret;
 }
 

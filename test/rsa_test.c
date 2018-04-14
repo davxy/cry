@@ -129,6 +129,6 @@ void rsa_test(void)
         free(cipher_buf);
     }
 
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, 0);
+    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
 }
 
