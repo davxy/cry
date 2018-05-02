@@ -36,7 +36,7 @@ CRY_PRNG=aes
 #CRY_MPI_DIV_SMALL=y
 
 # Comba as baseline multiplier
-CRY_MPI_MUL_COMBA=y
+#CRY_MPI_MUL_COMBA=y
 
 # Karatsuba multiplier enabled, see the mpi_mul.c to set the CUTOFF
 CRY_MPI_MUL_KARATSUBA=y
@@ -47,12 +47,3 @@ CRY_ECP_MUL_WIN=y
 # Elliptic curve point multiplication with sliding window algorithm (faster)
 # Have precedence against the simple windowed one.
 CRY_ECP_MUL_SLIDING_WIN=y
-
-################################################################################
-# Internals
-################################################################################
-
-# Use one octet digit in place of sizeof(unsigned long) octets.
-# Imply performance degradation and present just for testing.
-#CRY_MPI_SMALL_DIGIT=y
-
