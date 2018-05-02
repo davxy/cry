@@ -18,25 +18,21 @@
  */
 
 #include "test.h"
-#include <string.h>
+#include "memxor.h"
 
 
-void cry_memxor(unsigned char *dst, const unsigned char *src,
-                unsigned int size);
-
-void cry_memxor3(unsigned char *dst, const unsigned char *src1,
-                 const unsigned char *src2, unsigned int size);
-
+#define XOR_RES \
+        "\x51\x53\x51\x57\x51\x53\x51\x5f\x51\x53\x2a\x2e\x2e\x2a\x2a\x36"
 
 void memxor_test(void)
 {
-    const unsigned char *a = "0123456789ABCDEF";
-    const unsigned char *b = "abcdefghijklmnop";
+    const char *a = "0123456789ABCDEF";
+    const char *b = "abcdefghijklmnop";
     size_t n = strlen(a);
     
     memcpy(buf, a, n);
-    cry_memxor(buf, b, n);
+    cry_memxor(buf, (unsigned char *)b, n);
 
-    PRINT_HEX("res", buf, n);
+    ASSERT_EQ_BUF(buf, XOR_RES, n);
 }
 
