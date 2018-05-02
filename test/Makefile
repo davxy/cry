@@ -3,7 +3,7 @@ libcry := ../libcry.a
 CC := gcc
 
 CFLAGS := -O0 -g3 -Wall --coverage
-CPPFLAGS := -I../include
+CPPFLAGS := -I. -I../include -I../src
 LDFLAGS := --coverage
 
 
@@ -12,7 +12,10 @@ objs := \
 	version_test.o \
 	memxor_test.o \
 	base64_test.o \
-	des_test.o \
+	mpi/mpi_test.o \
+	mpi/mpi_add_test.o \
+	mpi/mpi_mul_test.o \
+#	des_test.o \
 	aes_test.o \
 	cbc_test.o \
 	ctr_test.o \
@@ -22,7 +25,6 @@ objs := \
 	sha256_test.o \
 	cmac_test.o \
 	sum_test.o \
-	mpi_test.o \
 	rsa_test.o \
 	rand_test.o \
 	dh_test.o \

@@ -106,6 +106,6 @@ $(binary_dir)/%.o: $(source_dir)/%.c
 test: $(target)
 	make -C test
 
-cleantest:
+testclean:
 	make -C test clean
 
