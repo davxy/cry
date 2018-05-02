@@ -29,9 +29,11 @@
 extern "C"{
 #endif
 
-int cry_base64_encode(const char *in, int len, char *out);
+#include <stddef.h>
 
-int cry_base64_decode(const char *in, int len, char *out);
+size_t cry_base64_encode(const char *in, size_t len, char *out);
+
+size_t cry_base64_decode(const char *in, size_t len, char *out);
 
 #ifdef __cplusplus
 }

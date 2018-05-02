@@ -22,9 +22,9 @@
 static const char *base64 =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-int cry_base64_encode(const char *in, int len, char *out)
+size_t cry_base64_encode(const char *in, size_t len, char *out)
 {
-    int i, outlen = 0;
+    size_t i, outlen = 0;
 
     do {
         outlen += 4;
@@ -78,9 +78,9 @@ static const unsigned char unbase64[] = {
      49,  50,  51, 255, 255, 255, 255, 255,
 };
 
-int cry_base64_decode(const char *in, int len, char *out)
+size_t cry_base64_decode(const char *in, size_t len, char *out)
 {
-    int i, outlen = 0;
+    size_t i, outlen = 0;
 
     if (len & 0x03)
         return -1; /* should be a multiple of 4 */

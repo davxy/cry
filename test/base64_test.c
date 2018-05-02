@@ -26,12 +26,14 @@
 
 void base64_test(void)
 {
-    ASSERT(cry_base64_encode(MSG, strlen(MSG), buf) == ELEN);
-    PRINT_ASC("encoded", buf, ELEN);
-    ASSERT_EQ_BUF(buf, "SGVsbG8gV29ybGQ=", ELEN);
+    char *cbuf = (char *)buf;
 
-    ASSERT(cry_base64_decode(buf, ELEN, buf) == MLEN);
-    PRINT_ASC("decoded", buf, MLEN);
+    ASSERT(cry_base64_encode(MSG, strlen(MSG), cbuf) == ELEN);
+    PRINT_ASC("encoded", cbuf, ELEN);
+    ASSERT_EQ_BUF(cbuf, "SGVsbG8gV29ybGQ=", ELEN);
+
+    ASSERT(cry_base64_decode(cbuf, ELEN, cbuf) == MLEN);
+    PRINT_ASC("decoded", cbuf, MLEN);
     ASSERT_EQ_BUF(buf, MSG, MLEN);
 }
 
