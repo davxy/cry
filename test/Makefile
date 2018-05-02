@@ -2,7 +2,7 @@ libcry := ../libcry.a
 
 CC := gcc
 
-CFLAGS := -O0 -g3 -Wall -fprofile-arcs -ftest-coverage
+CFLAGS := -O0 -g3 -Wall --coverage
 CPPFLAGS := -I../include
 LDFLAGS := --coverage
 
@@ -38,3 +38,4 @@ all: $(objs) $(libcry)
 
 clean:
 	$(RM) $(objs) test *.gcda *.gcno *.gcov
+

@@ -14,13 +14,9 @@ config := $(source_dir)/config.h
 #
 
 # $(call normalstr,str)
-build_name := $(shell uname -om)
-space := $(empty) $(empty)
-normalstr := $(subst _,-,$(subst /,-,$(subst $(space),-,$(build_name))))
-# remove unwanted characters spaces
-build_name := $(shell echo $(call normalstr,$(build_name)) | tr A-Z a-z)
+build_name = $(shell $(CC) -dumpmachine)
 # convert to lowercase
-binary_dir := build/$(build_name)
+binary_dir = build/$(build_name)
 
 
 # call $(src_to_bin_dir,list)
@@ -33,7 +29,7 @@ target = $(binary_dir)/libcry.a
 includes-y	:= -Iinclude -Isrc -include $(config)
 
 cflags-y := -Wall -MMD -MP
-cflags-y += -fprofile-arcs -ftest-coverage
+cflags-$(CRY_COVERAGE) += --coverage
 cflags-$(CRY_SHORT_ENUMS) += -fshort-enums
 cflags-$(CRY_OMIT_FRAME_POINTER) += -fomit-frame-pointer
 
@@ -92,7 +88,9 @@ cry: $(target)
 clean:
 	$(RM) $(binary_dir) $(config) *.a
 
-$(target): $(config) $(objects)
+$(objects): $(config)
+
+$(target): $(objects)
 	$(AR) rcs $@ $^
 	$(CP) $(target) .
 

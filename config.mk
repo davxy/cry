@@ -1,7 +1,7 @@
 ################################################################################
 # CRY build configuration.
 #
-# This file is directly feed to Makefile.
+# This file is included by Makefile.
 ################################################################################
 
 ################################################################################
@@ -12,6 +12,7 @@ CRY_DEBUG=y
 #CRY_OMIT_FRAME_POINTER=y
 #CRY_SMALL_SIZE=y
 #CRY_STACK_PROTECTOR=y
+CRY_COVERAGE=y
 
 ################################################################################
 # Platform
@@ -23,10 +24,6 @@ CRY_DEBUG=y
 ################################################################################
 # Algorithms
 ################################################################################
-
-# Use one octet digit in place of sizeof(unsigned long) octets.
-# Warning: NO ADVANTAGES, just for testing purposes
-#CRY_MPI_SMALL_DIGIT=y
 
 # Options: aes|weak|posix|win
 CRY_PRNG=aes
@@ -50,4 +47,12 @@ CRY_ECP_MUL_WIN=y
 # Elliptic curve point multiplication with sliding window algorithm (faster)
 # Have precedence against the simple windowed one.
 CRY_ECP_MUL_SLIDING_WIN=y
+
+################################################################################
+# Internals
+################################################################################
+
+# Use one octet digit in place of sizeof(unsigned long) octets.
+# Imply performance degradation and present just for testing.
+#CRY_MPI_SMALL_DIGIT=y
 
