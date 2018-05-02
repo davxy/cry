@@ -149,9 +149,9 @@ static int mul_base(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     /* iterate through every digit in the first operand */
     for (i = 0; i < pa; i++) {
         /* limit ourselves to making digs digits of output */
-        pb = CRY_MIN(b->used, digs - i);
-        if (pb < 0)
+        if (digs < i)
             break;
+        pb = CRY_MIN(b->used, digs - i);
         /* copy of the digit to be used within the nested loop */
         tmpx = a->data[i];
         /* an alias for the destination shifted i places */
@@ -168,7 +168,7 @@ static int mul_base(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
                  (cry_mpi_dword)tmpx * (cry_mpi_dword)(*tmpy++) +
                  (cry_mpi_dword)u;
             /* the new column is the lower part of the result */
-            *tmpt++ = (cry_mpi_digit)(dw & (cry_mpi_digit)-1);
+            *tmpt++ = (cry_mpi_digit)(dw & CRY_MPI_DIGIT_MAX);
             /* get the carry digit from the result */
             u = (cry_mpi_digit)(dw >> CRY_MPI_DIGIT_BITS);
         }

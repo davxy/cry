@@ -27,11 +27,10 @@
 
 #include <stddef.h>
 
-#ifndef CRY_MPI_SMALL_DIGIT
-typedef unsigned long cry_mpi_digit;
-#else
+//typedef unsigned long cry_mpi_digit;
 typedef unsigned char cry_mpi_digit;
-#endif
+
+#define CRY_MPI_DIGIT_MAX    ((cry_mpi_digit)-1)
 
 struct cry_mpi {
     int           sign;
@@ -160,6 +159,8 @@ void cry_mpi_print(const cry_mpi *a, unsigned int radix);
 #define cry_mpi_zero(a) do { \
     (a)->sign = 0;           \
     (a)->used = 0;           \
+    (a)->alloc = 0;          \
+    (a)->data = NULL;        \
     } while(0)
 
 int cry_mpi_rand(cry_mpi *a, unsigned int bits);
