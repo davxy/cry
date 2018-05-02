@@ -22,6 +22,7 @@
 #include <stdlib.h> /* rand */
 #include <time.h>   /* time */
 
+#if 0
 static void mpi_init_test(void)
 {
     cry_mpi a, b;
@@ -782,8 +783,17 @@ static void sqr_test(void)
     cry_mpi_clear(&a);
 }
 
+
+
+
+#endif
+
+void mpi_add_test(void);
+void mpi_mul_test(void);
+
 void mpi_test(void)
 {
+#if 0
     RUN(mpi_init_test);
     RUN(abs_test);
     RUN(cmp_test);
@@ -805,5 +815,8 @@ void mpi_test(void)
     RUN(prime_test);
     RUN(karatsuba_test);
     RUN(sqr_test);
+#endif
+    RUN(mpi_add_test);
+    RUN(mpi_mul_test);
 }
 

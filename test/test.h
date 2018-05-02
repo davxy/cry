@@ -17,15 +17,13 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#ifndef _TEST_H_
-#define _TEST_H_
+#ifndef CRY_TEST_H_
+#define CRY_TEST_H_
 
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-
-//#define NDEBUG
 
 extern int test_runs;
 extern int test_fails;
@@ -39,11 +37,16 @@ extern unsigned char buf[BUFSIZ];
 #define TS2US(ts) \
         ((unsigned long)(ts)->tv_sec * 1000000 + (ts)->tv_nsec / 1000)
 
-typedef void (* test_func)(void);
+void run(const char *name, void (* test)(void),
+         void (* setup)(void), void (* teardown)(void));
 
-void run(const char *name, test_func func);
+#define RUNX(test, setup, teardown) do { \
+    run(#test, test, setup, teardown); \
+    if (test_msg != NULL) return; \
+    } while(0)
 
-#define RUN(test) run(#test, test)
+#define RUN(test) RUNX(test, NULL, NULL)
+
 
 #define CONTINUE(exp) do { \
     int __tmp = test_cont; \
@@ -53,9 +56,9 @@ void run(const char *name, test_func func);
     } while (0)
 
 #define ASSERT(test) do { \
-    if (!(test)) { \
+    if ((test) == 0) { \
         TRACE(">>> ASSERTION FAIL: %s\n", #test); \
-        if (!test_cont) { test_msg = #test; return; } \
+        if (test_cont == 0) { test_msg = #test; return; } \
         else { test_fails++; } \
     } \
     } while (0)
@@ -74,7 +77,8 @@ void run(const char *name, test_func func);
     ASSERT(strcmp(buf, str) == 0); \
     } while (0)
 
-#define ASSERT_OK(e) ASSERT_EQ(e, 0)
+#define ASSERT_OK(e) \
+        ASSERT_EQ((e), 0)
 
 
 #ifdef NDEBUG
@@ -100,7 +104,7 @@ void run(const char *name, test_func func);
     } while(0)
 
 # define PRINT_ASC(msg, buf, siz) \
-    TRACE("%s: %.*s\n", msg, siz, buf)
+    TRACE("%s: %.*s\n", msg, (int)(siz), buf)
 
 # define PRINT_MPI(msg, mpi, rad) do { \
     TRACE("%s:\t", msg); \

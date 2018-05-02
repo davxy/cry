@@ -30,7 +30,8 @@ unsigned char buf[BUFSIZ];
 
 
 
-void run(const char *name, test_func func)
+void run(const char *name, void (* test)(void),
+         void (* setup)(void), void (* teardown)(void))
 {
     int i;
     struct timespec t1, t2;
@@ -42,9 +43,13 @@ void run(const char *name, test_func func)
     printf(" %s\n", name);
 
     test_level++;
+    if (setup != NULL)
+        setup();
     clock_gettime(CLOCK_MONOTONIC, &t1);
-    func();
+    test();
     clock_gettime(CLOCK_MONOTONIC, &t2);
+    if (teardown != NULL)
+        teardown();
     test_level--;
 
     test_runs++;
@@ -63,6 +68,8 @@ void run(const char *name, test_func func)
 TEST_WRAP(version)
 TEST_WRAP(memxor)
 TEST_WRAP(base64)
+TEST_WRAP(mpi)
+#if 0
 TEST_WRAP(des)
 TEST_WRAP(aes)
 TEST_WRAP(cbc)
@@ -73,7 +80,6 @@ TEST_WRAP(md5)
 TEST_WRAP(sha256)
 TEST_WRAP(cmac)
 TEST_WRAP(sum)
-TEST_WRAP(mpi)
 TEST_WRAP(rsa)
 TEST_WRAP(rand)
 TEST_WRAP(dh)
@@ -81,6 +87,7 @@ TEST_WRAP(dsa)
 TEST_WRAP(ecp)
 TEST_WRAP(ecdsa)
 TEST_WRAP(ecdh)
+#endif
 
 struct test_def {
     const char *name;
@@ -93,6 +100,8 @@ static struct test_def tests[] = {
     TEST_ELEM(version),
     TEST_ELEM(memxor),
     TEST_ELEM(base64),
+    TEST_ELEM(mpi),
+#if 0
     TEST_ELEM(des),
     TEST_ELEM(aes),
     TEST_ELEM(cbc),
@@ -103,7 +112,6 @@ static struct test_def tests[] = {
     TEST_ELEM(sha256),
     TEST_ELEM(cmac),
     TEST_ELEM(sum),
-    TEST_ELEM(mpi),
     TEST_ELEM(rsa),
     TEST_ELEM(rand),
     TEST_ELEM(dh),
@@ -111,6 +119,7 @@ static struct test_def tests[] = {
     TEST_ELEM(ecp),
     TEST_ELEM(ecdsa),
     TEST_ELEM(ecdh),
+#endif
 };
 
 #define TESTS_NUM   (sizeof(tests)/sizeof(*tests))
