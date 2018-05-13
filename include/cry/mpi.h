@@ -27,8 +27,8 @@
 
 #include <stddef.h>
 
-//typedef unsigned long cry_mpi_digit;
-typedef unsigned char cry_mpi_digit;
+typedef unsigned long cry_mpi_digit;
+//typedef unsigned char cry_mpi_digit;
 
 #define CRY_MPI_DIGIT_MAX    ((cry_mpi_digit)-1)
 
