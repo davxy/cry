@@ -25,39 +25,28 @@ int test_runs;
 int test_fails;
 int test_level;
 int test_cont;
-const char *test_msg;
+int test_stop;
 unsigned char buf[BUFSIZ];
-
 
 
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void))
 {
     int i;
-    struct timespec t1, t2;
 
+    test_runs++;
     if (test_level == 0)
         printf("\n");
-    for (i = 0; i < test_level + 2; i++)
-        printf("%c", '-');
-    printf(" %s\n", name);
-
+    for (i = 0; i < test_level; i++)
+        printf("---");
+    printf("> %s\n", name);
     test_level++;
     if (setup != NULL)
         setup();
-    clock_gettime(CLOCK_MONOTONIC, &t1);
     test();
-    clock_gettime(CLOCK_MONOTONIC, &t2);
     if (teardown != NULL)
         teardown();
     test_level--;
-
-    test_runs++;
-    for (i = 0; i < test_level + 2; i++)
-        printf("%c", '-');
-    printf(" %lu us\n", TS2US(&t2) - TS2US(&t1));
-    if (test_msg)
-        return;
 }
 
 
@@ -142,8 +131,8 @@ int main(int argc, char *argv[])
     test_runs = 0;
     test_fails = 0;
     test_level = 0;
-    test_msg = NULL;
     test_cont = 0;
+    test_stop = 0;
 
     prng_init(); /* Always do it */
 
@@ -152,7 +141,7 @@ int main(int argc, char *argv[])
     if (argc == 1) {
         for (j = 0; j < TESTS_NUM; j++) {
             tests[j].func();
-            if (test_msg != NULL)
+            if (test_stop != 0)
                 break;
         }
     } else {
@@ -160,7 +149,7 @@ int main(int argc, char *argv[])
             for (j = 0; j < TESTS_NUM; j++) {
                 if (strcmp(argv[i], tests[j].name) == 0) {
                     tests[j].func();
-                    if (test_msg != NULL) {
+                    if (test_stop != 0) {
                         i = argc;
                         break;
                     }
@@ -170,10 +159,10 @@ int main(int argc, char *argv[])
     }
 
     printf("\n");
-    printf("|| Tests run: %d\n", test_runs);
-    printf("|| Tests fails: %d\n", test_fails);
+    printf("|| Tests: %d\n", test_runs);
+    printf("|| Fails: %d\n", test_fails);
     printf("\n-------------------------------------\n\n");
 
-    return test_msg != NULL;
+    return (test_fails != 0);
 }
 

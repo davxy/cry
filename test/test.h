@@ -29,20 +29,18 @@ extern int test_runs;
 extern int test_fails;
 extern int test_level;
 extern int test_cont;
-extern const char *test_msg;
+extern int test_stop;
 extern unsigned char buf[BUFSIZ];
 
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
-#define TS2US(ts) \
-        ((unsigned long)(ts)->tv_sec * 1000000 + (ts)->tv_nsec / 1000)
 
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void));
 
 #define RUNX(test, setup, teardown) do { \
     run(#test, test, setup, teardown); \
-    if (test_msg != NULL) return; \
+    if (test_stop == 1) return; \
     } while(0)
 
 #define RUN(test) RUNX(test, NULL, NULL)
@@ -57,9 +55,10 @@ void run(const char *name, void (* test)(void),
 
 #define ASSERT(test) do { \
     if ((test) == 0) { \
-        TRACE(">>> ASSERTION FAIL: %s\n", #test); \
-        if (test_cont == 0) { test_msg = #test; return; } \
-        else { test_fails++; } \
+        test_fails++; \
+        TRACE(">>> ASSERTION FAIL (%s:%d): %s\n", \
+                __FILE__, __LINE__, #test); \
+        if (test_cont == 0) { test_stop = 1; return; } \
     } \
     } while (0)
 
@@ -73,12 +72,12 @@ void run(const char *name, void (* test)(void),
     ASSERT(memcmp(b1, b2, len) == 0)
 
 #define ASSERT_EQ_MPI(mpi, rad, str) do { \
-    cry_mpi_store_str(mpi, rad, buf, sizeof(buf)); \
-    ASSERT(strcmp(buf, str) == 0); \
+    cry_mpi_store_str(mpi, rad, (char *)buf, BUFSIZ); \
+    ASSERT(strcmp((char *)buf, str) == 0); \
     } while (0)
 
 #define ASSERT_OK(e) \
-        ASSERT_EQ((e), 0)
+    ASSERT_EQ((e), 0)
 
 
 #ifdef NDEBUG
