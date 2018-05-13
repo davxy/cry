@@ -2,6 +2,7 @@ libcry.a
 build
 src/config.h
 test/test
+out
 *.o
 *.gcda
 *.gcno
