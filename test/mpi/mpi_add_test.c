@@ -17,8 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include "test.h"
-#include <cry/mpi.h>
+#include "mpi_test.h"
 
 
 void mpi_add_test(void)

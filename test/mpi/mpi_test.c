@@ -17,10 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include "test.h"
-#include <cry/mpi.h>
-#include <stdlib.h> /* rand */
-#include <time.h>   /* time */
+#include "mpi_test.h"
 
 #if 0
 static void mpi_init_test(void)
@@ -788,8 +785,7 @@ static void sqr_test(void)
 
 #endif
 
-void mpi_add_test(void);
-void mpi_mul_test(void);
+
 
 void mpi_test(void)
 {
@@ -816,6 +812,8 @@ void mpi_test(void)
     RUN(karatsuba_test);
     RUN(sqr_test);
 #endif
+    RUN(mpi_core_test);
+    RUN(mpi_cmp_test);
     RUN(mpi_add_test);
     RUN(mpi_mul_test);
 }

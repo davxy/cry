@@ -17,8 +17,7 @@
  * License along with CRY; if not, see <http://www.gnu/licenses/>.
  */
 
-#include "test.h"
-#include <cry/mpi.h>
+#include "mpi_test.h"
 
 static cry_mpi a, b, r;
 static size_t siz;
@@ -66,6 +65,12 @@ void mpi_mul_digit_max(void)
     siz = cry_mpi_store_bin(&r, (char *)buf, BUFSIZ, 0);
     ASSERT_EQ(siz, DIGIT_MAX_MUL_SIZ);
     ASSERT_EQ(memcmp(buf, DIGIT_MAX_MUL_BIN, DIGIT_MAX_MUL_SIZ), 0);
+}
+
+void mpi_mul_by_zero(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(&a, DIGIT_MAX_BIN, DIGIT_MAX_SIZ));
+
 }
 
 
