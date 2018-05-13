@@ -73,13 +73,13 @@ objects = $(call src_to_bin_dir,$(objects_list))
 depends = $(patsubst %.o,%.d,$(objects))
 
 CPPFLAGS =  $(includes-y)
-CFLAGS  = 	$(cflags-y)
+CFLAGS = 	$(cflags-y)
 AFLAGS = 	$(aflags-y)
 LDFLAGS = 	$(lflags-y)
 
 DATE 	:= $(shell date +'%y%m%d')
 
-.PHONY: all cry clean test
+.PHONY: all cry clean test coverage
 
 all: cry
 
@@ -87,6 +87,8 @@ cry: $(target)
 
 clean:
 	$(RM) $(binary_dir) $(config) *.a
+	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
+	
 
 $(objects): $(config)
 
@@ -109,3 +111,13 @@ test: $(target)
 testclean:
 	make -C test clean
 
+coverage: test
+	@mkdir -p out/coverage
+	lcov -z -d build
+	lcov -c -i -d build -o base.info
+	./test/test $(TESTS)
+	lcov -c -d build -o test.info
+	lcov -a base.info -a test.info -o tsm.info
+	@mv tsm.info out/coverage
+	@cd out/coverage; genhtml tsm.info
+	@rm base.info test.info
