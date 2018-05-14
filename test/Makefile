@@ -42,5 +42,5 @@ all: $(objs) $(libcry)
 
 clean:
 	$(RM) $(objs) test
-	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
+	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno -o -name \*.gcov \)`
 
