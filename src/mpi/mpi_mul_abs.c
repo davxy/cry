@@ -138,8 +138,14 @@ static int mul_base(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     int res, pa, pb, i, j;
     cry_mpi_digit u, tmpx, *tmpt, *tmpy;
     cry_mpi_dword dw;
-    size_t digs = a->used + b->used;
+    size_t digs;
 
+    if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
+    digs = a->used + b->used;
     if ((res = cry_mpi_init_size(&t, digs)) != 0)
         return res;
     cry_mpi_set_used(&t, digs);
@@ -190,8 +196,8 @@ static int mul_base(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
 static int mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    cry_mpi x0, x1, y0, y1, t1, x0y0, x1y1;
     int B, hB, res;
+    cry_mpi x0, x1, y0, y1, z0, z1, z2;
 
     /* minimum number of digits */
     B = CRY_MIN(a->used, b->used);
@@ -209,11 +215,11 @@ static int mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     if ((res = cry_mpi_init_size(&y1, b->used - hB)) < 0)
         goto e3;
 
-    if ((res = cry_mpi_init_size(&t1, B)) < 0)
+    if ((res = cry_mpi_init_size(&z0, B)) < 0)
         goto e4;
-    if ((res = cry_mpi_init_size(&x0y0, B)) < 0)
+    if ((res = cry_mpi_init_size(&z1, B)) < 0)
         goto e5;
-    if ((res = cry_mpi_init_size(&x1y1, B)) < 0)
+    if ((res = cry_mpi_init_size(&z2, B)) < 0)
         goto e6;
 
     /* Shift the digits */
@@ -221,7 +227,6 @@ static int mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     x1.used = a->used - hB;
     y1.used = b->used - hB;
 
-#if 1
     {
         register int x;
         register cry_mpi_digit *tmpa, *tmpb, *tmpx, *tmpy;
@@ -251,13 +256,6 @@ static int mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
             *tmpy++ = *tmpb++;
 
     }
-#else
-    int x = hB * sizeof(cry_mpi_digit);
-    memcpy(x0.data, a->data, x);
-    memcpy(x1.data, a->data + x, a->used * sizeof(cry_mpi_digit) - x);
-    memcpy(y0.data, b->data, x);
-    memcpy(y1.data, b->data + x, b->used * sizeof(cry_mpi_digit) - x);
-#endif
 
     /*
      * Only need to clamp the lower words since by definition the upper
@@ -266,44 +264,35 @@ static int mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     cry_mpi_adjust(&x0);
     cry_mpi_adjust(&y0);
 
-    /*
-     * Now calc the products x0y0 and x1y1.
-     * After this x0 is no longer required, free temp [x0==t2]
-     */
-    if ((res = cry_mpi_mul(&x0y0, &x0, &y0)) < 0)
+    if ((res = cry_mpi_mul(&z0, &x0, &y0)) < 0) /* z0 = x0*y0 */
         goto e7;
-    if ((res = cry_mpi_mul(&x1y1, &x1, &y1)) < 0)
+    if ((res = cry_mpi_mul(&z2, &x1, &y1)) < 0) /* z2 = x1*y1 */
         goto e7;
-
-    /* Now calc x1+x0 and y1+y0 */
-    if ((res = cry_mpi_add(&t1, &x1, &x0)) < 0)        /* t1 = x1 + x0 */
+    /* Use x0 for temporary storage */
+    if ((res = cry_mpi_add(&z1, &x1, &x0)) < 0) /* z1 = x1+x0 */
         goto e7;
-    if ((res = cry_mpi_add(&x0, &y1, &y0)) < 0)     /* t2 = y1 + y0 */
+    if ((res = cry_mpi_add(&x0, &y1, &y0)) < 0) /* x0 = y1+y0 */
         goto e7;
-
-    if ((res = cry_mpi_mul(&t1, &x0, &t1)) < 0)      /* t1 = (x1+x0)*(y1+y0) */
+    if ((res = cry_mpi_mul(&z1, &z1, &x0)) < 0) /* z1 = (x1+x0)(y1+y0) */
+        goto e7;
+    if ((res = cry_mpi_add(&x0, &z0, &z2)) < 0) /* x0 = z0+z2 */
+        goto e7;
+    if ((res = cry_mpi_sub(&z1, &z1, &x0)) < 0) /* z1=(x1+x0)*(y1+y0)-(z0+z2) */
         goto e7;
 
-    /* Add x0y0 */
-    if ((res = cry_mpi_add(&x0, &x0y0, &x1y1)) < 0)  /* t2 = x0y0 + x1y1 */
+    if ((res = cry_mpi_shld(&z1, hB)) < 0)
         goto e7;
-    if ((res = cry_mpi_sub(&t1, &t1, &x0)) < 0)
-        goto e7;                    /* t1 = (x1+x0)*(y1+y0) - (x0y0+x1y1) */
-
-    /* Shift by hB */
-    if ((res = cry_mpi_shld(&t1, hB)) < 0)
-        goto e7;
-    if ((res = cry_mpi_shld(&x1y1, B)) < 0)
+    if ((res = cry_mpi_shld(&z2, B)) < 0)
         goto e7;
 
-    if ((res = cry_mpi_add(&t1, &x0y0, &t1)) < 0)
+    if ((res = cry_mpi_add(&z1, &z0, &z1)) < 0)
         goto e7;
-    if ((res = cry_mpi_add(r, &t1, &x1y1)) < 0)    /* r = x0y0 + t1 + x1y1 */
+    if ((res = cry_mpi_add(r, &z1, &z2)) < 0)   /* r = z2<<B + z1<<hB + z0 */
         goto e7;
 
-e7: cry_mpi_clear(&x1y1);
-e6: cry_mpi_clear(&x0y0);
-e5: cry_mpi_clear(&t1);
+e7: cry_mpi_clear(&z2);
+e6: cry_mpi_clear(&z1);
+e5: cry_mpi_clear(&z0);
 e4: cry_mpi_clear(&y1);
 e3: cry_mpi_clear(&y0);
 e2: cry_mpi_clear(&x1);
