@@ -110,14 +110,3 @@ test: $(target)
 
 testclean:
 	make -C test clean
-
-coverage: test
-	@mkdir -p out/coverage
-	lcov -z -d build
-	lcov -c -i -d build -o base.info
-	./test/test $(TESTS)
-	lcov -c -d build -o test.info
-	lcov -a base.info -a test.info -o tsm.info
-	@mv tsm.info out/coverage
-	@cd out/coverage; genhtml tsm.info
-	@rm base.info test.info

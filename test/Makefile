@@ -44,3 +44,22 @@ clean:
 	$(RM) $(objs) test
 	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno -o -name \*.gcov \)`
 
+coverage: test
+	@mkdir -p out/coverage
+	lcov -z -d ../build
+	lcov -c -i -d ../build -o base.info
+	./test $(TESTS)
+	lcov -c -d ../build -o cry.info
+	lcov -a base.info -a cry.info -o cry.info
+	@genhtml -o out/coverage cry.info 
+	@rm base.info cry.info
+
+valgrind: all
+	@mkdir -p out/valgrind
+	valgrind --log-file=val.log --leak-check=full --show-leak-kinds=all --track-origins=yes ./test $(TESTS)
+	@echo "<html><pre>" > valgrind.html
+	@cat val.log >> valgrind.html
+	@echo "</pre></html>" >> valgrind.html
+	@mv valgrind.html out/valgrind/index.html
+	@rm val.log
+
