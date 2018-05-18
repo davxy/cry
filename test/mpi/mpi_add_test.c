@@ -32,4 +32,6 @@ void mpi_add_test(void)
 
     ASSERT_OK(cry_mpi_store_str(&r, 16, (char *)buf, BUFSIZ));
     ASSERT_EQ(strcmp((char *)buf, "33"), 0);
+
+    cry_mpi_clear_list(&a, &b, &r, NULL);
 }

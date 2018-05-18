@@ -496,12 +496,28 @@ static void karatsuba(void)
     ASSERT_OK(cry_mpi_load_bin(&a, a_dat, sizeof(a_dat)));
     ASSERT_OK(cry_mpi_load_bin(&b, b_dat, sizeof(b_dat)));
     ASSERT_OK(cry_mpi_load_bin(&c, a_mul_b_dat, sizeof(a_mul_b_dat)));
-    ASSERT_OK(cry_mpi_mul(&d, &a, &b));
+    ASSERT_OK(cry_mpi_mul_karatsuba(&d, &a, &b));
 
     ASSERT_EQ(cry_mpi_cmp(&c, &d), 0);
 
     cry_mpi_clear_list(&a, &b, &c, &d, NULL);
 }
+
+static void comba(void)
+{
+    cry_mpi c, d;
+
+    ASSERT_OK(cry_mpi_init_list(&c, &d, NULL));
+    ASSERT_OK(cry_mpi_load_bin(&a, a_dat, sizeof(a_dat)));
+    ASSERT_OK(cry_mpi_load_bin(&b, b_dat, sizeof(b_dat)));
+    ASSERT_OK(cry_mpi_load_bin(&c, a_mul_b_dat, sizeof(a_mul_b_dat)));
+    ASSERT_OK(cry_mpi_mul_comba(&d, &a, &b));
+
+    ASSERT_EQ(cry_mpi_cmp(&c, &d), 0);
+
+    cry_mpi_clear_list(&a, &b, &c, &d, NULL);
+}
+
 
 
 #define MYRUN(test) RUNX(test, setup, teardown)
@@ -512,4 +528,5 @@ void mpi_mul_test(void)
     MYRUN(digit_max);
     MYRUN(by_zero);
     MYRUN(karatsuba);
+    MYRUN(comba);
 }

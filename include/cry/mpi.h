@@ -126,6 +126,15 @@ int cry_mpi_lcm(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m);
 
+
+int cry_mpi_mul_baseline(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
+int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
+int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
+
+
 /*
  * Utilities
  */

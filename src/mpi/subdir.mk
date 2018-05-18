@@ -3,17 +3,20 @@
 objs-y := mpi_core.o \
           mpi_list.o \
           mpi_abs.o \
+          mpi_cmp.o \
           mpi_cmp_abs.o \
+          mpi_add.o \
           mpi_add_abs.o \
+          mpi_sub.o \
           mpi_sub_abs.o \
+          mpi_mul.o \
           mpi_mul_abs.o \
+          mpi_mul_baseline.o \
+          mpi_mul_comba.o \
+          mpi_mul_karatsuba.o \
+		  mpi_div.o \
           mpi_div_abs.o \
 		  mpi_sqr.o \
-          mpi_cmp.o \
-          mpi_add.o \
-          mpi_sub.o \
-          mpi_mul.o \
-          mpi_div.o \
           mpi_shl.o \
           mpi_shr.o \
           mpi_bin.o \
