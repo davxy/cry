@@ -1,3 +1,5 @@
+image: davxy/build-machine
+
 stages:
     - build
     - test
@@ -17,7 +19,6 @@ test:
     script:
         - make test
         - test/test
-        - gcovr --exclude test | grep TOTAL
 
 # Deploy
 
