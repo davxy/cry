@@ -1,0 +1,32 @@
+image: davxy/builder
+
+stages:
+    - build
+    - test
+    - deploy
+
+# Build
+
+build:
+    stage: build
+    script:
+        - make
+
+# Test
+
+test:
+    stage: test
+    script:
+        - make test
+        - test/test
+        - gcovr --exclude test -r . | grep TOTAL
+
+# Deploy
+
+deploy:
+    stage: deploy
+    script:
+        - echo "TODO"
+    only:
+        - master
+        - tags
