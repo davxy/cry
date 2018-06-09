@@ -163,6 +163,12 @@ size_t cry_mpi_count_bits(const cry_mpi *a);
 #define cry_mpi_is_even(a) \
     (!cry_mpi_is_odd(a))
 
+#define cry_mpi_is_pos(a) \
+    ((a)->sign == 0)
+
+#define cry_mpi_is_neg(a) \
+    (!cry_mpi_is_pos(a))
+
 void cry_mpi_print(const cry_mpi *a, unsigned int radix);
 
 #define cry_mpi_zero(a) do { \

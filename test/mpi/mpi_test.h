@@ -25,10 +25,10 @@
 
 #define MPI_BUF_LEN   4
 extern cry_mpi *g_mpi_buf;
-#define g_mpi0  g_mpi_buf[0]
-#define g_mpi1  g_mpi_buf[1]
-#define g_mpi2  g_mpi_buf[2]
-#define g_mpi3  g_mpi_buf[3]
+#define g_mpi0 (&g_mpi_buf[0])
+#define g_mpi1 (&g_mpi_buf[1])
+#define g_mpi2 (&g_mpi_buf[2])
+#define g_mpi3 (&g_mpi_buf[3])
 
 extern const char g_a6400_bin[800];
 extern const char g_b6400_bin[800];
@@ -36,9 +36,14 @@ extern const char g_a6400_b6400_mul_bin[1600];
 
 void mpi_setup(void);
 void mpi_teardown(void);
+#define MPI_RUN(test) RUNX(test, mpi_setup, mpi_teardown)
 
+/*
+ * Subtests
+ */
 void mpi_core_test(void);
 void mpi_cmp_test(void);
+void mpi_abs_test(void);
 void mpi_add_test(void);
 void mpi_mul_test(void);
 
