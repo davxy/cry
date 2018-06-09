@@ -13,6 +13,7 @@ objs := \
 	memxor_test.o \
 	base64_test.o \
 	mpi/mpi_test.o \
+	mpi/mpi_data.o \
 	mpi/mpi_core_test.o \
 	mpi/mpi_cmp_test.o \
 	mpi/mpi_add_test.o \
