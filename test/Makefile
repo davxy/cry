@@ -2,7 +2,7 @@ libcry := ../libcry.a
 
 CC := gcc
 
-CFLAGS := -O0 -g3 -Wall --coverage
+CFLAGS := -O0 -g3 -Wall
 CPPFLAGS = -I. -I../include -I../src
 LDFLAGS := --coverage
 
