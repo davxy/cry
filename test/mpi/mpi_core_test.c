@@ -1,76 +1,74 @@
 #include "mpi_test.h"
 
-static cry_mpi a, b;
 
-static void long_init(void)
+static void set_int(void)
 {
-    cry_mpi_init_int(&a, 0x123456789abcdef);
+    ASSERT_OK(cry_mpi_set_int(g_mpi0, LONG_VALUE));
 
-    ASSERT_EQ_MPI(&a, 16, "123456789abcdef");
-    cry_mpi_clear(&a);
+    ASSERT_EQ_MPI(g_mpi0, g_long_value_bin);
 }
 
-static void zero_init(void)
+#if 0
+static void set_zero(void)
 {
-    cry_mpi_zero(&a);
+    ASSERT_OK(cry_mpi_set_int(g_mpi0, 0));
 
-    ASSERT_EQ(cry_mpi_is_zero(&a), 1);
-    cry_mpi_clear(&a);
+    ASSERT_EQ(cry_mpi_is_zero(g_mpi0), 1);
 }
 
-static void zero_set(void)
+static void set_neg(void)
 {
-    cry_mpi_init(&a);
-    cry_mpi_set_int(&a, 0);
+    cry_mpi_set_int(g_mpi0, -10);
 
-    ASSERT_EQ(cry_mpi_is_zero(&a), 1);
-    cry_mpi_clear(&a);
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi0), 1);
 }
 
 static void copy(void)
 {
-    ASSERT_OK(cry_mpi_init_str(&a, 16, "12345678"));
+    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "12345678"));
 
-    ASSERT_OK(cry_mpi_init_copy(&b, &a));
-    ASSERT_EQ_MPI(&b, 16, "12345678");
+    ASSERT_OK(cry_mpi_copy(g_mpi1, g_mpi0));
 
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
+    //ASSERT_EQ_MPI(g_mpi1, 16, "12345678");
 }
 
 static void copy_grow(void)
 {
-    ASSERT_OK(cry_mpi_init_str(&a, 16, "123456782983641298734187253123129834"));
+    unsigned int words = g_mpi1->used;
 
-    ASSERT_OK(cry_mpi_init_copy(&b, &a));
-    ASSERT_EQ_MPI(&b, 16, "123456782983641298734187253123129834");
+    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "123456782983641298734187253123129834"));
 
-    cry_mpi_clear(&a);
-    cry_mpi_clear(&b);
+    ASSERT_OK(cry_mpi_copy(g_mpi1, g_mpi0));
+
+    //ASSERT_EQ_MPI(g_mpi1, 16, "123456782983641298734187253123129834");
+    ASSERT_EQ(g_mpi1->used > words, 1);
 }
 
 static void count_bits(void)
 {
-    ASSERT_OK(cry_mpi_init_str(&a, 16, "1"));
+    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "1"));
 
-    ASSERT_EQ(cry_mpi_count_bits(&a), 1);
+    ASSERT_EQ(cry_mpi_count_bits(g_mpi0), 1);
 }
 
 static void count_bits_full(void)
 {
-    ASSERT_OK(cry_mpi_init_str(&a, 16, "ffffffffffffffff"));
+    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "ffffffffffffffff"));
 
-    ASSERT_EQ(cry_mpi_count_bits(&a), sizeof(cry_mpi_digit)*8);
+    ASSERT_EQ(cry_mpi_count_bits(g_mpi0), sizeof(cry_mpi_digit)*8);
 }
+
+#endif
 
 void mpi_core_test(void)
 {
-    RUN(zero_init);
-    RUN(zero_set);
-    RUN(long_init);
-    RUN(copy);
-    RUN(copy_grow);
-    RUN(count_bits);
-    RUN(count_bits_full);
+    MPI_RUN(set_int);
+#if 0
+    MPI_RUN(set_zero);
+    MPI_RUN(set_neg);
+    MPI_RUN(copy);
+    MPI_RUN(copy_grow);
+    MPI_RUN(count_bits);
+    MPI_RUN(count_bits_full);
+#endif
 }
-

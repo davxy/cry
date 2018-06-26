@@ -71,9 +71,11 @@ void run(const char *name, void (* test)(void),
 #define ASSERT_EQ_BUF(b1, b2, len) \
     ASSERT(memcmp(b1, b2, len) == 0)
 
-#define ASSERT_EQ_MPI(mpi, rad, str) do { \
-    cry_mpi_store_str(mpi, rad, (char *)buf, BUFSIZ); \
-    ASSERT(strcmp((char *)buf, str) == 0); \
+#define ASSERT_EQ_MPI(mpi, bin) do { \
+	unsigned int __n = cry_mpi_count_bytes(mpi); \
+	ASSERT_EQ(BUFSIZ >= __n, 1); \
+    cry_mpi_store_bin(mpi, (char *)buf, BUFSIZ, 0); \
+    ASSERT(memcmp((char *)buf, bin, __n) == 0); \
     } while (0)
 
 #define ASSERT_OK(e) \

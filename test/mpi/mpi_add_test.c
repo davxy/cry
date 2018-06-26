@@ -20,18 +20,19 @@
 #include "mpi_test.h"
 
 
+static void mpi_add_no_expand(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a8_bin, sizeof(g_a8_bin)));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_b8_bin, sizeof(g_b8_bin)));
+
+    ASSERT_OK(cry_mpi_add(g_mpi2, g_mpi0, g_mpi1));
+
+    cry_mpi_store_bin(g_mpi2, buf, BUFSIZ, 0);
+    ASSERT_EQ_BUF(buf, g_a8_b8_add_bin, sizeof(g_a8_b8_add_bin));
+}
+
+
 void mpi_add_test(void)
 {
-    struct cry_mpi a, b, r;
-
-    ASSERT_OK(cry_mpi_init_list(&a, &b, &r, NULL));
-
-    ASSERT_OK(cry_mpi_set_int(&a, 0x12));
-    ASSERT_OK(cry_mpi_set_int(&b, 0x21));
-    ASSERT_OK(cry_mpi_add(&r, &a, &b));
-
-    ASSERT_OK(cry_mpi_store_str(&r, 16, (char *)buf, BUFSIZ));
-    ASSERT_EQ(strcmp((char *)buf, "33"), 0);
-
-    cry_mpi_clear_list(&a, &b, &r, NULL);
+    MPI_RUN(mpi_add_no_expand);
 }

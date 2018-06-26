@@ -39,9 +39,9 @@ void mpi_teardown(void)
 void mpi_test(void)
 {
     RUN(mpi_core_test);
-    RUN(mpi_cmp_test);
-    RUN(mpi_abs_test);
-    RUN(mpi_add_test);
-    RUN(mpi_mul_test);
+//    RUN(mpi_cmp_test);
+//    RUN(mpi_abs_test);
+//    RUN(mpi_add_test);
+//    RUN(mpi_mul_test);
 }
 
