@@ -22,8 +22,8 @@
 
 static void mpi_add_no_expand(void)
 {
-    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a8_bin, sizeof(g_a8_bin)));
-    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_b8_bin, sizeof(g_b8_bin)));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 1));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_b6400_bin, 1));
 
     ASSERT_OK(cry_mpi_add(g_mpi2, g_mpi0, g_mpi1));
 

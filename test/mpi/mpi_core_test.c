@@ -1,14 +1,25 @@
 #include "mpi_test.h"
 
 
-static void set_int(void)
+static void count_bits(void)
 {
-    ASSERT_OK(cry_mpi_set_int(g_mpi0, LONG_VALUE));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(g_a6400_bin)));
 
-    ASSERT_EQ_MPI(g_mpi0, g_long_value_bin);
+    ASSERT_EQ(cry_mpi_count_bits(g_mpi0), 6400);
 }
 
-#if 0
+
+static void count_bytes(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(g_a6400_bin)));
+
+    ASSERT_EQ(cry_mpi_count_bytes(g_mpi0), 800);
+}
+
+/*
+ * Get/Set int
+ */
+
 static void set_zero(void)
 {
     ASSERT_OK(cry_mpi_set_int(g_mpi0, 0));
@@ -16,59 +27,101 @@ static void set_zero(void)
     ASSERT_EQ(cry_mpi_is_zero(g_mpi0), 1);
 }
 
-static void set_neg(void)
+static void set_pos_int(void)
 {
-    cry_mpi_set_int(g_mpi0, -10);
+    ASSERT_OK(cry_mpi_set_int(g_mpi0, A32_VAL));
+
+    ASSERT_EQ_MPI(g_mpi0, g_a6400_bin, cry_mpi_count_bytes(g_mpi0));
+}
+
+static void get_pos_int(void)
+{
+    long val;
+
+    ASSERT_OK(cry_mpi_set_int(g_mpi0, A32_VAL));
+
+    ASSERT_OK(cry_mpi_get_int(g_mpi0, &val));
+
+    ASSERT_EQ(val, A32_VAL);
+}
+
+static void set_neg_int(void)
+{
+    cry_mpi_set_int(g_mpi0, -A32_VAL);
 
     ASSERT_EQ(cry_mpi_is_neg(g_mpi0), 1);
+    ASSERT_EQ_MPI(g_mpi0, g_a6400_bin, cry_mpi_count_bytes(g_mpi0));
 }
 
-static void copy(void)
+static void get_neg_int(void)
 {
-    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "12345678"));
+    long val;
+
+    ASSERT_OK(cry_mpi_set_int(g_mpi0, -A32_VAL));
+
+    ASSERT_OK(cry_mpi_get_int(g_mpi0, &val));
+
+    ASSERT_EQ(val, -A32_VAL);
+}
+
+/*
+ * Get/Set bin
+ */
+
+static void set_bin(void)
+{
+    long val;
+
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 4));
+
+    ASSERT_OK(cry_mpi_get_int(g_mpi0, &val));
+    ASSERT_EQ(val, A32_VAL);
+}
+
+static void get_bin(void)
+{
+    ASSERT_OK(cry_mpi_set_int(g_mpi0, A32_VAL));
+
+    ASSERT_OK(cry_mpi_store_bin(g_mpi0, buf, BUFSIZ, 0));
+    ASSERT_EQ(memcmp(buf, g_a6400_bin, 4), 0);
+}
+
+/*
+ * Copy
+ */
+
+static void copy_over_smaller(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 32));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 16));
 
     ASSERT_OK(cry_mpi_copy(g_mpi1, g_mpi0));
 
-    //ASSERT_EQ_MPI(g_mpi1, 16, "12345678");
+    ASSERT_EQ_MPI(g_mpi1, g_a6400_bin, 32);
 }
 
-static void copy_grow(void)
+static void copy_over_bigger(void)
 {
-    unsigned int words = g_mpi1->used;
-
-    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "123456782983641298734187253123129834"));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 32));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 64));
 
     ASSERT_OK(cry_mpi_copy(g_mpi1, g_mpi0));
 
-    //ASSERT_EQ_MPI(g_mpi1, 16, "123456782983641298734187253123129834");
-    ASSERT_EQ(g_mpi1->used > words, 1);
+    ASSERT_EQ_MPI(g_mpi1, g_a6400_bin, 32);
 }
 
-static void count_bits(void)
-{
-    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "1"));
-
-    ASSERT_EQ(cry_mpi_count_bits(g_mpi0), 1);
-}
-
-static void count_bits_full(void)
-{
-    ASSERT_OK(cry_mpi_load_str(g_mpi0, 16, "ffffffffffffffff"));
-
-    ASSERT_EQ(cry_mpi_count_bits(g_mpi0), sizeof(cry_mpi_digit)*8);
-}
-
-#endif
 
 void mpi_core_test(void)
 {
-    MPI_RUN(set_int);
-#if 0
-    MPI_RUN(set_zero);
-    MPI_RUN(set_neg);
-    MPI_RUN(copy);
-    MPI_RUN(copy_grow);
     MPI_RUN(count_bits);
-    MPI_RUN(count_bits_full);
-#endif
+    MPI_RUN(count_bytes);
+    MPI_RUN(set_zero);
+    MPI_RUN(set_pos_int);
+    MPI_RUN(get_pos_int);
+    MPI_RUN(set_neg_int);
+    MPI_RUN(get_neg_int);
+    MPI_RUN(set_bin);
+    MPI_RUN(get_bin);
+    MPI_RUN(copy_over_smaller);
+    MPI_RUN(copy_over_bigger);
 }

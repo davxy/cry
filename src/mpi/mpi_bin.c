@@ -79,7 +79,7 @@ int cry_mpi_store_bin(const cry_mpi *x, void *buf,
         l = x->data[i / CRY_MPI_DIGIT_BYTES];
         *d++ = (unsigned char)(l >> (8 * (i % CRY_MPI_DIGIT_BYTES))) & 0xff;
     }
-    return bufsiz;
+    return 0;
 }
 
 int cry_mpi_init_bin(cry_mpi *x, const void *b, unsigned int size)

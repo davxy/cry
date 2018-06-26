@@ -59,9 +59,11 @@ int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s);
 
 int cry_mpi_init_size(cry_mpi *a, unsigned int size);
 
-int cry_mpi_init_int(cry_mpi *a, long i);
+int cry_mpi_init_int(cry_mpi *a, long val);
 
-int cry_mpi_set_int(cry_mpi *a, long i);
+int cry_mpi_set_int(cry_mpi *a, long val);
+
+int cry_mpi_get_int(cry_mpi *a, long *val);
 
 int cry_mpi_init_bin(cry_mpi *a, const void *b, unsigned int size);
 

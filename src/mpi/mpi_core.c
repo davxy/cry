@@ -78,32 +78,32 @@ int cry_mpi_init_size(cry_mpi *a, unsigned int size)
 /*
  * Initialize a big number and assign it an integer value.
  */
-int cry_mpi_init_int(cry_mpi *a, long i)
+int cry_mpi_init_int(cry_mpi *a, long val)
 {
     int res;
 
     if ((res = cry_mpi_init(a)) == 0) {
-        if ((res = cry_mpi_set_int(a, i)) < 0)
+        if ((res = cry_mpi_set_int(a, val)) < 0)
             cry_mpi_clear(a);
     }
     return 0;
 }
 
-int cry_mpi_set_int(cry_mpi *a, long i)
+int cry_mpi_set_int(cry_mpi *a, long val)
 {
     int res;
-    size_t used = CRY_MPI_BYTES_TO_DIGS(sizeof(i));
+    size_t used = CRY_MPI_BYTES_TO_DIGS(sizeof(val));
     cry_mpi_dword dd;
 
     if ((res = cry_mpi_grow(a, used)) < 0)
         return res;
 
-    if (i < 0) {
+    if (val < 0) {
         a->sign = 1;
-        dd = -i;
+        dd = -val;
     } else {
         a->sign = 0;
-        dd = i;
+        dd = val;
     }
 
     a->used = 0;
@@ -112,6 +112,25 @@ int cry_mpi_set_int(cry_mpi *a, long i)
         dd >>= CRY_MPI_DIGIT_BITS;
     }
     return res;
+}
+
+int cry_mpi_get_int(cry_mpi *a, long *val)
+{
+    size_t used;
+    size_t i;
+    long rval = 0;
+
+    used = cry_mpi_count_bytes(a);
+    if (used > sizeof(long))
+        return -1;
+
+    i = a->used;
+    while (i-- > 0) {
+        rval <<= sizeof(cry_mpi_digit);
+        rval |= a->data[i];
+    }
+    *val = (a->sign == 0) ? rval : -rval;
+    return 0;
 }
 
 void cry_mpi_clear(cry_mpi *a)
