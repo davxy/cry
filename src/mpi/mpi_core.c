@@ -172,17 +172,17 @@ int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s)
 {
     int res;
 
-    if ((res = cry_mpi_init(d)) != 0)
-        return res;
-    if ((res = cry_mpi_copy(d, s)) != 0)
-        cry_mpi_clear(d);
+    if ((res = cry_mpi_init(d)) == 0) {
+        if ((res = cry_mpi_copy(d, s)) != 0)
+            cry_mpi_clear(d);
+    }
     return res;
 }
 
 /*
  * Quick way to get number of bits in a word
  */
-static size_t word_size_bits(unsigned long l)
+static size_t word_bits(unsigned long l)
 {
     static const unsigned char bits[256] = {
         0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -239,9 +239,10 @@ static size_t word_size_bits(unsigned long l)
  */
 size_t cry_mpi_count_bits(const cry_mpi *a)
 {
-    if (a->used == 0)
-        return 0;
-    return ((a->used-1) * CRY_MPI_DIGIT_BITS) +
-            word_size_bits(a->data[a->used-1]);
+    size_t n = 0;
+
+    if (a->used != 0)
+        n = ((a->used-1)*CRY_MPI_DIGIT_BITS) + word_bits(a->data[a->used-1]);
+    return n;
 }
 
