@@ -18,6 +18,7 @@ objs := \
 	mpi/mpi_abs_test.o \
 	mpi/mpi_cmp_test.o \
 	mpi/mpi_add_test.o \
+	mpi/mpi_sub_test.o \
 	mpi/mpi_mul_test.o \
 #	des_test.o \
 	aes_test.o \
