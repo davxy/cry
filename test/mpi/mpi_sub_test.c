@@ -59,10 +59,106 @@ static void mpi_sub_abs_neg_res(void)
     ASSERT_NE(cry_mpi_sub_abs(g_mpi2, g_mpi1, g_mpi0), 0);
 }
 
+
+static void mpi_sub_same_sign_first_pos_and_bigger(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 33));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 32));
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 0);
+    ASSERT_EQ_MPI(g_mpi2, g_a264_a256_add_sign_bin,
+                   sizeof(g_a264_a256_add_sign_bin));
+}
+
+static void mpi_sub_same_sign_first_pos_and_smaller(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 32));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 33));
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 1);
+    ASSERT_EQ_MPI(g_mpi2, g_a264_a256_add_sign_bin,
+                   sizeof(g_a264_a256_add_sign_bin));
+}
+
+static void mpi_sub_same_sign_same_magnitude(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 32));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 32));
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 0);
+    ASSERT_EQ(cry_mpi_is_zero(g_mpi2), 1);
+}
+
+static void mpi_sub_diff_sign_first_neg_and_bigger(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 33));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 32));
+    g_mpi0->sign = 1;
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 1);
+    ASSERT_EQ_MPI(g_mpi2, g_a264_a256_sub_sign_bin,
+                   sizeof(g_a264_a256_sub_sign_bin));
+}
+
+static void mpi_sub_diff_sign_first_pos_and_bigger(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 33));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 32));
+    g_mpi1->sign = 1;
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 0);
+    ASSERT_EQ_MPI(g_mpi2, g_a264_a256_sub_sign_bin,
+                   sizeof(g_a264_a256_sub_sign_bin));
+}
+
+static void mpi_sub_diff_sign_first_neg_and_smaller(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 32));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 33));
+    g_mpi0->sign = 1;
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 1);
+    ASSERT_EQ_MPI(g_mpi2, g_a264_a256_sub_sign_bin,
+                   sizeof(g_a264_a256_sub_sign_bin));
+}
+
+static void mpi_sub_diff_sign_first_pos_and_smaller(void)
+{
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, 32));
+    ASSERT_OK(cry_mpi_load_bin(g_mpi1, g_a6400_bin, 33));
+    g_mpi1->sign = 1;
+
+    ASSERT_OK(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1));
+
+    ASSERT_EQ(cry_mpi_is_neg(g_mpi2), 0);
+    ASSERT_EQ_MPI(g_mpi2, g_a264_a256_sub_sign_bin,
+                   sizeof(g_a264_a256_sub_sign_bin));
+}
+
+/* Entry point */
 void mpi_sub_test(void)
 {
     MPI_RUN(mpi_sub_no_expand);
     MPI_RUN(mpi_sub_expand);
     MPI_RUN(mpi_sub_carry_propagate);
     MPI_RUN(mpi_sub_abs_neg_res);
+    MPI_RUN(mpi_sub_same_sign_first_pos_and_bigger);
+    MPI_RUN(mpi_sub_same_sign_first_pos_and_smaller);
+    MPI_RUN(mpi_sub_same_sign_same_magnitude);
+    MPI_RUN(mpi_sub_diff_sign_first_neg_and_bigger);
+    MPI_RUN(mpi_sub_diff_sign_first_pos_and_bigger);
+    MPI_RUN(mpi_sub_diff_sign_first_neg_and_smaller);
+    MPI_RUN(mpi_sub_diff_sign_first_pos_and_smaller);
 }
