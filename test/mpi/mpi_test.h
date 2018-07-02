@@ -40,6 +40,7 @@ extern const char g_a8_b8_add_bin[1];
 extern const char g_a8_b256_add_bin[32];
 extern const char g_a1024_a512_add_bin[128];
 extern const char g_a1024_a1024_add_bin[129];
+extern const char g_a264_a256_add_sign_bin[33];
 
 extern const char g_a8_b8_sub_bin[1];
 extern const char g_a512_a256_sub_bin[64];
