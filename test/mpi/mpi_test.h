@@ -63,6 +63,8 @@ void mpi_cmp_test(void);
 void mpi_abs_test(void);
 void mpi_add_test(void);
 void mpi_sub_test(void);
+void mpi_shl_test(void);
+void mpi_shr_test(void);
 void mpi_mul_test(void);
 
 #endif /* TEST_MPI_MPI_TEST_H_ */

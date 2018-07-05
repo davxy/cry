@@ -43,6 +43,8 @@ void mpi_test(void)
     RUN(mpi_abs_test);
     RUN(mpi_add_test);
     RUN(mpi_sub_test);
+    RUN(mpi_shl_test);
+    RUN(mpi_shr_test);
 //    RUN(mpi_mul_test);
 }
 

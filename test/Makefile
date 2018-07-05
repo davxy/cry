@@ -20,6 +20,8 @@ objs := \
 	mpi/mpi_add_test.o \
 	mpi/mpi_sub_test.o \
 	mpi/mpi_mul_test.o \
+	mpi/mpi_shl_test.o \
+	mpi/mpi_shr_test.o \
 #	des_test.o \
 	aes_test.o \
 	cbc_test.o \
