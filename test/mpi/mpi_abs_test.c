@@ -18,33 +18,39 @@
  */
 
 #include "mpi_test.h"
-#include <stdlib.h>
 
-
-cry_mpi *g_mpi_buf;
-
-void mpi_setup(void)
+static void positive_abs(void)
 {
-    g_mpi_buf = malloc(sizeof(cry_mpi)*MPI_BUF_LEN);
-    cry_mpi_init_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, NULL);
+    cry_mpi_set_int(g_mpi0, 123456);
+
+    cry_mpi_abs(g_mpi0, g_mpi0);
+
+    ASSERT_EQ(cry_mpi_is_pos(g_mpi0), 1);
 }
 
-void mpi_teardown(void)
+static void negative_abs(void)
 {
-    cry_mpi_clear_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, NULL);
-    free(g_mpi_buf);
+    cry_mpi_set_int(g_mpi0, -123456);
+
+    cry_mpi_abs(g_mpi0, g_mpi0);
+
+    ASSERT_EQ(cry_mpi_is_pos(g_mpi0), 1);
+}
+
+static void different_src_dst(void)
+{
+    cry_mpi_set_int(g_mpi0, -123456);
+
+    cry_mpi_abs(g_mpi1, g_mpi0);
+
+    ASSERT_EQ(cry_mpi_is_pos(g_mpi1), 1);
+    ASSERT_EQ(cry_mpi_is_pos(g_mpi0), 0);
 }
 
 
-void mpi_test(void)
+void mpi_abs_test(void)
 {
-    RUN(mpi_core_test);
-    RUN(mpi_cmp_test);
-    RUN(mpi_abs_test);
-    RUN(mpi_add_test);
-    RUN(mpi_sub_test);
-    RUN(mpi_shl_test);
-    RUN(mpi_shr_test);
-//    RUN(mpi_mul_test);
+    MPI_RUN(positive_abs);
+    MPI_RUN(negative_abs);
+    MPI_RUN(different_src_dst);
 }
-

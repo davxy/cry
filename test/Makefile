@@ -13,10 +13,15 @@ objs := \
 	memxor_test.o \
 	base64_test.o \
 	mpi/mpi_test.o \
+	mpi/mpi_data.o \
 	mpi/mpi_core_test.o \
+	mpi/mpi_abs_test.o \
 	mpi/mpi_cmp_test.o \
 	mpi/mpi_add_test.o \
+	mpi/mpi_sub_test.o \
 	mpi/mpi_mul_test.o \
+	mpi/mpi_shl_test.o \
+	mpi/mpi_shr_test.o \
 #	des_test.o \
 	aes_test.o \
 	cbc_test.o \
@@ -46,12 +51,12 @@ clean:
 
 coverage: test
 	@mkdir -p out/coverage
-	lcov -z -d ../build
-	lcov -c -i -d ../build -o base.info
-	./test $(TESTS)
-	lcov -c -d ../build -o cry.info
-	lcov -a base.info -a cry.info -o cry.info
-	@genhtml -o out/coverage cry.info 
+	@lcov -q -z -d ../build
+	@lcov -q -c -i -d ../build -o base.info
+	@./test $(TESTS)
+	@lcov -q -c -d ../build -o cry.info
+	@lcov -q -a base.info -a cry.info -o cry.info
+	@genhtml -q -o out/coverage cry.info 
 	@rm base.info cry.info
 
 valgrind: all

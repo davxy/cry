@@ -59,9 +59,11 @@ int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s);
 
 int cry_mpi_init_size(cry_mpi *a, unsigned int size);
 
-int cry_mpi_init_int(cry_mpi *a, long i);
+int cry_mpi_init_int(cry_mpi *a, long val);
 
-int cry_mpi_set_int(cry_mpi *a, long i);
+int cry_mpi_set_int(cry_mpi *a, long val);
+
+int cry_mpi_get_int(cry_mpi *a, long *val);
 
 int cry_mpi_init_bin(cry_mpi *a, const void *b, unsigned int size);
 
@@ -162,6 +164,12 @@ size_t cry_mpi_count_bits(const cry_mpi *a);
 
 #define cry_mpi_is_even(a) \
     (!cry_mpi_is_odd(a))
+
+#define cry_mpi_is_pos(a) \
+    ((a)->sign == 0)
+
+#define cry_mpi_is_neg(a) \
+    (!cry_mpi_is_pos(a))
 
 void cry_mpi_print(const cry_mpi *a, unsigned int radix);
 
