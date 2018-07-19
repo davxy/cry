@@ -1,5 +1,5 @@
 /**
- * @file    cry_base64.h
+ * @file    base64.h
  * @brief   Base-64 encoder/decoder.
  */
 

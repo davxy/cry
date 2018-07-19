@@ -1,5 +1,5 @@
 /**
- * @file    cry_prng.h
+ * @file    prng.h
  * @brief   Pseudo Random Number Generator
  */
 

@@ -1,5 +1,5 @@
 /**
- * @file    cry_aes.h
+ * @file    aes.h
  * @brief   AES block cipher.
  */
 

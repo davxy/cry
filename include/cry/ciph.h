@@ -1,5 +1,5 @@
 /**
- * @file    cry_ciph.h
+ * @file    ciph.h
  * @brief   Generic cipher interface
  */
 

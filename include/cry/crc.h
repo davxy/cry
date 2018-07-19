@@ -1,5 +1,5 @@
 /**
- * @file    cry_crc.h
+ * @file    crc.h
  * @brief   Cyclic Redundancy Check
  *
  * Wikipedia reference:

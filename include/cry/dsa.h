@@ -1,5 +1,5 @@
 /**
- * @file    cry_dsa.h
+ * @file    dsa.h
  * @brief   Digital Signature Algorithm
  */
 

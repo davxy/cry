@@ -6,4 +6,4 @@ out
 *.o
 *.gcda
 *.gcno
-
+doc/html

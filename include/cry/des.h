@@ -1,5 +1,5 @@
 /**
- * @file    cry_des.h
+ * @file    des.h
  * @brief   DES block cipher.
  */
 

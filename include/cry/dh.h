@@ -1,5 +1,5 @@
 /**
- * @file    cry_dh.h
+ * @file    dh.h
  * @brief   Diffie-Hellman key exchange algorithm.
  */
 

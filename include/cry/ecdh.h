@@ -1,5 +1,5 @@
 /**
- * @file    cry_ecdh.h
+ * @file    ecdh.h
  * @brief   Elliptic Curve Diffie Hellman
  */
 

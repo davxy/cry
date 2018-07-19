@@ -1,5 +1,5 @@
 /**
- * @file    cry_rsa.h
+ * @file    rsa.h
  * @brief   RSA cipher.
  */
 
