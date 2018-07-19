@@ -61,4 +61,3 @@ int cry_mpi_gcd(cry_mpi *r, const cry_mpi *x, const cry_mpi *y)
 e:  cry_mpi_clear_list(&tx, &ty, NULL);
     return res;
 }
-

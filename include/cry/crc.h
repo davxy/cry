@@ -172,4 +172,3 @@ uint32_t cry_crc32_eth(const unsigned char *in, size_t n);
 #endif
 
 #endif /* _CRY_CRC_H_ */
-

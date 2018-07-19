@@ -94,5 +94,3 @@
     CRY_ROTL(val, 32, bits)
 
 #endif /* _CRY_MISC_H_ */
-
-

@@ -11,4 +11,3 @@ int cry_mpi_abs(cry_mpi *d, const cry_mpi *s)
     d->sign = 0;
     return 0;
 }
-

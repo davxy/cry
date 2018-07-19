@@ -40,4 +40,3 @@ int cry_ecdsa_keygen(const cry_ec *ec, cry_mpi *d, cry_ecp *q);
 #endif
 
 #endif /* _CRY_ECDSA_H_ */
-

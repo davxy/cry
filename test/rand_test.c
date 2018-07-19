@@ -13,4 +13,3 @@ void rand_test(void)
     ASSERT_OK(cry_prng_rand(buf, 64));
     PRINT_HEX("rand", buf, 64);
 }
-

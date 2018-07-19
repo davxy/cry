@@ -74,4 +74,3 @@ void cbc_test(void)
     PRINT_HEX("plaintext ", buf, LEN);
     ASSERT_EQ_BUF(buf, plaintext, LEN);
 }
-

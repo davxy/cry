@@ -233,4 +233,3 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest)
         digest[ii+3] = (unsigned char) ((ctx->buf[i] >> 24) & 0xFF);
     }
 }
-

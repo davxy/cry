@@ -38,4 +38,3 @@ void des_test(void)
     RUN(single);
     RUN(triple);
 }
-

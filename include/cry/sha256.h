@@ -36,4 +36,3 @@ void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *digest);
 #endif
 
 #endif /* _CRY_SHA256_H */
-

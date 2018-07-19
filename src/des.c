@@ -328,4 +328,3 @@ void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
         size -= CRY_DES_BLOCK_SIZE;
     }
 }
-

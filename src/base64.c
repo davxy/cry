@@ -94,4 +94,3 @@ size_t cry_base64_decode(const char *in, size_t len, char *out)
     } while(len != 0);
     return outlen;
 }
-

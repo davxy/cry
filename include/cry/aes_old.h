@@ -81,4 +81,3 @@ void cry_aes_256_decrypt(unsigned char *dst, const unsigned char *src,
 #endif
 
 #endif /* _CRY_AES_H_ */
-

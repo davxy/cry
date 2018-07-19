@@ -103,4 +103,3 @@ void cry_memxor(unsigned char *dst, const unsigned char *src,
             dst[n] ^= src[n];
     }
 }
-

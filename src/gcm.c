@@ -216,4 +216,3 @@ void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
     encrypt(ciph, buffer, ctx->iv, CRY_GCM_BLOCK_SIZE);
     cry_memxor3(mac, ctx->x, buffer, size);
 }
-

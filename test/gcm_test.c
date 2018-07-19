@@ -83,4 +83,3 @@ void gcm_test(void)
     PRINT_HEX("gmac", buf+msglen, 16);
     ASSERT_EQ_BUF(buf+msglen, buf+msglen+16, 16);
 }
-

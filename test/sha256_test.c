@@ -29,4 +29,3 @@ void sha256_test(void)
     PRINT_HEX("sha256", buf, 32);
     ASSERT_EQ_BUF(buf, sha256_hash, 32);
 }
-

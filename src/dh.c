@@ -43,4 +43,3 @@ int cry_dh_get_key(cry_dh_ctx *dh, unsigned char *out, size_t out_len)
 {
     return cry_mpi_store_bin(&dh->Z, out, out_len, 0);
 }
-

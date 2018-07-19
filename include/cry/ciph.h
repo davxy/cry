@@ -77,4 +77,3 @@ typedef struct cry_ciph_itf cry_ciph_itf;
 
 
 #endif /* _CRY_CIPH_H_ */
-

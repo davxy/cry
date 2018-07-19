@@ -25,4 +25,3 @@ int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
     }
     return res;
 }
-

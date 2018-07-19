@@ -54,7 +54,7 @@ void run(const char *name, void (* test)(void),
 
 #define ASSERT_EQ_MPI(mpi, bin, siz) do { \
     ASSERT_EQ(cry_mpi_count_bytes(mpi), siz); \
-	ASSERT_EQ(BUFSIZ >= siz, 1); \
+    ASSERT_EQ(BUFSIZ >= siz, 1); \
     cry_mpi_store_bin(mpi, (char *)buf, BUFSIZ, 0); \
     ASSERT(memcmp((char *)buf, bin, siz) == 0); \
     } while (0)
@@ -97,4 +97,3 @@ void run(const char *name, void (* test)(void),
 
 
 #endif /* _TEST_H_ */
-

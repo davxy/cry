@@ -31,4 +31,3 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
 e:  cry_mpi_clear_list(&num, &den, &lam, &r.x, &r.y, NULL);
     return res;
 }
-

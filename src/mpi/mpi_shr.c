@@ -73,4 +73,3 @@ int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n)
     cry_mpi_adjust(c);
     return 0;
 }
-

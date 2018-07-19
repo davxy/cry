@@ -16,4 +16,3 @@ void memxor_test(void)
 
     ASSERT_EQ_BUF(buf, XOR_RES, n);
 }
-

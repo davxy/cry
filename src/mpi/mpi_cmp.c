@@ -18,4 +18,3 @@ int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b)
     }
     return ret;
 }
-

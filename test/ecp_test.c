@@ -33,4 +33,3 @@ void ecp_test(void)
     ASSERT_OK(cry_ec_init_nist_p256(&ec));
     RUN(ecp_add);
 }
-

@@ -45,4 +45,3 @@ int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     cry_mpi_adjust(r); /* Adjust used counter */
     return 0;
 }
-

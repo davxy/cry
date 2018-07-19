@@ -35,4 +35,3 @@ unsigned char cry_lrc(const unsigned char *in, size_t n);
 #endif
 
 #endif /* _CRY_SUM_H_ */
-

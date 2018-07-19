@@ -40,4 +40,3 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
 #endif
 
 #endif /* _CRY_DSA_H_ */
-

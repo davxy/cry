@@ -57,4 +57,3 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest);
 #endif
 
 #endif /* _CRY_MD5_H_ */
-

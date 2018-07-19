@@ -8,4 +8,3 @@ void version_test(void)
     TRACE("CRY version (build-time): %ld\n", cry_version());
     ASSERT(cry_version() == CRY_VERSION);
 }
-

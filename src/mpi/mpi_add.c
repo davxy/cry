@@ -28,4 +28,3 @@ int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         r->sign = rsign;
     return ret;
 }
-

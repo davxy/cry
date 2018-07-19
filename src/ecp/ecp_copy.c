@@ -8,4 +8,3 @@ int cry_ecp_copy(cry_ecp *d, const cry_ecp *s)
         res = cry_mpi_copy(&d->y, &s->y);
     return res;
 }
-

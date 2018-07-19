@@ -22,4 +22,3 @@ void cry_mpi_print(const cry_mpi *a, unsigned int radix)
     if (s != fallback)
         free(s);
 }
-

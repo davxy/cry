@@ -39,4 +39,3 @@ int cry_prng_rand(unsigned char *buf, size_t siz);
 #endif
 
 #endif /* _CRY_PRNG_H_ */
-

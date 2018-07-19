@@ -59,4 +59,3 @@ int cry_mpi_shld(cry_mpi *a, int n);
          1U << ((bit) % CRY_MPI_DIGIT_BITS))
 
 #endif /* _CRY_MPI_PVT_H_ */
-

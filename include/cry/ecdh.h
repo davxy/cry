@@ -34,4 +34,3 @@ int cry_ecdh_final(cry_ecdh_ctx *ctx);
 #endif
 
 #endif /* _CRY_ECDH_ */
-

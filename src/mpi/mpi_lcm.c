@@ -17,4 +17,3 @@ int cry_mpi_lcm(cry_mpi *r, const cry_mpi *x, const cry_mpi *y)
     cry_mpi_clear_list(&gcm, &prod, NULL);
     return res;
 }
-

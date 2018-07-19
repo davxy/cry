@@ -21,4 +21,3 @@ size_t cry_base64_decode(const char *in, size_t len, char *out);
 #endif
 
 #endif /* _CRY_BASE64_H_ */
-
