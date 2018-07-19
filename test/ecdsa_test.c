@@ -36,4 +36,3 @@ void ecdsa_test(void)
     cry_mpi_clear_list(&sign.r, &sign.s, NULL);
     /* TODO: release ecdsa context data */
 }
-

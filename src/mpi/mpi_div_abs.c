@@ -283,5 +283,4 @@ LBL_Q:cry_mpi_clear (&q);
     return res;
 }
 
-#endif /* !CRY_DIV_SMALL */
-
+#endif /* CRY_DIV_SMALL */

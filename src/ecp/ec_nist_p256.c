@@ -66,4 +66,3 @@ int cry_ec_init_nist_p256(cry_ec *ec)
     }
     return res;
 }
-

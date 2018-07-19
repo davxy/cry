@@ -154,4 +154,3 @@ void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *digest)
         digest[i + 28] = (ctx->state[7] >> (24 - i * 8)) & 0xff;
     }
 }
-

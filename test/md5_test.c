@@ -27,4 +27,3 @@ void md5_test(void)
     PRINT_HEX("md5", buf, 16);
     ASSERT_EQ_BUF(buf, md5_hash, 16);
 }
-

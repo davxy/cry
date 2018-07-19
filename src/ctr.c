@@ -88,4 +88,3 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctr, unsigned char *dst,
         }
     }
 }
-

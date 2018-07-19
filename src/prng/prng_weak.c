@@ -56,4 +56,3 @@ int cry_prng_rand(unsigned char *buf, size_t siz)
     }
     return 0;
 }
-

@@ -226,4 +226,3 @@ size_t cry_mpi_count_bits(const cry_mpi *a)
         n = ((a->used-1)*CRY_MPI_DIGIT_BITS) + word_bits(a->data[a->used-1]);
     return n;
 }
-

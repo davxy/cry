@@ -43,4 +43,3 @@ int cry_ec_set_nist_p256(cry_ec *ec);
 #endif
 
 #endif /* _CRY_EC_H_ */
-

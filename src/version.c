@@ -4,4 +4,3 @@ long cry_version(void)
 {
     return CRY_VERSION;
 }
-

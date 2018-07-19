@@ -55,4 +55,3 @@ void cry_aes_256_decrypt(unsigned char *dst, const unsigned char *src,
 {
     cry_aes_xxx_decrypt(dst, src, size, key, 32);
 }
-

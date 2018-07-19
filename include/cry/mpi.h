@@ -174,4 +174,3 @@ int cry_mpi_is_prime(const cry_mpi *a);
 #endif
 
 #endif /* _CRY_MPI_H_ */
-

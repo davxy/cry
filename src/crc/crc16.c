@@ -23,4 +23,3 @@ uint16_t cry_crc16_final(struct cry_crc16_ctx *ctx)
         ctx->crc = (ctx->crc << 8) | (ctx->crc >> 8);
     return ctx->crc;
 }
-

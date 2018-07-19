@@ -112,4 +112,3 @@ void rsa_test(void)
 
     cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
 }
-

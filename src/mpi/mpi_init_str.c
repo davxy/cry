@@ -15,4 +15,3 @@ int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s)
     }
     return res;
 }
-

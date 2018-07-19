@@ -11,8 +11,8 @@ void cry_crc32_init(struct cry_crc32_ctx *ctx, uint32_t start,
 void cry_crc32_update(struct cry_crc32_ctx *ctx, 
                       const unsigned char *buf, size_t size)
 {
-	while (size--)
-		ctx->crc = ctx->tab[(*buf++ ^ ctx->crc) & 0xFF] ^ (ctx->crc >> 8);
+    while (size--)
+        ctx->crc = ctx->tab[(*buf++ ^ ctx->crc) & 0xFF] ^ (ctx->crc >> 8);
 }
 
 uint32_t cry_crc32_final(struct cry_crc32_ctx *ctx)
@@ -26,4 +26,3 @@ uint32_t cry_crc32_final(struct cry_crc32_ctx *ctx)
                    (ctx->crc & 0xff000000) >> 24;
     return ctx->crc;
 }
-

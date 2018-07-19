@@ -47,4 +47,3 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
 #endif
 
 #endif /* _CRY_ECP_H_ */
-

@@ -37,4 +37,3 @@ int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *a,
 e:  cry_mpi_clear_list(&num, &den, &lam, &r.x, &r.y, NULL);
     return res;
 }
-

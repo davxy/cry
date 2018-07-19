@@ -919,4 +919,3 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
         src += CRY_AES_BLOCK_SIZE;
     }
 }
-

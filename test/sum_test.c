@@ -19,4 +19,3 @@ void sum_test(void)
     TRACE("lrc = 0x%02x\n", cs);
     ASSERT_EQ(cs, LRC);
 }
-

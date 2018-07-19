@@ -81,4 +81,3 @@ void cry_cbc_decrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
 #endif
 
 #endif /* _CRY_CBC_H_ */
-

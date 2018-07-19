@@ -257,4 +257,3 @@ int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
         *iter = i;
     return res;
 }
-

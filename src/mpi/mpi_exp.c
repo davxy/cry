@@ -30,4 +30,3 @@ int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
 e:  cry_mpi_clear_list(&t, &one, &c, NULL);
     return 0;
 }
-

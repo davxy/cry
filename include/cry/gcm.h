@@ -112,4 +112,3 @@ void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
 #endif
 
 #endif /* _CRY_GCM_H_ */
-

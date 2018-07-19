@@ -62,4 +62,3 @@ void ctr_test(void)
     CONTINUE(ASSERT_EQ_BUF(msg, buf, msglen));
     //ASSERT_EQ_BUF(msg, buf, msglen);
 }
-

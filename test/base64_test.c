@@ -17,4 +17,3 @@ void base64_test(void)
     PRINT_ASC("decoded", cbuf, MLEN);
     ASSERT_EQ_BUF(buf, MSG, MLEN);
 }
-

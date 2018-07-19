@@ -61,4 +61,3 @@ int cry_hmac(cry_hmac_ctx *ctx, unsigned char *mac, const unsigned char *in,
         hash->clean(ctx->hash_ctx);
     return 0;
 }
-

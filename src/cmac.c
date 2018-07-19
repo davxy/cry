@@ -95,4 +95,3 @@ void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
     xor_128(block, mac, last);
     cry_aes_encrypt(&aes, mac, block, 16);
 }
-

@@ -59,4 +59,3 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
     cry_mpi_clear(&tmp);
     return ret;
 }
-

@@ -8,4 +8,3 @@ unsigned char cry_lrc(const unsigned char *in, size_t n)
         cs += *in++;
     return ~cs + 1;
 }
-

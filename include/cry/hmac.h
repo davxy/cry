@@ -23,4 +23,3 @@ int cry_hmac(cry_hmac_ctx *ctx, unsigned char *mac, const unsigned char *in,
              size_t insize);
 
 #endif /* _CRY_HMAC_H_ */
-

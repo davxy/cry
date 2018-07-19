@@ -102,4 +102,3 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
 e:  cry_mpi_clear_list(&z, &w, &u1, &u2, NULL);
     return res;
 }
-

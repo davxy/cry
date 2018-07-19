@@ -58,4 +58,3 @@ typedef struct cry_hash_itf cry_hash_itf;
 #endif
 
 #endif /* _CRY_HASH_H_ */
-

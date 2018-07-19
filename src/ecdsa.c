@@ -99,4 +99,3 @@ int cry_ecdsa_keygen(const cry_ec *ec, cry_mpi *d, cry_ecp *q)
         res = cry_ecp_mul(q, &ec->g, d, &ec->a, &ec->p);
     return res;
 }
-

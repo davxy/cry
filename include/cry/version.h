@@ -20,9 +20,8 @@
  *
  * For consistency, should be equal to the CRY_VERSION value.
  *
- * @return	compile time library version.
+ * @return    compile time library version.
  */
 long cry_version(void);
 
 #endif /* _CRY_VERSION_H_ */
-

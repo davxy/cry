@@ -42,4 +42,3 @@ int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max)
         ret = cry_mpi_mod(a, a, max);
     return 0;
 }
-

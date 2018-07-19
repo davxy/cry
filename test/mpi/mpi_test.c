@@ -28,4 +28,3 @@ void mpi_test(void)
     RUN(mpi_shr_test);
 //    RUN(mpi_mul_test);
 }
-

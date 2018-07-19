@@ -63,4 +63,3 @@ void dh_test(void)
     cry_dh_clear(&dh2);
     cry_mpi_clear_list(&Y1, &Y2, &Z, NULL);
 }
-

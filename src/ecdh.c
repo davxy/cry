@@ -26,4 +26,3 @@ int cry_ecdh_final(cry_ecdh_ctx *ctx)
 {
     return cry_ecp_mul(&ctx->z, &ctx->q, &ctx->d, &ctx->ec.a, &ctx->ec.p);
 }
-

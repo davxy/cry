@@ -92,4 +92,3 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
 e:  cry_mpi_clear_list(&tmp, &rad, &rem, NULL);
     return ret;
 }
-

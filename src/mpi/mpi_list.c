@@ -41,4 +41,3 @@ void cry_mpi_clear_list(cry_mpi *mp, ...)
     }
     va_end(args);
 }
-

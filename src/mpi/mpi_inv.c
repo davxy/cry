@@ -117,4 +117,3 @@ cleanup:
 }
 
 #endif /* CRY_MPI_INV_EUCLID */
-

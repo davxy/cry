@@ -36,4 +36,3 @@ void cry_memxor3(unsigned char *dst, const unsigned char *src1,
 #endif
 
 #endif /* _CRY_MEMXOR_H_ */
-

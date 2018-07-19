@@ -228,4 +228,3 @@ e:  cry_mpi_clear_list(&dp.x, &dp.y, &r.x, &r.y, NULL);
 }
 
 #endif /* CRY_ECP_MUL_WIN */
-

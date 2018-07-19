@@ -48,4 +48,3 @@ unsigned short cry_crc16_ibm(const unsigned char *in, size_t n)
     cry_crc16_update(&ctx, in, n);
     return cry_crc16_final(&ctx);
 }
-

@@ -84,4 +84,3 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
 #define cry_ctr_decrypt cry_ctr_encrypt
 
 #endif /* _CRY_CTR_H_ */
-

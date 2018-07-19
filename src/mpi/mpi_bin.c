@@ -75,4 +75,3 @@ int cry_mpi_init_bin(cry_mpi *x, const void *b, unsigned int size)
     }
     return res;
 }
-

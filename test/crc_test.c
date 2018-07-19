@@ -40,4 +40,3 @@ void crc_test(void)
     RUN(crc16_ibm_test);
     RUN(crc32_eth_test);
 }
-

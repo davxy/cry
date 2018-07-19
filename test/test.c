@@ -146,4 +146,3 @@ int main(int argc, char *argv[])
 
     return (test_fails != 0);
 }
-

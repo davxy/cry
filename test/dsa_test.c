@@ -73,4 +73,3 @@ void dsa_test(void)
                        &dsa.g, &dsa.p, &dsa.q,
                        &dsa.pvt, &dsa.pub, NULL);
 }
-

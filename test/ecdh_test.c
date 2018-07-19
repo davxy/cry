@@ -43,4 +43,3 @@ void ecdh_test(void)
     cry_ecp_clear(&q1);
     cry_ecp_clear(&q2);
 }
-

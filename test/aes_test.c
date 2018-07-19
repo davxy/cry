@@ -46,4 +46,3 @@ void aes_test(void)
     RUN(aes_192);
     RUN(aes_256);
 }
-

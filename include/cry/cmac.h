@@ -31,4 +31,3 @@ void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
 #endif
 
 #endif /* _CRY_CMAC_H_ */
-
