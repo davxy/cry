@@ -21,6 +21,11 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+[0.0.7] - Unreleased
+--------------------
+
+- Project released under the MIT license
+
 [0.0.6] - 2017-07-09
 --------------------
 

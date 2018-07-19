@@ -1,11 +1,3 @@
-/*
- * mpi_old_test.c
- *
- *  Created on: Jun 9, 2018
- *      Author: dave
- */
-
-
 #if 0
 static void mpi_init_test(void)
 {
