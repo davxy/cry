@@ -1,5 +1,5 @@
 /**
- * @file    cry_ecdsa.h
+ * @file    ecdsa.h
  * @brief   Elliptic Curve Digital Signature Algorithm
  */
 

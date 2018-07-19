@@ -1,5 +1,5 @@
 /**
- * @file    cry_sum.h
+ * @file    sum.h
  * @brief   Common checksum algorithms.
  */
 

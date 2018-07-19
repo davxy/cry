@@ -1,5 +1,5 @@
 /**
- * @file    cry_ctr.h
+ * @file    ctr.h
  * @brief   CTR block cipher mode of operation.
  *
  * Turns a block cipher into a stream cipher. It generates the next

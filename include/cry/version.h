@@ -1,5 +1,5 @@
 /**
- * @file    cry_version.h
+ * @file    version.h
  * @brief   Library version.
  */
 

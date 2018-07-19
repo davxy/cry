@@ -1,5 +1,5 @@
 /**
- * @file    cry_mpi.h
+ * @file    mpi.h
  * @brief   Multiple precision integers.
  */
 

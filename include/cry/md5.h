@@ -1,5 +1,5 @@
 /**
- * @file    cry_md5.h
+ * @file    md5.h
  * @brief   MD5 message digest algorithm
  */
 

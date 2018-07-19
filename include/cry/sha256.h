@@ -1,5 +1,5 @@
 /**
- * @file    cry_sha256.h
+ * @file    sha256.h
  * @brief   Secure Hash Algorithm (256)
  */
 

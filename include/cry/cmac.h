@@ -1,5 +1,5 @@
 /**
- * @file    cry_cmac.h
+ * @file    cmac.h
  * @brief   CMAC algorithm
  *
  * Also known as OMAC1 (One-key mac 1).

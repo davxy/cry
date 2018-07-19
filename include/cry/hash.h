@@ -1,3 +1,8 @@
+/**
+ * @file    hash.h
+ * @brief   Generic hash algorithm interface
+ */
+
 #ifndef _CRY_HASH_H_
 #define _CRY_HASH_H_
 
@@ -36,8 +41,8 @@ typedef void (* cry_hash_update_f) (void *ctx, const uint8_t *data,
 /**
  * Finalize.
  *
- * @param ctx   Hash context
- * @digest      Preallocated output buffer
+ * @param ctx    Hash context
+ * @param digest Preallocated output buffer
  */
 typedef void (* cry_hash_digest_f) (void *ctx, uint8_t *digest);
 

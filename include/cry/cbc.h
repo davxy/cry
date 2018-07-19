@@ -1,5 +1,5 @@
 /**
- * @file    cry_cbc.h
+ * @file    cbc.h
  * @brief   CBC block cipher mode of operation.
  */
 

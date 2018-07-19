@@ -1,5 +1,5 @@
 /**
- * @file    cry_gcm.h
+ * @file    gcm.h
  * @brief   GCM block cipher mode of operation.
  */
 
