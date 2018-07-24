@@ -1,5 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+
+dirs=$1
+
+if [[ $dirs == "" ]]
+then
+    dirs="../include ../src ../test"
+fi
+echo "Checking $dirs"
 
 # Replace tabs with 4 spaces
-find $1 -not -path '*/\.*' -type f | grep -E ".(h|c)$" | xargs -L1 ./stylecheck.sh
-
+find $dirs -not -path '*/\.*' -type f | grep -E ".(h|c)$" | xargs -L1 ./stylecheck.sh
