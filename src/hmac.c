@@ -1,4 +1,4 @@
-#include "cry/hmac.h" 
+#include "cry/hmac.h"
 #include <string.h>
 
 #define BLOCK_SIZE  64
@@ -23,7 +23,7 @@ int cry_hmac(cry_hmac_ctx *ctx, unsigned char *mac, const unsigned char *in,
     unsigned char hkey[BLOCK_SIZE];
     unsigned char pad[BLOCK_SIZE];
     const cry_hash_itf *hash = ctx->hash_itf;
- 
+
     if (ctx->key_len <= BLOCK_SIZE) {
         key = ctx->key;
         key_len = ctx->key_len;

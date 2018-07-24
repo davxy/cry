@@ -24,7 +24,7 @@ void ecdh_test(void)
     ASSERT_OK(cry_mpi_rand(&dh2.d, 256));
     ASSERT_OK(cry_ecdh_agree(&dh2)); /* gen pub key */
     ASSERT_OK(cry_ecp_copy(&q2, &dh2.q));
-    
+
     /* Public keys exchange takes place */
     ASSERT_OK(cry_ecp_copy(&dh1.q, &q2));
     ASSERT_OK(cry_ecp_copy(&dh2.q, &q1));

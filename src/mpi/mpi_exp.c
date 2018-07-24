@@ -8,7 +8,7 @@ int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
 
     if ((res = cry_mpi_init_list(&t, &one, &c, NULL)) != 0)
         return res;
-    
+
     if ((res = cry_mpi_copy(&c, e)) != 0)
         goto e;
 

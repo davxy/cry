@@ -34,10 +34,10 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     }
     CHK(cry_ecp_copy(&win[0], p1));             /* 1P (tmp) */
     CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 2P (tmp) */
-    CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 4P (tmp) */ 
+    CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 4P (tmp) */
     CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 8P */
     CHK(cry_ecp_add(&win[1], &win[0], p1, p));  /* 9P */
-    CHK(cry_ecp_add(&win[2], &win[1], p1, p));  /* 10P */ 
+    CHK(cry_ecp_add(&win[2], &win[1], p1, p));  /* 10P */
     CHK(cry_ecp_add(&win[3], &win[2], p1, p));  /* 11P */
     CHK(cry_ecp_add(&win[4], &win[3], p1, p));  /* 12P */
     CHK(cry_ecp_add(&win[5], &win[4], p1, p));  /* 13P */
