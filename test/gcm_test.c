@@ -15,7 +15,7 @@ void cry_aes_128_gcm_encrypt(unsigned char *dst,
                              const unsigned int src_size,
                              const unsigned char *key,
                              const unsigned char *iv,
-                             unsigned char *mac, 
+                             unsigned char *mac,
                              const unsigned char *aad,
                              unsigned int aad_size)
 {
@@ -38,7 +38,7 @@ void cry_aes_128_gcm_decrypt(unsigned char *dst,
                              const unsigned int src_size,
                              const unsigned char *key,
                              const unsigned char *iv,
-                             unsigned char *mac, 
+                             unsigned char *mac,
                              const unsigned char *aad,
                              unsigned int aad_size)
 {

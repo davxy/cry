@@ -85,8 +85,8 @@ cleanup:
  * HAC pp.598 Algorithm 14.20
  *
  * Note that the description in HAC is horribly incomplete.
- * For example, it doesn’t consider the case where digits
- * are removed from 'x' in the inner loop. It also doesn’t
+ * For example, it doesn't consider the case where digits
+ * are removed from 'x' in the inner loop. It also doesn't
  * consider the case that y has fewer than three digits, etc..
  *
  * The overall algorithm is as described as 14.20 from HAC

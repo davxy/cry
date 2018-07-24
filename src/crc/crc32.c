@@ -8,7 +8,7 @@ void cry_crc32_init(struct cry_crc32_ctx *ctx, uint32_t start,
     ctx->flags = flags;
 }
 
-void cry_crc32_update(struct cry_crc32_ctx *ctx, 
+void cry_crc32_update(struct cry_crc32_ctx *ctx,
                       const unsigned char *buf, size_t size)
 {
     while (size--)

@@ -21,7 +21,7 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
         t.data[2*i] = (cry_mpi_digit)dd;
         /* get the carry */
         c = dd >> CRY_MPI_DIGIT_BITS;
-        
+
         /* left hand side of a[i]*a[i] */
         tmpx = a->data[i];
         /* alias for where to store the result */
@@ -31,7 +31,7 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
             /* first calculate the double product */
             dd = (cry_mpi_dword)tmpx * (cry_mpi_dword)a->data[j];
             /* check if mul by 2 will generate overflow */
-            ch = (dd & (((cry_mpi_dword)1U) << (2*CRY_MPI_DIGIT_BITS - 1))) 
+            ch = (dd & (((cry_mpi_dword)1U) << (2*CRY_MPI_DIGIT_BITS - 1)))
                     >> (CRY_MPI_DIGIT_BITS - 1);
             dd <<= 1; /* mul by 2 */
             dd += ((cry_mpi_dword)*tmpt + c);
@@ -40,7 +40,7 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
             /* get the new carry */
             c = ch | (dd >> CRY_MPI_DIGIT_BITS);
         }
-        
+
         /* propagate carry */
         while (c != 0) {
             dd = (cry_mpi_dword)*tmpt + c;

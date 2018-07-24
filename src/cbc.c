@@ -57,7 +57,7 @@ void cry_cbc_decrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
         cry_memxor(dst + CRY_CBC_BLOCK_SIZE, src, size - CRY_CBC_BLOCK_SIZE);
         memcpy(ctx->v, src + size - CRY_CBC_BLOCK_SIZE, CRY_CBC_BLOCK_SIZE);
     } else {
-        /* 
+        /*
          * For in-place CBC, we decrypt into a temporary buffer of size
          * at most CBC_BUFFER_LIMIT, and process that amount of data at
          * a time.

@@ -7,13 +7,13 @@
  * Compute c = m^e mod n.
  *
  * Each rsa_operate operation returns a result mod n.
- * This means that you can’t encrypt blocks larger than n without losing
+ * This means that you can't encrypt blocks larger than n without losing
  * information, so you need to chop the input up into blocks of length n
  * or less.
  * RSA works on blocks of data. Each block includes a header and some
  * padding (of at least 11 bytes), so the resulting input blocks are
  * modulus_length-11 bytes minimum. The header is pretty simple:
- * it’s a 0 byte, followed by a padding identifier of 0, 1, or 2.
+ * it's a 0 byte, followed by a padding identifier of 0, 1, or 2.
  * For RSA encryption, always use padding identifier 2, which indicates
  * that the following bytes, up to the first 0 byte, are padding and
  * should be discarded. Everything following the first 0 byte, up to the
@@ -103,7 +103,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
             break;
         if ((res = cry_mpi_mod_exp(&c, &m, &ctx->e, &ctx->m)) != 0)
             break;
-        if (cry_mpi_store_bin(&c, *out + (*out_siz - mod_siz), 
+        if (cry_mpi_store_bin(&c, *out + (*out_siz - mod_siz),
                               mod_siz, 1) != mod_siz) {
             res = -1;
             break;

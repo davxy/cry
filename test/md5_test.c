@@ -23,7 +23,7 @@ void md5_test(void)
         cry_md5_update(&md5, input[i], len);
     }
     cry_md5_digest(&md5, buf);
-    
+
     PRINT_HEX("md5", buf, 16);
     ASSERT_EQ_BUF(buf, md5_hash, 16);
 }

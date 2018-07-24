@@ -63,7 +63,7 @@ void cry_memxor2(unsigned char *dst, const unsigned char *src1,
 
     if (dst <= src1 || (src1 + n <= dst && dst <= src2)) {
         /* Case 1 */
-        for (i = 0; i < n; i++) 
+        for (i = 0; i < n; i++)
             dst[i] = src1[i] ^ src2[i];
     } else if (src2 <= dst || (src1 <= dst && dst + n <= src2)) {
         /* Case 2 */

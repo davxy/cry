@@ -52,7 +52,7 @@ typedef void (* cry_hash_digest_f) (void *ctx, uint8_t *digest);
 struct cry_hash_itf {
     cry_hash_init_f   init;     /**< Initialize (optional) */
     cry_hash_clean_f  clean;    /**< Clean (optional) */
-    cry_hash_update_f update;   /**< Update */ 
+    cry_hash_update_f update;   /**< Update */
     cry_hash_digest_f digest;   /**< Digest (finalize) */
 };
 
