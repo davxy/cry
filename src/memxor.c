@@ -1,36 +1,21 @@
 #include "memxor.h"
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
-void cry_memxor3_worst(unsigned char *dst, const unsigned char *src1,
-                       const unsigned char *src2, unsigned int size)
-{
-    unsigned int i;
-    unsigned char *tmp;
-    
-    tmp = malloc(size);
-    if (tmp != NULL) {
-        for (i = 0; i < size; i++)
-            tmp[i] = src1[i] ^ src2[i];
-        memcpy(dst, tmp, size);
-        free(tmp);
-    } else {
-        /* 
-         * TODO: this could be a security issue FIXME
-         */
-    }
-}
 
-/* We assume src1 <= src2
+/* In the four cases below, we assume src1 <= src2.
+ * The input pointers are eventually swapped internally.
  *
  * CASE 1 : Start from the beginning
  *
  *   1.a) dst is less than or equal both.
+ *
  *      src1 :        [----------]
  *      src2 :            [----------]
  *      dst  :   [----------]
  *
  *   1.b) src1 and src2 are disjointed AND dst is less than or equal src2
+ *
  *      src1 :   [----------]
  *      src2 :                     [----------]
  *      dst  :                 [----------]
@@ -38,11 +23,13 @@ void cry_memxor3_worst(unsigned char *dst, const unsigned char *src1,
  * CASE 2: Start from the end
  *
  *   2.a) dst is greater than or equal both
+ *
  *      src1 :   [----------]
  *      src2 :       [----------]
  *      dst  :            [----------]
  *
  *   2.b) src1 and src2 are disjointed AND dst+n is smaller than or equal src2
+ *
  *      src1 :   [----------]
  *      src2 :                     [----------]
  *      dst  :      [----------]
@@ -55,40 +42,60 @@ void cry_memxor3_worst(unsigned char *dst, const unsigned char *src1,
  *      src2 :                   [----------]
  *      dst  :           [---k------]
  *
- *  CASE 4: worst case, use malloc for temporary allocation.
- *          Inplace implementation is still possible but is not implemented.
+ *  CASE 4: worst case, inplace implementation is too much involved.
+ *          Use malloc for temporary allocation.
+ *
+ *      src1 :   [----------]
+ *      src2 :         [----------]
+ *      dst  :      [----------]
  */
-void cry_memxor3(unsigned char *dst, const unsigned char *src1,
+void cry_memxor2(unsigned char *dst, const unsigned char *src1,
                  const unsigned char *src2, unsigned int n)
 {
-    unsigned int i;
+    size_t i, j;
+    unsigned char *tmp, t;
 
     if (src2 < src1) {
-        const unsigned char *tmp = src1;
-
+        tmp = (unsigned char *)src1;
         src1 = src2;
         src2 = tmp;
     }
 
-    if ((dst <= src1) || ((src1+n <= dst) && (dst <= src2))) {
+    if (dst <= src1 || (src1 + n <= dst && dst <= src2)) {
         /* Case 1 */
         for (i = 0; i < n; i++) 
             dst[i] = src1[i] ^ src2[i];
-    } else if ((src2 <= dst) || ((src1 <= dst) && (dst+n <= src2))) {
+    } else if (src2 <= dst || (src1 <= dst && dst + n <= src2)) {
         /* Case 2 */
         while(n != 0) {
             n--;
             dst[n] = src1[n] ^ src2[n];
         }
-    }
-#if 0   /* TODO: EXAMINATE better before production */
-    /* Case 3 */
-    else if (disjoint == TRUE) {
-    }
-#endif
-    /* Case 4 */
-    else {
-        cry_memxor3_worst(dst, src1, src2, n);
+    } else if (src1 + n < src2){
+        /* Case 3 */
+        j = ((src1 + n) - dst);
+        for (i = 0; i < n; i++) {
+            dst[j++] = src1[i] ^ src2[i];
+            if (j == n)
+                j = 0;
+        }
+        /* Now shift the dst buffer */
+        j = ((src1 + n) - dst);
+        for (i = 0; i < n-1; i++) {
+            t = dst[j];
+            dst[j] = dst[i];
+            dst[i] = t;
+            if (j < n-1)
+                j++;
+        }
+    } else {
+        /* Case 4 */
+        tmp = malloc(n);
+        if (tmp != NULL) {
+            cry_memxor2(tmp, src1, src2, n);
+            memcpy(dst, tmp, n);
+            free(tmp);
+        }
     }
 }
 

@@ -51,14 +51,14 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctr, unsigned char *dst,
             if (left != 0) {
                 encrypt(ciph, buffer, ctr->v, CRY_CTR_BLOCK_SIZE);
                 CRY_INCREMENT_BE(ctr->v, CRY_CTR_BLOCK_SIZE);
-                cry_memxor3(dst + len - left, src + len - left, buffer, left);
+                cry_memxor2(dst + len - left, src + len - left, buffer, left);
             }
         }
     } else {
         if (len <= CRY_CTR_BLOCK_SIZE) {
             encrypt(ciph, buffer, ctr->v, CRY_CTR_BLOCK_SIZE);
             CRY_INCREMENT_BE(ctr->v, CRY_CTR_BLOCK_SIZE);
-            cry_memxor3(dst, src, buffer, len);
+            cry_memxor2(dst, src, buffer, len);
         } else {
             unsigned chunk = CRY_CTR_BLOCK_SIZE * CTR_NBLOCKS;
 
@@ -83,7 +83,7 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctr, unsigned char *dst,
                     CRY_INCREMENT_BE(ctr->v, CRY_CTR_BLOCK_SIZE);
                 }
                 encrypt(ciph, buffer, buffer, chunk);
-                cry_memxor3(dst, src, buffer, len);
+                cry_memxor2(dst, src, buffer, len);
             }
         }
     }

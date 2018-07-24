@@ -28,7 +28,7 @@ void cry_memxor(unsigned char *dst, const unsigned char *src,
  * @param src2  Second source.
  * @param size  Number of bytes to XOR.
  */
-void cry_memxor3(unsigned char *dst, const unsigned char *src1,
+void cry_memxor2(unsigned char *dst, const unsigned char *src1,
                  const unsigned char *src2, unsigned int size);
 
 #ifdef __cplusplus

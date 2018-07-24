@@ -169,7 +169,7 @@ static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
         for (; size >= CRY_GCM_BLOCK_SIZE; (size -= CRY_GCM_BLOCK_SIZE,
                src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
-            cry_memxor3 (dst, src, buffer, CRY_GCM_BLOCK_SIZE);
+            cry_memxor2 (dst, src, buffer, CRY_GCM_BLOCK_SIZE);
             CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     }
@@ -177,7 +177,7 @@ static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
     if (size > 0) {
         /* A final partial block */
         encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
-        cry_memxor3(dst, src, buffer, size);
+        cry_memxor2(dst, src, buffer, size);
         CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
     }
 }
@@ -214,5 +214,5 @@ void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
 
     cry_gcm_hash_sizes(ctx->key, ctx->x, ctx->auth_size, ctx->ciph_size);
     encrypt(ciph, buffer, ctx->iv, CRY_GCM_BLOCK_SIZE);
-    cry_memxor3(mac, ctx->x, buffer, size);
+    cry_memxor2(mac, ctx->x, buffer, size);
 }

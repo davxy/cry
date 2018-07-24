@@ -79,9 +79,9 @@ void cry_cbc_decrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
             memcpy(initial_iv, ctx->v, CRY_CBC_BLOCK_SIZE);
             memcpy(ctx->v, src + buffer_size - CRY_CBC_BLOCK_SIZE,
                    CRY_CBC_BLOCK_SIZE);
-            cry_memxor3(dst + CRY_CBC_BLOCK_SIZE, buffer + CRY_CBC_BLOCK_SIZE,
+            cry_memxor2(dst + CRY_CBC_BLOCK_SIZE, buffer + CRY_CBC_BLOCK_SIZE,
                         src, buffer_size - CRY_CBC_BLOCK_SIZE);
-            cry_memxor3(dst, buffer, initial_iv, CRY_CBC_BLOCK_SIZE);
+            cry_memxor2(dst, buffer, initial_iv, CRY_CBC_BLOCK_SIZE);
         }
 
         decrypt(ciph, buffer, src, size);
@@ -89,10 +89,10 @@ void cry_cbc_decrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
         /* Copies last block */
         memcpy(ctx->v, src + size - CRY_CBC_BLOCK_SIZE, CRY_CBC_BLOCK_SIZE);
         /* Writes all but first block, reads all but last block. */
-        cry_memxor3(dst + CRY_CBC_BLOCK_SIZE, buffer + CRY_CBC_BLOCK_SIZE,
+        cry_memxor2(dst + CRY_CBC_BLOCK_SIZE, buffer + CRY_CBC_BLOCK_SIZE,
                     src, size - CRY_CBC_BLOCK_SIZE);
         /* Writes first block. */
-        cry_memxor3(dst, buffer, initial_iv, CRY_CBC_BLOCK_SIZE);
+        cry_memxor2(dst, buffer, initial_iv, CRY_CBC_BLOCK_SIZE);
 
         if (buffer != fallback)
             free(buffer);
