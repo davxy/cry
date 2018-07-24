@@ -1,6 +1,4 @@
 #include "test.h"
-#include <cry/prng.h>
-#include <time.h> /* to seed prng */
 
 int test_runs;
 int test_fails;
@@ -94,15 +92,6 @@ static struct test_def tests[] = {
 
 #define TESTS_NUM   (sizeof(tests)/sizeof(*tests))
 
-void prng_init(void)
-{
-    time_t t[4];
-    int res;
-
-    t[0] = t[1] = t[2] = t[3] = time(NULL);
-    if ((res = cry_prng_init((unsigned char *)t, sizeof(t))) != 0)
-        TRACE("Failed to initialize PRNG (error: %d\n", res);
-}
 
 int main(int argc, char *argv[])
 {
@@ -114,8 +103,6 @@ int main(int argc, char *argv[])
     test_level = 0;
     test_cont = 0;
     test_stop = 0;
-
-    prng_init(); /* Always do it */
 
     printf("\nCRY(T_T)EST\n");
 
