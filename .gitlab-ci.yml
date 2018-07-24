@@ -28,5 +28,4 @@ deploy:
     script:
         - echo "TODO"
     only:
-        - master
         - tags
