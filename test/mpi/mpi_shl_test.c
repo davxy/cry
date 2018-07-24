@@ -6,46 +6,67 @@ static void shld_dummy(void)
 {
     ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit)));
 
-    cry_mpi_print(g_mpi0, 16);
     ASSERT_OK(cry_mpi_shld(g_mpi0, 0));
-    cry_mpi_print(g_mpi0, 16);
+
+    ASSERT_EQ_MPI(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit));
 }
 
 static void shld_expand(void)
 {
-    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit)));
+    char *raw;
+    size_t siz;
 
-    cry_mpi_print(g_mpi0, 16);
-    ASSERT_OK(cry_mpi_shld(g_mpi0, g_mpi0->alloc + 1));
-    cry_mpi_print(g_mpi0, 16);
+    ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit)));
+    siz = sizeof(cry_mpi_digit) * 10;
+    ASSERT_NE(raw = calloc(1, siz), NULL);
+    memcpy(raw, g_a6400_bin, sizeof(cry_mpi_digit));
+
+    ASSERT_OK(cry_mpi_shld(g_mpi0, 9));
+
+    ASSERT_EQ_MPI(g_mpi0, raw, siz);
+
+    free(raw);
 }
 
 static void shl_one_digit(void)
 {
+    char *raw;
+    size_t siz;
+
     ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit)));
+    siz = sizeof(cry_mpi_digit) * 2;
+    ASSERT_NE(raw = calloc(1, siz), NULL);
+    memcpy(raw, g_a6400_bin, sizeof(cry_mpi_digit));
 
-    cry_mpi_print(g_mpi0, 16);
     ASSERT_OK(cry_mpi_shl(g_mpi1, g_mpi0, 8*sizeof(cry_mpi_digit)));
-    cry_mpi_print(g_mpi1, 16);
 
-    //ASSERT_EQ_MPI(g_mpi2, g_a8_b8_sub_bin, sizeof(g_a8_b8_sub_bin));
+    ASSERT_EQ_MPI(g_mpi1, raw, siz);
+
+    free(raw);
 }
 
 static void shl_expand(void)
 {
+    char *raw;
+    size_t siz, bits;
+
     ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit)));
+    siz = sizeof(cry_mpi_digit) * 10;
+    ASSERT_NE(raw = calloc(1, siz), NULL);
+    memcpy(raw, g_a6400_bin, sizeof(cry_mpi_digit));
 
-    cry_mpi_print(g_mpi0, 16);
-    size_t bits = 8*sizeof(cry_mpi_digit)*(g_mpi0->alloc + 1);
+    bits = 8 * sizeof(cry_mpi_digit) * 9;
     ASSERT_OK(cry_mpi_shl(g_mpi1, g_mpi0, bits));
-    cry_mpi_print(g_mpi1, 16);
 
-    //ASSERT_EQ_MPI(g_mpi2, g_a8_b8_sub_bin, sizeof(g_a8_b8_sub_bin));
+    ASSERT_EQ_MPI(g_mpi1, raw, siz);
+
+    free(raw);
 }
 
 static void shl_not_digit_multiple(void)
 {
     long val;
+
     ASSERT_OK(cry_mpi_set_int(g_mpi0, A32_VAL));
 
     ASSERT_OK(cry_mpi_shl(g_mpi1, g_mpi0, 1));
@@ -57,10 +78,13 @@ static void shl_not_digit_multiple(void)
 
 static void shl_not_digit_multiple_carry(void)
 {
+    const char *raw = "\x01\x92\x5c\x41\x73\x21\x08\xd4\x20";
+
     ASSERT_OK(cry_mpi_load_bin(g_mpi0, g_a6400_bin, sizeof(cry_mpi_digit)));
 
     ASSERT_OK(cry_mpi_shl(g_mpi1, g_mpi0, 1));
-    cry_mpi_print(g_mpi1, 16);
+
+    ASSERT_EQ_MPI(g_mpi1, raw, 9);
 }
 
 
