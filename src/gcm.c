@@ -18,15 +18,12 @@ static void gcm_gf_add(unsigned char *r, const unsigned char *x,
 }
 
 #define RSHIFT_WORD(x) \
-        ((((x) & 0xfefefefeUL) >> 1U) | (((x) & 0x00010101UL) << 15U))
+    ((((x) & 0xfefefefeUL) >> 1U) | \
+     (((x) & 0x00010101UL) << 15U))
 
-#define GHASH_POLYNOMIAL 0xE1UL
+#define GMAC_POLY 0xE1UL
 
-/*
- * Multiplication by 010...0; a big-endian shift right. If the bit
- * shifted out is one, the defining polynomial is added to cancel it
- * out. r == x is allowed.
- */
+
 static void gcm_gf_shift(unsigned char *r, const unsigned char *x)
 {
     uint32_t mask;
@@ -39,27 +36,22 @@ static void gcm_gf_shift(unsigned char *r, const unsigned char *x)
     rw[3] = RSHIFT_WORD(xw[3]) | ((xw[2] >> 17) & 0x80U);
     rw[2] = RSHIFT_WORD(xw[2]) | ((xw[1] >> 17) & 0x80U);
     rw[1] = RSHIFT_WORD(xw[1]) | ((xw[0] >> 17) & 0x80U);
-    rw[0] = RSHIFT_WORD(xw[0]) ^ (mask & GHASH_POLYNOMIAL);
+    rw[0] = RSHIFT_WORD(xw[0]) ^ (mask & GMAC_POLY);
 #else
     mask = (~(xw[3] & 1U)) + 1;
     rw[3] = (xw[3] >> 1U) | ((xw[2] & 1) << 31U);
     rw[2] = (xw[2] >> 1U) | ((xw[1] & 1) << 31U);
     rw[1] = (xw[1] >> 1U) | ((xw[0] & 1) << 31U);
-    rw[0] = (xw[0] >> 1U) ^ (mask & (GHASH_POLYNOMIAL << 24U));
+    rw[0] = (xw[0] >> 1U) ^ (mask & (GMAC_POLY << 24U));
 #endif
 }
 
-/*
- * Sets x <- x * y mod r, using the plain bitwise algorithm from the
- * specification. y may be shorter than a full block, missing bytes
- * are assumed zero.
- */
 static void gcm_gf_mul(unsigned char *x, const unsigned char *y)
 {
     unsigned char V[CRY_GCM_BLOCK_SIZE];
     unsigned char Z[CRY_GCM_BLOCK_SIZE];
     unsigned char b;
-    unsigned int i, j;
+    size_t i, j;
 
     memcpy(V, x, CRY_GCM_BLOCK_SIZE);
     memset(Z, 0, CRY_GCM_BLOCK_SIZE);
@@ -97,13 +89,10 @@ static void cry_gcm_hash_sizes(const unsigned char *key,
 {
     unsigned char buffer[CRY_GCM_BLOCK_SIZE] = {0};
 
-    /* Get the sizes in bits */
-    ciph_size <<= 3;
     auth_size <<= 3;
-
+    ciph_size <<= 3;
     CRY_WRITE32_BE(auth_size, buffer + 4);
     CRY_WRITE32_BE(ciph_size, buffer + 12);
-
     cry_gcm_hash(key, x, CRY_GCM_BLOCK_SIZE, buffer);
 }
 
@@ -146,7 +135,6 @@ void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
     memcpy(ctx->ctr, ctx->iv, CRY_GCM_BLOCK_SIZE);
     CRY_INCREMENT_BE(ctx->ctr + CRY_GCM_BLOCK_SIZE - 4, 4);
 
-    /* Reset the rest of the message-dependent state */
     memset(ctx->x, 0, CRY_GCM_BLOCK_SIZE);
     ctx->auth_size = ctx->ciph_size = 0;
 }
@@ -175,7 +163,6 @@ static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
     }
 
     if (size > 0) {
-        /* A final partial block */
         encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
         cry_memxor2(dst, src, buffer, size);
         CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);

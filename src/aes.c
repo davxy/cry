@@ -9,18 +9,7 @@ struct aes_tab {
     uint32_t table[4][256];
 };
 
-/*
- * Tables are assembled using little-endian byte order, including the
- * pre-rotated variants.
- *
- * Note that AES is byte order agnostic, we only need to be consistent
- * and use the same byteorder when processing key, cleartext and
- * ciphertext bytes.
- *
- * Little-endian means that the first row of the AES state arrays
- * occupy the least significant byte of the words, which is also
- * consistent with the row numbering.
- */
+/* Tables are created using little-endian byte order */
 
 static const struct aes_tab encrypt_tab = {
     /* sbox */
@@ -705,111 +694,111 @@ static const uint32_t mtab[256] = {
     0xbe805d9f,0xb58d5491,0xa89a4f83,0xa397468d,
 };
 
-#define aes_sbox (encrypt_tab.sbox)
 
-/* Get the byte with index 0, 1, 2 and 3 */
 #define B0(x) ((x) & 0xff)
 #define B1(x) (((x) >> 8) & 0xff)
 #define B2(x) (((x) >> 16) & 0xff)
 #define B3(x) (((x) >> 24) & 0xff)
 
-#define SUBBYTE(x, box)                 \
-    (   (uint32_t)(box)[B0(x)]          \
-     | ((uint32_t)(box)[B1(x)] << 8)    \
-     | ((uint32_t)(box)[B2(x)] << 16)   \
-     | ((uint32_t)(box)[B3(x)] << 24))
+#define SBOX(x) \
+    ((uint32_t)(encrypt_tab.sbox)[B0(x)] | \
+    ((uint32_t)(encrypt_tab.sbox)[B1(x)] << 8) | \
+    ((uint32_t)(encrypt_tab.sbox)[B2(x)] << 16) | \
+    ((uint32_t)(encrypt_tab.sbox)[B3(x)] << 24))
 
-#define ROUND(T, w0, w1, w2, w3, k) \
-    ((  T.table[0][B0(w0)]          \
-      ^ T.table[1][B1(w1)]          \
-      ^ T.table[2][B2(w2)]          \
-      ^ T.table[3][B3(w3)]) ^ (k))
+#define ROUND(T, w0, w1, w2, w3) \
+    (T.table[0][B0(w0)] ^ \
+     T.table[1][B1(w1)] ^ \
+     T.table[2][B2(w2)] ^ \
+     T.table[3][B3(w3)])
 
-#define FINAL_ROUND(T, w0, w1, w2, w3, k) \
-    ((   (uint32_t) T.sbox[B0(w0)]        \
-      | ((uint32_t) T.sbox[B1(w1)] << 8)  \
-      | ((uint32_t) T.sbox[B2(w2)] << 16) \
-      | ((uint32_t) T.sbox[B3(w3)] << 24)) ^ (k))
-
-#define MIX_COLUMN(T, key) do { \
-    uint32_t _k, _nk, _t;       \
-    _k = (key);                 \
-    _nk = T[_k & 0xff];         \
-    _k >>= 8;                   \
-    _t = T[_k & 0xff];          \
-    _nk ^= CRY_ROTL32(_t, 8);   \
-    _k >>= 8;                   \
-    _t = T[_k & 0xff];          \
-    _nk ^= CRY_ROTL32(_t, 16);  \
-    _k >>= 8;                   \
-    _t = T[_k & 0xff];          \
-    _nk ^= CRY_ROTL32(_t, 24);  \
-    (key) = _nk;                \
-    } while(0)
+#define FINAL(T, w0, w1, w2, w3) \
+     ((uint32_t)T.sbox[B0(w0)] | \
+     ((uint32_t) T.sbox[B1(w1)] << 8) | \
+     ((uint32_t)T.sbox[B2(w2)] << 16) | \
+     ((uint32_t) T.sbox[B3(w3)] << 24))
 
 
 static void key_invert(cry_aes_ctx *ctx)
 {
-    unsigned nr = ctx->nr;
-    unsigned i, j, k;
+    size_t i, j, k, nr;
+    uint32_t key, newkey, tmp;
 
+    nr = ctx->nr;
     for (i = 0, j = nr * 4; i < j; i += 4, j -= 4) {
         for (k = 0; k < 4; k++)
             CRY_SWAP(ctx->keys[i+k], ctx->keys[j+k]);
     }
 
-    /* Transform all subkeys but the first and last. */
-    for (i = 4; i < 4 * nr; i++)
-        MIX_COLUMN(mtab, ctx->keys[i]);
+    /* Transform all subkeys except the first and last. */
+    for (i = 4; i < 4 * nr; i++) {
+        key = ctx->keys[i];
+        newkey = mtab[key & 0xff];
+        key >>= 8;
+        tmp = mtab[key & 0xff];
+        newkey ^= CRY_ROTL32(tmp, 8);
+        key >>= 8;
+        tmp = mtab[key & 0xff];
+        newkey ^= CRY_ROTL32(tmp, 16);
+        key >>= 8;
+        tmp = mtab[key & 0xff];
+        newkey ^= CRY_ROTL32(tmp, 24);
+        ctx->keys[i] = newkey;
+    }
 }
-
 
 void cry_aes_key_set(cry_aes_ctx *ctx, const unsigned char *key, size_t size)
 {
+    /* The round constant word array */
     const unsigned char rcon[10] = {
         0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36,
     };
-    unsigned int nk, nr, i, lastkey;
-    uint32_t temp;
-    const uint8_t *rp;
+    const uint8_t *rp = rcon;
+    size_t i, nk, nr, lk;
+    uint32_t tmp;
 
-    /* Truncate keysizes to the valid key sizes provided by Rijndael */
+    /* By default set to encrypt mode */
+    ctx->mode = CRY_AES_MODE_ENCRYPT;
+
+    /*
+     * nk = the number of 32 bit words in a key.
+     * nr = the number of rounds in AES cipher.
+     */
     if (size >= 32) {
         nk = 8;
         nr = 14;
     } else if (size >= 24) {
         nk = 6;
         nr = 12;
-    } else { /* must be 16 or more */
+    } else { /* size >= 16 */
         nk = 4;
         nr = 10;
     }
 
-    lastkey = (CRY_AES_BLOCK_SIZE >> 2) * (nr + 1);
+    lk = (CRY_AES_BLOCK_SIZE >> 2) * (nr + 1);
     ctx->nr = nr;
 
-    for (i = 0, rp = rcon; i < nk; i++)
+    /* The first round key is the key itself */
+    for (i = 0; i < nk; i++)
         CRY_READ32_LE(ctx->keys[i], key + i*4);
 
-    for (i = nk; i < lastkey; i++) {
-        temp = ctx->keys[i-1];
+    /* All other round keys are found from the previous round keys */
+    for (i = nk; i < lk; i++) {
+        tmp = ctx->keys[i-1];
         if (i % nk == 0)
-            temp = SUBBYTE(CRY_ROTL32(temp, 24), aes_sbox) ^ *rp++;
-        else if (nk > 6 && (i%nk) == 4)
-            temp = SUBBYTE(temp, aes_sbox);
-
-        ctx->keys[i] = ctx->keys[i-nk] ^ temp;
+            tmp = SBOX(CRY_ROTL32(tmp, 24)) ^ *rp++;
+        else if (nk == 8 && (i%nk) == 4) /* Only for aes-256 */
+            tmp = SBOX(tmp);
+        ctx->keys[i] = ctx->keys[i-nk] ^ tmp;
     }
-
-    ctx->mode = CRY_AES_MODE_ENCRYPT; /* by default assume encrypt */
 }
 
 void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, size_t size)
 {
-    uint32_t w0, w1, w2, w3;        /* working ciphertext */
+    uint32_t w0, w1, w2, w3;
     uint32_t t0, t1, t2, t3;
-    unsigned int i;
+    size_t i;
 
     if (ctx->mode == CRY_AES_MODE_DECRYPT) {
         key_invert(ctx);
@@ -817,9 +806,6 @@ void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
     }
 
     while (size >= 16) {
-        /* Get clear text, using little-endian byte order.
-         * Also XOR with the first subkey. */
-
         CRY_READ32_LE(w0, src);
         CRY_READ32_LE(w1, src + 4);
         CRY_READ32_LE(w2, src + 8);
@@ -831,25 +817,20 @@ void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
         w3 ^= ctx->keys[3];
 
         for (i = 1; i < ctx->nr; i++) {
-            t0 = ROUND(encrypt_tab, w0, w1, w2, w3, ctx->keys[4 * i]);
-            t1 = ROUND(encrypt_tab, w1, w2, w3, w0, ctx->keys[4 * i + 1]);
-            t2 = ROUND(encrypt_tab, w2, w3, w0, w1, ctx->keys[4 * i + 2]);
-            t3 = ROUND(encrypt_tab, w3, w0, w1, w2, ctx->keys[4 * i + 3]);
-
-            /* We could unroll the loop twice, to avoid these
-               assignments. If all eight variables fit in registers,
-               that should give a slight speedup. */
+            t0 = ROUND(encrypt_tab, w0, w1, w2, w3) ^ ctx->keys[4*i];
+            t1 = ROUND(encrypt_tab, w1, w2, w3, w0) ^ ctx->keys[4*i + 1];
+            t2 = ROUND(encrypt_tab, w2, w3, w0, w1) ^ ctx->keys[4*i + 2];
+            t3 = ROUND(encrypt_tab, w3, w0, w1, w2) ^ ctx->keys[4*i + 3];
             w0 = t0;
             w1 = t1;
             w2 = t2;
             w3 = t3;
         }
 
-        /* Final round */
-        t0 = FINAL_ROUND(encrypt_tab, w0, w1, w2, w3, ctx->keys[4 * i]);
-        t1 = FINAL_ROUND(encrypt_tab, w1, w2, w3, w0, ctx->keys[4 * i + 1]);
-        t2 = FINAL_ROUND(encrypt_tab, w2, w3, w0, w1, ctx->keys[4 * i + 2]);
-        t3 = FINAL_ROUND(encrypt_tab, w3, w0, w1, w2, ctx->keys[4 * i + 3]);
+        t0 = FINAL(encrypt_tab, w0, w1, w2, w3) ^ ctx->keys[4*i];
+        t1 = FINAL(encrypt_tab, w1, w2, w3, w0) ^ ctx->keys[4*i + 1];
+        t2 = FINAL(encrypt_tab, w2, w3, w0, w1) ^ ctx->keys[4*i + 2];
+        t3 = FINAL(encrypt_tab, w3, w0, w1, w2) ^ ctx->keys[4*i + 3];
 
         CRY_WRITE32_LE(t0, dst);
         CRY_WRITE32_LE(t2, dst + 8);
@@ -865,9 +846,9 @@ void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
 void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, size_t size)
 {
-    uint32_t w0, w1, w2, w3;        /* working ciphertext */
+    uint32_t w0, w1, w2, w3;
     uint32_t t0, t1, t2, t3;
-    unsigned i;
+    size_t i;
 
     if (ctx->mode == CRY_AES_MODE_ENCRYPT) {
         key_invert(ctx);
@@ -875,9 +856,6 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
     }
 
     while (size >= 16) {
-        /* Get clear text, using little-endian byte order.
-         * Also XOR with the first subkey. */
-
         CRY_READ32_LE(w0, src);
         CRY_READ32_LE(w1, src + 4);
         CRY_READ32_LE(w2, src + 8);
@@ -889,25 +867,20 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
         w3 ^= ctx->keys[3];
 
         for (i = 1; i < ctx->nr; i++) {
-            t0 = ROUND(decrypt_tab, w0, w3, w2, w1, ctx->keys[4 * i]);
-            t1 = ROUND(decrypt_tab, w1, w0, w3, w2, ctx->keys[4 * i + 1]);
-            t2 = ROUND(decrypt_tab, w2, w1, w0, w3, ctx->keys[4 * i + 2]);
-            t3 = ROUND(decrypt_tab, w3, w2, w1, w0, ctx->keys[4 * i + 3]);
-
-            /* We could unroll the loop twice, to avoid these
-               assignments. If all eight variables fit in registers,
-               that should give a slight speedup. */
+            t0 = ROUND(decrypt_tab, w0, w3, w2, w1) ^ ctx->keys[4*i];
+            t1 = ROUND(decrypt_tab, w1, w0, w3, w2) ^ ctx->keys[4*i + 1];
+            t2 = ROUND(decrypt_tab, w2, w1, w0, w3) ^ ctx->keys[4*i + 2];
+            t3 = ROUND(decrypt_tab, w3, w2, w1, w0) ^ ctx->keys[4*i + 3];
             w0 = t0;
             w1 = t1;
             w2 = t2;
             w3 = t3;
         }
 
-        /* Final round */
-        t0 = FINAL_ROUND(decrypt_tab, w0, w3, w2, w1, ctx->keys[4 * i]);
-        t1 = FINAL_ROUND(decrypt_tab, w1, w0, w3, w2, ctx->keys[4 * i + 1]);
-        t2 = FINAL_ROUND(decrypt_tab, w2, w1, w0, w3, ctx->keys[4 * i + 2]);
-        t3 = FINAL_ROUND(decrypt_tab, w3, w2, w1, w0, ctx->keys[4 * i + 3]);
+        t0 = FINAL(decrypt_tab, w0, w3, w2, w1) ^ ctx->keys[4*i];
+        t1 = FINAL(decrypt_tab, w1, w0, w3, w2) ^ ctx->keys[4*i + 1];
+        t2 = FINAL(decrypt_tab, w2, w1, w0, w3) ^ ctx->keys[4*i + 2];
+        t3 = FINAL(decrypt_tab, w3, w2, w1, w0) ^ ctx->keys[4*i + 3];
 
         CRY_WRITE32_LE(t0, dst);
         CRY_WRITE32_LE(t2, dst + 8);
