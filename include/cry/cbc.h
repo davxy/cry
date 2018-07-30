@@ -3,29 +3,23 @@
  * @brief   CBC block cipher mode of operation.
  */
 
-#ifndef _CRY_CBC_H_
-#define _CRY_CBC_H_
+#ifndef CRY_CBC_H_
+#define CRY_CBC_H_
 
 #include "cry/ciph.h"
 
-/** CTR block size. */
+/** CBC block size. */
 #define CRY_CBC_BLOCK_SIZE      16
 
-/** Initialization helper macro */
-#define CRY_CBC_INIT(ctx, _crypto_ctx, _crypto_itf) do { \
-    memset((ctx), 0, sizeof(struct cry_cbc_ctx)); \
-    (ctx)->ciph_ctx = (_crypto_ctx); \
-    (ctx)->ciph_itf = (_crypto_itf); \
-    } while(0)
 
 /** CBC context structure. */
 struct cry_cbc_ctx {
-    /** Block cipher context. */
+    /** Cipher context. */
     void                      *ciph_ctx;
-    /** Block cipher interface. */
+    /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter */
-    unsigned char             v[CRY_CBC_BLOCK_SIZE];
+    unsigned char              ctr[CRY_CBC_BLOCK_SIZE];
 };
 
 typedef struct cry_cbc_ctx cry_cbc_ctx;
@@ -33,6 +27,16 @@ typedef struct cry_cbc_ctx cry_cbc_ctx;
 #ifdef __cplusplus
 extern "C"{
 #endif
+
+/**
+ * Context initialization.
+ *
+ * @param ctx       CBC context.
+ * @param ciph_ctx  Cipher context.
+ * @param ciph_itf  Cipher interface.
+ */
+void cry_cbc_init(struct cry_cbc_ctx *ctx, void *ciph_ctx,
+                  const cry_ciph_itf *ciph_itf);
 
 /**
  * Set the cipher key.
@@ -80,4 +84,4 @@ void cry_cbc_decrypt(struct cry_cbc_ctx *ctx, unsigned char *dst,
 }
 #endif
 
-#endif /* _CRY_CBC_H_ */
+#endif /* CRY_CBC_H_ */

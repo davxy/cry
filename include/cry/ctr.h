@@ -1,5 +1,6 @@
 /**
  * @file    ctr.h
+ *
  * @brief   CTR block cipher mode of operation.
  *
  * Turns a block cipher into a stream cipher. It generates the next
@@ -9,37 +10,42 @@
  * increment-by-one counter is the simplest and most popular.
  */
 
-#ifndef _CRY_CTR_H_
-#define _CRY_CTR_H_
+#ifndef CRY_CTR_H_
+#define CRY_CTR_H_
 
 #include "cry/ciph.h"
 
 /** Block size. */
 #define CRY_CTR_BLOCK_SIZE    16
 
-/* Initialization helper macro */
-#define CRY_CTR_INIT(ctx, _crypto_ctx, _crypto_itf) do { \
-    memset((ctx), 0, sizeof(struct cry_ctr_ctx)); \
-    (ctx)->ciph_ctx = (_crypto_ctx); \
-    (ctx)->ciph_itf = (_crypto_itf); \
-    } while(0)
-
 /**
  * CTR context.
  */
 struct cry_ctr_ctx
 {
-    /** Block cipher context. */
+    /** Cipher context. */
     void                      *ciph_ctx;
-    /** Block cipher interface. */
+    /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter. */
-    unsigned char             v[CRY_CTR_BLOCK_SIZE];
+    unsigned char              ctr[CRY_CTR_BLOCK_SIZE];
 };
+
+typedef struct cry_ctr_ctx cry_ctr_ctx;
 
 #ifdef __cplusplus
 extern "C"{
 #endif
+
+/**
+ * Context initialization.
+ *
+ * @param ctx       CTR context.
+ * @param ciph_ctx  Cipher context.
+ * @param ciph_itf  Cipher interface.
+ */
+void cry_ctr_init(struct cry_ctr_ctx *ctx, void *ciph_ctx,
+                  const struct cry_ciph_itf *ciph_itf);
 
 /**
  * Set the cipher key in the cipher context.
@@ -56,9 +62,7 @@ void cry_ctr_key_set(struct cry_ctr_ctx *ctx, const unsigned char *key,
  *
  * @param ctx   CTR context.
  * @param iv    Initialization vector.
- * @param size  Size of initialization vector.
- *              Must be less then CRY_CTR_BLOCK_SIZE (16),
- *              If less then the iv is zero padded to 16.
+ * @param size  Size of initialization vector (<= CRY_CTR_BLOCK_SIZE).
  */
 void cry_ctr_iv_set(struct cry_ctr_ctx *ctx, const unsigned char *iv,
                     unsigned int size);
@@ -83,4 +87,4 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
  */
 #define cry_ctr_decrypt cry_ctr_encrypt
 
-#endif /* _CRY_CTR_H_ */
+#endif /* CRY_CTR_H_ */

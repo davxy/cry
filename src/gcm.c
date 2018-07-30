@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdint.h>
 
+
 static void gcm_gf_add(unsigned char *r, const unsigned char *x,
                        const unsigned char *y)
 {
@@ -67,33 +68,43 @@ static void gcm_gf_mul(unsigned char *x, const unsigned char *y)
     memcpy(x, Z, CRY_GCM_BLOCK_SIZE);
 }
 
-static void cry_gcm_hash(const unsigned char *key, unsigned char *x,
-                         unsigned int length, const unsigned char *data)
+static void gcm_hash(unsigned char *hash, const unsigned char *key,
+                     const unsigned char *data, size_t len)
 {
-    for (; length >= CRY_GCM_BLOCK_SIZE;
-           length -= CRY_GCM_BLOCK_SIZE, data += CRY_GCM_BLOCK_SIZE) {
-        cry_memxor(x, data, CRY_GCM_BLOCK_SIZE);
-        gcm_gf_mul(x, key);
+    while (len >= CRY_GCM_BLOCK_SIZE) {
+        cry_memxor(hash, data, CRY_GCM_BLOCK_SIZE);
+        gcm_gf_mul(hash, key);
+        len -= CRY_GCM_BLOCK_SIZE;
+        data += CRY_GCM_BLOCK_SIZE;
     }
-
-    if (length > 0) {
-        cry_memxor(x, data, length);
-        gcm_gf_mul(x, key);
+    if (len > 0) {
+        cry_memxor(hash, data, len);
+        gcm_gf_mul(hash, key);
     }
 }
 
-static void cry_gcm_hash_sizes(const unsigned char *key,
-                               unsigned char *x,
-                               unsigned long auth_size,
-                               unsigned long ciph_size)
+static void gcm_hash_sizes(unsigned char *hash, const unsigned char *key,
+                           unsigned long auth_size, unsigned long ciph_size)
 {
-    unsigned char buffer[CRY_GCM_BLOCK_SIZE] = {0};
+    unsigned char buf[CRY_GCM_BLOCK_SIZE] = {0};
+    uint32_t bits;
 
-    auth_size <<= 3;
-    ciph_size <<= 3;
-    CRY_WRITE32_BE(auth_size, buffer + 4);
-    CRY_WRITE32_BE(ciph_size, buffer + 12);
-    cry_gcm_hash(key, x, CRY_GCM_BLOCK_SIZE, buffer);
+    /* Sizes in bits */
+    bits = (uint32_t)(auth_size << 3);
+    CRY_WRITE32_BE(bits, buf + 4);
+    bits = (uint32_t)(ciph_size << 3);
+    CRY_WRITE32_BE(bits, buf + 12);
+    gcm_hash(hash, key, buf, CRY_GCM_BLOCK_SIZE);
+}
+
+
+
+void cry_gcm_init(struct cry_gcm_ctx *ctx, void *ciph_ctx,
+                  const struct cry_ciph_itf *ciph_itf)
+{
+    memset(ctx, 0, sizeof(struct cry_gcm_ctx));
+    ctx->ciph_ctx = ciph_ctx;
+    ctx->ciph_itf = ciph_itf;
 }
 
 void cry_gcm_key_set(struct cry_gcm_ctx *gcm, const unsigned char *key,
@@ -103,12 +114,13 @@ void cry_gcm_key_set(struct cry_gcm_ctx *gcm, const unsigned char *key,
     cry_ciph_encrypt_f encrypt = gcm->ciph_itf->encrypt;
     cry_ciph_key_set_f key_set = gcm->ciph_itf->key_set;
 
-    memset(gcm->x, 0, CRY_GCM_BLOCK_SIZE);
+    /* Reset all */
+    memset(gcm->hs, 0, CRY_GCM_BLOCK_SIZE);
     memset(gcm->ctr, 0, CRY_GCM_BLOCK_SIZE);
     memset(gcm->iv, 0, CRY_GCM_BLOCK_SIZE);
     memset(gcm->key, 0, CRY_GCM_BLOCK_SIZE);
-    gcm->auth_size = 0;
-    gcm->ciph_size = 0;
+    gcm->auth_len = 0;
+    gcm->ciph_len = 0;
 
     key_set(ciph, key, size);
 
@@ -128,19 +140,20 @@ void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
         ctx->iv[CRY_GCM_BLOCK_SIZE-1] = 1;
     } else {
         memset(ctx->iv, 0, CRY_GCM_BLOCK_SIZE);
-        cry_gcm_hash(ctx->key, ctx->iv, size, iv);
-        cry_gcm_hash_sizes(ctx->key, ctx->iv, 0, size);
+        gcm_hash(ctx->iv, ctx->key, iv, size);
+        gcm_hash_sizes(ctx->iv, ctx->key, 0, size);
     }
 
     memcpy(ctx->ctr, ctx->iv, CRY_GCM_BLOCK_SIZE);
     CRY_INCREMENT_BE(ctx->ctr + CRY_GCM_BLOCK_SIZE - 4, 4);
 
-    memset(ctx->x, 0, CRY_GCM_BLOCK_SIZE);
-    ctx->auth_size = ctx->ciph_size = 0;
+    memset(ctx->hs, 0, CRY_GCM_BLOCK_SIZE);
+    ctx->auth_len = 0;
+    ctx->ciph_len = 0;
 }
 
-static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                          const unsigned char *src, unsigned int size)
+static void gcm_operate(struct cry_gcm_ctx *ctx, unsigned char *dst,
+                        const unsigned char *src, unsigned int size)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;
@@ -172,24 +185,24 @@ static void cry_gcm_crypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
 void cry_gcm_encrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, unsigned int size)
 {
-    cry_gcm_crypt(ctx, dst, src, size);
-    cry_gcm_hash(ctx->key, ctx->x, size, dst);
-    ctx->ciph_size += size;
+    gcm_operate(ctx, dst, src, size);
+    gcm_hash(ctx->hs, ctx->key, dst, size);
+    ctx->ciph_len += size;
 }
 
 void cry_gcm_decrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, unsigned int size)
 {
-    cry_gcm_hash(ctx->key, ctx->x, size, src);
-    cry_gcm_crypt(ctx, dst, src, size);
-    ctx->ciph_size += size;
+    gcm_hash(ctx->hs, ctx->key, src, size);
+    gcm_operate(ctx, dst, src, size);
+    ctx->ciph_len += size;
 }
 
 void cry_gcm_update(struct cry_gcm_ctx *ctx, const unsigned char *aad,
                     unsigned int size)
 {
-    cry_gcm_hash(ctx->key, ctx->x, size, aad);
-    ctx->auth_size += size;
+    gcm_hash(ctx->hs, ctx->key, aad, size);
+    ctx->auth_len += size;
 }
 
 void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
@@ -199,7 +212,7 @@ void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;
     unsigned char buffer[CRY_GCM_BLOCK_SIZE];
 
-    cry_gcm_hash_sizes(ctx->key, ctx->x, ctx->auth_size, ctx->ciph_size);
+    gcm_hash_sizes(ctx->hs, ctx->key, ctx->auth_len, ctx->ciph_len);
     encrypt(ciph, buffer, ctx->iv, CRY_GCM_BLOCK_SIZE);
-    cry_memxor2(mac, ctx->x, buffer, size);
+    cry_memxor2(mac, ctx->hs, buffer, size);
 }
