@@ -7,6 +7,99 @@ int test_cont;
 int test_stop;
 unsigned char buf[BUFSIZ];
 
+static int get_line(FILE *f, char *buf, size_t len)
+{
+    char *ret;
+
+    ret = fgets(buf, len, f);
+    if (ret == NULL)
+        return -1;
+    if (strlen(buf) && buf[strlen(buf)-1] == '\n')
+        buf[strlen(buf)-1] = '\0';
+    if (strlen(buf) && buf[strlen(buf)-1] == '\r')
+        buf[strlen(buf)-1] = '\0';
+    return 0;
+}
+
+void func_test(const char *name, const char *datafile,
+               void (*dispatch)(int argc, char *argv[]))
+{
+    FILE *file;
+    int ret, cnt;
+    char *params[50];
+    int i;
+    char *curr;
+    size_t left;
+
+    fprintf(stdout, ">>> %s\n", name);
+
+    file = fopen(datafile, "r");
+    if (file == NULL) {
+        fprintf(stderr, "Error: data file \"%s\" not found", datafile);
+        return;
+    }
+
+    while (feof(file) == 0) {
+        curr = (char *)buf;
+        left = BUFSIZ;
+        /* Test Name */
+        if ((ret = get_line(file, (char*)buf, left)) != 0)
+            break;
+        fprintf(stdout, "    %s\n", buf);
+        /* Collect test function name and parameters */
+        i = 0;
+        while ((ret = get_line(file, curr, left)) == 0) {
+            if (strlen(curr) == 0)
+                break; /* last parameter read */
+            params[i] = curr;
+            cnt = strlen(params[i])+1;
+            curr += cnt;
+            left -= cnt;
+            i++;
+        }
+        dispatch(i, params);
+    }
+}
+
+
+void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
+{
+    unsigned char c;
+    size_t i = 0;
+    size_t j = 0;
+
+    while (j < size) {
+        c = asc[j];
+        if ('0' <= c && c <= '9')
+            raw[i] = (c - '0') << 4;
+        else if ('a' <= c && c <= 'f')
+            raw[i] = ((c - 'a') + 10) << 4;
+        else if ('A' <= c && c <= 'F')
+            raw[i] = ((c - 'A') + 10) << 4;
+        else
+            raw[i] = 0;   /* Fallback for no-ascii values. */
+        j++;
+
+        c = asc[j];
+        if ('0' <= c && c <= '9')
+            raw[i] |= (c - '0');
+        else if ('a' <= c && c <= 'f')
+            raw[i] |= ((c - 'a') + 10);
+        else if ('A' <= c && c <= 'F')
+            raw[i] |= ((c - 'A') + 10);
+        else
+            raw[i] = 0;   /* Fallback for no-ascii values. */
+        j++;
+        i++;
+    }
+}
+
+
+
+
+
+
+
 
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void))
@@ -37,12 +130,12 @@ TEST_WRAP(version)
 TEST_WRAP(memxor)
 TEST_WRAP(base64)
 TEST_WRAP(mpi)
-#if 0
-TEST_WRAP(des)
 TEST_WRAP(aes)
 TEST_WRAP(cbc)
 TEST_WRAP(ctr)
 TEST_WRAP(gcm)
+#if 0
+TEST_WRAP(des)
 TEST_WRAP(crc)
 TEST_WRAP(md5)
 TEST_WRAP(sha256)
@@ -69,12 +162,12 @@ static struct test_def tests[] = {
     TEST_ELEM(memxor),
     TEST_ELEM(base64),
     TEST_ELEM(mpi),
-#if 0
-    TEST_ELEM(des),
     TEST_ELEM(aes),
     TEST_ELEM(cbc),
     TEST_ELEM(ctr),
     TEST_ELEM(gcm),
+#if 0
+    TEST_ELEM(des),
     TEST_ELEM(crc),
     TEST_ELEM(md5),
     TEST_ELEM(sha256),

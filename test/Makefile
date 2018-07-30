@@ -22,11 +22,11 @@ objs := \
 	mpi/mpi_mul_test.o \
 	mpi/mpi_shl_test.o \
 	mpi/mpi_shr_test.o \
-#	des_test.o \
 	aes_test.o \
 	cbc_test.o \
 	ctr_test.o \
 	gcm_test.o \
+#	des_test.o \
 	crc_test.o \
 	md5_test.o \
 	sha256_test.o \

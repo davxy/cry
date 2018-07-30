@@ -13,6 +13,13 @@ extern int test_cont;
 extern int test_stop;
 extern unsigned char buf[BUFSIZ];
 
+
+void func_test(const char *name, const char *datafile,
+               void (*dispatch)(int argc, char *argv[]));
+
+void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
+
+
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
 
