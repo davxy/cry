@@ -18,7 +18,7 @@ test:
     stage: test
     script:
         - make test
-        - test/test
+        - (cd test; ./test)
         - gcovr --exclude test -r . | grep TOTAL
 
 # Deploy
