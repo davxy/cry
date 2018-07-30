@@ -1,48 +1,91 @@
 #include "test.h"
 #include <cry/aes.h>
 
-#define KEY "mYv3rysekRe7k3y!xtendedFora3s256"
-#define MSG "CRY is free soft"
-#define C128 "\xcb\xcd\x85\x43\xe6\xd6\xc1\x91\x99\xf1\x33\xab\xcf\xb0\x45\xb3"
-#define C192 "\x92\xa2\xb3\x87\xba\x93\x31\xb4\x7c\x88\x4c\x68\x51\x5b\xcc\x4c"
-#define C256 "\xf1\xbd\x71\x68\x1a\xaf\xda\x2a\x11\x57\x4c\xe5\x5b\x51\x40\x21"
-#define LEN 16
 
-static void aes_128(void)
+static void aes_xxx_ecb_encrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key, size_t keysize)
 {
-    cry_aes_128_encrypt(buf, MSG, LEN, KEY);
-    PRINT_HEX("ciphertext", buf, LEN);
-    ASSERT_EQ_BUF(buf, C128, LEN);
-    cry_aes_128_decrypt(buf, buf, LEN, KEY);
-    PRINT_ASC("cleartext ", buf, LEN);
-    ASSERT_EQ_BUF(buf, MSG, LEN);
+    cry_aes_ctx ctx;
+
+    cry_aes_key_set(&ctx, key, keysize);
+    cry_aes_encrypt(&ctx, dst, src, size);
 }
 
-
-static void aes_192(void)
+static void aes_xxx_ecb_decrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key, size_t keysize)
 {
-    cry_aes_192_encrypt(buf, MSG, LEN, KEY);
-    PRINT_HEX("ciphertext", buf, LEN);
-    PRINT_HEX("should be ", C192, LEN);
-    ASSERT_EQ_BUF(buf, C192, LEN);
-    cry_aes_192_decrypt(buf, buf, LEN, KEY);
-    PRINT_ASC("cleartext ", buf, LEN);
-    ASSERT_EQ_BUF(buf, MSG, LEN);
+    cry_aes_ctx ctx;
+
+    cry_aes_key_set(&ctx, key, keysize);
+    cry_aes_decrypt(&ctx, dst, src, size);
 }
 
-static void aes_256(void)
+static void aes_128_ecb_encrypt(unsigned char *dst, const unsigned char *src,
+                                size_t size, const unsigned char *key)
 {
-    cry_aes_256_encrypt(buf, MSG, LEN, KEY);
-    PRINT_HEX("ciphertext", buf, LEN);
-    ASSERT_EQ_BUF(buf, C256, LEN);
-    cry_aes_256_decrypt(buf, buf, LEN, KEY);
-    PRINT_ASC("cleartext ", buf, LEN);
-    ASSERT_EQ_BUF(buf, MSG, LEN);
+    aes_xxx_ecb_encrypt(dst, src, size, key, 16);
 }
+
+static void aes_128_ecb_decrypt(unsigned char *dst, const unsigned char *src,
+                                size_t size, const unsigned char *key)
+{
+    aes_xxx_ecb_decrypt(dst, src, size, key, 16);
+}
+
+static void aes_192_ecb_encrypt(unsigned char *dst, const unsigned char *src,
+                                size_t size, const unsigned char *key)
+{
+    aes_xxx_ecb_encrypt(dst, src, size, key, 24);
+}
+
+static void aes_192_ecb_decrypt(unsigned char *dst, const unsigned char *src,
+                                size_t size, const unsigned char *key)
+{
+    aes_xxx_ecb_decrypt(dst, src, size, key, 24);
+}
+
+static void aes_256_ecb_encrypt(unsigned char *dst, const unsigned char *src,
+                                size_t size, const unsigned char *key)
+{
+    aes_xxx_ecb_encrypt(dst, src, size, key, 32);
+}
+
+static void aes_256_ecb_decrypt(unsigned char *dst, const unsigned char *src,
+                                size_t size, const unsigned char *key)
+{
+    aes_xxx_ecb_decrypt(dst, src, size, key, 32);
+}
+
+static void dispatch(int argc, char *argv[])
+{
+    unsigned char key[32];
+    unsigned char in[32];
+    unsigned char out[32];
+    unsigned char out2[32];
+
+    asc_to_raw(argv[1], strlen(argv[1]), key);
+    asc_to_raw(argv[2], 32, in);
+    asc_to_raw(argv[3], 32, out);
+
+    if (strcmp("aes_128_ecb_encrypt", argv[0]) == 0)
+        aes_128_ecb_encrypt(out2, in, 16, key);
+    else if (strcmp("aes_128_ecb_decrypt", argv[0]) == 0)
+        aes_128_ecb_decrypt(out2, in, 16, key);
+    else if (strcmp("aes_192_ecb_encrypt", argv[0]) == 0)
+        aes_192_ecb_encrypt(out2, in, 16, key);
+    else if (strcmp("aes_192_ecb_decrypt", argv[0]) == 0)
+        aes_192_ecb_decrypt(out2, in, 16, key);
+    else if (strcmp("aes_256_ecb_encrypt", argv[0]) == 0)
+        aes_256_ecb_encrypt(out2, in, 16, key);
+    else if (strcmp("aes_256_ecb_decrypt", argv[0]) == 0)
+        aes_256_ecb_decrypt(out2, in, 16, key);
+    ASSERT_EQ_BUF(out, out2, 16);
+}
+
 
 void aes_test(void)
 {
-    RUN(aes_128);
-    RUN(aes_192);
-    RUN(aes_256);
+    func_test("AES-ECB NIST KAT", "aes_ecb.data", dispatch);
 }

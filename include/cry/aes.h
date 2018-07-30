@@ -3,8 +3,8 @@
  * @brief   AES block cipher.
  */
 
-#ifndef _CRY_AES_H_
-#define _CRY_AES_H_
+#ifndef CRY_AES_H_
+#define CRY_AES_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -59,30 +59,8 @@ void cry_aes_encrypt(cry_aes_ctx *ctx, unsigned char *dst,
 void cry_aes_decrypt(cry_aes_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, size_t size);
 
-/*
- * Wrappers
- */
-
-void cry_aes_128_encrypt(unsigned char *dst, const unsigned char *src,
-                         size_t size, const unsigned char *key);
-
-void cry_aes_128_decrypt(unsigned char *dst, const unsigned char *src,
-                         size_t size, const unsigned char *key);
-
-void cry_aes_192_encrypt(unsigned char *dst, const unsigned char *src,
-                         size_t size, const unsigned char *key);
-
-void cry_aes_192_decrypt(unsigned char *dst, const unsigned char *src,
-                         size_t size, const unsigned char *key);
-
-void cry_aes_256_encrypt(unsigned char *dst, const unsigned char *src,
-                         size_t size, const unsigned char *key);
-
-void cry_aes_256_decrypt(unsigned char *dst, const unsigned char *src,
-                         size_t size, const unsigned char *key);
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _CRY_AES_H_ */
+#endif /* CRY_AES_H_ */

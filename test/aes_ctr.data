@@ -1,0 +1,13 @@
+AES-128-CTR Encrypt NIST 800-38a #1
+aes_128_ctr_encrypt
+2b7e151628aed2a6abf7158809cf4f3c
+f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+6bc1bee22e409f96e93d7e117393172a
+874d6191b620e3261bef6864990db6ce
+
+AES-128-CTR Encrypt NIST 800-38a #2
+aes_128_ctr_encrypt
+2b7e151628aed2a6abf7158809cf4f3c
+f0f1f2f3f4f5f6f7f8f9fafbfcfdff00  
+ae2d8a571e03ac9c9eb76fac45af8e51  
+9806f66b7970fdff8617187bb9fffdff      

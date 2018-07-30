@@ -2,63 +2,119 @@
 #include <cry/ctr.h>
 #include <cry/aes.h>
 
-static const struct cry_ciph_itf aes_itf = {
-    .init = NULL,
-    .clean = NULL,
+
+static const cry_ciph_itf aes_itf = {
     .key_set = (cry_ciph_key_set_f) cry_aes_key_set,
     .encrypt = (cry_ciph_encrypt_f) cry_aes_encrypt,
-    .decrypt = (cry_ciph_decrypt_f) cry_aes_decrypt
 };
 
-void cry_aes_128_ctr_encrypt(unsigned char *dst,
-                             const unsigned char *src,
-                             const unsigned int src_size,
-                             const unsigned char *key,
-                             const unsigned char *iv)
+static void aes_xxx_ctr_encrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key, size_t ksize,
+                                const unsigned char *iv)
 {
-    struct cry_aes_ctx aes;
-    struct cry_ctr_ctx ctr;
+    cry_ctr_ctx ctx;
+    cry_aes_ctx aes_ctx;
 
-    ctr.ciph_itf = &aes_itf;
-    ctr.ciph_ctx = &aes;
-    cry_ctr_key_set(&ctr, key, 16);
-    cry_ctr_iv_set(&ctr, iv, 16);
-    cry_ctr_encrypt(&ctr, dst, src, src_size);
+    cry_ctr_init(&ctx, &aes_ctx, &aes_itf);
+    cry_ctr_key_set(&ctx, key, ksize);
+    cry_ctr_iv_set(&ctx, iv, 16);
+    cry_ctr_encrypt(&ctx, dst, src, size);
 }
 
-void cry_aes_128_ctr_decrypt(unsigned char *dst,
-                             const unsigned char *src,
-                             const unsigned int src_size,
-                             const unsigned char *key,
-                             const unsigned char *iv)
+static void aes_xxx_ctr_decrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key, size_t ksize,
+                                const unsigned char *iv)
 {
-    struct cry_aes_ctx aes;
-    struct cry_ctr_ctx ctr;
+    cry_ctr_ctx ctx;
+    cry_aes_ctx aes_ctx;
 
-    ctr.ciph_itf = &aes_itf;
-    ctr.ciph_ctx = &aes;
-    cry_ctr_key_set(&ctr, key, 16);
-    cry_ctr_iv_set(&ctr, iv, 16);
-    cry_ctr_decrypt(&ctr, dst, src, src_size);
+    cry_ctr_init(&ctx, &aes_ctx, &aes_itf);
+    cry_ctr_key_set(&ctx, key, ksize);
+    cry_ctr_iv_set(&ctx, iv, 16);
+    cry_ctr_decrypt(&ctx, dst, src, size);
 }
+
+static void aes_128_ctr_encrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key,
+                                const unsigned char *iv)
+{
+    aes_xxx_ctr_encrypt(dst, src, size, key, 16, iv);
+}
+
+static void aes_128_ctr_decrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key,
+                                const unsigned char *iv)
+{
+    aes_xxx_ctr_decrypt(dst, src, size, key, 16, iv);
+}
+
+static void aes_192_ctr_encrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key,
+                                const unsigned char *iv)
+{
+    aes_xxx_ctr_encrypt(dst, src, size, key, 24, iv);
+}
+
+static void aes_192_ctr_decrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key,
+                                const unsigned char *iv)
+{
+    aes_xxx_ctr_decrypt(dst, src, size, key, 24, iv);
+}
+
+static void aes_256_ctr_encrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key,
+                                const unsigned char *iv)
+{
+    aes_xxx_ctr_encrypt(dst, src, size, key, 32, iv);
+}
+
+static void aes_256_ctr_decrypt(unsigned char *dst,
+                                const unsigned char *src, size_t size,
+                                const unsigned char *key,
+                                const unsigned char *iv)
+{
+    aes_xxx_ctr_decrypt(dst, src, size, key, 32, iv);
+}
+
+
+static void dispatch(int argc, char *argv[])
+{
+    unsigned char key[32];
+    unsigned char iv[32];
+    unsigned char in[32];
+    unsigned char out[32];
+    unsigned char out2[32];
+
+    asc_to_raw(argv[1], strlen(argv[1]), key);
+    asc_to_raw(argv[2], 32, iv);
+    asc_to_raw(argv[3], 32, in);
+    asc_to_raw(argv[4], 32, out);
+
+    if (strcmp("aes_128_ctr_encrypt", argv[0]) == 0)
+        aes_128_ctr_encrypt(out2, in, 16, key, iv);
+    if (strcmp("aes_128_ctr_decrypt", argv[0]) == 0)
+        aes_128_ctr_decrypt(out2, in, 16, key, iv);
+    if (strcmp("aes_192_ctr_encrypt", argv[0]) == 0)
+        aes_192_ctr_encrypt(out2, in, 16, key, iv);
+    if (strcmp("aes_192_ctr_decrypt", argv[0]) == 0)
+        aes_192_ctr_decrypt(out2, in, 16, key, iv);
+    if (strcmp("aes_256_ctr_encrypt", argv[0]) == 0)
+        aes_256_ctr_encrypt(out2, in, 16, key, iv);
+    if (strcmp("aes_256_ctr_decrypt", argv[0]) == 0)
+        aes_256_ctr_decrypt(out2, in, 16, key, iv);
+    ASSERT_EQ_BUF(out, out2, 16);
+}
+
 
 void ctr_test(void)
 {
-    char buf[128];
-    char *msg = "This file is part of CRY software.";
-    char key[] = {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15 };
-    char iv[] =  {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15 };
-    int msglen = strlen(msg);
-
-    memcpy(buf, msg, sizeof(msg));
-    cry_aes_128_ctr_encrypt(buf, buf, msglen, key, iv);
-    PRINT_HEX("ciphertext", buf, msglen);
-
-    cry_aes_128_ctr_decrypt(buf, buf, msglen, key, iv);
-    PRINT_ASC("plaintext ", buf, msglen);
-
-    CONTINUE(ASSERT_EQ_BUF(msg, buf, msglen));
-    //ASSERT_EQ_BUF(msg, buf, msglen);
+    func_test("AES-CTR NIST KAT", "aes_ctr.data", dispatch);
 }
