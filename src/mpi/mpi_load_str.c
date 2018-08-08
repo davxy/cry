@@ -1,9 +1,31 @@
 #include "mpi_pvt.h"
+#include <stdlib.h>
 
 #define ASC_TO_RAW_CHAR(c) \
         (('0' <= (c) && (c) <= '9') ?  ((c) - '0') : \
          ('a' <= (c) && (c) <= 'z') ? (((c) - 'a') + 10) : \
          ('A' <= (c) && (c) <= 'Z') ? (((c) - 'A') + 10) : 0)
+
+static int load16(cry_mpi *a, const char *s)
+{
+    int res;
+    unsigned char *raw, c;
+    size_t i, len;
+ 
+    len = strlen(s) >> 1;
+    raw = malloc(len);
+    if (raw == NULL)
+        return -1;
+    for (i = 0; i < len; i++) {
+        c = *s++;
+        raw[i] = (ASC_TO_RAW_CHAR(c) << 4);
+        c = *s++;
+        raw[i] |= ASC_TO_RAW_CHAR(c); 
+    }
+    res = cry_mpi_load_bin(a, raw, len);
+    free(raw);
+    return res;
+}
 
 int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
 {
@@ -25,6 +47,12 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
         sign = 0;
         if (*s == '+')
             s++;
+    }
+
+    if (radix == 16) {
+        ret = load16(a, s);
+        a->sign = sign;
+        return ret;
     }
 
     if (cry_mpi_init_int(&base, (long)radix) < 0)
