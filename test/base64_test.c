@@ -7,7 +7,7 @@
 
 void base64_test(void)
 {
-    char *cbuf = (char *)buf;
+    char *cbuf = (char *)g_buf;
 
     ASSERT(cry_base64_encode(MSG, strlen(MSG), cbuf) == ELEN);
     PRINT_ASC("encoded", cbuf, ELEN);
@@ -15,5 +15,5 @@ void base64_test(void)
 
     ASSERT(cry_base64_decode(cbuf, ELEN, cbuf) == MLEN);
     PRINT_ASC("decoded", cbuf, MLEN);
-    ASSERT_EQ_BUF(buf, MSG, MLEN);
+    ASSERT_EQ_BUF(g_buf, MSG, MLEN);
 }

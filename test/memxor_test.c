@@ -23,98 +23,98 @@
 
 static void mem1_before_mem2(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1+1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1+1, S2, L2);
 
-    cry_memxor(buf, buf+L1+1, L1);
+    cry_memxor(g_buf, g_buf+L1+1, L1);
 
-    ASSERT_EQ_BUF(buf, XOR_RES, L1);
+    ASSERT_EQ_BUF(g_buf, XOR_RES, L1);
 }
 
 static void mem1_after_mem2(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1+1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1+1, S2, L2);
 
-    cry_memxor(buf+L1+1, buf, L1);
+    cry_memxor(g_buf+L1+1, g_buf, L1);
 
-    ASSERT_EQ_BUF(buf+L1+1, XOR_RES, L1);
+    ASSERT_EQ_BUF(g_buf+L1+1, XOR_RES, L1);
 }
 
 static void memxor2_mem1_before_mem2(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1+1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1+1, S2, L2);
 
-    cry_memxor2(buf, buf, buf+L1+1, L1);
+    cry_memxor2(g_buf, g_buf, g_buf+L1+1, L1);
 
-    ASSERT_EQ_BUF(buf, XOR_RES, L1);
+    ASSERT_EQ_BUF(g_buf, XOR_RES, L1);
 }
 
 static void memxor2_mem1_after_mem2(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1+1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1+1, S2, L2);
 
-    cry_memxor2(buf+L1+1, buf+L1+1, buf, L1);
+    cry_memxor2(g_buf+L1+1, g_buf+L1+1, g_buf, L1);
 
-    ASSERT_EQ_BUF(buf+L1+1, XOR_RES, L1);
+    ASSERT_EQ_BUF(g_buf+L1+1, XOR_RES, L1);
 }
 
 static void memxor2_mem1_before_mem2_overlap(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1-1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1-1, S2, L2);
 
-    cry_memxor2(buf, buf, buf+L1-1, L1);
+    cry_memxor2(g_buf, g_buf, g_buf+L1-1, L1);
 
-    ASSERT_EQ_BUF(buf, XOR_RES1, L1);
+    ASSERT_EQ_BUF(g_buf, XOR_RES1, L1);
 }
 
 static void memxor2_mem1_after_mem2_overlap(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1-1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1-1, S2, L2);
 
-    cry_memxor2(buf+L1-1, buf+L1-1, buf, L1);
+    cry_memxor2(g_buf+L1-1, g_buf+L1-1, g_buf, L1);
 
-    ASSERT_EQ_BUF(buf+L1-1, XOR_RES1, L1);
+    ASSERT_EQ_BUF(g_buf+L1-1, XOR_RES1, L1);
 }
 
 static void memxor2_mem1_before_mem2_dst_in_the_gap_after_mem1_end(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1+1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1+1, S2, L2);
 
-    cry_memxor2(buf+L1, buf, buf+L1+1, L1);
+    cry_memxor2(g_buf+L1, g_buf, g_buf+L1+1, L1);
 
-    ASSERT_EQ_BUF(buf+L1, XOR_RES, L1);
+    ASSERT_EQ_BUF(g_buf+L1, XOR_RES, L1);
 }
 
 static void memxor2_mem1_before_mem2_dst_in_the_gap_before_mem1_end(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+L1+1, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+L1+1, S2, L2);
 
-    cry_memxor2(buf+L1-3, buf, buf+L1+1, L1);
+    cry_memxor2(g_buf+L1-3, g_buf, g_buf+L1+1, L1);
 
-    ASSERT_EQ_BUF(buf+L1-3, XOR_RES, L1);
+    ASSERT_EQ_BUF(g_buf+L1-3, XOR_RES, L1);
 }
 
 static void memxor2_mem1_before_mem2_dst_in_the_mid(void)
 {
-    memcpy(buf, S1, L1);
-    memcpy(buf+3, S2, L2);
+    memcpy(g_buf, S1, L1);
+    memcpy(g_buf+3, S2, L2);
 
-    cry_memxor2(buf+1, buf, buf+3, L1);
+    cry_memxor2(g_buf+1, g_buf, g_buf+3, L1);
 
-    ASSERT_EQ_BUF(buf+1, XOR_RES2, L1);
+    ASSERT_EQ_BUF(g_buf+1, XOR_RES2, L1);
 }
 
 
 static void setup(void)
 {
-    memset(buf, 0, USED_MAX);
+    memset(g_buf, 0, USED_MAX);
 }
 
 #define MYRUN(test) RUNX(test, setup, NULL)

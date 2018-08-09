@@ -1,0 +1,42 @@
+MPI init size
+mpi_init_size
+1
+1
+
+MPI set int 0
+mpi_set_int
+0
+
+MPI set int neg
+mpi_set_int
+-2147483648
+
+MPI set int neg
+mpi_set_int
+2147483647
+
+MPI count bits
+mpi_count_bits
+1943
+13
+
+MPI count bytes
+mpi_count_bytes
+1943
+2
+
+MPI load and store zero as string
+mpi_load_store_str
+00
+0
+
+MPI load and store positive string
+mpi_load_store_str
+123456789abcdef00102030405060708090a0b0c0d0e0f
+0
+
+MPI load and store bad length string
+mpi_load_store_str
+abc
+-1
+

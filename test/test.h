@@ -11,7 +11,7 @@ extern int test_fails;
 extern int test_level;
 extern int test_cont;
 extern int test_stop;
-extern unsigned char buf[BUFSIZ];
+extern unsigned char g_buf[BUFSIZ];
 
 
 void func_test(const char *name, const char *datafile,
@@ -62,8 +62,8 @@ void run(const char *name, void (* test)(void),
 #define ASSERT_EQ_MPI(mpi, bin, siz) do { \
     ASSERT_EQ(cry_mpi_count_bytes(mpi), siz); \
     ASSERT_EQ(BUFSIZ >= siz, 1); \
-    cry_mpi_store_bin(mpi, (char *)buf, BUFSIZ, 0); \
-    ASSERT(memcmp((char *)buf, bin, siz) == 0); \
+    cry_mpi_store_bin(mpi, (char *)g_buf, BUFSIZ, 0); \
+    ASSERT(memcmp((char *)g_buf, bin, siz) == 0); \
     } while (0)
 
 #define ASSERT_OK(e) \

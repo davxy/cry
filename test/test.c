@@ -5,7 +5,9 @@ int test_fails;
 int test_level;
 int test_cont;
 int test_stop;
-unsigned char buf[BUFSIZ];
+unsigned char g_buf[BUFSIZ];
+
+static unsigned char argbuf[BUFSIZ];
 
 static int get_line(FILE *f, char *buf, size_t len)
 {
@@ -40,14 +42,14 @@ void func_test(const char *name, const char *datafile,
     }
 
     while (feof(file) == 0) {
-        curr = (char *)buf;
-        left = BUFSIZ;
         /* Test Name */
-        if ((ret = get_line(file, (char*)buf, left)) != 0)
+        if ((ret = get_line(file, (char*)argbuf, sizeof(argbuf))) != 0)
             break;
-        fprintf(stdout, "    %s\n", buf);
+        fprintf(stdout, "    %s\n", argbuf);
         /* Collect test function name and parameters */
         i = 0;
+        curr = (char *)argbuf;
+        left = sizeof(argbuf);
         while ((ret = get_line(file, curr, left)) == 0) {
             if (strlen(curr) == 0)
                 break; /* last parameter read */
@@ -59,6 +61,7 @@ void func_test(const char *name, const char *datafile,
         }
         dispatch(i, params);
     }
+    fclose(file);
 }
 
 
@@ -95,12 +98,6 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
 }
 
 
-
-
-
-
-
-
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void))
 {
@@ -130,10 +127,12 @@ TEST_WRAP(version)
 TEST_WRAP(memxor)
 TEST_WRAP(base64)
 TEST_WRAP(mpi)
+#if 0
 TEST_WRAP(aes)
 TEST_WRAP(cbc)
 TEST_WRAP(ctr)
 TEST_WRAP(gcm)
+#endif
 #if 0
 TEST_WRAP(des)
 TEST_WRAP(crc)
@@ -158,14 +157,18 @@ struct test_def {
 #define TEST_ELEM(name) { #name , name ## _wrap }
 
 static struct test_def tests[] = {
+#if 0
     TEST_ELEM(version),
     TEST_ELEM(memxor),
     TEST_ELEM(base64),
+#endif
     TEST_ELEM(mpi),
+#if 0
     TEST_ELEM(aes),
     TEST_ELEM(cbc),
     TEST_ELEM(ctr),
     TEST_ELEM(gcm),
+#endif
 #if 0
     TEST_ELEM(des),
     TEST_ELEM(crc),

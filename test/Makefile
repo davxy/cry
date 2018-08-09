@@ -12,17 +12,8 @@ objs := \
 	version_test.o \
 	memxor_test.o \
 	base64_test.o \
-	mpi/mpi_test.o \
-	mpi/mpi_data.o \
-	mpi/mpi_core_test.o \
-	mpi/mpi_abs_test.o \
-	mpi/mpi_cmp_test.o \
-	mpi/mpi_add_test.o \
-	mpi/mpi_sub_test.o \
-	mpi/mpi_mul_test.o \
-	mpi/mpi_shl_test.o \
-	mpi/mpi_shr_test.o \
-	aes_test.o \
+	mpi_test.o \
+#	aes_test.o \
 	cbc_test.o \
 	ctr_test.o \
 	gcm_test.o \
