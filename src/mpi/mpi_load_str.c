@@ -6,13 +6,16 @@
          ('a' <= (c) && (c) <= 'z') ? (((c) - 'a') + 10) : \
          ('A' <= (c) && (c) <= 'Z') ? (((c) - 'A') + 10) : 0)
 
-static int load16(cry_mpi *a, const char *s)
+static int cry_mpi_load_str_hex(cry_mpi *a, const char *s)
 {
     int res;
     unsigned char *raw, c;
     size_t i, len;
  
-    len = strlen(s) >> 1;
+    len = strlen(s);
+    if ((len & 0x01) != 0)
+        return -1;
+    len >>= 1;
     raw = malloc(len);
     if (raw == NULL)
         return -1;
@@ -50,7 +53,7 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
     }
 
     if (radix == 16) {
-        ret = load16(a, s);
+        ret = cry_mpi_load_str_hex(a, s);
         a->sign = sign;
         return ret;
     }
@@ -70,7 +73,6 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
         l = ASC_TO_RAW_CHAR(l);
         if (radix <= l)
             break;
-
         tmp.data[0] = l;
         if (cry_mpi_mul(a, a, &base) < 0)
             break;

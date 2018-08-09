@@ -51,7 +51,8 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
     if (radix < 2 || radix > 16 || size < 2)
         return -1;
 
-    if (a->used == 0) {
+    if (cry_mpi_is_zero(a) != 0) {
+        s[i++] = '0';
         s[i++] = '0';
         s[i] = '\0';
         return 0;
@@ -60,9 +61,8 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
     if (radix == 16)
         return cry_mpi_store_str_hex(a, s, size);
 
-    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, NULL)) != 0) {
+    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, NULL)) != 0)
         return ret;
-    }
 
     if ((ret = cry_mpi_copy(&tmp, a)) != 0)
         goto e;
