@@ -13,11 +13,9 @@ objs := \
 	memxor_test.o \
 	base64_test.o \
 	mpi_test.o \
-#	aes_test.o \
-	cbc_test.o \
-	ctr_test.o \
-	gcm_test.o \
-#	des_test.o \
+	aes_test.o \
+#	gcm_test.o \
+	des_test.o \
 	crc_test.o \
 	md5_test.o \
 	sha256_test.o \

@@ -2,17 +2,16 @@
 
 int test_runs;
 int test_fails;
-int test_level;
 int test_cont;
 int test_stop;
 unsigned char g_buf[BUFSIZ];
 
-static unsigned char argbuf[BUFSIZ];
 
 static int get_line(FILE *f, char *buf, size_t len)
 {
     char *ret;
 
+    *buf = '\0';
     ret = fgets(buf, len, f);
     if (ret == NULL)
         return -1;
@@ -23,8 +22,7 @@ static int get_line(FILE *f, char *buf, size_t len)
     return 0;
 }
 
-void func_test(const char *name, const char *datafile,
-               void (*dispatch)(int argc, char *argv[]))
+void func_test(const char *datafile, dispatch_func_t dispatch)
 {
     FILE *file;
     int ret, cnt;
@@ -32,8 +30,7 @@ void func_test(const char *name, const char *datafile,
     int i;
     char *curr;
     size_t left;
-
-    fprintf(stdout, ">>> %s\n", name);
+    static char argbuf[BUFSIZ];
 
     file = fopen(datafile, "r");
     if (file == NULL) {
@@ -43,12 +40,14 @@ void func_test(const char *name, const char *datafile,
 
     while (feof(file) == 0) {
         /* Test Name */
-        if ((ret = get_line(file, (char*)argbuf, sizeof(argbuf))) != 0)
+        if ((ret = get_line(file, argbuf, sizeof(argbuf))) != 0)
             break;
+        if (*argbuf == '#' || *argbuf == '\0')
+            continue;
         fprintf(stdout, "    %s\n", argbuf);
         /* Collect test function name and parameters */
         i = 0;
-        curr = (char *)argbuf;
+        curr = argbuf;
         left = sizeof(argbuf);
         while ((ret = get_line(file, curr, left)) == 0) {
             if (strlen(curr) == 0)
@@ -60,6 +59,7 @@ void func_test(const char *name, const char *datafile,
             i++;
         }
         dispatch(i, params);
+        test_runs++;
     }
     fclose(file);
 }
@@ -101,70 +101,28 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void))
 {
-    int i;
-
     test_runs++;
-    if (test_level == 0)
-        printf("\n");
-    for (i = 0; i < test_level; i++)
-        printf("---");
-    printf("> %s\n", name);
-    test_level++;
+    printf("    %s\n", name);
     if (setup != NULL)
         setup();
     test();
     if (teardown != NULL)
         teardown();
-    test_level--;
 }
 
+void version_test(void);
+void memxor_test(void);
+void base64_test(void);
+void mpi_test(void);
+void aes_test(void);
 
-#define TEST_WRAP(name) \
-    void name ## _test(void); \
-    void name ## _wrap(void) { RUN( name ## _test ); }
-
-TEST_WRAP(version)
-TEST_WRAP(memxor)
-TEST_WRAP(base64)
-TEST_WRAP(mpi)
+static test_func_t tests[] = {
+    version_test,
+    memxor_test,
+    base64_test,
+    mpi_test,
+    aes_test,
 #if 0
-TEST_WRAP(aes)
-TEST_WRAP(cbc)
-TEST_WRAP(ctr)
-TEST_WRAP(gcm)
-#endif
-#if 0
-TEST_WRAP(des)
-TEST_WRAP(crc)
-TEST_WRAP(md5)
-TEST_WRAP(sha256)
-TEST_WRAP(cmac)
-TEST_WRAP(sum)
-TEST_WRAP(rsa)
-TEST_WRAP(rand)
-TEST_WRAP(dh)
-TEST_WRAP(dsa)
-TEST_WRAP(ecp)
-TEST_WRAP(ecdsa)
-TEST_WRAP(ecdh)
-#endif
-
-struct test_def {
-    const char *name;
-    void (*func)(void);
-};
-
-#define TEST_ELEM(name) { #name , name ## _wrap }
-
-static struct test_def tests[] = {
-#if 0
-    TEST_ELEM(version),
-    TEST_ELEM(memxor),
-    TEST_ELEM(base64),
-#endif
-    TEST_ELEM(mpi),
-#if 0
-    TEST_ELEM(aes),
     TEST_ELEM(cbc),
     TEST_ELEM(ctr),
     TEST_ELEM(gcm),
@@ -191,35 +149,20 @@ static struct test_def tests[] = {
 
 int main(int argc, char *argv[])
 {
-    int i, j;
+    int i;
 
     /* Reset test variables */
     test_runs = 0;
     test_fails = 0;
-    test_level = 0;
     test_cont = 0;
     test_stop = 0;
 
-    printf("\nCRY(T_T)EST\n");
+    printf("\nCRY(T_T)EST\n\n");
 
-    if (argc == 1) {
-        for (j = 0; j < TESTS_NUM; j++) {
-            tests[j].func();
-            if (test_stop != 0)
-                break;
-        }
-    } else {
-        for (i = 1; i < argc; i++) {
-            for (j = 0; j < TESTS_NUM; j++) {
-                if (strcmp(argv[i], tests[j].name) == 0) {
-                    tests[j].func();
-                    if (test_stop != 0) {
-                        i = argc;
-                        break;
-                    }
-                }
-            }
-        }
+    for (i = 0; i < TESTS_NUM; i++) {
+        tests[i]();
+        if (test_stop != 0)
+            break;
     }
 
     printf("\n");

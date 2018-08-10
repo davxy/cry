@@ -14,8 +14,17 @@ extern int test_stop;
 extern unsigned char g_buf[BUFSIZ];
 
 
-void func_test(const char *name, const char *datafile,
-               void (*dispatch)(int argc, char *argv[]));
+typedef void (* test_func_t)(void);
+
+struct test_case {
+    const char *name;
+    test_func_t func;
+};
+
+typedef void (* dispatch_func_t)(int argc, char *argv[]);
+
+
+void func_test(const char *datafile, dispatch_func_t dispatch);
 
 void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
 
