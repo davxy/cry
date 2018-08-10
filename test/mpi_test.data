@@ -1,0 +1,228 @@
+################################################################################
+# Initialize with a given size.
+# p0 : input size
+################################################################################
+
+Initialize with given size
+mpi_init_size
+1
+
+################################################################################
+# Set primitive integer value
+# p0 : input value (primitive base 10)
+################################################################################
+
+Set zero primitive
+mpi_set_int
+0
+
+Set negative primitive (-2^31)
+mpi_set_int
+-2147483648
+
+Set positive primitive (+2^31 - 1)
+mpi_set_int
+2147483647
+
+################################################################################
+# Count bits
+# p0 : input value
+# p1 : return value (number of bits)
+################################################################################
+
+MPI count bits
+mpi_count_bits
+1943
+13
+
+MPI count bits zero
+mpi_count_bits
+00
+0
+
+################################################################################
+# Count bytes
+# p0 : input value
+# p1 : return value (number of bytes)
+################################################################################
+
+MPI count bytes
+mpi_count_bytes
+1943
+2
+
+MPI count bytes zero
+mpi_count_bytes
+00
+0
+
+################################################################################
+# Load and store string
+# p0 : input/output value as hex string
+# p1 : return value
+################################################################################
+
+MPI load and store zero as string
+mpi_load_store_str
+00
+0
+
+MPI load and store positive string
+mpi_load_store_str
+123456789abcdef00102030405060708090a0b0c0d0e0f
+0
+
+MPI load and store bad length string
+mpi_load_store_str
+abc
+-1
+
+################################################################################
+# Absolute value
+# p0 : input value as hex string
+# p1 : output value as hex string
+################################################################################
+
+MPI abs positive value
+mpi_abs
+1234
+1234
+
+MPI abs negative value
+mpi_abs
+-1234
+1234
+
+MPI abs negative zero
+mpi_abs
+-00
+00
+
+################################################################################
+# Comparison
+# p0 : first input value as hex string
+# p1 : second input value as hex string
+# p2 : result
+################################################################################
+
+Compare first = second
+mpi_cmp
+23424a98719c87431513cc276f4238941d23db48976234
+23424a98719c87431513cc276f4238941d23db48976234
+0
+
+Compare first > second and first = -second 
+mpi_cmp
+23424a98719c87431513cc276f4238941d23db48976234
+-23424a98719c87431513cc276f4238941d23db48976234
+1
+
+Compare first < second and first = -second
+mpi_cmp
+-23424a98719c87431513cc276f4238941d23db48976234
+23424a98719c87431513cc276f4238941d23db48976234
+-1
+
+Compare first > second
+mpi_cmp
+23424a98719c87431513cc276f4238941d23db48976234
+23424a98719c87431513cc276f4238941d23db48976233
+1
+
+Compare first < second
+mpi_cmp
+23424a98719c87431513cc276f4238941d23db48976231
+23424a98719c87431513cc276f4238941d23db48976233
+-1
+
+Compare first < second (#2)
+mpi_cmp
+-23424a98719c87431513cc276f4238941d23db48976233
+-23424a98719c87431513cc276f4238941d23db48976231
+-1
+
+################################################################################
+# Addition
+# p0 : first input value as hex string
+# p1 : second input value as hex string
+# p2 : addition value
+################################################################################
+
+Add zero
+mpi_add
+1234
+00
+1234
+
+Add two positives
+mpi_add
+23424a98719c87431513cc276f4238941d23db48976234
+ab123874298346127438787138743217688787518234532d641329727398496325
+ab1238742983461274389bb3830ca3b3efca9c654e5bc26f9ca746964ee0e0c559
+
+Add two negatives
+mpi_add
+-23424a98719c87431513cc276f4238941d23db48976234
+-ab123874298346127438787138743217688787518234532d641329727398496325
+-ab1238742983461274389bb3830ca3b3efca9c654e5bc26f9ca746964ee0e0c559
+
+Add positive with negative
+mpi_add
+23424a98719c87431513cc276f4238941d23db48976234
+-ab123874298346127438787138743217688787518234532d641329727398496325
+-ab123874298346127438552eeddbc07ae144723db60ce3eb2b7f0c4e984fb200f1
+
+Add negative with positive
+mpi_add
+-23424a98719c87431513cc276f4238941d23db48976234
+ab123874298346127438552eeddbc07ae14472
+-23424a97c68a4eceeb908614fb09e3652f481acdb61dc2
+
+Add opposite
+mpi_add
+-23424a98719c87431513cc276f4238941d23db48976234
+23424a98719c87431513cc276f4238941d23db48976234
+00
+
+################################################################################
+# Subtraction
+# p0 : minuend input value as hex string
+# p1 : subtrahend input value as hex string
+# p2 : subtraction value
+################################################################################
+
+Sub zero
+mpi_sub
+1234
+00
+1234
+
+Sub from zero (change sign)
+mpi_sub
+00
+1235
+-1235
+
+Sub two positives with first > second
+mpi_sub
+ab123874298346127438787138743217688787518234532d641329727398496325
+23424a98719c87431513cc276f4238941d23db48976234
+ab123874298346127438552eeddbc07ae144723db60ce3eb2b7f0c4e984fb200f1
+
+Sub two positives with first < second
+mpi_sub
+23424a98719c87431513cc276f4238941d23db48976234
+ab123874298346127438787138743217688787518234532d641329727398496325
+-ab123874298346127438552eeddbc07ae144723db60ce3eb2b7f0c4e984fb200f1
+
+Sub one negative from one positive
+mpi_sub
+ab123874298346127438787138743217688787518234532d641329727398496325
+-23424a98719c87431513cc276f4238941d23db48976234
+ab1238742983461274389bb3830ca3b3efca9c654e5bc26f9ca746964ee0e0c559
+
+Sub two equal values
+mpi_sub
+ab123874298346127438787138743217688787518234532d641329727398496325
+ab123874298346127438787138743217688787518234532d641329727398496325
+00

@@ -26,7 +26,7 @@ static void mpi_init_size(int argc, char *argv[])
 {
     cry_mpi tmp;
 
-    ASSERT_EQ(argc, 2);
+    ASSERT_EQ(argc, 1);
     ASSERT_OK(cry_mpi_init_size(&tmp, atol(argv[0])));
 
     ASSERT_EQ(tmp.alloc, atol(argv[0]));
@@ -76,8 +76,59 @@ static void mpi_load_store_str(int argc, char *argv[])
     }
 }
 
+static void mpi_cmp(int argc, char *argv[])
+{
+    int res;
 
-static void dispatch(int argc, char *argv[])
+    ASSERT_EQ(argc, 3);
+    res = atoi(argv[2]);
+
+    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+    ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
+
+    ASSERT(cry_mpi_cmp(g_mpi0, g_mpi1) == res);
+}
+
+static void mpi_abs(int argc, char *argv[])
+{
+    ASSERT_EQ(argc, 2);
+
+    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+
+    ASSERT(cry_mpi_abs(g_mpi1, g_mpi0) == 0);
+
+    ASSERT(cry_mpi_store_str(g_mpi1, 16, (char *)g_buf, BUFSIZ) == 0);
+    ASSERT(strcmp((char *)g_buf, argv[1]) == 0);
+}
+
+static void mpi_add(int argc, char *argv[])
+{
+    ASSERT_EQ(argc, 3);
+
+    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+    ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
+
+    ASSERT(cry_mpi_add(g_mpi2, g_mpi0, g_mpi1) == 0);
+
+    ASSERT(cry_mpi_store_str(g_mpi2, 16, (char *)g_buf, BUFSIZ) == 0);
+    ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
+}
+
+static void mpi_sub(int argc, char *argv[])
+{
+    ASSERT_EQ(argc, 3);
+
+    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+    ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
+
+    ASSERT(cry_mpi_sub(g_mpi2, g_mpi0, g_mpi1) == 0);
+
+    ASSERT(cry_mpi_store_str(g_mpi2, 16, (char *)g_buf, BUFSIZ) == 0);
+    ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
+}
+
+
+static void mpi_dispatch(int argc, char *argv[])
 {
     char *test = *argv;
 
@@ -95,8 +146,16 @@ static void dispatch(int argc, char *argv[])
         mpi_set_int(argc, argv);
     else if (strcmp(test, "mpi_load_store_str") == 0)
         mpi_load_store_str(argc, argv);
+    else if (strcmp(test, "mpi_abs") == 0)
+        mpi_abs(argc, argv);
+    else if (strcmp(test, "mpi_cmp") == 0)
+        mpi_cmp(argc, argv);
+    else if (strcmp(test, "mpi_add") == 0)
+        mpi_add(argc, argv);
+    else if (strcmp(test, "mpi_sub") == 0)
+        mpi_sub(argc, argv);
     else
-        ASSERT(0);
+        fprintf(stderr, "Test '%s' not defined\n", test);
 
     mpi_teardown();
 }
@@ -105,5 +164,7 @@ static void dispatch(int argc, char *argv[])
 
 void mpi_test(void)
 {
-    func_test("MPI", "mpi.data", dispatch);
+    fprintf(stderr, "* MPI\n");
+    func_test("mpi_test.data", mpi_dispatch);
+    fprintf(stderr, "\n");
 }
