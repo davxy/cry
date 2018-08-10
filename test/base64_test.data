@@ -1,0 +1,72 @@
+################################################################################
+# Decode
+# p0 : encoded string
+# p1 : decoded string
+################################################################################
+
+One char encode
+encode
+a
+YQ==
+4
+
+Two char encode
+encode
+aa
+YWE=
+4
+
+Three char encode
+encode
+aaa
+YWFh
+4
+
+
+Multi char encode
+encode
+Hello World
+SGVsbG8gV29ybGQ=
+16
+
+################################################################################
+# Decode
+# p0 : encoded string
+# p1 : decoded string
+################################################################################
+
+One char decode
+decode
+YQ==
+a
+1
+
+Two chars encode
+decode
+YWE=
+aa
+2
+
+Three chars encode
+decode
+YWFh
+aaa
+3
+
+Multi char decode
+decode
+SGVsbG8gV29ybGQ=
+Hello World
+11
+
+Decode bad string length
+decode
+YWF
+-
+-1
+
+Decode bad string chars
+decode
+Y!E=
+-
+-1
