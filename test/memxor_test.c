@@ -2,7 +2,6 @@
 #include "memxor.h"
 #include <string.h>
 
-
 #define S1 "HeLLoWoRld01x"
 #define S2 "0231487516295"
 #define L1 (sizeof(S1)-1)
@@ -117,20 +116,28 @@ static void setup(void)
     memset(g_buf, 0, USED_MAX);
 }
 
-#define MYRUN(test) RUNX(test, setup, NULL)
+
+static struct test_case tests[] = {
+    { "M1 < M2 and dst = M1", mem1_before_mem2 },
+    { "M1 > M2 and dst = M1", mem1_after_mem2 },
+    { "M1 < M2", memxor2_mem1_before_mem2 },
+    { "M1 > M2", memxor2_mem1_after_mem2 },
+    { "M1 < M2 and overlap", memxor2_mem1_before_mem2_overlap },
+    { "M1 > M2 and overlap", memxor2_mem1_after_mem2_overlap },
+    { "M1 < M2 and M1.end <= dst <= M2", memxor2_mem1_before_mem2_dst_in_the_gap_after_mem1_end },
+    { "M1 < M2 and M1 <= dst <= M1.end", memxor2_mem1_before_mem2_dst_in_the_gap_before_mem1_end },
+    { "M1 < M2 and M1.end <= dst <= M2", memxor2_mem1_before_mem2_dst_in_the_mid }
+};
+
+#define NTESTS (sizeof(tests)/sizeof(tests[0]))
 
 void memxor_test(void)
 {
-    /* tests assumptions */
-    ASSERT(USED_MAX < BUFSIZ);
+    int i;
 
-    MYRUN(mem1_before_mem2);
-    MYRUN(mem1_after_mem2);
-    MYRUN(memxor2_mem1_before_mem2);
-    MYRUN(memxor2_mem1_after_mem2);
-    MYRUN(memxor2_mem1_before_mem2_overlap);
-    MYRUN(memxor2_mem1_after_mem2_overlap);
-    MYRUN(memxor2_mem1_before_mem2_dst_in_the_gap_after_mem1_end);
-    MYRUN(memxor2_mem1_before_mem2_dst_in_the_gap_before_mem1_end);
-    MYRUN(memxor2_mem1_before_mem2_dst_in_the_mid);
+    fprintf(stdout, "* XOR\n");
+    ASSERT(USED_MAX < BUFSIZ);
+    for (i = 0; i < NTESTS; i++)
+        run(tests[i].name, tests[i].func, setup, NULL);
+    fprintf(stdout, "\n");
 }
