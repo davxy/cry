@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/davxy/cry.svg?branch=master)](https://travis-ci.org/davxy/cry)
+[![Build Status](https://travis-ci.com/crylib/cry.svg?branch=master)](https://travis-ci.com/crylib/cry)
 [![Coverage Status](https://coveralls.io/repos/github/davxy/cry/badge.svg?branch=master)](https://coveralls.io/github/davxy/cry?branch=master)
 
 
