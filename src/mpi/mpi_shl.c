@@ -6,8 +6,11 @@
 int cry_mpi_shld(cry_mpi *a, int n)
 {
     int x, res;
+    cry_mpi_digit *top, *bottom;
 
-    if (n <= 0)
+    if (n < 0)
+        return cry_mpi_shrd(a, -n);
+    if (n == 0 || cry_mpi_is_zero(a) != 0)
         return 0;
 
     /* grow to fit the new digits */
@@ -16,20 +19,16 @@ int cry_mpi_shld(cry_mpi *a, int n)
             return res;
     }
 
-    {
-        cry_mpi_digit *top, *bottom;
+    a->used += n;
+    top = a->data + a->used - 1;
+    bottom = (a->data + a->used - 1) - n;
+    for (x = a->used - 1; x >= n; x--)
+        *top-- = *bottom--;
 
-        a->used += n;
-        top = a->data + a->used - 1;
-        bottom = (a->data + a->used - 1) - n;
-        for (x = a->used - 1; x >= n; x--)
-            *top-- = *bottom--;
-
-        /* zero the lower digits */
-        top = a->data;
-        for (x = 0; x < n; x++)
-            *top++ = 0;
-    }
+    /* zero the lower digits */
+    top = a->data;
+    for (x = 0; x < n; x++)
+        *top++ = 0;
     return 0;
 }
 
@@ -41,11 +40,17 @@ int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n)
     cry_mpi_digit d;
     int res;
 
+    if (n < 0)
+        return cry_mpi_shr(c, a, -n);
+
     /* copy */
     if (a != c) {
         if ((res = cry_mpi_copy(c, a)) != 0)
             return res;
     }
+
+    if (n == 0 || cry_mpi_is_zero(a) != 0)
+        return 0;
 
     if (c->alloc < (c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) {
         if ((res = cry_mpi_grow(c,
