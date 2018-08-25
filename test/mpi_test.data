@@ -30,12 +30,12 @@ mpi_set_int
 # p1 : return value (number of bits)
 ################################################################################
 
-MPI count bits
+Count bits
 mpi_count_bits
 1943
 13
 
-MPI count bits zero
+Count bits zero
 mpi_count_bits
 00
 0
@@ -46,36 +46,82 @@ mpi_count_bits
 # p1 : return value (number of bytes)
 ################################################################################
 
-MPI count bytes
+Count bytes
 mpi_count_bytes
 1943
 2
 
-MPI count bytes zero
+Count bytes zero
 mpi_count_bytes
 00
 0
 
 ################################################################################
 # Load and store string
-# p0 : input/output value as hex string
-# p1 : return value
+# p0 : input value as hex string
+# p1 : output value as hex string
+# p2 : return value
 ################################################################################
 
-MPI load and store zero as string
+Load and store zero as string
 mpi_load_store_str
-00
+0
+0
 0
 
-MPI load and store positive string
+Load and store positive string with even length
 mpi_load_store_str
+123456789abcdef00102030405060708090a0b0c0d0e0f
 123456789abcdef00102030405060708090a0b0c0d0e0f
 0
 
-MPI load and store bad length string
+Load and store positive string with odd length
 mpi_load_store_str
 abc
--1
+abc
+0
+
+Load and store positive string with single zero prefix
+mpi_load_store_str
+0abc
+abc
+0
+
+Load and store positive string with multi zero prefix
+mpi_load_store_str
+0000000000000000abc
+abc
+0
+
+Load and store negative zero as string
+mpi_load_store_str
+-0
+0
+0
+
+Load and store negative string with even length
+mpi_load_store_str
+-123456789abcdef00102030405060708090a0b0c0d0e0f
+-123456789abcdef00102030405060708090a0b0c0d0e0f
+0
+
+Load and store negative string with odd length
+mpi_load_store_str
+-abc
+-abc
+0
+
+Load and store negative string with single zero prefix
+mpi_load_store_str
+-0abc
+-abc
+0
+
+Load and store negative string with multi zero prefix
+mpi_load_store_str
+-0000000000000000abc
+-abc
+0
 
 ################################################################################
 # Absolute value
@@ -83,20 +129,25 @@ abc
 # p1 : output value as hex string
 ################################################################################
 
-MPI abs positive value
+Absolute value positive input
 mpi_abs
 1234
 1234
 
-MPI abs negative value
+Absolute value negative input
 mpi_abs
 -1234
 1234
 
-MPI abs negative zero
+Absolute value zero
 mpi_abs
--00
-00
+0
+0
+
+Absolute value negative zero
+mpi_abs
+-0
+0
 
 ################################################################################
 # Comparison
@@ -142,6 +193,68 @@ mpi_cmp
 -1
 
 ################################################################################
+# Left shift
+# p0 : input value as hex string
+# p1 : number of bits
+# p2 : output value as hex string
+################################################################################
+
+Shift left zero
+mpi_shl
+0
+123
+0
+
+Shift left no expand
+mpi_shl
+1248
+1
+2490
+
+Shift left expand
+mpi_shl
+1248
+513
+249000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+Shift left by a negative quantity (shl -> shr)
+mpi_shl
+1248
+-1
+924
+
+################################################################################
+# Shift right
+# p0 : input value as hex string
+# p1 : number of bits
+# p2 : output value as hex string
+################################################################################
+
+Shift right zero
+mpi_shr
+0
+123
+0
+
+Shift right
+mpi_shr
+1248
+1
+924
+
+Shift right to zero
+mpi_shr
+1248
+513
+0
+
+Shift right by a negative quantity (shr -> shl)
+mpi_shr
+1248
+-1
+2490
+
+################################################################################
 # Addition
 # p0 : first input value as hex string
 # p1 : second input value as hex string
@@ -182,7 +295,7 @@ Add opposite
 mpi_add
 -23424a98719c87431513cc276f4238941d23db48976234
 23424a98719c87431513cc276f4238941d23db48976234
-00
+0
 
 ################################################################################
 # Subtraction
@@ -225,4 +338,4 @@ Sub two equal values
 mpi_sub
 ab123874298346127438787138743217688787518234532d641329727398496325
 ab123874298346127438787138743217688787518234532d641329727398496325
-00
+0
