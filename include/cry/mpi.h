@@ -56,8 +56,7 @@ int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s);
 
 int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s);
 
-int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s,
-                      size_t size);
+int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s);
 
 int cry_mpi_init_list(cry_mpi *a, ...);
 

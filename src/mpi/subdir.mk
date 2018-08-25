@@ -20,9 +20,7 @@ objs-y := mpi_core.o \
           mpi_shl.o \
           mpi_shr.o \
           mpi_bin.o \
-          mpi_init_str.o \
-          mpi_load_str.o \
-          mpi_store_str.o \
+          mpi_str.o \
           mpi_exp.o \
 		  mpi_mod_exp.o \
           mpi_gcd.o \
