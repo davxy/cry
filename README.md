@@ -1,10 +1,12 @@
 [![Build Status](https://travis-ci.com/crylib/cry.svg?branch=master)](https://travis-ci.com/crylib/cry)
 [![Coverage Status](https://coveralls.io/repos/github/crylib/cry/badge.svg?branch=master)](https://coveralls.io/github/crylib/cry?branch=master)
 
-CRY(T_T)
-========
+CRY
+===
 
-A small crypto library.
+CRY is a small, comprehensive and portable cryptographic library prividing
+a good collection of ciphers, hash functions, chaining modes, pseudo-random
+number generators and checksums.
 
 
 Multiple precision integers
