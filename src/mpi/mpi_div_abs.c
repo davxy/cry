@@ -95,17 +95,6 @@ cleanup:
 
 #define MP_MASK ((cry_mpi_digit)-1)
 
-static int cry_mpi_mul_dig(cry_mpi *r, const cry_mpi *a, cry_mpi_digit d)
-{
-    cry_mpi b;
-
-    b.data = &d;
-    b.used = 1;
-    b.alloc = 1;
-    b.sign = 0;
-    return cry_mpi_mul(r, a, &b);
-}
-
 int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
                     const cry_mpi *b)
 {

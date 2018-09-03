@@ -14,6 +14,7 @@ objs-y := mpi_core.o \
           mpi_mul_baseline.o \
           mpi_mul_comba.o \
           mpi_mul_karatsuba.o \
+		  mpi_mul_toom3.o \
 		  mpi_div.o \
           mpi_div_abs.o \
 		  mpi_sqr.o \

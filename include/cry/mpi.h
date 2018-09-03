@@ -115,6 +115,8 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
+int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+
 
 
 /*
@@ -165,6 +167,8 @@ int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max);
 int cry_mpi_prime(cry_mpi *a, unsigned int bits, unsigned int *iter);
 
 int cry_mpi_is_prime(const cry_mpi *a);
+
+int cry_mpi_mul_dig(cry_mpi *r, const cry_mpi *a, cry_mpi_digit b);
 
 #ifdef __cplusplus
 }

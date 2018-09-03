@@ -46,7 +46,7 @@ cflags-y += -DNDEBUG
 ifeq ($(CRY_SMALL_SIZE),y)
 cflags-y += -Os
 else
-cflags-y += -O3
+cflags-y += -O3 -funroll-loops
 endif
 endif
 
