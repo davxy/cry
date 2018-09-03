@@ -16,6 +16,7 @@ Multiple precision integers
 - GCD and LCM
 - Probabilistic prime numbers generator (Miller-Rabin)
 - Random mpi generator
+- Comba, Karatsuba and Toom-Cook-3 multipliers
 
 
 Symmetric ciphers

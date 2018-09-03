@@ -25,6 +25,7 @@ Given a version number MAJOR.MINOR.PATCH
 --------------------
 
 - Project released under the MIT license
+- MPI Toom-Cook-3 multiplier
 
 [0.0.6] - 2017-07-09
 --------------------
