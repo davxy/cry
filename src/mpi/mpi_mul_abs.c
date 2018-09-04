@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #define KARATSUBA_CUTOFF 64
-#define TOOM3_CUTOFF     356
+#define TOOM3_CUTOFF     300
 
 int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
