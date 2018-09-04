@@ -47,18 +47,49 @@ static int mul3(cry_mpi *a)
     return res;
 }
 
+/*
+ * Based on Tudor Jebelean "exact division" algorithm.
+ */
 static int div3(cry_mpi *a)
 {
-    int res;
-    cry_mpi b;
+    int res, ix;
+    cry_mpi q;
+    cry_mpi_dword w, t;
+    cry_mpi_digit b;
 
-    res = cry_mpi_init(&b);
-    if (res == 0) {
-        res = cry_mpi_shr(&b, a, 1);
-        if (res == 0)
-            res = cry_mpi_sub(a, &b, a);
-        cry_mpi_clear(&b);
+    /* b = 2**DIGIT_BIT / 3 */
+    b = (((cry_mpi_dword)1) << CRY_MPI_DIGIT_BITS) / 3;
+
+    if ((res = cry_mpi_init_size(&q, a->used)) != 0)
+        return res;
+
+    q.used = a->used;
+    q.sign = a->sign;
+    w = 0;
+    for (ix = a->used - 1; ix >= 0; ix--) {
+        w = (w << ((cry_mpi_dword)CRY_MPI_DIGIT_BITS)) | a->data[ix];
+        if (w >= 3) {
+            /* multiply w by 1/3 */
+            t = (w * ((cry_mpi_dword)b)) >> CRY_MPI_DIGIT_BITS;
+            /* now subtract 3*w/3 from w, to get the remainder */
+            w -= t+t+t;
+            /*
+             * fixup the remainder as required since the optimization
+             * is not exact.
+             */
+            while (w >= 3) {
+               t += 1;
+               w -= 3;
+            }
+        } else {
+            t = 0;
+        }
+        q.data[ix] = (cry_mpi_digit)t;
     }
+
+    cry_mpi_adjust(&q);
+    cry_mpi_swap(&q, a);
+    cry_mpi_clear(&q);
     return res;
 }
 
@@ -74,7 +105,6 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
        return res;
     }
 
-    /* B */
     B = CRY_MIN(a->used, b->used) / 3;
 
     /* a = a2 * B**2 + a1 * B + a0 */
@@ -227,7 +257,7 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     if ((res = div3(&w3)) != 0)
         goto e;
 
-    /* At this point shift W[n] by B*n */
+    /* Reconstruct by shifting wn by B*n */
     if ((res = cry_mpi_shld(&w1, 1*B)) != 0)
         goto e;
     if ((res = cry_mpi_shld(&w2, 2*B)) != 0)
@@ -251,3 +281,4 @@ e:  cry_mpi_clear_list(&w0, &w1, &w2, &w3, &w4,
                        &b2, &tmp1, &tmp2, NULL);
     return res;
 }
+
