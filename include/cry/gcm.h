@@ -31,6 +31,9 @@ struct cry_gcm_ctx {
     unsigned int               ciph_len;
 };
 
+typedef struct cry_gcm_ctx cry_gcm_ctx;
+
+
 #ifdef __cplusplus
 extern "C"{
 #endif

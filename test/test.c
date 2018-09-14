@@ -34,7 +34,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
 
     file = fopen(datafile, "r");
     if (file == NULL) {
-        fprintf(stderr, "Error: data file \"%s\" not found", datafile);
+        fprintf(stderr, "Error: data file \"%s\" not found\n", datafile);
         return;
     }
 

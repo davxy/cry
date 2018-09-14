@@ -68,6 +68,9 @@ void run(const char *name, void (* test)(void),
 #define ASSERT_EQ_BUF(b1, b2, len) \
     ASSERT(memcmp(b1, b2, len) == 0)
 
+#define ASSERT_NE_BUF(b1, b2, len) \
+    ASSERT(memcmp(b1, b2, len) != 0)
+
 #define ASSERT_EQ_MPI(mpi, bin, siz) do { \
     ASSERT_EQ(cry_mpi_count_bytes(mpi), siz); \
     ASSERT_EQ(BUFSIZ >= siz, 1); \
