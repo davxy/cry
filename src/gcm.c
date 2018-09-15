@@ -5,11 +5,7 @@
 #include <stdint.h>
 
 
-#define RSHIFT_WORD(x) \
-    ((((x) & 0xfefefefeUL) >> 1U) | \
-     (((x) & 0x00010101UL) << 15U))
-
-#define GMAC_POLY 0xE1UL
+#define POLY 0xE1UL
 
 static void gcm_gf_mul(unsigned char *x, const unsigned char *y)
 {
@@ -19,7 +15,10 @@ static void gcm_gf_mul(unsigned char *x, const unsigned char *y)
     unsigned char b;
     size_t i, j;
 
-    memcpy(V, x, CRY_GCM_BLOCK_SIZE);
+    CRY_READ32_BE(V[0], x);
+    CRY_READ32_BE(V[1], x+4);
+    CRY_READ32_BE(V[2], x+8);
+    CRY_READ32_BE(V[3], x+12);
     for (i = 0; i < CRY_GCM_BLOCK_SIZE; i++) {
         b = y[i];
         for (j = 0; j < 8; j++, b <<= 1) {
@@ -31,23 +30,17 @@ static void gcm_gf_mul(unsigned char *x, const unsigned char *y)
                 Z[3] ^= V[3];
             }
             /* GF double (shift left) */
-#ifndef CRY_BIG_ENDIAN
-            /* shift uses big endian representation */
-            mask = (~((V[3] >> 24U) & 1U)) + 1;
-            V[3] = RSHIFT_WORD(V[3]) | ((V[2] >> 17) & 0x80U);
-            V[2] = RSHIFT_WORD(V[2]) | ((V[1] >> 17) & 0x80U);
-            V[1] = RSHIFT_WORD(V[1]) | ((V[0] >> 17) & 0x80U);
-            V[0] = RSHIFT_WORD(V[0]) ^ (mask & GMAC_POLY);
-#else
             mask = (~(V[3] & 1U)) + 1;
             V[3] = (V[3] >> 1U) | ((V[2] & 1) << 31U);
             V[2] = (V[2] >> 1U) | ((V[1] & 1) << 31U);
             V[1] = (V[1] >> 1U) | ((V[0] & 1) << 31U);
-            V[0] = (V[0] >> 1U) ^ (mask & (GMAC_POLY << 24U));
-#endif
+            V[0] = (V[0] >> 1U) ^ (mask & (POLY << 24U));
         }
     }
-    memcpy(x, Z, CRY_GCM_BLOCK_SIZE);
+    CRY_WRITE32_BE(Z[0], x);
+    CRY_WRITE32_BE(Z[1], x + 4);
+    CRY_WRITE32_BE(Z[2], x + 8);
+    CRY_WRITE32_BE(Z[3], x + 12);
 }
 
 static void gcm_hash(unsigned char *hash, const unsigned char *key,
