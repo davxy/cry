@@ -5,64 +5,46 @@
 #include <stdint.h>
 
 
-static void gcm_gf_add(unsigned char *r, const unsigned char *x,
-                       const unsigned char *y)
-{
-    uint32_t *rw = (uint32_t *) r;
-    const uint32_t *xw = (const uint32_t *) x;
-    const uint32_t *yw = (const uint32_t *) y;
-
-    rw[0] = xw[0] ^ yw[0];
-    rw[1] = xw[1] ^ yw[1];
-    rw[2] = xw[2] ^ yw[2];
-    rw[3] = xw[3] ^ yw[3];
-}
-
 #define RSHIFT_WORD(x) \
     ((((x) & 0xfefefefeUL) >> 1U) | \
      (((x) & 0x00010101UL) << 15U))
 
 #define GMAC_POLY 0xE1UL
 
-
-static void gcm_gf_shift(unsigned char *r, const unsigned char *x)
-{
-    uint32_t mask;
-    uint32_t *rw = (uint32_t *) r;
-    const uint32_t *xw = (const uint32_t *) x;
-
-    /* Shift uses big-endian representation. */
-#ifndef CRY_BIG_ENDIAN
-    mask = (~((xw[3] >> 24U) & 1U)) + 1;
-    rw[3] = RSHIFT_WORD(xw[3]) | ((xw[2] >> 17) & 0x80U);
-    rw[2] = RSHIFT_WORD(xw[2]) | ((xw[1] >> 17) & 0x80U);
-    rw[1] = RSHIFT_WORD(xw[1]) | ((xw[0] >> 17) & 0x80U);
-    rw[0] = RSHIFT_WORD(xw[0]) ^ (mask & GMAC_POLY);
-#else
-    mask = (~(xw[3] & 1U)) + 1;
-    rw[3] = (xw[3] >> 1U) | ((xw[2] & 1) << 31U);
-    rw[2] = (xw[2] >> 1U) | ((xw[1] & 1) << 31U);
-    rw[1] = (xw[1] >> 1U) | ((xw[0] & 1) << 31U);
-    rw[0] = (xw[0] >> 1U) ^ (mask & (GMAC_POLY << 24U));
-#endif
-}
-
 static void gcm_gf_mul(unsigned char *x, const unsigned char *y)
 {
-    unsigned char V[CRY_GCM_BLOCK_SIZE];
-    unsigned char Z[CRY_GCM_BLOCK_SIZE];
+    uint32_t V[CRY_GCM_BLOCK_SIZE >> 2];
+    uint32_t Z[CRY_GCM_BLOCK_SIZE >> 2] = {0};
+    uint32_t mask;
     unsigned char b;
     size_t i, j;
 
     memcpy(V, x, CRY_GCM_BLOCK_SIZE);
-    memset(Z, 0, CRY_GCM_BLOCK_SIZE);
-
     for (i = 0; i < CRY_GCM_BLOCK_SIZE; i++) {
         b = y[i];
         for (j = 0; j < 8; j++, b <<= 1) {
-            if (b & 0x80)
-                gcm_gf_add(Z, Z, V);
-            gcm_gf_shift(V, V);
+            if (b & 0x80) {
+                /* GF add (xor) */
+                Z[0] ^= V[0];
+                Z[1] ^= V[1];
+                Z[2] ^= V[2];
+                Z[3] ^= V[3];
+            }
+            /* GF double (shift left) */
+#ifndef CRY_BIG_ENDIAN
+            /* shift uses big endian representation */
+            mask = (~((V[3] >> 24U) & 1U)) + 1;
+            V[3] = RSHIFT_WORD(V[3]) | ((V[2] >> 17) & 0x80U);
+            V[2] = RSHIFT_WORD(V[2]) | ((V[1] >> 17) & 0x80U);
+            V[1] = RSHIFT_WORD(V[1]) | ((V[0] >> 17) & 0x80U);
+            V[0] = RSHIFT_WORD(V[0]) ^ (mask & GMAC_POLY);
+#else
+            mask = (~(V[3] & 1U)) + 1;
+            V[3] = (V[3] >> 1U) | ((V[2] & 1) << 31U);
+            V[2] = (V[2] >> 1U) | ((V[1] & 1) << 31U);
+            V[1] = (V[1] >> 1U) | ((V[0] & 1) << 31U);
+            V[0] = (V[0] >> 1U) ^ (mask & (GMAC_POLY << 24U));
+#endif
         }
     }
     memcpy(x, Z, CRY_GCM_BLOCK_SIZE);
