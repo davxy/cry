@@ -239,18 +239,18 @@ static void dispatch(int argc, char *argv[])
     else if (strcmp(test, "aes_gcm_decrypt") == 0)
         aes_gcm_decrypt(argc, argv);
     else
-        fprintf(stdout, "Test '%s' not defined\n", test);
+        printf("Test '%s' not defined\n", test);
 }
 
 void aes_test(void)
 {
-    fprintf(stdout, "* AES NIST AESAVS KAT\n");
+    printf("* AES NIST AESAVS KAT\n");
     func_test("aes_test.data", dispatch);
-    fprintf(stdout, "* AES GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
+    printf("* AES GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
     func_test("aes_gcm_en_test.data", dispatch);
-    fprintf(stdout, "* AES GCM NIST Decrypt Validation (iv,txt,aad,mac)\n");
+    printf("* AES GCM NIST Decrypt Validation (iv,txt,aad,mac)\n");
     func_test("aes_gcm_de_test.data", dispatch);
-    fprintf(stdout, "* AES-192 GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
+    printf("* AES-192 GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
     func_test("aes_gcm_en_192_test.data", dispatch);
-    fprintf(stdout, "\n");
+    printf("\n");
 }

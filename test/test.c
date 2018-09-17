@@ -34,7 +34,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
 
     file = fopen(datafile, "r");
     if (file == NULL) {
-        fprintf(stderr, "Error: data file \"%s\" not found\n", datafile);
+        printf("Error: data file \"%s\" not found\n", datafile);
         return;
     }
 
@@ -46,7 +46,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
             continue;
         left = sizeof(argbuf);
         if (test_verb != 0)
-            fprintf(stdout, "    %s\n", argbuf);
+            printf("    %s\n", argbuf);
         /* Collect test function name and parameters */
         cnt = strlen(argbuf) + 1;
         curr = argbuf + cnt;
@@ -65,7 +65,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
         dispatch(i, params);
         test_runs++;
         if (test_fails != fails)
-            fprintf(stderr, "      %s\n", argbuf);
+            printf("      %s\n", argbuf);
     }
     fclose(file);
 }
@@ -84,7 +84,7 @@ void run(const char *name, void (* test)(void),
     fails = test_fails;
     test();
     if (test_fails != fails)
-        fprintf(stderr, "      %s\n", name);
+        printf("      %s\n", name);
     if (teardown != NULL)
         teardown();
 }

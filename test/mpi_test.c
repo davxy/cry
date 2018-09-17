@@ -189,7 +189,7 @@ static void mpi_dispatch(int argc, char *argv[])
     else if (strcmp(test, "mpi_sub") == 0)
         mpi_sub(argc, argv);
     else
-        fprintf(stderr, "Test '%s' not defined\n", test);
+        printf("Test '%s' not defined\n", test);
 
     mpi_teardown();
 }
@@ -198,7 +198,7 @@ static void mpi_dispatch(int argc, char *argv[])
 
 void mpi_test(void)
 {
-    fprintf(stderr, "* MPI\n");
+    printf("* MPI\n");
     func_test("mpi_test.data", mpi_dispatch);
-    fprintf(stderr, "\n");
+    printf("\n");
 }

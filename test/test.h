@@ -36,7 +36,7 @@ void run(const char *name, void (* test)(void),
 #define ASSERT(test) do { \
     if ((test) == 0) { \
         test_fails++; \
-        TRACE(">>> ASSERTION FAIL (%s:%d): %s\n", \
+        printf("!!! ASSERTION FAIL (%s:%d): %s\n", \
                 __FILE__, __LINE__, #test); \
         return; \
     } \
@@ -65,37 +65,21 @@ void run(const char *name, void (* test)(void),
     ASSERT_EQ((e), 0)
 
 
-#ifdef NDEBUG
-
-#define TRACE(fmt, ...)
-#define PRINT_HEX(msg, buf, siz)
-#define PRINT_ASC(msg, buf, siz)
-#define PRINT_MPI(msg, mpi, rad)
-
-#else /* !NDEBUG */
-
-# define TRACE(...) do { \
-    fprintf(stdout, __VA_ARGS__); \
-    fflush(stdout); \
-    } while(0)
-
 # define PRINT_HEX(msg, buf, siz) do { \
     size_t __siz = siz; \
     unsigned char *__p = buf; \
-    if (msg) TRACE("%s: ", msg); \
-    while (__siz-- > 0) TRACE("%02x", *__p++); \
-    TRACE("\n"); \
+    if (msg) printf("%s: ", msg); \
+    while (__siz-- > 0) printf("%02x", *__p++); \
+    printf("\n"); \
     } while(0)
 
 # define PRINT_ASC(msg, buf, siz) \
-    TRACE("%s: %.*s\n", msg, (int)(siz), buf)
+    printf("%s: %.*s\n", msg, (int)(siz), buf)
 
 # define PRINT_MPI(msg, mpi, rad) do { \
-    TRACE("%s:\t", msg); \
+    printf("%s:\t", msg); \
     cry_mpi_print(mpi, rad); \
     } while(0)
-
-#endif /* NDEBUG */
 
 
 #endif /* _TEST_H_ */
