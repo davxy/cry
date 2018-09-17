@@ -2,8 +2,7 @@
 
 int test_runs;
 int test_fails;
-int test_cont;
-int test_stop;
+int test_verb;
 unsigned char g_buf[BUFSIZ];
 
 
@@ -31,6 +30,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
     char *curr;
     size_t left;
     static char argbuf[BUFSIZ];
+    int fails;
 
     file = fopen(datafile, "r");
     if (file == NULL) {
@@ -44,24 +44,49 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
             break;
         if (*argbuf == '#' || *argbuf == '\0')
             continue;
-        fprintf(stdout, "    %s\n", argbuf);
-        /* Collect test function name and parameters */
-        i = 0;
-        curr = argbuf;
         left = sizeof(argbuf);
+        if (test_verb != 0)
+            fprintf(stdout, "    %s\n", argbuf);
+        /* Collect test function name and parameters */
+        cnt = strlen(argbuf) + 1;
+        curr = argbuf + cnt;
+        left = sizeof(argbuf) - cnt;
+        i = 0;
         while ((ret = get_line(file, curr, left)) == 0) {
             if (strlen(curr) == 0)
                 break; /* last parameter read */
             params[i] = curr;
-            cnt = strlen(params[i])+1;
+            cnt = strlen(params[i]) + 1;
             curr += cnt;
             left -= cnt;
             i++;
         }
+        fails = test_fails;
         dispatch(i, params);
         test_runs++;
+        if (test_fails != fails)
+            fprintf(stderr, "      %s\n", argbuf);
     }
     fclose(file);
+}
+
+
+void run(const char *name, void (* test)(void),
+         void (* setup)(void), void (* teardown)(void))
+{
+    int fails;
+
+    test_runs++;
+    if (test_verb != 0)
+        printf("    %s\n", name);
+    if (setup != NULL)
+        setup();
+    fails = test_fails;
+    test();
+    if (test_fails != fails)
+        fprintf(stderr, "      %s\n", name);
+    if (teardown != NULL)
+        teardown();
 }
 
 
@@ -98,23 +123,21 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
 }
 
 
-void run(const char *name, void (* test)(void),
-         void (* setup)(void), void (* teardown)(void))
-{
-    test_runs++;
-    printf("    %s\n", name);
-    if (setup != NULL)
-        setup();
-    test();
-    if (teardown != NULL)
-        teardown();
-}
-
 void version_test(void);
 void memxor_test(void);
 void base64_test(void);
 void mpi_test(void);
 void aes_test(void);
+
+static const char *tests_str[] = {
+    "version",
+    "memxor",
+    "base64",
+    "mpi",
+    "aes",
+};
+
+static char tests_exe[ARLEN(tests_str)];
 
 static test_func_t tests[] = {
     version_test,
@@ -149,20 +172,35 @@ static test_func_t tests[] = {
 
 int main(int argc, char *argv[])
 {
-    int i;
+    int i, j;
+
+    if (argc > 1) {
+        if (strcmp(argv[1], "-list") == 0) {
+            for (i = 0; i < ARLEN(tests_str); i++)
+                printf("%s\n", tests_str[i]);
+            return 0;
+        }
+        for (i = 1; i < argc; i++) {
+            for (j = 0; j < ARLEN(tests_str); j++) {
+                if (strcmp(argv[i], tests_str[j]) == 0)
+                    tests_exe[j] = 1;
+            }
+        }
+        test_verb = 1;
+    } else {
+        memset(tests_exe, 1, ARLEN(tests_exe));
+        test_verb = 0;
+    }
 
     /* Reset test variables */
     test_runs = 0;
     test_fails = 0;
-    test_cont = 0;
-    test_stop = 0;
 
     printf("\nCRY(T_T)EST\n\n");
 
     for (i = 0; i < TESTS_NUM; i++) {
-        tests[i]();
-        if (test_stop != 0)
-            break;
+        if (tests_exe[i] == 1)
+            tests[i]();
     }
 
     printf("\n");

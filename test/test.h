@@ -9,8 +9,6 @@
 extern int test_runs;
 extern int test_fails;
 extern int test_level;
-extern int test_cont;
-extern int test_stop;
 extern unsigned char g_buf[BUFSIZ];
 
 
@@ -35,27 +33,12 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void));
 
-#define RUNX(test, setup, teardown) do { \
-    run(#test, test, setup, teardown); \
-    if (test_stop == 1) return; \
-    } while(0)
-
-#define RUN(test) RUNX(test, NULL, NULL)
-
-
-#define CONTINUE(exp) do { \
-    int __tmp = test_cont; \
-    test_cont = 1; \
-    exp; \
-    test_cont = __tmp; \
-    } while (0)
-
 #define ASSERT(test) do { \
     if ((test) == 0) { \
         test_fails++; \
         TRACE(">>> ASSERTION FAIL (%s:%d): %s\n", \
                 __FILE__, __LINE__, #test); \
-        if (test_cont == 0) { test_stop = 1; return; } \
+        return; \
     } \
     } while (0)
 
