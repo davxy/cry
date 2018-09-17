@@ -250,5 +250,7 @@ void aes_test(void)
     func_test("aes_gcm_en_test.data", dispatch);
     fprintf(stdout, "* AES GCM NIST Decrypt Validation (iv,txt,aad,mac)\n");
     func_test("aes_gcm_de_test.data", dispatch);
+    fprintf(stdout, "* AES-192 GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
+    func_test("aes_gcm_en_192_test.data", dispatch);
     fprintf(stdout, "\n");
 }
