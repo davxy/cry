@@ -1,9 +1,58 @@
 #include "test.h"
 
-int test_runs;
-int test_fails;
-int test_verb;
+void version_test(void);
+void memxor_test(void);
+void base64_test(void);
+void mpi_test(void);
+void aes_test(void);
+
+
+static int g_runs;
+int g_fails;
+int g_verbose;
 unsigned char g_buf[BUFSIZ];
+
+static const char *g_test_str[] = {
+    "version",
+    "memxor",
+    "base64",
+    "mpi",
+    "aes",
+};
+
+static char g_test_skip[ARLEN(g_test_str)];
+
+
+static test_func_t g_test_func[] = {
+    version_test,
+    memxor_test,
+    base64_test,
+    mpi_test,
+    aes_test,
+#if 0
+    TEST_ELEM(cbc),
+    TEST_ELEM(ctr),
+    TEST_ELEM(gcm),
+#endif
+#if 0
+    TEST_ELEM(des),
+    TEST_ELEM(crc),
+    TEST_ELEM(md5),
+    TEST_ELEM(sha256),
+    TEST_ELEM(cmac),
+    TEST_ELEM(sum),
+    TEST_ELEM(rsa),
+    TEST_ELEM(rand),
+    TEST_ELEM(dh),
+    TEST_ELEM(dsa),
+    TEST_ELEM(ecp),
+    TEST_ELEM(ecdsa),
+    TEST_ELEM(ecdh),
+#endif
+};
+
+#define NTESTS  ARLEN(g_test_func)
+
 
 
 static int get_line(FILE *f, char *buf, size_t len)
@@ -45,7 +94,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
         if (*argbuf == '#' || *argbuf == '\0')
             continue;
         left = sizeof(argbuf);
-        if (test_verb != 0)
+        if (g_verbose != 0)
             printf("    %s\n", argbuf);
         /* Collect test function name and parameters */
         cnt = strlen(argbuf) + 1;
@@ -61,10 +110,10 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
             left -= cnt;
             i++;
         }
-        fails = test_fails;
+        fails = g_fails;
         dispatch(i, params);
-        test_runs++;
-        if (test_fails != fails)
+        g_runs++;
+        if (g_fails != fails)
             printf("      %s\n", argbuf);
     }
     fclose(file);
@@ -76,14 +125,14 @@ void run(const char *name, void (* test)(void),
 {
     int fails;
 
-    test_runs++;
-    if (test_verb != 0)
+    g_runs++;
+    if (g_verbose != 0)
         printf("    %s\n", name);
     if (setup != NULL)
         setup();
-    fails = test_fails;
+    fails = g_fails;
     test();
-    if (test_fails != fails)
+    if (g_fails != fails)
         printf("      %s\n", name);
     if (teardown != NULL)
         teardown();
@@ -123,90 +172,81 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
 }
 
 
-void version_test(void);
-void memxor_test(void);
-void base64_test(void);
-void mpi_test(void);
-void aes_test(void);
 
-static const char *tests_str[] = {
-    "version",
-    "memxor",
-    "base64",
-    "mpi",
-    "aes",
-};
+static void help(const char *arg)
+{
+    if (arg != NULL)
+        printf("Error: unsupported option '%s'\n", arg);
+    printf("\nUsage: test [options] [tests]\n");
+    printf("  -h    help\n");
+    printf("  -l    show cases\n");
+    printf("  -v    verbose\n");
+    printf("\n");
+    exit(0);
+}
 
-static char tests_exe[ARLEN(tests_str)];
+static void show_cases(void)
+{
+    int i;
 
-static test_func_t tests[] = {
-    version_test,
-    memxor_test,
-    base64_test,
-    mpi_test,
-    aes_test,
-#if 0
-    TEST_ELEM(cbc),
-    TEST_ELEM(ctr),
-    TEST_ELEM(gcm),
-#endif
-#if 0
-    TEST_ELEM(des),
-    TEST_ELEM(crc),
-    TEST_ELEM(md5),
-    TEST_ELEM(sha256),
-    TEST_ELEM(cmac),
-    TEST_ELEM(sum),
-    TEST_ELEM(rsa),
-    TEST_ELEM(rand),
-    TEST_ELEM(dh),
-    TEST_ELEM(dsa),
-    TEST_ELEM(ecp),
-    TEST_ELEM(ecdsa),
-    TEST_ELEM(ecdh),
-#endif
-};
+    printf("\nTest cases:\n");
+    for (i = 0; i < NTESTS; i++)
+        printf("  %s\n", g_test_str[i]);
+    printf("\n");
+    exit(0);
+}
 
-#define TESTS_NUM   (sizeof(tests)/sizeof(*tests))
+static void parse_args(int argc, char *argv[])
+{
+    int i = 1, j;
 
+    while (i < argc) {
+        if (argv[i][0] != '-')
+            break;
+        if (strcmp(argv[i], "-v") == 0)
+            g_verbose = 1;        
+        else if (strcmp(argv[i], "-h") == 0)
+            help(NULL);
+        else if (strcmp(argv[i], "-l") == 0)
+            show_cases();
+        else
+            help(argv[i]);
+        i++;
+    }
+    /* Eventually disable some tests */
+    while (i < argc) {
+        memset(g_test_skip, 1, sizeof(g_test_skip));
+        for (j = 0; j < NTESTS; j++) {
+            if (strcmp(argv[i], g_test_str[j]) == 0)
+                g_test_skip[j] = 0;
+        }
+        i++;
+    }
+}
 
 int main(int argc, char *argv[])
 {
-    int i, j;
+    int i;
 
-    if (argc > 1) {
-        if (strcmp(argv[1], "-list") == 0) {
-            for (i = 0; i < ARLEN(tests_str); i++)
-                printf("%s\n", tests_str[i]);
-            return 0;
-        }
-        for (i = 1; i < argc; i++) {
-            for (j = 0; j < ARLEN(tests_str); j++) {
-                if (strcmp(argv[i], tests_str[j]) == 0)
-                    tests_exe[j] = 1;
-            }
-        }
-        test_verb = 1;
-    } else {
-        memset(tests_exe, 1, ARLEN(tests_exe));
-        test_verb = 0;
-    }
-
-    /* Reset test variables */
-    test_runs = 0;
-    test_fails = 0;
+    /* Reset global variables, just in case... */
+    g_runs = 0;
+    g_fails = 0;
+    g_verbose = 0;
+    memset(g_test_skip, 0, sizeof(g_test_skip));
+    /* Parse arguments */
+    parse_args(argc, argv);
 
     printf("\nCRY(T_T)EST\n\n");
 
-    for (i = 0; i < TESTS_NUM; i++) {
-        if (tests_exe[i] == 1)
-            tests[i]();
+    for (i = 0; i < NTESTS; i++) {
+        if (g_test_skip[i] == 0)
+            g_test_func[i]();
     }
 
     printf("\n");
-    printf("|| Tests: %d\n", test_runs);
-    printf("|| Fails: %d\n", test_fails);
+    printf("|| Tests: %d\n", g_runs);
+    printf("|| Fails: %d\n", g_fails);
     printf("\n-------------------------------------\n\n");
 
-    return (test_fails != 0);
+    return (g_fails != 0);
 }

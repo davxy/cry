@@ -3,12 +3,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include <stdlib.h>
 
-extern int test_runs;
-extern int test_fails;
-extern int test_level;
+extern int g_fails;
 extern unsigned char g_buf[BUFSIZ];
 
 
@@ -35,7 +32,7 @@ void run(const char *name, void (* test)(void),
 
 #define ASSERT(test) do { \
     if ((test) == 0) { \
-        test_fails++; \
+        g_fails++; \
         printf("!!! ASSERTION FAIL (%s:%d): %s\n", \
                 __FILE__, __LINE__, #test); \
         return; \
