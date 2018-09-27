@@ -83,13 +83,12 @@ VERSION=$VERSION-$FILEFMT
 #
 # Compiler
 #
-if [[ -e $COMPILER ]]
+if [[ ! -z $COMPILER ]]
 then
-    VERSION=$VERSION "-" $COMPILER
+    VERSION=$VERSION-$COMPILER
 fi
 
-RELEASE=$(date +"%y%m%d")
-VERSION=$VERSION-$RELEASE
+VERSION=$VERSION-$(date +"%y%m%d")
 
 #
 # Add files to the archive
