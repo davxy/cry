@@ -214,13 +214,15 @@ static void parse_args(int argc, char *argv[])
         i++;
     }
     /* Eventually disable some tests */
-    while (i < argc) {
+    if (i < argc) {
         memset(g_test_skip, 1, sizeof(g_test_skip));
-        for (j = 0; j < NTESTS; j++) {
-            if (strcmp(argv[i], g_test_str[j]) == 0)
-                g_test_skip[j] = 0;
-        }
-        i++;
+        do {
+            for (j = 0; j < NTESTS; j++) {
+                if (strcmp(argv[i], g_test_str[j]) == 0)
+                    g_test_skip[j] = 0;
+            }
+            i++;
+        } while (i < argc);
     }
 }
 
