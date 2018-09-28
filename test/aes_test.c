@@ -245,12 +245,8 @@ static void dispatch(int argc, char *argv[])
 void aes_test(void)
 {
     printf("* AES NIST AESAVS KAT\n");
-    func_test("aes_test.data", dispatch);
-    printf("* AES GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
-    func_test("aes_gcm_en_test.data", dispatch);
-    printf("* AES GCM NIST Decrypt Validation (iv,txt,aad,mac)\n");
-    func_test("aes_gcm_de_test.data", dispatch);
-    printf("* AES-192 GCM NIST Encrypt Validation (iv,txt,aad,mac)\n");
-    func_test("aes_gcm_en_192_test.data", dispatch);
+    func_test("aes_kat_test.data", dispatch);
+    printf("* AES NIST GCM Validation\n");
+    func_test("aes_gcm_test.data", dispatch);
     printf("\n");
 }
