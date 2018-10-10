@@ -49,4 +49,3 @@ void base64_test(void)
     func_test("base64_test.data", base64_dispatch);
     printf("\n");
 }
-

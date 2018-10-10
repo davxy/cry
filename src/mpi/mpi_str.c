@@ -13,7 +13,7 @@ static int load_str_hex(cry_mpi *a, const char *s)
     size_t i = 0, j = 0;
     char *bin, first = 0;
     size_t siz, len;
- 
+
     len = strlen(s);
     siz = len >> 1;
     if ((len & 0x01) != 0) {
