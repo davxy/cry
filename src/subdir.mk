@@ -18,5 +18,5 @@ objs-y := version.o \
 		  dsa.o \
 		  ecdsa.o
 
-subdirs-y += mpi crc prng sum ecp
+subdirs-y += mpi crc prng sum ecp classic
 

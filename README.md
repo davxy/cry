@@ -98,6 +98,14 @@ Hash
 - 8-bit trivial checksum
 
 
+Classical ciphers
+-----------------
+
+### Substitution ciphers
+
+- Hill cipher
+
+
 Utilities
 ---------
 

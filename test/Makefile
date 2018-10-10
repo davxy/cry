@@ -14,6 +14,7 @@ objs := \
 	base64_test.o \
 	mpi_test.o \
 	aes_test.o \
+	hill_test.o \
 #	gcm_test.o \
 	des_test.o \
 	crc_test.o \

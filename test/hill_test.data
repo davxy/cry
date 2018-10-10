@@ -1,0 +1,114 @@
+################################################################################
+# Encode
+# p0 : encrypt key
+# p1 : decrypt key
+# p2 : clear  text
+# p3 : cipher text
+################################################################################
+
+Encode 10 bytes, keylen=1
+hill_encrypt
+e9
+59
+48656c6c6f576f726c64
+88ed4c4c072f07c24c04
+
+Encode 10 bytes, keylen=4
+hill_encrypt
+66e94bd4
+049b818e
+48656c6c6f576f726c64
+9dbc54146991fced0c74
+
+Encode 10 bytes, keylen=8, trim to 4
+hill_encrypt
+66e94bd42089b6ac
+NULL
+48656c6c6f576f726c64
+9dbc54146991fced0c74
+
+Encode 10 bytes, keylen=9
+hill_encrypt
+2089b6acd093abe0c9
+70cbd7d98688d06f44
+48656c6c6f576f726c64
+d57444c1b593aa38b18030cc
+
+Encode 10 bytes, keylen=16
+hill_encrypt
+66e94bd4ef8a2c3b884cfa59ca342b2e
+8e43d7c47d149e6f083e5cfb44cc317e
+48656c6c6f576f726c64
+b11e40e056e1d4630cbc1088
+
+Encode 10 bytes, keylen=100
+hill_encrypt
+66e94bd4ef8a2c3b884cfa59ca342b2e58e2fccefa7e3061367f1d57a4e7455a0388dace60b6a392f328c2b971b2fe78f795aaab494b5923f7fd89ff948bc1e0200211214e7394da2089b6acd093abe0c94da219118e297d7b7ebcbcc9c388f28ade7d85
+a0ad8d59906f843cfa04ceb20315f2a923b4c101bc1a86249968b30a05b64d6e977a72fb26d3be3ea4777fed181f1598252917320d53f1a0fddb6adbac90b7dff421068bbd4ecf0bae2ca32c7da47354c2353dfedf2b11ca536687cd307472c686d3ce71
+48656c6c6f576f726c64
+a270828e7b5ed696fbb4
+
+Encode 10 bytes, keylen=101, trim to 100
+hill_encrypt
+66e94bd4ef8a2c3b884cfa59ca342b2e58e2fccefa7e3061367f1d57a4e7455a0388dace60b6a392f328c2b971b2fe78f795aaab494b5923f7fd89ff948bc1e0200211214e7394da2089b6acd093abe0c94da219118e297d7b7ebcbcc9c388f28ade7d8533
+a0ad8d59906f843cfa04ceb20315f2a923b4c101bc1a86249968b30a05b64d6e977a72fb26d3be3ea4777fed181f1598252917320d53f1a0fddb6adbac90b7dff421068bbd4ecf0bae2ca32c7da47354c2353dfedf2b11ca536687cd307472c686d3ce71
+48656c6c6f576f726c64
+a270828e7b5ed696fbb4
+
+################################################################################
+# Decode
+# p0 : encrypt key
+# p1 : decrypt key
+# p2 : cipher text
+# p3 : clear  text
+################################################################################
+
+Decode 10 bytes, keylen=1
+hill_decrypt
+e9
+59
+88ed4c4c072f07c24c04
+48656c6c6f576f726c64
+
+Decode 10 bytes, keylen=1, ikeygen
+hill_decrypt
+e9
+NULL
+88ed4c4c072f07c24c04
+48656c6c6f576f726c64
+
+Decode 10 bytes, keylen=4
+hill_decrypt
+66e94bd4
+049b818e
+9dbc54146991fced0c74
+48656c6c6f576f726c64
+
+Decode 12 bytes, keylen=9
+hill_decrypt
+2089b6acd093abe0c9
+70cbd7d98688d06f44
+d57444c1b593aa38b18030cc
+48656c6c6f576f726c640000
+
+Decode 12 bytes, keylen=9, ikeygen
+hill_decrypt
+07080b0c0d0f0d150b
+NULL
+c4d59529cc543d52a1bcb014
+48656c6c6f576f726c640000
+
+Decode 12 bytes, keylen=16
+hill_decrypt
+66e94bd4ef8a2c3b884cfa59ca342b2e
+8e43d7c47d149e6f083e5cfb44cc317e
+b11e40e056e1d4630cbc1088
+48656c6c6f576f726c640000
+
+Decode 10 bytes, keylen=100
+hill_decrypt
+66e94bd4ef8a2c3b884cfa59ca342b2e58e2fccefa7e3061367f1d57a4e7455a0388dace60b6a392f328c2b971b2fe78f795aaab494b5923f7fd89ff948bc1e0200211214e7394da2089b6acd093abe0c94da219118e297d7b7ebcbcc9c388f28ade7d85
+a0ad8d59906f843cfa04ceb20315f2a923b4c101bc1a86249968b30a05b64d6e977a72fb26d3be3ea4777fed181f1598252917320d53f1a0fddb6adbac90b7dff421068bbd4ecf0bae2ca32c7da47354c2353dfedf2b11ca536687cd307472c686d3ce71
+a270828e7b5ed696fbb4
+48656c6c6f576f726c64
+
