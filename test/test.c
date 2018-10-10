@@ -5,6 +5,7 @@ void memxor_test(void);
 void base64_test(void);
 void mpi_test(void);
 void aes_test(void);
+void hill_test(void);
 
 
 static int g_runs;
@@ -18,6 +19,7 @@ static const char *g_test_str[] = {
     "base64",
     "mpi",
     "aes",
+    "hill",
 };
 
 static char g_test_skip[ARLEN(g_test_str)];
@@ -29,6 +31,7 @@ static test_func_t g_test_func[] = {
     base64_test,
     mpi_test,
     aes_test,
+    hill_test,
 #if 0
     TEST_ELEM(cbc),
     TEST_ELEM(ctr),
@@ -204,7 +207,7 @@ static void parse_args(int argc, char *argv[])
         if (argv[i][0] != '-')
             break;
         if (strcmp(argv[i], "-v") == 0)
-            g_verbose = 1;        
+            g_verbose = 1;
         else if (strcmp(argv[i], "-h") == 0)
             help(NULL);
         else if (strcmp(argv[i], "-l") == 0)
