@@ -8,8 +8,8 @@
 # Compiler
 ################################################################################
 
-#CRY_DEBUG=y
-CRY_OMIT_FRAME_POINTER=y
+CRY_DEBUG=y
+#CRY_OMIT_FRAME_POINTER=y
 #CRY_SMALL_SIZE=y
 #CRY_STACK_PROTECTOR=y
 CRY_COVERAGE=y

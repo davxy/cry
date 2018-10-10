@@ -7,5 +7,5 @@ before_install:
   - pip install --user -q cpp-coveralls
 
 after_success:
-  - coveralls -b . -e test --gcov-options '\-lp'
+  - coveralls -b . -e test -e include --gcov-options '\-lp'
 
