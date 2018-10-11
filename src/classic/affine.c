@@ -11,12 +11,12 @@ long cry_inverse(unsigned long a, unsigned long m)
     s0 = 1;
     s1 = 0;
     while (r1 != 0) {
-        /* r2 = r0 - q1-r1 */
+        /* r2 = r0 - q*r1 */
         q = r0 / r1;
         r0 %= r1;
         CRY_SWAP(r0, r1);
-        /* s2 = s0 - q1*s1 */
-        s0 = s0 - q*s1;
+        /* s2 = s0 - q*s1 */
+        s0 -= q*s1;
         CRY_SWAP(s0, s1);
     }
     return s0;
@@ -54,6 +54,8 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
                     const unsigned char *keyb, size_t keylen)
 {
     size_t i;
+    long inv;
+    int res = 0;
 
     memset(ctx, 0, sizeof(*ctx));
     if (keylen > CRY_AFFINE_KEYMAX)
@@ -63,9 +65,17 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
     ctx->keylen = keylen;
     /* Compute key inverse */
     for (i = 0; i < keylen; i++) {
-        ctx->inva[i] = cry_inverse(ctx->keya[i], 256);
-        /* Check */
+        /* sould be odd  to have gcd(256, val)=1 */
+        if ((ctx->keya[i] & 1) != 1) {
+            res = -1;
+            break;
+        }
+        inv = cry_inverse(ctx->keya[i], 256);
+        inv %= 256;
+        if (inv < 0)
+            inv += 256;
+        ctx->inva[i] = (unsigned char)inv;
     }
-    return 0;
+    return res;
 }
 
