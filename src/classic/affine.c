@@ -2,26 +2,6 @@
 #include "misc.h"
 #include <string.h>
 
-long cry_inverse(unsigned long a, unsigned long m)
-{
-    long r0, r1, s0, s1, q;
-
-    r0 = a;
-    r1 = m;
-    s0 = 1;
-    s1 = 0;
-    while (r1 != 0) {
-        /* r2 = r0 - q*r1 */
-        q = r0 / r1;
-        r0 %= r1;
-        CRY_SWAP(r0, r1);
-        /* s2 = s0 - q*s1 */
-        s0 -= q*s1;
-        CRY_SWAP(s0, s1);
-    }
-    return s0;
-}
-
 void cry_affine_encrypt(struct cry_affine_ctx *ctx, unsigned char *out,
                       const unsigned char *in, size_t len)
 {
@@ -54,7 +34,6 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
                     const unsigned char *keyb, size_t keylen)
 {
     size_t i;
-    long inv;
     int res = 0;
 
     memset(ctx, 0, sizeof(*ctx));
@@ -70,11 +49,7 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
             res = -1;
             break;
         }
-        inv = cry_inverse(ctx->keya[i], 256);
-        inv %= 256;
-        if (inv < 0)
-            inv += 256;
-        ctx->inva[i] = (unsigned char)inv;
+        ctx->inva[i] = (unsigned char)cry_long_inv(ctx->keya[i], 256);
     }
     return res;
 }

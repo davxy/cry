@@ -77,6 +77,7 @@ static void dispatch(int argc, char *argv[])
         printf("Test '%s' not defined\n", test);
 }
 
+
 void hill_test(void)
 {
     printf("* HILL Test\n");

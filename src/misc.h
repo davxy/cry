@@ -2,8 +2,8 @@
  * A bounch of helper macros and functions meant for internal use.
  */
 
-#ifndef _CRY_MISC_H_
-#define _CRY_MISC_H_
+#ifndef CRY_MISC_H_
+#define CRY_MISC_H_
 
 #include <stdint.h>
 
@@ -93,4 +93,14 @@
 #define CRY_ROTL32(val, bits) \
     CRY_ROTL(val, 32, bits)
 
-#endif /* _CRY_MISC_H_ */
+/**
+ * Modular inverse using Euclid algorithm.
+ *
+ * @param val   Value.
+ * @param mod   Module.
+ * @return      On success returns the positive modular inverse.
+ *              If the value is not invertible returns 0.
+ */
+unsigned long cry_long_inv(unsigned long val, unsigned long mod);
+
+#endif /* CRY_MISC_H_ */

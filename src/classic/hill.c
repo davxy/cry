@@ -34,7 +34,7 @@ static unsigned char mtx_det(unsigned char *mtx, size_t n)
         det = 0;
         for (i = 0; i < n; i++) {
             mtx_minor(b, mtx, 0, i, n);
-            det += mtx[i] * ((i % 2) ? -1 : 1) * mtx_det(b, n-1);
+            det += mtx[i] * ((i & 1) ? -1 : 1) * mtx_det(b, n-1);
             det %= 256;
             if (det < 0)
                 det += 256;
@@ -77,7 +77,7 @@ static void mtx_invert(unsigned char *imtx, unsigned char *mtx,
         for (j = 0; j < n; j++) {
             mtx_minor(b, t, i, j, n);
             c = mtx_det(b, n-1);
-            if ((i+j) % 2)
+            if (((i+j) & 1))
                 c = -c;
             c *= idet;
             c %= 256;
@@ -171,16 +171,15 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
         }
 
         det = mtx_det(key, n);
-        if (det != 0) {
-            for (idet = 1; idet < 256; idet++) {
-                if ((idet * det) % 256 == 1)
-                    break;
-            }
-            if (idet != 256) {
-                mtx_invert(ikey, key, n, idet);
-                res = 0;
-                trials = 0;
-            }
+        /*
+         * Determinant should be non-zero (to be invertible) and
+         * should be odd, since if gcd(det, 256)=1 -> is invertible
+         */
+        if ((det & 1) != 0) {
+            idet = cry_long_inv(det, 256);
+            mtx_invert(ikey, key, n, idet);
+            res = 0;
+            trials = 0;
         }
     } while (trials > 0);
 
