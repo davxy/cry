@@ -1,17 +1,29 @@
 /*
  * The following algorithm is not secure and is provided as an
  * historical reference only.
- * The following cipher mix together the affine and the substitution
- * ciphers.
  *
- * Affine cipher encryption function:
- *  E(x) = (ax + b)
- *  D(y) = (y - b)*a^-1
- * To allow a correct decryption is fundamental that gcd(a,256)=1
- * and that is the case for all the odd numbers less than 256.
+ * The original affine cipher is a monoalphaberic substitution cipher where
+ * each octet is encrypted using a simple linear function performed modulo
+ * 256.
  *
- * To exploit the properties of the vigenere cipher we make a list of
- * numbers 'a's and 'b's to be used as keys for the affine cipher.
+ * Encryption function: E(x) = (ax + b) = y
+ * Decryption function: D(y) = (y - b)*a^-1 = x
+ *
+ * Note that to be invertible the value 'a' should be chosen so that
+ * gcd(a,256)=1 and, since 256=2^8, this is true whenever the value
+ * of 'a' is odd.
+ *
+ * The provided implementation allows the usage of a list of 'a' values
+ * and 'b' values, thus it can be more appropriately classified as a
+ * polyalphabetic affine cipher.
+ *
+ * Given the two variable length 'keys' the implementation provides the
+ * following well known ciphers:
+ *  - Caesar     : keylen = 1, keya = {1}, keyb = {3}
+ *  - Rot-X      : keylen = 1, keya = {1}, keyb = {X}
+ *  - Affine     : keylen = 1, keya = {a}, keyb = {0}
+ *  - Vigenere   : keylen > 1, keya = {1,...,1},   keyb = {b1,...,bn}
+ *  - Poly-Affine: keylen > 1, keya = {a1,...,an}, keyb = {b1,...,bn}
  */
 
 #ifndef CRY_AFFINE_H_

@@ -104,6 +104,7 @@ Classical ciphers
 ### Substitution ciphers
 
 - Hill cipher
+- Polyalphabetic Affine cipher
 
 
 Utilities
