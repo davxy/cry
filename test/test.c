@@ -6,6 +6,7 @@ void base64_test(void);
 void mpi_test(void);
 void aes_test(void);
 void hill_test(void);
+void affine_test(void);
 
 
 static int g_runs;
@@ -20,6 +21,7 @@ static const char *g_test_str[] = {
     "mpi",
     "aes",
     "hill",
+    "affine",
 };
 
 static char g_test_skip[ARLEN(g_test_str)];
@@ -32,6 +34,7 @@ static test_func_t g_test_func[] = {
     mpi_test,
     aes_test,
     hill_test,
+    affine_test,
 #if 0
     TEST_ELEM(cbc),
     TEST_ELEM(ctr),

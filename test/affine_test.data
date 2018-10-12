@@ -1,0 +1,99 @@
+################################################################################
+# Encode
+# p0 : encrypt key a
+# p1 : decrypt key b
+# p2 : clear  text
+# p3 : cipher text
+################################################################################
+
+Caesar Encode <akey={1}, bkey={3}>
+affine_encrypt
+01
+03
+48656c6c6f576f726c64
+4b686f6f725a72756f67
+
+Rot13 Encode <akey={1}, bkey={13}>
+affine_encrypt
+01
+0d
+48656c6c6f576f726c64
+557279797c647c7f7971
+
+Affine Encode <akey={5}, bkey={0}>
+affine_encrypt
+05
+00
+48656c6c6f576f726c64
+68f91c1c2bb32b3a1cf4
+
+Affine Encode <akey={5}, bkey={3}> (Affine)
+affine_encrypt
+05
+03
+48656c6c6f576f726c64
+6bfc1f1f2eb62e3d1ff7
+
+Vigenere Encode <akey={1,1,1}, bkey={19, 10, 201}>
+affine_encrypt
+010101
+130ac9
+48656c6c6f576f726c64
+5b6f357f7920827c3577
+
+Polyalphabetic Affine Encode <akey={199,205,475}, bkey={8,92,107}>
+affine_encrypt
+05
+03
+48656c6c6f576f726c64
+6bfc1f1f2eb62e3d1ff7
+
+################################################################################
+# Decode
+# p0 : encrypt key
+# p1 : decrypt key
+# p2 : cipher text
+# p3 : clear  text
+################################################################################
+
+Caesar Decode <akey={1}, bkey={3}>
+affine_decrypt
+01
+03
+4b686f6f725a72756f67
+48656c6c6f576f726c64
+
+Rot13 Decode <akey={1}, bkey={13}>
+affine_decrypt
+01
+0d
+557279797c647c7f7971
+48656c6c6f576f726c64
+
+Affine Decode <akey={5}, bkey={0}>
+affine_decrypt
+05
+00
+68f91c1c2bb32b3a1cf4
+48656c6c6f576f726c64
+
+Affine Decode <akey={5}, bkey={3}> (Affine)
+affine_decrypt
+05
+03
+6bfc1f1f2eb62e3d1ff7
+48656c6c6f576f726c64
+
+Vigenere Decode <akey={1,1,1}, bkey={19, 10, 201}>
+affine_decrypt
+010101
+130ac9
+5b6f357f7920827c3577
+48656c6c6f576f726c64
+
+Polyalphabetic Affine Decode <akey={199,205,475}, bkey={8,92,107}>
+affine_decrypt
+05
+03
+6bfc1f1f2eb62e3d1ff7
+48656c6c6f576f726c64
