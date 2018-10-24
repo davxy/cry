@@ -12,9 +12,9 @@ extern "C"{
 
 #include <stddef.h>
 
-size_t cry_base64_encode(const char *in, size_t len, char *out);
+size_t cry_base64_encode(char *out, const char *in, size_t len);
 
-size_t cry_base64_decode(const char *in, size_t len, char *out);
+size_t cry_base64_decode(char *out, const char *in, size_t len);
 
 #ifdef __cplusplus
 }

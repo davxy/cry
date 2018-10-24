@@ -9,7 +9,7 @@ static void encode(int argc, char *argv[])
     ASSERT(argc == 3);
     len = atoi(argv[2]);
 
-    ASSERT(cry_base64_encode(argv[0], strlen(argv[0]), (char *)g_buf) == len);
+    ASSERT(cry_base64_encode((char *)g_buf, argv[0], strlen(argv[0])) == len);
     if (len >= 0)
         ASSERT_EQ_BUF(g_buf, argv[1], len);
 }
@@ -21,7 +21,7 @@ static void decode(int argc, char *argv[])
     ASSERT(argc == 3);
     len = atoi(argv[2]);
 
-    ASSERT(cry_base64_decode(argv[0], strlen(argv[0]), (char *)g_buf) == len);
+    ASSERT(cry_base64_decode((char *)g_buf, argv[0], strlen(argv[0])) == len);
     if (len >= 0)
         ASSERT_EQ_BUF(g_buf, argv[1], len);
 }

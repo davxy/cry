@@ -3,7 +3,7 @@
 static const char *base64 =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-size_t cry_base64_encode(const char *in, size_t len, char *out)
+size_t cry_base64_encode(char *out, const char *in, size_t len)
 {
     size_t i, outlen = 0;
 
@@ -59,7 +59,7 @@ static const unsigned char unbase64[] = {
      49,  50,  51, 255, 255, 255, 255, 255,
 };
 
-size_t cry_base64_decode(const char *in, size_t len, char *out)
+size_t cry_base64_decode(char *out, const char *in, size_t len)
 {
     size_t i, outlen = 0;
 
