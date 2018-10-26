@@ -14,9 +14,9 @@
  * Structure used for both private and public key.
  */
 struct cry_rsa_ctx {
-    cry_mpi m;      /**< Public modulus */
-    cry_mpi e;      /**< Public exponent */
-    cry_mpi d;      /**< Private exponent */
+    cry_mpi m;      /**< Modulus */
+    cry_mpi e;      /**< Encrypt exponent */
+    cry_mpi d;      /**< Decrypt exponent */
     int     flags;  /**< Behaviour flags */
 };
 

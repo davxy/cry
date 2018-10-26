@@ -104,7 +104,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
         if ((res = cry_mpi_mod_exp(&c, &m, &ctx->e, &ctx->m)) != 0)
             break;
         if (cry_mpi_store_bin(&c, *out + (*out_siz - mod_siz),
-                              mod_siz, 1) != mod_siz) {
+                              mod_siz, 1) != 0) {
             res = -1;
             break;
         }
@@ -156,7 +156,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
             break;
         if ((res = cry_mpi_mod_exp(&m, &c, &ctx->d, &ctx->m)) != 0)
             break;
-        if (cry_mpi_store_bin(&m, padded_block, mod_siz, 1) != mod_siz) {
+        if (cry_mpi_store_bin(&m, padded_block, mod_siz, 1) != 0) {
             res = -1;
             break;
         }
