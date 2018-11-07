@@ -1,0 +1,41 @@
+###############################################################################
+#
+# CAVS 11.0
+# HMAC information 
+# Hash sizes tested: 20 28 32 48 64
+# Generated on Mon Feb 28 20:38:43 2011
+#
+# Small subset. The test number refers to the original test number
+#
+###############################################################################
+
+###############################################################################
+# HMAC digest
+# p0: key
+# p1: msg
+# p2: mac
+###############################################################################
+
+HMAC-SHA256 #30 (klen=40)
+hmac_digest
+9779d9120642797f1747025d5b22b7ac607cab08e1758f2f3a46c8be1e25c53b8c6a8f58ffefa176
+b1689c2591eaf3c9e66070f8a77954ffb81749f1b00346f9dfe0b2ee905dcc288baf4a92de3f4001dd9f44c468c3d07d6c6ee82faceafc97c2fc0fc0601719d2dcd0aa2aec92d1b0ae933c65eb06a03c9c935c2bad0459810241347ab87e9f11adb30415424c6c7f5f22a003b8ab8de54f6ded0e3ab9245fa79568451dfa258e
+769f00d3e6a6cc1fb426a14a4f76c6462e6149726e0dee0ec0cf97a16605ac8b
+
+HMAC-SHA256 #31 (klen=40)
+hmac_digest
+09675f2dcc4783b599f18fb765583668a0fd8ae4096f6fcdc60d4f35b4130fbefcd542ffe7459d2a
+0cf2198c31376f5c8915660137725f2bbc180a986e5a7bda27fa81593a4a339bab92cbc39fb2b8581108ee48c794812d845a72ce8008c9e915d9e330bbb90e9136aa53ba0e6693dd4046d6b03362dfb9edfa04c887153cc5de677aab8c7839d517035879679c29727e96c5426324a2575fbe678d6cc7fef5eb6cebd595cfddef
+6b142d4dfe217f1881aa0e6483b271dd5d43f70b85605953a0fef272ddde46ca
+
+HMAC-SHA256 #32 (klen=40)
+hmac_digest
+cfd4a44910c9e567507abb6cede4fe601a7a2765c9755aa2cf6ba4814223811a26a8a1ef499cebd9
+3fb301cb4092f9623aa5ffd690d22d65d56e5a1c330b9c4a0d910c34e391c90a76d5401a2d3caa44b8c5d5aef3e928b90d2ee233e9f9a2cec4a32cd019d06a0dc1fcb1125f5746a4fbd32169ed7bf0e4fd065fa7c8ac97c366380484495f5c5b6850dd1c9d8cd6694cf8686e46308ed0ed1f5bdf98cd831339771db63de5a7de
+20153bf8ea2953c48251ebcc4161f8b6e28499e5c76c24014cff4a9e2f62d25c
+
+HMAC-SHA256 #165 (klen=70)
+hmac_digest
+c09e29071c405d5e820d345a46dbbf1e0f8202e92de3ed3e2d298e43aa4f846866e3b748990946d488c2c1ae5a6e99d32790d47d53d205481a497c936bf9ba29fa9c2821919f
+ea7240529980076d3b028a083ebc4e24efdaa06c9c84d76bf5b2d9fdb842e1038e487f5b30a5e010cddb4fcdb01ffc981eb0fcbc7d689207bc90ad36eef9b1ae38487a6dee929f3ff929f3357cb55253b7869a892b28f7e5fe386406a2776ed4b21d3b6e1c70cc6485947f27e9a5d8bd820380b9eced8e6b865206541be39fdc
+49ae1c4a7a570fde47f7517ab18898b1b991d03cfcf8c45bb3615b5f755da682

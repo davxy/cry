@@ -4,6 +4,7 @@ void version_test(void);
 void memxor_test(void);
 void base64_test(void);
 void mpi_test(void);
+void hmac_test(void);
 void aes_test(void);
 void hill_test(void);
 void affine_test(void);
@@ -19,6 +20,7 @@ static const char *g_test_str[] = {
     "memxor",
     "base64",
     "mpi",
+    "hmac",
     "aes",
     "hill",
     "affine",
@@ -32,6 +34,7 @@ static test_func_t g_test_func[] = {
     memxor_test,
     base64_test,
     mpi_test,
+    hmac_test,
     aes_test,
     hill_test,
     affine_test,
@@ -177,6 +180,23 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
     }
 }
 
+
+#define EMPTY_STRING "NULL"
+
+int raw_init(unsigned char *raw, unsigned int rawlen, const char *asc)
+{
+    int len;
+
+    if (strcmp(asc, EMPTY_STRING) == 0)
+        return 0;
+    if (strcmp(asc, "-1") == 0)
+        return -1;
+    len = strlen(asc);
+    if (rawlen < (len >> 1))
+        len = rawlen << 1;
+    asc_to_raw(asc, len, raw);
+    return len >> 1;
+}
 
 
 static void help(const char *arg)

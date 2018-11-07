@@ -13,18 +13,18 @@
 struct cry_hmac_ctx {
     void                *hash_ctx;
     const cry_hash_itf  *hash_itf;
-    size_t              hash_len;
+    size_t               hash_len;
     const unsigned char *key;
-    size_t              key_len;
+    size_t               key_len;
 };
 
 typedef struct cry_hmac_ctx cry_hmac_ctx;
 
 void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
-                   cry_hash_itf *hash_itf, size_t hash_len,
+                   const cry_hash_itf *hash_itf, size_t hash_len,
                    const unsigned char *key, size_t key_len);
 
-int cry_hmac(cry_hmac_ctx *ctx, unsigned char *mac, const unsigned char *in,
-             size_t insize);
+int cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac,
+                    const unsigned char *in, size_t insize);
 
 #endif /* _CRY_HMAC_H_ */

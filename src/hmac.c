@@ -4,7 +4,7 @@
 #define BLOCK_SIZE  64
 
 void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
-                   cry_hash_itf *hash_itf, size_t hash_len,
+                   const cry_hash_itf *hash_itf, size_t hash_len,
                    const unsigned char *key, size_t key_len)
 {
     ctx->hash_ctx = hash_ctx;
@@ -14,8 +14,8 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
     ctx->key_len = key_len;
 }
 
-int cry_hmac(cry_hmac_ctx *ctx, unsigned char *mac, const unsigned char *in,
-             size_t insize)
+int cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac,
+                    const unsigned char *in, size_t insize)
 {
     int i;
     const unsigned char *key;

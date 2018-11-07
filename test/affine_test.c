@@ -13,9 +13,6 @@ struct affine_param {
     size_t        dstlen;
 };
 
-int raw_init(unsigned char *raw, unsigned int rawlen, const char *asc);
-
-
 static void param_init(struct affine_param *par, char *argv[])
 {
     memset(par, 0, sizeof(*par));
