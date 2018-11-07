@@ -19,9 +19,14 @@ static void param_init(struct hmac_param *par, int argc, char *argv[])
     par->maclen = raw_init(par->mac, sizeof(par->mac), argv[2]);
 }
 
+static void sha256_clean(void *ctx)
+{
+    /* Just to increase lib coverage */
+}
+
 static const struct cry_hash_itf sha256_itf = {
     (cry_hash_init_f)   cry_sha256_init,
-    (cry_hash_clean_f)  NULL,
+    (cry_hash_clean_f)  sha256_clean,
     (cry_hash_update_f) cry_sha256_update,
     (cry_hash_digest_f) cry_sha256_digest,
 };
