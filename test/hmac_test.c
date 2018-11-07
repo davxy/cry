@@ -6,7 +6,7 @@ struct hmac_param {
     unsigned int  keylen;
     unsigned int  msglen;
     unsigned int  maclen;
-    unsigned char key[128];
+    unsigned char key[256];
     unsigned char msg[256];
     unsigned char mac[64];
 };
@@ -64,4 +64,5 @@ void hmac_test(void)
 {
     printf("* HMAC NIST CAVS 11.0\n");
     func_test("hmac_test.data", dispatch);
+    printf("\n");
 }
