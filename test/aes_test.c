@@ -26,22 +26,6 @@ struct aes_param {
     unsigned char dst[128];
 };
 
-#define EMPTY_STRING "NULL"
-
-int raw_init(unsigned char *raw, unsigned int rawlen, const char *asc)
-{
-    int len;
-
-    if (strcmp(asc, EMPTY_STRING) == 0)
-        return 0;
-    if (strcmp(asc, "-1") == 0)
-        return -1;
-    len = strlen(asc);
-    if (rawlen < (len >> 1))
-        len = rawlen << 1;
-    asc_to_raw(asc, len, raw);
-    return len >> 1;
-}
 
 static void param_init(struct aes_param *par, int argc, char *argv[])
 {

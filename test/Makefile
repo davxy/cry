@@ -13,6 +13,7 @@ objs := \
 	memxor_test.o \
 	base64_test.o \
 	mpi_test.o \
+	hmac_test.o \
 	aes_test.o \
 	hill_test.o \
 	affine_test.o

@@ -79,7 +79,7 @@ LDFLAGS = 	$(lflags-y)
 
 DATE 	:= $(shell date +'%y%m%d')
 
-.PHONY: all cry clean test coverage
+.PHONY: all cry clean test testclean
 
 all: cry
 

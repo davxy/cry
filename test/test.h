@@ -23,6 +23,8 @@ void func_test(const char *datafile, dispatch_func_t dispatch);
 
 void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
 
+int raw_init(unsigned char *raw, unsigned int rawlen, const char *asc);
+
 
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
