@@ -7,6 +7,9 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
                    const cry_hash_itf *hash_itf, size_t hash_len,
                    const unsigned char *key, size_t key_len)
 {
+    int i;
+    unsigned char pad[BLOCK_SIZE];
+
     ctx->hash_ctx = hash_ctx;
     ctx->hash_itf = hash_itf;
     ctx->hash_len = hash_len;
@@ -23,14 +26,6 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
             hash_itf->clean(ctx->hash_ctx);
         ctx->key_len = ctx->hash_len;
     }
-}
-
-int cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac,
-                    const unsigned char *in, size_t insize)
-{
-    int i;
-    unsigned char pad[BLOCK_SIZE];
-    const cry_hash_itf *hash_itf = ctx->hash_itf;
 
     memset(pad, 0x36, BLOCK_SIZE);
     for (i = 0; i < ctx->key_len; i++)
@@ -38,7 +33,19 @@ int cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac,
     if (hash_itf->init)
         hash_itf->init(ctx->hash_ctx);
     hash_itf->update(ctx->hash_ctx, pad, BLOCK_SIZE);
-    hash_itf->update(ctx->hash_ctx, in, insize);
+}
+
+void cry_hmac_update(cry_hmac_ctx *ctx, unsigned char *in, size_t in_len)
+{
+    ctx->hash_itf->update(ctx->hash_ctx, in, in_len);
+}
+
+void cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac)
+{
+    int i;
+    unsigned char pad[BLOCK_SIZE];
+    const cry_hash_itf *hash_itf = ctx->hash_itf;
+
     hash_itf->digest(ctx->hash_ctx, mac);
     if (hash_itf->clean)
         hash_itf->clean(ctx->hash_ctx);
@@ -53,6 +60,4 @@ int cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac,
     hash_itf->digest(ctx->hash_ctx, mac);
     if (hash_itf->clean)
         hash_itf->clean(ctx->hash_ctx);
-
-    return 0;
 }
