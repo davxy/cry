@@ -5,6 +5,7 @@ void memxor_test(void);
 void base64_test(void);
 void mpi_test(void);
 void hmac_test(void);
+void des_test(void);
 void aes_test(void);
 void hill_test(void);
 void affine_test(void);
@@ -21,6 +22,7 @@ static const char *g_test_str[] = {
     "base64",
     "mpi",
     "hmac",
+    "des",
     "aes",
     "hill",
     "affine",
@@ -35,16 +37,11 @@ static test_func_t g_test_func[] = {
     base64_test,
     mpi_test,
     hmac_test,
+    des_test,
     aes_test,
     hill_test,
     affine_test,
 #if 0
-    TEST_ELEM(cbc),
-    TEST_ELEM(ctr),
-    TEST_ELEM(gcm),
-#endif
-#if 0
-    TEST_ELEM(des),
     TEST_ELEM(crc),
     TEST_ELEM(md5),
     TEST_ELEM(sha256),
