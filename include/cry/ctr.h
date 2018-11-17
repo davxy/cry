@@ -16,19 +16,20 @@
 #include "cry/ciph.h"
 
 /** Block size. */
-#define CRY_CTR_BLOCK_SIZE    16
+#define CRY_CTR_BLOCK_MAX    16
 
 /**
  * CTR context.
  */
-struct cry_ctr_ctx
-{
+struct cry_ctr_ctx {
     /** Cipher context. */
     void                      *ciph_ctx;
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter. */
-    unsigned char              ctr[CRY_CTR_BLOCK_SIZE];
+    unsigned char              ctr[CRY_CTR_BLOCK_MAX];
+    /** Counter length */
+    unsigned int               ctrlen;
 };
 
 typedef struct cry_ctr_ctx cry_ctr_ctx;

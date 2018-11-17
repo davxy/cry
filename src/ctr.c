@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define BUF_BLOCKS  4
-#define BUF_LEN     (CRY_CTR_BLOCK_SIZE * BUF_BLOCKS)
+#define BUF_LEN     (CRY_CTR_BLOCK_MAX * BUF_BLOCKS)
 
 void cry_ctr_init(struct cry_ctr_ctx *ctx, void *ciph_ctx,
                   const struct cry_ciph_itf *ciph_itf)
@@ -26,9 +26,9 @@ void cry_ctr_key_set(struct cry_ctr_ctx *ctx, const unsigned char *key,
 void cry_ctr_iv_set(struct cry_ctr_ctx *ctx, const unsigned char *iv,
                     unsigned int size)
 {
-    size = CRY_MIN(CRY_CTR_BLOCK_SIZE, size);
-    memcpy(ctx->ctr, iv, size);
-    memset(ctx->ctr + size, 0, CRY_CTR_BLOCK_SIZE - size);
+    ctx->ctrlen  = CRY_MIN(CRY_CTR_BLOCK_MAX, size);
+    memcpy(ctx->ctr, iv, ctx->ctrlen);
+    memset(ctx->ctr + ctx->ctrlen, 0, CRY_CTR_BLOCK_MAX - ctx->ctrlen);
 }
 
 void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
@@ -42,27 +42,27 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
 
     if (src != dst) {
         p = dst;
-        for (n = len; n >= CRY_CTR_BLOCK_SIZE; n -= CRY_CTR_BLOCK_SIZE) {
-            memcpy(p, ctx->ctr, CRY_CTR_BLOCK_SIZE);
-            CRY_INCREMENT_BE(ctx->ctr, CRY_CTR_BLOCK_SIZE);
-            p += CRY_CTR_BLOCK_SIZE;
+        for (n = len; n >= ctx->ctrlen; n -= ctx->ctrlen) {
+            memcpy(p, ctx->ctr, ctx->ctrlen);
+            CRY_INCREMENT_BE(ctx->ctr, ctx->ctrlen);
+            p += ctx->ctrlen;
         }
 
         encrypt(ciph, dst, dst, len - n);
         cry_memxor(dst, src, len - n);
 
         if (n != 0) {
-            encrypt(ciph, buf, ctx->ctr, CRY_CTR_BLOCK_SIZE);
-            CRY_INCREMENT_BE(ctx->ctr, CRY_CTR_BLOCK_SIZE);
+            encrypt(ciph, buf, ctx->ctr, ctx->ctrlen);
+            CRY_INCREMENT_BE(ctx->ctr, ctx->ctrlen);
             cry_memxor2(dst + len - n, src + len - n, buf, n);
         }
     } else {
         while (len >= BUF_LEN) {
             p = buf;
             for (n = 0; n < BUF_BLOCKS; n++) {
-                memcpy(p, ctx->ctr, CRY_CTR_BLOCK_SIZE);
-                CRY_INCREMENT_BE(ctx->ctr, CRY_CTR_BLOCK_SIZE);
-                p += CRY_CTR_BLOCK_SIZE;
+                memcpy(p, ctx->ctr, ctx->ctrlen);
+                CRY_INCREMENT_BE(ctx->ctr, ctx->ctrlen);
+                p += ctx->ctrlen;
             }
             encrypt(ciph, buf, buf, BUF_LEN);
             cry_memxor2(dst, src, buf, BUF_LEN);
@@ -73,10 +73,10 @@ void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
 
         if (len != 0) {
             p = buf;
-            for (n = 0; n < len; n += CRY_CTR_BLOCK_SIZE) {
-                memcpy(p, ctx->ctr, CRY_CTR_BLOCK_SIZE);
-                CRY_INCREMENT_BE(ctx->ctr, CRY_CTR_BLOCK_SIZE);
-                p += CRY_CTR_BLOCK_SIZE;
+            for (n = 0; n < len; n += ctx->ctrlen) {
+                memcpy(p, ctx->ctr, ctx->ctrlen);
+                CRY_INCREMENT_BE(ctx->ctr, ctx->ctrlen);
+                p += ctx->ctrlen;
             }
             encrypt(ciph, buf, buf, n);
             cry_memxor2(dst, src, buf, len);

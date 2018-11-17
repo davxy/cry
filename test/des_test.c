@@ -89,7 +89,7 @@ static void des_cbc_encrypt(int argc, char *argv[])
 
     cry_cbc_init(&ctx, &des_ctx, &des_itf);
     cry_cbc_key_set(&ctx, par.key, par.keylen);
-    cry_cbc_iv_set(&ctx, par.iv, 16);
+    cry_cbc_iv_set(&ctx, par.iv, par.ivlen);
     cry_cbc_encrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
@@ -107,7 +107,7 @@ static void des_cbc_decrypt(int argc, char *argv[])
 
     cry_cbc_init(&ctx, &des_ctx, &des_itf);
     cry_cbc_key_set(&ctx, par.key, par.keylen);
-    cry_cbc_iv_set(&ctx, par.iv, 16);
+    cry_cbc_iv_set(&ctx, par.iv, par.ivlen);
     cry_cbc_decrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
@@ -125,7 +125,7 @@ static void des_ctr_encrypt(int argc, char *argv[])
 
     cry_ctr_init(&ctx, &des_ctx, &des_itf);
     cry_ctr_key_set(&ctx, par.key, par.keylen);
-    cry_ctr_iv_set(&ctx, par.iv, 16);
+    cry_ctr_iv_set(&ctx, par.iv, par.ivlen);
     cry_ctr_encrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
@@ -143,7 +143,7 @@ static void des_ctr_decrypt(int argc, char *argv[])
 
     cry_ctr_init(&ctx, &des_ctx, &des_itf);
     cry_ctr_key_set(&ctx, par.key, par.keylen);
-    cry_ctr_iv_set(&ctx, par.iv, 16);
+    cry_ctr_iv_set(&ctx, par.iv, par.ivlen);
     cry_ctr_decrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
