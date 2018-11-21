@@ -6,6 +6,7 @@ void base64_test(void);
 void mpi_test(void);
 void hmac_test(void);
 void aes_test(void);
+void trivium_test(void);
 void hill_test(void);
 void affine_test(void);
 
@@ -15,53 +16,65 @@ int g_fails;
 int g_verbose;
 unsigned char g_buf[BUFSIZ];
 
-static const char *g_test_str[] = {
-    "version",
-    "memxor",
-    "base64",
-    "mpi",
-    "hmac",
-    "aes",
-    "hill",
-    "affine",
+
+struct sub_test {
+    const char *name;
+    test_func_t func;
 };
 
-static char g_test_skip[ARLEN(g_test_str)];
+#define SUB_TEST(name) { #name , name ## _test }
 
-
-static test_func_t g_test_func[] = {
-    version_test,
-    memxor_test,
-    base64_test,
-    mpi_test,
-    hmac_test,
-    aes_test,
-    hill_test,
-    affine_test,
-#if 0
-    TEST_ELEM(cbc),
-    TEST_ELEM(ctr),
-    TEST_ELEM(gcm),
+struct sub_test g_tests[] = {
+    SUB_TEST(version),
+#if 1
+    SUB_TEST(memxor),
+    SUB_TEST(base64),
+    SUB_TEST(mpi),
+    SUB_TEST(hmac),
+    SUB_TEST(aes),
+    SUB_TEST(trivium),
+    SUB_TEST(hill),
+    SUB_TEST(affine),
 #endif
 #if 0
-    TEST_ELEM(des),
-    TEST_ELEM(crc),
-    TEST_ELEM(md5),
-    TEST_ELEM(sha256),
-    TEST_ELEM(cmac),
-    TEST_ELEM(sum),
-    TEST_ELEM(rsa),
-    TEST_ELEM(rand),
-    TEST_ELEM(dh),
-    TEST_ELEM(dsa),
-    TEST_ELEM(ecp),
-    TEST_ELEM(ecdsa),
-    TEST_ELEM(ecdh),
+   TEST_ELEM(cbc),
+   TEST_ELEM(ctr),
+   TEST_ELEM(gcm),
+   TEST_ELEM(des),
+   TEST_ELEM(crc),
+   TEST_ELEM(md5),
+   TEST_ELEM(sha256),
+   TEST_ELEM(cmac),
+   TEST_ELEM(sum),
+   TEST_ELEM(rsa),
+   TEST_ELEM(rand),
+   TEST_ELEM(dh),
+   TEST_ELEM(dsa),
+   TEST_ELEM(ecp),
+   TEST_ELEM(ecdsa),
+   TEST_ELEM(ecdh),
+   TEST_ELEM(cbc),
+   TEST_ELEM(ctr),
+   TEST_ELEM(gcm),
+   TEST_ELEM(des),
+   TEST_ELEM(crc),
+   TEST_ELEM(md5),
+   TEST_ELEM(sha256),
+   TEST_ELEM(cmac),
+   TEST_ELEM(sum),
+   TEST_ELEM(rsa),
+   TEST_ELEM(rand),
+   TEST_ELEM(dh),
+   TEST_ELEM(dsa),
+   TEST_ELEM(ecp),
+   TEST_ELEM(ecdsa),
+   TEST_ELEM(ecdh),
 #endif
 };
 
-#define NTESTS  ARLEN(g_test_func)
+#define NTESTS  ARLEN(g_tests)
 
+static char g_test_skip[NTESTS];
 
 
 static int get_line(FILE *f, char *buf, size_t len)
@@ -217,7 +230,7 @@ static void show_cases(void)
 
     printf("\nTest cases:\n");
     for (i = 0; i < NTESTS; i++)
-        printf("  %s\n", g_test_str[i]);
+        printf("  %s\n", g_tests[i].name);
     printf("\n");
     exit(0);
 }
@@ -244,7 +257,7 @@ static void parse_args(int argc, char *argv[])
         memset(g_test_skip, 1, sizeof(g_test_skip));
         do {
             for (j = 0; j < NTESTS; j++) {
-                if (strcmp(argv[i], g_test_str[j]) == 0)
+                if (strcmp(argv[i], g_tests[j].name) == 0)
                     g_test_skip[j] = 0;
             }
             i++;
@@ -268,7 +281,7 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < NTESTS; i++) {
         if (g_test_skip[i] == 0)
-            g_test_func[i]();
+            g_tests[i].func();
     }
 
     printf("\n");
