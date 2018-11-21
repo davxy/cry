@@ -105,9 +105,19 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
     uint32_t s11, s12, s13;
     uint32_t s21, s22, s23;
     uint32_t s31, s32, s33, s34;
+    uint32_t t1, t2, t3;
 
     ctx->ivlen = (size <= CRY_TRIVIUM_IVLEN) ? size : CRY_TRIVIUM_IVLEN;
 
+    /*
+     * S initialized as:
+     *  [ key || 0 ] ||      (96 bits)
+     *  [  iv || 0 ] ||      (96 bits)
+     *  [ 0 ... 0 || 0x70 || 0 ... 0 ]  (128 bits)
+     *
+     * The last byte of the second FSR and the last two bytes of the
+     * third FSR are not used.
+     */
     for (i = 0; i < ctx->keylen; i++)
         ctx->s[i] = ctx->key[i];
     for ( ; i < 12; i++)
@@ -121,17 +131,11 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
     ctx->s[24 + 13] = 0x70;
 
     LOAD(ctx->s);
-
 #define Z(w)
-
-
     for (i = 0; i < 4 * 9; i++) {
-        uint32_t t1, t2, t3;
-
         UPDATE();
         ROTATE();
     }
-
     STORE(ctx->s);
 }
 
@@ -145,6 +149,7 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
     uint32_t s21, s22, s23;
     uint32_t s31, s32, s33, s34;
     uint32_t z;
+    uint32_t t1, t2, t3;
 
     LOAD(ctx->s);
 
@@ -152,8 +157,6 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
 #define Z(w) U32TO8_LITTLE(dst + 4 * i, U8TO32_LITTLE(src + 4 * i) ^ w)
 
     for (i = 0; i < size / 4; i++) {
-        uint32_t t1, t2, t3;
-
         UPDATE();
         ROTATE();
     }
@@ -163,11 +166,8 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
 
     i *= 4;
     if (i < size) {
-        uint32_t t1, t2, t3;
-      
         UPDATE();
         ROTATE();
-
         for ( ; i < size; i++, z >>= 8)
 	        dst[i] = src[i] ^ U8V(z); 
     }

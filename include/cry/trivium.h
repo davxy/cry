@@ -8,7 +8,7 @@
  *
  * The cipher makes use of a 80-bit key and 80-bit initialisation vector (IV);
  * its secret state has 288 bits, consisting of three interconnected non-linear
- * feedback shift registers (LFSR) of length 93, 84 and 111 bits, respectively.
+ * feedback shift registers (NLFSR) of length 93, 84 and 111 bits, respectively.
  *
  * The cipher operation consists of two phases: the key and IV set-up and the
  * keystream generation. Initialisation is very similar to keystream generation
