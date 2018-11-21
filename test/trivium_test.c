@@ -59,8 +59,6 @@ static void dispatch(int argc, char *argv[])
 void trivium_test(void)
 {
     printf("* TRIVIUM ECRYPT Vectors\n");
-#if 0
     func_test("trivium_ecrypt.data", dispatch);
-#endif
     printf("\n");
 }
