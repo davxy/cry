@@ -1,4 +1,4 @@
-#include "cry/ecdsa.h"
+#include <cry/ecdsa.h>
 #include "mpi/mpi_pvt.h"
 
 #define CHK(exp) do { if ((res = (exp)) != 0) goto e; } while (0)

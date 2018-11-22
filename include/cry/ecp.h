@@ -6,7 +6,7 @@
 #ifndef _CRY_ECP_H_
 #define _CRY_ECP_H_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 /** Elliptic curve point structure */
 struct cry_ecp {

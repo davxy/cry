@@ -6,7 +6,7 @@
 #ifndef _CRY_DSA_H_
 #define _CRY_DSA_H_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 struct cry_dsa_ctx {
     cry_mpi  g;

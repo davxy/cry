@@ -1,4 +1,4 @@
-#include "cry/des.h"
+#include <cry/des.h>
 
 #define GET_BIT(buf, bit) \
     (buf[(bit) / 8] & (0x80 >> ((bit) % 8)))

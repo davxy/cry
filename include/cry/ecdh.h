@@ -6,7 +6,7 @@
 #ifndef _CRY_ECDH_
 #define _CRY_ECDH_
 
-#include "cry/ec.h"
+#include <cry/ec.h>
 
 struct cry_ecdh_ctx {
     cry_ec      ec;  /**> Elliptic curve parameters */

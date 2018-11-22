@@ -1,7 +1,7 @@
 #ifndef _CRY_MPI_PVT_H_
 #define _CRY_MPI_PVT_H_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 #include <string.h> /* memset */
 #include <limits.h>
 #include <stdint.h>

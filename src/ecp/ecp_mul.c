@@ -1,4 +1,4 @@
-#include "cry/ecp.h"
+#include <cry/ecp.h>
 #include "mpi/mpi_pvt.h" /* CRY_MPI_DIGIT_BITS */
 #include <stdlib.h>      /* malloc() */
 

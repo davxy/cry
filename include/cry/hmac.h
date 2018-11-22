@@ -3,7 +3,7 @@
  * @brief   Hash MAC
  */
 
-#include "cry/hash.h"
+#include <cry/hash.h>
 
 #ifndef _CRY_HMAC_H_
 #define _CRY_HMAC_H_

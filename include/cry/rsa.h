@@ -6,7 +6,7 @@
 #ifndef _CRY_RSA_H_
 #define _CRY_RSA_H_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 #define CRY_RSA_FLAG_SIGN   (1 << 0)
 

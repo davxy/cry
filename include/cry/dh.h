@@ -6,7 +6,7 @@
 #ifndef _CRY_DH_
 #define _CRY_DH_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 /** Diffie-Hellman algorithm context */
 struct cry_dh_ctx {

@@ -6,7 +6,7 @@
 #ifndef CRY_GCM_H_
 #define CRY_GCM_H_
 
-#include "cry/ciph.h"
+#include <cry/ciph.h>
 
 /** Size of a GCM block. */
 #define CRY_GCM_BLOCK_SIZE      16

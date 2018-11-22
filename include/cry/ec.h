@@ -6,7 +6,7 @@
 #ifndef _CRY_EC_H_
 #define _CRY_EC_H_
 
-#include "cry/ecp.h"
+#include <cry/ecp.h>
 
 /*
  * Describes an elliptic curve equation:

@@ -1,4 +1,4 @@
-#include "cry/ecp.h"
+#include <cry/ecp.h>
 
 int cry_ecp_copy(cry_ecp *d, const cry_ecp *s)
 {

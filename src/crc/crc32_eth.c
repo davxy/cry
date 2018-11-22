@@ -1,4 +1,4 @@
-#include "cry/crc.h"
+#include <cry/crc.h>
 
 static const uint32_t crc32_tab[] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,

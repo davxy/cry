@@ -1,4 +1,4 @@
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
 
