@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
     /* Parse arguments */
     parse_args(argc, argv);
 
-    printf("\nCRY(T_T)EST\n\n");
+    printf("\nC  R  Y  T  E  S  T\n\n");
 
     for (i = 0; i < NTESTS; i++) {
         if (g_test_skip[i] == 0)
