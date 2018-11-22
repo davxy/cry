@@ -27,18 +27,14 @@ static void trivium_operate(int argc, char *argv[])
     struct trivium_param par;
     unsigned char src[512] = {0};
     unsigned char dst[512];
-    unsigned char clr[512];
 
     ASSERT(argc == 4);
     param_init(&par, argc, argv);
 
+    cry_trivium_init(&ctx);
     cry_trivium_key_set(&ctx, par.key, par.keylen);
     cry_trivium_iv_set(&ctx, par.iv, par.ivlen);
     cry_trivium_encrypt(&ctx, dst, src, 512);
-
-    cry_trivium_key_set(&ctx, par.key, par.keylen);
-    cry_trivium_iv_set(&ctx, par.iv, par.ivlen);
-    cry_trivium_decrypt(&ctx, clr, dst, 512);
 
     ASSERT_EQ_BUF(dst, par.buf, 512);
 }
