@@ -6,8 +6,8 @@
  * Polynomial_representations_of_cyclic_redundancy_checks
  */
 
-#ifndef _CRY_CRC_H_
-#define _CRY_CRC_H_
+#ifndef CRY_CRC_H_
+#define CRY_CRC_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -171,4 +171,4 @@ uint32_t cry_crc32_eth(const unsigned char *in, size_t n);
 }
 #endif
 
-#endif /* _CRY_CRC_H_ */
+#endif /* CRY_CRC_H_ */

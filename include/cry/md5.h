@@ -3,8 +3,8 @@
  * @brief   MD5 message digest algorithm
  */
 
-#ifndef _CRY_MD5_H_
-#define _CRY_MD5_H_
+#ifndef CRY_MD5_H_
+#define CRY_MD5_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -56,4 +56,4 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest);
 }
 #endif
 
-#endif /* _CRY_MD5_H_ */
+#endif /* CRY_MD5_H_ */

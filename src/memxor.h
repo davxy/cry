@@ -1,5 +1,5 @@
-#ifndef _CRY_MEMXOR_H_
-#define _CRY_MEMXOR_H_
+#ifndef CRY_MEMXOR_H_
+#define CRY_MEMXOR_H_
 
 #ifdef __cplusplus
 extern "C"{
@@ -35,4 +35,4 @@ void cry_memxor2(unsigned char *dst, const unsigned char *src1,
 }
 #endif
 
-#endif /* _CRY_MEMXOR_H_ */
+#endif /* CRY_MEMXOR_H_ */

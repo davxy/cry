@@ -1,5 +1,5 @@
-#ifndef _CRY_MPI_PVT_H_
-#define _CRY_MPI_PVT_H_
+#ifndef CRY_MPI_PVT_H_
+#define CRY_MPI_PVT_H_
 
 #include <cry/mpi.h>
 #include <string.h> /* memset */
@@ -58,4 +58,4 @@ int cry_mpi_shld(cry_mpi *a, int n);
     ((a)->data[(bit) / CRY_MPI_DIGIT_BITS] |= \
          1U << ((bit) % CRY_MPI_DIGIT_BITS))
 
-#endif /* _CRY_MPI_PVT_H_ */
+#endif /* CRY_MPI_PVT_H_ */

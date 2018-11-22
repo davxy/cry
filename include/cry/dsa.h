@@ -3,8 +3,8 @@
  * @brief   Digital Signature Algorithm
  */
 
-#ifndef _CRY_DSA_H_
-#define _CRY_DSA_H_
+#ifndef CRY_DSA_H_
+#define CRY_DSA_H_
 
 #include <cry/mpi.h>
 
@@ -39,4 +39,4 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
 }
 #endif
 
-#endif /* _CRY_DSA_H_ */
+#endif /* CRY_DSA_H_ */

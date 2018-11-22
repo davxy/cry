@@ -3,8 +3,8 @@
  * @brief   Elliptic Curve Diffie Hellman
  */
 
-#ifndef _CRY_ECDH_
-#define _CRY_ECDH_
+#ifndef CRY_ECDH_
+#define CRY_ECDH_
 
 #include <cry/ec.h>
 
@@ -33,4 +33,4 @@ int cry_ecdh_final(cry_ecdh_ctx *ctx);
 }
 #endif
 
-#endif /* _CRY_ECDH_ */
+#endif /* CRY_ECDH_ */

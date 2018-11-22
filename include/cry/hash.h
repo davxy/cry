@@ -3,8 +3,8 @@
  * @brief   Generic hash algorithm interface
  */
 
-#ifndef _CRY_HASH_H_
-#define _CRY_HASH_H_
+#ifndef CRY_HASH_H_
+#define CRY_HASH_H_
 
 #ifdef __cplusplus
 extern "C"{
@@ -62,4 +62,4 @@ typedef struct cry_hash_itf cry_hash_itf;
 }
 #endif
 
-#endif /* _CRY_HASH_H_ */
+#endif /* CRY_HASH_H_ */

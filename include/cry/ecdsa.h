@@ -3,8 +3,8 @@
  * @brief   Elliptic Curve Digital Signature Algorithm
  */
 
-#ifndef _CRY_ECDSA_H_
-#define _CRY_ECDSA_H_
+#ifndef CRY_ECDSA_H_
+#define CRY_ECDSA_H_
 
 #include <cry/ec.h>
 
@@ -39,4 +39,4 @@ int cry_ecdsa_keygen(const cry_ec *ec, cry_mpi *d, cry_ecp *q);
 }
 #endif
 
-#endif /* _CRY_ECDSA_H_ */
+#endif /* CRY_ECDSA_H_ */

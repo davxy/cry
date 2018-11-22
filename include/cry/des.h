@@ -3,8 +3,8 @@
  * @brief   DES block cipher.
  */
 
-#ifndef _CRY_DES_H_
-#define _CRY_DES_H_
+#ifndef CRY_DES_H_
+#define CRY_DES_H_
 
 #include <string.h>
 
@@ -32,4 +32,4 @@ void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
 void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, unsigned int size);
 
-#endif /* _CRY_DES_H_ */
+#endif /* CRY_DES_H_ */
