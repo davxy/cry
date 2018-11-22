@@ -64,7 +64,7 @@ void run(const char *name, void (* test)(void),
     ASSERT_EQ((e), 0)
 
 
-# define PRINT_HEX(msg, buf, siz) do { \
+#define PRINT_HEX(msg, buf, siz) do { \
     size_t __siz = siz; \
     unsigned char *__p = buf; \
     if (msg) printf("%s: ", msg); \
@@ -72,10 +72,10 @@ void run(const char *name, void (* test)(void),
     printf("\n"); \
     } while(0)
 
-# define PRINT_ASC(msg, buf, siz) \
+#define PRINT_ASC(msg, buf, siz) \
     printf("%s: %.*s\n", msg, (int)(siz), buf)
 
-# define PRINT_MPI(msg, mpi, rad) do { \
+#define PRINT_MPI(msg, mpi, rad) do { \
     printf("%s:\t", msg); \
     cry_mpi_print(mpi, rad); \
     } while(0)
