@@ -13,7 +13,7 @@
 #ifndef CRY_CTR_H_
 #define CRY_CTR_H_
 
-#include "cry/ciph.h"
+#include <cry/ciph.h>
 
 /** Block size. */
 #define CRY_CTR_BLOCK_SIZE    16

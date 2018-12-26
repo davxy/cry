@@ -1,4 +1,4 @@
-#include "cry/crc.h"
+#include <cry/crc.h>
 
 void cry_crc32_init(struct cry_crc32_ctx *ctx, uint32_t start,
                     const uint32_t *tab, unsigned char flags)

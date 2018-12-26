@@ -3,10 +3,10 @@
  * @brief   Hash MAC
  */
 
-#include "cry/hash.h"
+#include <cry/hash.h>
 
-#ifndef _CRY_HMAC_H_
-#define _CRY_HMAC_H_
+#ifndef CRY_HMAC_H_
+#define CRY_HMAC_H_
 
 #define CRY_HMAC_BLOCK_MAX     64
 
@@ -28,4 +28,4 @@ void cry_hmac_update(cry_hmac_ctx *ctx, unsigned char *in, size_t in_len);
 
 void cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac);
 
-#endif /* _CRY_HMAC_H_ */
+#endif /* CRY_HMAC_H_ */

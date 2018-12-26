@@ -3,10 +3,10 @@
  * @brief   Diffie-Hellman key exchange algorithm.
  */
 
-#ifndef _CRY_DH_
-#define _CRY_DH_
+#ifndef CRY_DH_
+#define CRY_DH_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 /** Diffie-Hellman algorithm context */
 struct cry_dh_ctx {
@@ -41,4 +41,4 @@ int cry_dh_get_key(cry_dh_ctx *ctx, unsigned char *out, size_t out_len);
 }
 #endif
 
-#endif /* _CRY_DH_ */
+#endif /* CRY_DH_ */

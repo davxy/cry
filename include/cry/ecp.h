@@ -3,10 +3,10 @@
  * @brief   Elliptic curve point arithmetic
  */
 
-#ifndef _CRY_ECP_H_
-#define _CRY_ECP_H_
+#ifndef CRY_ECP_H_
+#define CRY_ECP_H_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 /** Elliptic curve point structure */
 struct cry_ecp {
@@ -46,4 +46,4 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
 }
 #endif
 
-#endif /* _CRY_ECP_H_ */
+#endif /* CRY_ECP_H_ */

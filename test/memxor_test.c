@@ -1,5 +1,5 @@
 #include "test.h"
-#include "memxor.h"
+#include <cry/memxor.h>
 #include <string.h>
 
 #define S1 "HeLLoWoRld01x"

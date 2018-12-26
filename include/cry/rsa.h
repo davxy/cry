@@ -3,10 +3,10 @@
  * @brief   RSA cipher.
  */
 
-#ifndef _CRY_RSA_H_
-#define _CRY_RSA_H_
+#ifndef CRY_RSA_H_
+#define CRY_RSA_H_
 
-#include "cry/mpi.h"
+#include <cry/mpi.h>
 
 #define CRY_RSA_FLAG_SIGN   (1 << 0)
 
@@ -36,4 +36,4 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 }
 #endif
 
-#endif /* _CRY_RSA_H_ */
+#endif /* CRY_RSA_H_ */

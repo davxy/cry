@@ -1,5 +1,5 @@
 #include "mpi_pvt.h"
-#include "cry/prng.h"
+#include <cry/prng.h>
 
 /*
  * Generate a random integer with a given number of bits.

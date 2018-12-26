@@ -3,8 +3,8 @@
  * @brief   Library version.
  */
 
-#ifndef _CRY_VERSION_H_
-#define _CRY_VERSION_H_
+#ifndef CRY_VERSION_H_
+#define CRY_VERSION_H_
 
 /** Library version major number */
 #define CRY_MAJOR   0
@@ -24,4 +24,4 @@
  */
 long cry_version(void);
 
-#endif /* _CRY_VERSION_H_ */
+#endif /* CRY_VERSION_H_ */

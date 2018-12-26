@@ -1,5 +1,5 @@
-#include "cry/rsa.h"
-#include "cry/prng.h"
+#include <cry/rsa.h>
+#include <cry/prng.h>
 #include <string.h>
 #include <stdlib.h>
 

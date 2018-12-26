@@ -3,8 +3,8 @@
  * @brief   Pseudo Random Number Generator
  */
 
-#ifndef _CRY_PRNG_H_
-#define _CRY_PRNG_H_
+#ifndef CRY_PRNG_H_
+#define CRY_PRNG_H_
 
 #ifdef __cplusplus
 extern "C"{
@@ -38,4 +38,4 @@ int cry_prng_rand(unsigned char *buf, size_t siz);
 }
 #endif
 
-#endif /* _CRY_PRNG_H_ */
+#endif /* CRY_PRNG_H_ */

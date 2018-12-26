@@ -3,8 +3,8 @@
  * @brief   Secure Hash Algorithm (256)
  */
 
-#ifndef _CRY_SHA256_H_
-#define _CRY_SHA256_H_
+#ifndef CRY_SHA256_H_
+#define CRY_SHA256_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -35,4 +35,4 @@ void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *digest);
 }
 #endif
 
-#endif /* _CRY_SHA256_H */
+#endif /* CRY_SHA256_H */

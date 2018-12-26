@@ -3,10 +3,10 @@
  * @brief   Elliptic curve equation
  */
 
-#ifndef _CRY_EC_H_
-#define _CRY_EC_H_
+#ifndef CRY_EC_H_
+#define CRY_EC_H_
 
-#include "cry/ecp.h"
+#include <cry/ecp.h>
 
 /*
  * Describes an elliptic curve equation:
@@ -42,4 +42,4 @@ int cry_ec_set_nist_p256(cry_ec *ec);
 }
 #endif
 
-#endif /* _CRY_EC_H_ */
+#endif /* CRY_EC_H_ */

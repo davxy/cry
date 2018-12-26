@@ -3,8 +3,8 @@
  * @brief   Generic cipher interface
  */
 
-#ifndef _CRY_CIPH_H_
-#define _CRY_CIPH_H_
+#ifndef CRY_CIPH_H_
+#define CRY_CIPH_H_
 
 #ifdef __cplusplus
 extern "C"{
@@ -80,4 +80,4 @@ struct cry_ciph_itf {
 typedef struct cry_ciph_itf cry_ciph_itf;
 
 
-#endif /* _CRY_CIPH_H_ */
+#endif /* CRY_CIPH_H_ */

@@ -1,4 +1,4 @@
-#include "cry/version.h"
+#include <cry/version.h>
 
 long cry_version(void)
 {

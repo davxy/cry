@@ -1,5 +1,5 @@
-#include "cry/hill.h"
-#include "cry/prng.h"
+#include <cry/hill.h>
+#include <cry/prng.h>
 #include "misc.h"
 #include <string.h>
 

@@ -1,4 +1,4 @@
-#include "cry/sum.h"
+#include <cry/sum.h>
 
 unsigned char cry_cs8(const unsigned char *in, size_t n)
 {

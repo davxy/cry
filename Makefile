@@ -51,7 +51,7 @@ endif
 endif
 
 
-objs-y 	:=
+objects-y 	:=
 paths-y	:=
 objects_list :=
 
@@ -59,9 +59,9 @@ define include_subdir
 $(shell mkdir -p $(call src_to_bin_dir,$1))
 subdirs-y :=
 current := $1
-objs-y :=
+objects-y :=
 include $1/subdir.mk
-objects_list += $$(if $$(objs-y),$$(addprefix $1/,$$(objs-y)))
+objects_list += $$(if $$(objects-y),$$(addprefix $1/,$$(objects-y)))
 paths-y += $$(current)
 subdirs-y := $$(addprefix $$(current)/, $$(subdirs-y))
 $$(foreach subdir, $$(subdirs-y),$$(eval $$(call include_subdir,$$(subdir))))
@@ -72,12 +72,13 @@ $(eval $(call include_subdir,src))
 objects = $(call src_to_bin_dir,$(objects_list))
 depends = $(patsubst %.o,%.d,$(objects))
 
-CPPFLAGS =  $(includes-y)
-CFLAGS = 	$(cflags-y)
-AFLAGS = 	$(aflags-y)
-LDFLAGS = 	$(lflags-y)
+CPPFLAGS = $(includes-y)
+CFLAGS   = $(cflags-y)
+AFLAGS   = $(aflags-y)
+LDFLAGS  = $(lflags-y)
 
-DATE 	:= $(shell date +'%y%m%d')
+DATE := $(shell date +'%y%m%d')
+
 
 .PHONY: all cry clean test testclean
 
@@ -86,11 +87,10 @@ all: cry
 cry: $(target)
 
 clean:
-	$(RM) $(binary_dir) $(config) *.a
-	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
-	
+	@$(RM) $(binary_dir) $(config) *.a
+	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
 
-$(objects): $(config)
+$(objects): Makefile config.mk $(config)
 
 $(target): $(objects)
 	$(AR) rcs $@ $^

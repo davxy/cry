@@ -6,8 +6,8 @@
  * Polynomial_representations_of_cyclic_redundancy_checks
  */
 
-#ifndef _CRY_CRC_H_
-#define _CRY_CRC_H_
+#ifndef CRY_CRC_H_
+#define CRY_CRC_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -114,9 +114,6 @@ void cry_crc16_ibm_init(struct cry_crc16_ctx *ctx);
  */
 uint16_t cry_crc16_ibm(const unsigned char *in, size_t n);
 
-
-
-
 /**
  * Initialize a generic CRC-32 algoritm context.
  *
@@ -171,4 +168,4 @@ uint32_t cry_crc32_eth(const unsigned char *in, size_t n);
 }
 #endif
 
-#endif /* _CRY_CRC_H_ */
+#endif /* CRY_CRC_H_ */

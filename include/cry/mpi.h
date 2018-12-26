@@ -3,8 +3,8 @@
  * @brief   Multiple precision integers.
  */
 
-#ifndef _CRY_MPI_H_
-#define _CRY_MPI_H_
+#ifndef CRY_MPI_H_
+#define CRY_MPI_H_
 
 #include <stddef.h>
 
@@ -176,4 +176,4 @@ int cry_mpi_mul_dig(cry_mpi *r, const cry_mpi *a, cry_mpi_digit b);
 }
 #endif
 
-#endif /* _CRY_MPI_H_ */
+#endif /* CRY_MPI_H_ */

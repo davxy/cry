@@ -3,8 +3,8 @@
  * @brief   Common checksum algorithms.
  */
 
-#ifndef _CRY_SUM_H_
-#define _CRY_SUM_H_
+#ifndef CRY_SUM_H_
+#define CRY_SUM_H_
 
 #include <stddef.h>
 
@@ -34,4 +34,4 @@ unsigned char cry_lrc(const unsigned char *in, size_t n);
 }
 #endif
 
-#endif /* _CRY_SUM_H_ */
+#endif /* CRY_SUM_H_ */

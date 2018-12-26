@@ -3,8 +3,8 @@
  * @brief   Base-64 encoder/decoder.
  */
 
-#ifndef _CRY_BASE64_H_
-#define _CRY_BASE64_H_
+#ifndef CRY_BASE64_H_
+#define CRY_BASE64_H_
 
 #ifdef __cplusplus
 extern "C"{
@@ -20,4 +20,4 @@ size_t cry_base64_decode(char *out, const char *in, size_t len);
 }
 #endif
 
-#endif /* _CRY_BASE64_H_ */
+#endif /* CRY_BASE64_H_ */

@@ -5,8 +5,8 @@
  * Also known as OMAC1 (One-key mac 1).
  */
 
-#ifndef _CRY_CMAC_H_
-#define _CRY_CMAC_H_
+#ifndef CRY_CMAC_H_
+#define CRY_CMAC_H_
 
 #include <stddef.h>
 
@@ -30,4 +30,4 @@ void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
 }
 #endif
 
-#endif /* _CRY_CMAC_H_ */
+#endif /* CRY_CMAC_H_ */
