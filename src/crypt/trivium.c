@@ -1,57 +1,38 @@
-#include "cry/trivium.h"
+#include <cry/trivium.h>
 #include <string.h>
+#include "misc.h"
 
-#define U8C(v) (v##U)
-#define U8V(v) ((uint8_t)(v) & U8C(0xFF))
-
-/* replace with CRY_READ32_LE */
-#define U8TO32_LITTLE(p) \
-  (((uint32_t)((p)[0])      ) | \
-   ((uint32_t)((p)[1]) <<  8) | \
-   ((uint32_t)((p)[2]) << 16) | \
-   ((uint32_t)((p)[3]) << 24))
-
-/* replace with CRY_WRITE32_LE */
-#define U32TO8_LITTLE(p, v) \
-  do { \
-    (p)[0] = U8V((v)      ); \
-    (p)[1] = U8V((v) >>  8); \
-    (p)[2] = U8V((v) >> 16); \
-    (p)[3] = U8V((v) >> 24); \
-  } while (0)
 
 #define S(a, n) (s##a##n)
 #define T(a)    (t##a)
 
 #define LOAD(s) do { \
-    S(1, 1) = U8TO32_LITTLE((s) +  0); \
-    S(1, 2) = U8TO32_LITTLE((s) +  4); \
-    S(1, 3) = U8TO32_LITTLE((s) +  8); \
-    S(2, 1) = U8TO32_LITTLE((s) + 12); \
-    S(2, 2) = U8TO32_LITTLE((s) + 16); \
-    S(2, 3) = U8TO32_LITTLE((s) + 20); \
-    S(3, 1) = U8TO32_LITTLE((s) + 24); \
-    S(3, 2) = U8TO32_LITTLE((s) + 28); \
-    S(3, 3) = U8TO32_LITTLE((s) + 32); \
-    S(3, 4) = U8TO32_LITTLE((s) + 36); \
+    CRY_READ32_LE(S(1, 1), (s) +  0); \
+    CRY_READ32_LE(S(1, 2), (s) +  4); \
+    CRY_READ32_LE(S(1, 3), (s) +  8); \
+    CRY_READ32_LE(S(2, 1), (s) + 12); \
+    CRY_READ32_LE(S(2, 2), (s) + 16); \
+    CRY_READ32_LE(S(2, 3), (s) + 20); \
+    CRY_READ32_LE(S(3, 1), (s) + 24); \
+    CRY_READ32_LE(S(3, 2), (s) + 28); \
+    CRY_READ32_LE(S(3, 3), (s) + 32); \
+    CRY_READ32_LE(S(3, 4), (s) + 36); \
 } while (0)
 
 #define STORE(s) do { \
-    U32TO8_LITTLE((s) +  0, S(1, 1)); \
-    U32TO8_LITTLE((s) +  4, S(1, 2)); \
-    U32TO8_LITTLE((s) +  8, S(1, 3)); \
-    U32TO8_LITTLE((s) + 12, S(2, 1)); \
-    U32TO8_LITTLE((s) + 16, S(2, 2)); \
-    U32TO8_LITTLE((s) + 20, S(2, 3)); \
-    U32TO8_LITTLE((s) + 24, S(3, 1)); \
-    U32TO8_LITTLE((s) + 28, S(3, 2)); \
-    U32TO8_LITTLE((s) + 32, S(3, 3)); \
-    U32TO8_LITTLE((s) + 36, S(3, 4)); \
+    CRY_WRITE32_LE(S(1, 1), (s) +  0); \
+    CRY_WRITE32_LE(S(1, 2), (s) +  4); \
+    CRY_WRITE32_LE(S(1, 3), (s) +  8); \
+    CRY_WRITE32_LE(S(2, 1), (s) + 12); \
+    CRY_WRITE32_LE(S(2, 2), (s) + 16); \
+    CRY_WRITE32_LE(S(2, 3), (s) + 20); \
+    CRY_WRITE32_LE(S(3, 1), (s) + 24); \
+    CRY_WRITE32_LE(S(3, 2), (s) + 28); \
+    CRY_WRITE32_LE(S(3, 3), (s) + 32); \
+    CRY_WRITE32_LE(S(3, 4), (s) + 36); \
 } while (0)
 
 
-#define S00(a, b) ((S(a, 1) << ( 32 - (b))))
-#define S32(a, b) ((S(a, 2) << ( 64 - (b))) | (S(a, 1) >> ((b) - 32)))
 #define S64(a, b) ((S(a, 3) << ( 96 - (b))) | (S(a, 2) >> ((b) - 64)))
 #define S96(a, b) ((S(a, 4) << (128 - (b))) | (S(a, 3) >> ((b) - 96)))
 
@@ -154,7 +135,11 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
     LOAD(ctx->s);
 
 #undef Z
-#define Z(w) U32TO8_LITTLE(dst + 4 * i, U8TO32_LITTLE(src + 4 * i) ^ w)
+#define Z(w) do { \
+    CRY_READ32_LE(z, src + 4 * i);  \
+    z ^= w;                         \
+    CRY_WRITE32_LE(z, dst + 4 * i); \
+} while (0)
 
     for (i = 0; i < size / 4; i++) {
         UPDATE();
@@ -169,7 +154,7 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
         UPDATE();
         ROTATE();
         for ( ; i < size; i++, z >>= 8)
-	        dst[i] = src[i] ^ U8V(z); 
+	        dst[i] = src[i] ^ (uint8_t)(z); 
     }
 
     STORE(ctx->s);

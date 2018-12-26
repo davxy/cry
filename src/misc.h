@@ -54,7 +54,7 @@
     ((uint8_t *)(dst))[2] = (uint8_t)(((val) >> 16) & 0xff); \
     ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 8) & 0xff); \
     ((uint8_t *)(dst))[0] = (uint8_t) ((val) & 0xff); \
-    } while(0)
+} while(0)
 
 /** Architecture independent big endian 32 bit value write. */
 #define CRY_WRITE32_BE(val, dst) do { \
@@ -62,7 +62,7 @@
     ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 16U) & 0xffU); \
     ((uint8_t *)(dst))[2] = (uint8_t)(((val) >> 8U) & 0xffU); \
     ((uint8_t *)(dst))[3] = (uint8_t) ((val) & 0xff); \
-    } while(0)
+} while(0)
 
 /** Architecture independent little endian 32 bit value read. */
 #define CRY_READ32_LE(val, src) \
