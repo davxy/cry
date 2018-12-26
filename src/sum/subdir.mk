@@ -1,6 +1,10 @@
-# src/sum/subdir.mk
+# src/crc/subdir.mk
 
 objects-y := \
-    cs8.o \
-    lrc.o
-
+    crc16.o \
+    crc16_ccitt.o \
+    crc16_ibm.o \
+    crc32.o \
+    crc32_eth.o \
+	cs8.o \
+	lrc.o
