@@ -114,9 +114,6 @@ void cry_crc16_ibm_init(struct cry_crc16_ctx *ctx);
  */
 uint16_t cry_crc16_ibm(const unsigned char *in, size_t n);
 
-
-
-
 /**
  * Initialize a generic CRC-32 algoritm context.
  *
