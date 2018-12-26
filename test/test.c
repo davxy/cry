@@ -5,6 +5,7 @@ void memxor_test(void);
 void base64_test(void);
 void mpi_test(void);
 void hmac_test(void);
+void des_test(void);
 void aes_test(void);
 void trivium_test(void);
 void hill_test(void);
@@ -73,6 +74,7 @@ struct sub_test g_tests[] = {
 };
 
 #define NTESTS  ARLEN(g_tests)
+
 
 static char g_test_skip[NTESTS];
 

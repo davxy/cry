@@ -1,0 +1,670 @@
+################################################################################
+#
+# OpenSSL test vectors
+#
+################################################################################
+
+################################################################################
+# DES-ECB encrypt
+# p0 : key
+# p1 : input
+# p2 : output
+################################################################################
+
+DES-ECB Encrypt OpenSSL Test Vector #1
+des_ecb_encrypt
+0000000000000000
+0000000000000000
+8CA64DE9C1B123A7
+
+DES-ECB Encrypt OpenSSL Test Vector #2
+des_ecb_encrypt
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+7359B2163E4EDC58
+
+DES-ECB Encrypt OpenSSL Test Vector #3
+des_ecb_encrypt
+3000000000000000
+1000000000000001
+958E6E627A05557B
+
+DES-ECB Encrypt OpenSSL Test Vector #4
+des_ecb_encrypt
+1111111111111111
+1111111111111111
+F40379AB9E0EC533
+
+DES-ECB Encrypt OpenSSL Test Vector #5
+des_ecb_encrypt
+0123456789ABCDEF
+1111111111111111
+17668DFC7292532D
+
+DES-ECB Encrypt OpenSSL Test Vector #6
+des_ecb_encrypt
+1111111111111111
+0123456789ABCDEF
+8A5AE1F81AB8F2DD
+
+DES-ECB Encrypt OpenSSL Test Vector #7
+des_ecb_encrypt
+0000000000000000
+0000000000000000
+8CA64DE9C1B123A7
+
+DES-ECB Encrypt OpenSSL Test Vector #8
+des_ecb_encrypt
+FEDCBA9876543210
+0123456789ABCDEF
+ED39D950FA74BCC4
+
+DES-ECB Encrypt OpenSSL Test Vector #9
+des_ecb_encrypt
+7CA110454A1A6E57
+01A1D6D039776742
+690F5B0D9A26939B
+
+DES-ECB Encrypt OpenSSL Test Vector #10
+des_ecb_encrypt
+0131D9619DC1376E
+5CD54CA83DEF57DA
+7A389D10354BD271
+
+DES-ECB Encrypt OpenSSL Test Vector #11
+des_ecb_encrypt
+07A1133E4A0B2686
+0248D43806F67172
+868EBB51CAB4599A
+
+DES-ECB Encrypt OpenSSL Test Vector #12
+des_ecb_encrypt
+3849674C2602319E
+51454B582DDF440A
+7178876E01F19B2A
+
+DES-ECB Encrypt OpenSSL Test Vector #13
+des_ecb_encrypt
+04B915BA43FEB5B6
+42FD443059577FA2
+AF37FB421F8C4095
+
+DES-ECB Encrypt OpenSSL Test Vector #14
+des_ecb_encrypt
+0113B970FD34F2CE
+059B5E0851CF143A
+86A560F10EC6D85B
+
+DES-ECB Encrypt OpenSSL Test Vector #15
+des_ecb_encrypt
+0170F175468FB5E6
+0756D8E0774761D2
+0CD3DA020021DC09
+
+DES-ECB Encrypt OpenSSL Test Vector #16
+des_ecb_encrypt
+43297FAD38E373FE
+762514B829BF486A
+EA676B2CB7DB2B7A
+
+DES-ECB Encrypt OpenSSL Test Vector #17
+des_ecb_encrypt
+07A7137045DA2A16
+3BDD119049372802
+DFD64A815CAF1A0F
+
+DES-ECB Encrypt OpenSSL Test Vector #18
+des_ecb_encrypt
+04689104C2FD3B2F
+26955F6835AF609A
+5C513C9C4886C088
+
+DES-ECB Encrypt OpenSSL Test Vector #19
+des_ecb_encrypt
+37D06BB516CB7546
+164D5E404F275232
+0A2AEEAE3FF4AB77
+
+DES-ECB Encrypt OpenSSL Test Vector #20
+des_ecb_encrypt
+1F08260D1AC2465E
+6B056E18759F5CCA
+EF1BF03E5DFA575A
+
+DES-ECB Encrypt OpenSSL Test Vector #21
+des_ecb_encrypt
+584023641ABA6176
+004BD6EF09176062
+88BF0DB6D70DEE56
+
+DES-ECB Encrypt OpenSSL Test Vector #22
+des_ecb_encrypt
+025816164629B007
+480D39006EE762F2
+A1F9915541020B56
+
+DES-ECB Encrypt OpenSSL Test Vector #23
+des_ecb_encrypt
+49793EBC79B3258F
+437540C8698F3CFA
+6FBF1CAFCFFD0556
+
+DES-ECB Encrypt OpenSSL Test Vector #24
+des_ecb_encrypt
+4FB05E1515AB73A7
+072D43A077075292
+2F22E49BAB7CA1AC
+
+DES-ECB Encrypt OpenSSL Test Vector #25
+des_ecb_encrypt
+49E95D6D4CA229BF
+02FE55778117F12A
+5A6B612CC26CCE4A
+
+DES-ECB Encrypt OpenSSL Test Vector #26
+des_ecb_encrypt
+018310DC409B26D6
+1D9D5C5018F728C2
+5F4C038ED12B2E41
+
+DES-ECB Encrypt OpenSSL Test Vector #27
+des_ecb_encrypt
+1C587F1C13924FEF
+305532286D6F295A
+63FAC0D034D9F793
+
+DES-ECB Encrypt OpenSSL Test Vector #28
+des_ecb_encrypt
+0101010101010101
+0123456789ABCDEF
+617B3A0CE8F07100
+
+DES-ECB Encrypt OpenSSL Test Vector #29
+des_ecb_encrypt
+1F1F1F1F0E0E0E0E
+0123456789ABCDEF
+DB958605F8C8C606
+
+DES-ECB Encrypt OpenSSL Test Vector #30
+des_ecb_encrypt
+E0FEE0FEF1FEF1FE
+0123456789ABCDEF
+EDBFD1C66C29CCC7
+
+DES-ECB Encrypt OpenSSL Test Vector #31
+des_ecb_encrypt
+0000000000000000
+FFFFFFFFFFFFFFFF
+355550B2150E2451
+
+DES-ECB Encrypt OpenSSL Test Vector #32
+des_ecb_encrypt
+FFFFFFFFFFFFFFFF
+0000000000000000
+CAAAAF4DEAF1DBAE
+
+DES-ECB Encrypt OpenSSL Test Vector #33
+des_ecb_encrypt
+0123456789ABCDEF
+0000000000000000
+D5D44FF720683D0D
+
+DES-ECB Encrypt OpenSSL Test Vector #34
+des_ecb_encrypt
+FEDCBA9876543210
+FFFFFFFFFFFFFFFF
+2A2BB008DF97C2F2
+
+################################################################################
+# DES-ECB decrypt
+# p0 : key
+# p1 : input
+# p2 : output
+################################################################################
+
+DES-ECB Decrypt OpenSSL Test Vector #1
+des_ecb_decrypt
+0000000000000000
+8CA64DE9C1B123A7
+0000000000000000
+
+DES-ECB Decrypt OpenSSL Test Vector #2
+des_ecb_decrypt
+FFFFFFFFFFFFFFFF
+7359B2163E4EDC58
+FFFFFFFFFFFFFFFF
+
+DES-ECB Decrypt OpenSSL Test Vector #3
+des_ecb_decrypt
+3000000000000000
+958E6E627A05557B
+1000000000000001
+
+DES-ECB Decrypt OpenSSL Test Vector #4
+des_ecb_decrypt
+1111111111111111
+F40379AB9E0EC533
+1111111111111111
+
+DES-ECB Decrypt OpenSSL Test Vector #5
+des_ecb_decrypt
+0123456789ABCDEF
+17668DFC7292532D
+1111111111111111
+
+DES-ECB Decrypt OpenSSL Test Vector #6
+des_ecb_decrypt
+1111111111111111
+8A5AE1F81AB8F2DD
+0123456789ABCDEF
+
+DES-ECB Decrypt OpenSSL Test Vector #7
+des_ecb_decrypt
+0000000000000000
+8CA64DE9C1B123A7
+0000000000000000
+
+DES-ECB Decrypt OpenSSL Test Vector #8
+des_ecb_decrypt
+FEDCBA9876543210
+ED39D950FA74BCC4
+0123456789ABCDEF
+
+DES-ECB Decrypt OpenSSL Test Vector #9
+des_ecb_decrypt
+7CA110454A1A6E57
+690F5B0D9A26939B
+01A1D6D039776742
+
+DES-ECB Decrypt OpenSSL Test Vector #10
+des_ecb_decrypt
+0131D9619DC1376E
+7A389D10354BD271
+5CD54CA83DEF57DA
+
+DES-ECB Decrypt OpenSSL Test Vector #11
+des_ecb_decrypt
+07A1133E4A0B2686
+868EBB51CAB4599A
+0248D43806F67172
+
+DES-ECB Decrypt OpenSSL Test Vector #12
+des_ecb_decrypt
+3849674C2602319E
+7178876E01F19B2A
+51454B582DDF440A
+
+DES-ECB Decrypt OpenSSL Test Vector #13
+des_ecb_decrypt
+04B915BA43FEB5B6
+AF37FB421F8C4095
+42FD443059577FA2
+
+DES-ECB Decrypt OpenSSL Test Vector #14
+des_ecb_decrypt
+0113B970FD34F2CE
+86A560F10EC6D85B
+059B5E0851CF143A
+
+DES-ECB Decrypt OpenSSL Test Vector #15
+des_ecb_decrypt
+0170F175468FB5E6
+0CD3DA020021DC09
+0756D8E0774761D2
+
+DES-ECB Decrypt OpenSSL Test Vector #16
+des_ecb_decrypt
+43297FAD38E373FE
+EA676B2CB7DB2B7A
+762514B829BF486A
+
+DES-ECB Decrypt OpenSSL Test Vector #17
+des_ecb_decrypt
+07A7137045DA2A16
+DFD64A815CAF1A0F
+3BDD119049372802
+
+DES-ECB Decrypt OpenSSL Test Vector #18
+des_ecb_decrypt
+04689104C2FD3B2F
+5C513C9C4886C088
+26955F6835AF609A
+
+DES-ECB Decrypt OpenSSL Test Vector #19
+des_ecb_decrypt
+37D06BB516CB7546
+0A2AEEAE3FF4AB77
+164D5E404F275232
+
+DES-ECB Decrypt OpenSSL Test Vector #20
+des_ecb_decrypt
+1F08260D1AC2465E
+EF1BF03E5DFA575A
+6B056E18759F5CCA
+
+DES-ECB Decrypt OpenSSL Test Vector #21
+des_ecb_decrypt
+584023641ABA6176
+88BF0DB6D70DEE56
+004BD6EF09176062
+
+DES-ECB Decrypt OpenSSL Test Vector #22
+des_ecb_decrypt
+025816164629B007
+A1F9915541020B56
+480D39006EE762F2
+
+DES-ECB Decrypt OpenSSL Test Vector #23
+des_ecb_decrypt
+49793EBC79B3258F
+6FBF1CAFCFFD0556
+437540C8698F3CFA
+
+DES-ECB Decrypt OpenSSL Test Vector #24
+des_ecb_decrypt
+4FB05E1515AB73A7
+2F22E49BAB7CA1AC
+072D43A077075292
+
+DES-ECB Decrypt OpenSSL Test Vector #25
+des_ecb_decrypt
+49E95D6D4CA229BF
+5A6B612CC26CCE4A
+02FE55778117F12A
+
+DES-ECB Decrypt OpenSSL Test Vector #26
+des_ecb_decrypt
+018310DC409B26D6
+5F4C038ED12B2E41
+1D9D5C5018F728C2
+
+DES-ECB Decrypt OpenSSL Test Vector #27
+des_ecb_decrypt
+1C587F1C13924FEF
+63FAC0D034D9F793
+305532286D6F295A
+
+DES-ECB Decrypt OpenSSL Test Vector #28
+des_ecb_decrypt
+0101010101010101
+617B3A0CE8F07100
+0123456789ABCDEF
+
+DES-ECB Decrypt OpenSSL Test Vector #29
+des_ecb_decrypt
+1F1F1F1F0E0E0E0E
+DB958605F8C8C606
+0123456789ABCDEF
+
+DES-ECB Decrypt OpenSSL Test Vector #30
+des_ecb_decrypt
+E0FEE0FEF1FEF1FE
+EDBFD1C66C29CCC7
+0123456789ABCDEF
+
+DES-ECB Decrypt OpenSSL Test Vector #31
+des_ecb_decrypt
+0000000000000000
+355550B2150E2451
+FFFFFFFFFFFFFFFF
+
+DES-ECB Decrypt OpenSSL Test Vector #32
+des_ecb_decrypt
+FFFFFFFFFFFFFFFF
+CAAAAF4DEAF1DBAE
+0000000000000000
+
+DES-ECB Decrypt OpenSSL Test Vector #33
+des_ecb_decrypt
+0123456789ABCDEF
+D5D44FF720683D0D
+0000000000000000
+
+DES-ECB Decrypt OpenSSL Test Vector #34
+des_ecb_decrypt
+FEDCBA9876543210
+2A2BB008DF97C2F2
+FFFFFFFFFFFFFFFF
+
+################################################################################
+# TDES-EBC encrypt
+# p0 : key
+# p2 : input
+# p3 : output
+################################################################################
+
+TDES-ECB Encrypt OpenSSL Test Vector #1
+des_ecb_encrypt
+000000000000000000000000000000000000000000000000
+0000000000000000
+8CA64DE9C1B123A7
+
+TDES-ECB Encrypt OpenSSL Test Vector #2
+des_ecb_encrypt
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+7359B2163E4EDC58
+
+TDES-ECB Encrypt OpenSSL Test Vector #3
+des_ecb_encrypt
+300000000000000030000000000000003000000000000000
+1000000000000001
+958E6E627A05557B
+
+TDES-ECB Encrypt OpenSSL Test Vector #4
+des_ecb_encrypt
+111111111111111111111111111111111111111111111111
+1111111111111111
+F40379AB9E0EC533
+
+TDES-ECB Encrypt OpenSSL Test Vector #5
+des_ecb_encrypt
+0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+1111111111111111
+17668DFC7292532D
+
+TDES-ECB Encrypt OpenSSL Test Vector #6
+des_ecb_encrypt
+111111111111111111111111111111111111111111111111
+0123456789ABCDEF
+8A5AE1F81AB8F2DD
+
+TDES-ECB Encrypt OpenSSL Test Vector #7
+des_ecb_encrypt
+000000000000000000000000000000000000000000000000
+0000000000000000
+8CA64DE9C1B123A7
+
+TDES-ECB Encrypt OpenSSL Test Vector #8
+des_ecb_encrypt
+FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210
+0123456789ABCDEF
+ED39D950FA74BCC4
+
+TDES-ECB Encrypt OpenSSL Test Vector #9
+des_ecb_encrypt
+7CA110454A1A6E577CA110454A1A6E577CA110454A1A6E57
+01A1D6D039776742
+690F5B0D9A26939B
+
+################################################################################
+# TDES-ECB decrypt
+# p0 : key
+# p1 : input
+# p2 : output
+################################################################################
+
+TDES-ECB Decrypt OpenSSL Test Vector #1
+des_ecb_decrypt
+000000000000000000000000000000000000000000000000
+8CA64DE9C1B123A7
+0000000000000000
+
+TDES-ECB Decrypt OpenSSL Test Vector #2
+des_ecb_decrypt
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+7359B2163E4EDC58
+FFFFFFFFFFFFFFFF
+
+TDES-ECB Decrypt OpenSSL Test Vector #3
+des_ecb_decrypt
+300000000000000030000000000000003000000000000000
+958E6E627A05557B
+1000000000000001
+
+TDES-ECB Decrypt OpenSSL Test Vector #4
+des_ecb_decrypt
+111111111111111111111111111111111111111111111111
+F40379AB9E0EC533
+1111111111111111
+
+TDES-ECB Decrypt OpenSSL Test Vector #5
+des_ecb_decrypt
+0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+17668DFC7292532D
+1111111111111111
+
+TDES-ECB Decrypt OpenSSL Test Vector #6
+des_ecb_decrypt
+111111111111111111111111111111111111111111111111
+8A5AE1F81AB8F2DD
+0123456789ABCDEF
+
+TDES-ECB Decrypt OpenSSL Test Vector #7
+des_ecb_decrypt
+000000000000000000000000000000000000000000000000
+8CA64DE9C1B123A7
+0000000000000000
+
+TDES-ECB Decrypt OpenSSL Test Vector #8
+des_ecb_decrypt
+FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210
+ED39D950FA74BCC4
+0123456789ABCDEF
+
+TDES-ECB Decrypt OpenSSL Test Vector #9
+des_ecb_decrypt
+7CA110454A1A6E577CA110454A1A6E577CA110454A1A6E57
+690F5B0D9A26939B
+01A1D6D039776742
+
+################################################################################
+# DES-CBC encrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+DES-CBC Encrypt OpenSSL Test Vector #1
+des_cbc_encrypt
+0123456789abcdef
+fedcba9876543210
+37363534333231204E6F77206973207468652074696D6520
+ccd173ffab2039f4acd8aefddfd8a1eb468e91157888ba68
+
+################################################################################
+# DES-CBC decrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+DES-CBC Decrypt OpenSSL Test Vector #1
+des_cbc_decrypt
+0123456789abcdef
+fedcba9876543210
+ccd173ffab2039f4acd8aefddfd8a1eb468e91157888ba68
+37363534333231204E6F77206973207468652074696D6520
+
+################################################################################
+# TDES-CBC encrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+TDES-CBC Encrypt OpenSSL Test Vector #1
+des_cbc_encrypt
+0123456789abcdef0123456789abcdef0123456789abcdef
+fedcba9876543210
+37363534333231204E6F77206973207468652074696D6520
+ccd173ffab2039f4acd8aefddfd8a1eb468e91157888ba68
+
+################################################################################
+# TDES-CBC decrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+TDES-CBC Decrypt OpenSSL Test Vector #1
+des_cbc_decrypt
+0123456789abcdef0123456789abcdef0123456789abcdef
+fedcba9876543210
+ccd173ffab2039f4acd8aefddfd8a1eb468e91157888ba68
+37363534333231204E6F77206973207468652074696D6520
+
+################################################################################
+# DES-CTR encrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+DES-CTR Encrypt OpenSSL Test Vector #1
+des_ctr_encrypt
+0123456789abcdef
+fedcba9876543210
+37363534333231204E6F77206973207468652074696D6520
+25f0139b36b9721b357dee68a3fe09a2b93fc605c3552ed5
+
+################################################################################
+# DES-CTR decrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+DES-CTR Decrypt OpenSSL Test Vector #1
+des_ctr_decrypt
+0123456789abcdef
+fedcba9876543210
+25f0139b36b9721b357dee68a3fe09a2b93fc605c3552ed5
+37363534333231204E6F77206973207468652074696D6520
+
+################################################################################
+# TDES-CTR encrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+TDES-CTR Encrypt OpenSSL Test Vector #1
+des_ctr_encrypt
+0123456789abcdef0123456789abcdef0123456789abcdef
+fedcba9876543210
+37363534333231204E6F77206973207468652074696D6520
+25f0139b36b9721b357dee68a3fe09a2b93fc605c3552ed5
+
+################################################################################
+# TDES-CTR decrypt
+# p0 : key
+# p1 : iv
+# p2 : input
+# p3 : output
+################################################################################
+
+TDES-CTR Decrypt OpenSSL Test Vector #1
+des_ctr_decrypt
+0123456789abcdef0123456789abcdef0123456789abcdef
+fedcba9876543210
+25f0139b36b9721b357dee68a3fe09a2b93fc605c3552ed5
+37363534333231204E6F77206973207468652074696D6520
+

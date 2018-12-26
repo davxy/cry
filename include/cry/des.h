@@ -21,10 +21,8 @@ struct cry_des_ctx {
 typedef struct cry_des_ctx cry_des_ctx;
 
 
-#define cry_des_key_set(ctx, _key, _keylen) do { \
-    (ctx)->keylen = _keylen; \
-    memcpy((ctx)->key, _key, _keylen); \
-    } while(0)
+void cry_des_key_set(cry_des_ctx *ctx, unsigned char *key,
+                     unsigned int size);
 
 void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
                      const unsigned char *src, unsigned int size);

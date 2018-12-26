@@ -9,7 +9,7 @@
 #include <cry/ciph.h>
 
 /** CBC block size. */
-#define CRY_CBC_BLOCK_SIZE      16
+#define CRY_CBC_BLOCK_MAX   16
 
 
 /** CBC context structure. */
@@ -19,7 +19,9 @@ struct cry_cbc_ctx {
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter */
-    unsigned char              ctr[CRY_CBC_BLOCK_SIZE];
+    unsigned char              ctr[CRY_CBC_BLOCK_MAX];
+    /** Counter length */
+    unsigned int               ctrlen;
 };
 
 typedef struct cry_cbc_ctx cry_cbc_ctx;
