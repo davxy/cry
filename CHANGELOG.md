@@ -21,6 +21,12 @@ Given a version number MAJOR.MINOR.PATCH
 - MINOR incremented for new functionalities
 - PATCH incremented for bug fixes
 
+
+[0.0.8] - Unreleased
+--------------------
+
+- CFB block cipher mode of operation
+
 [0.0.7] - 2018-12-26
 --------------------
 
@@ -69,8 +75,6 @@ Given a version number MAJOR.MINOR.PATCH
 [0.0.2] - 2014-11-22
 --------------------
 
-### Added
-
 - LRC
 - 8-bit trivial checksum
 - CRC16-IBM
@@ -79,8 +83,6 @@ Given a version number MAJOR.MINOR.PATCH
 
 [0.0.1] - 2014-05-10
 --------------------
-
-### Added
 
 - AES block cipher
 - DES block cipher
@@ -92,4 +94,3 @@ Given a version number MAJOR.MINOR.PATCH
 - CMAC message authentication code
 - Base64 encoder/decoder
 - CRC16-CCITT
-
