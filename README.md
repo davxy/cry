@@ -37,9 +37,7 @@ Symmetric ciphers
 - GCM
 - CTR
 
-
-Stream ciphers
---------------
+### Stream ciphers
 
 - Trivium
 
