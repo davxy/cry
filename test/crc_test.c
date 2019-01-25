@@ -23,16 +23,7 @@ static void crc16_ibm_test(void)
     ASSERT_EQ(crc, CRC16_IBM);
 }
 
-#if 0
-static const char *ar[] = {
-    "HelloWorld",
-    "Davy",
-    NULL
-};
-#endif
-
-
-static const tsm_uint8_t en_60870_5_1_pattern[] = {
+static const unsigned char en_60870_5_1_pattern[] = {
     0x00, 0x00, 0x00, 0x28, 0x30, 0x00, 0x3B, 0xE1,
     0x58, 0x0F, 0x12, 0xA7, 0x46, 0x1B, 0x01, 0x00,
     0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -54,10 +45,10 @@ static const tsm_uint8_t en_60870_5_1_pattern[] = {
 };
 
 struct binary_test {
-    char*           name,
-    tsm_uint8_t     pattern;
-    tsm_size_t      pattern_size;
-    tsm_uint16_t    expected;
+    char*           name;
+    unsigned char*  pattern;
+    size_t          pattern_size;
+    unsigned short  expected;
 };
 
 static const struct binary_test brs[] = {
@@ -70,21 +61,24 @@ static const struct binary_test brs[] = {
 
 static void crc16_dnp_test(void)
 {
+    struct tsc_crc16_ctx ctx;
     int i, t;
-
+    unsigned short crc;
+    
     printf("\nCTR (DNP, CEI EN 60870-5-1)\n");
 
     for(t = 0; t < sizeof(brs)/sizeof(*brs); ++t) {
-        printf("CRC16(%s) = 0x%x\n", brs[t].name,
+        printf("CRC16(%s) = 0x%04x\n", brs[t].name,
             tsc_crc16_dnp(brs[t].pattern, brs[t].pattern_size));
 
         printf("CRC16(");
-        tsc_crc16_dnp_init(&crc);
+        tsc_crc16_dnp_init(&ctx);
         for (i = 0; i < brs[t].pattern_size; i++) {
             printf("%02x ", brs[t].pattern[i]);
-            tsc_crc16_update(&crc, &brs[t].pattern[i], 1);
+            tsc_crc16_update(&ctx, &brs[t].pattern[i], 1);
         }
-        printf(") = 0x%x\n", tsc_crc16_final(&crc));
+        tsc_crc16_final(&ctx, &crc);
+        printf(") = 0x%04x\n", crc);
     }
 }
 

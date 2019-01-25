@@ -115,6 +115,27 @@ void cry_crc16_ibm_init(struct cry_crc16_ctx *ctx);
 uint16_t cry_crc16_ibm(const unsigned char *in, size_t n);
 
 /**
+ * Initialize as a CRC-16-DNP algorithm
+ *
+ * Standardized by: CEI EN 60870-5-1
+ * Used by: CTR protocol.
+ * Polynomial: x^16 + x^13 + x^12 + x^11 + x^10 + x^8 + x^6 + x^5 + x^2 + 1.
+ *
+ * @param ctx   CRC-16 context.
+ */
+void tsc_crc16_dnp_init(struct tsc_crc16_ctx *ctx);
+
+/**
+ * CRC-16-DNP all in one function.
+ *
+ *
+ * @param ptr   Buffer pointer.
+ * @param n     Number of octets in the buffer.
+ * @return      CRC value.
+ */
+uint16_t tsc_crc16_dnp(const uint8_t *ptr, size_t n);
+
+/**
  * Initialize a generic CRC-32 algoritm context.
  *
  * @param ctx   CRC-32 context.
