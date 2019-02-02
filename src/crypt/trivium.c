@@ -154,7 +154,7 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
         UPDATE();
         ROTATE();
         for ( ; i < size; i++, z >>= 8)
-	        dst[i] = src[i] ^ (uint8_t)(z); 
+            dst[i] = src[i] ^ (uint8_t)(z);
     }
 
     STORE(ctx->s);

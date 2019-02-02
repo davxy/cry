@@ -1,12 +1,13 @@
 [![Build Status](https://travis-ci.com/crylib/cry.svg?branch=master)](https://travis-ci.com/crylib/cry)
 [![Coverage Status](https://coveralls.io/repos/github/crylib/cry/badge.svg?branch=master)](https://coveralls.io/github/crylib/cry?branch=master)
 
+
 CRY
 ===
 
 CRY is a small, comprehensive and portable cryptographic library prividing
-a good collection of ciphers, hash functions, chaining modes, pseudo-random
-number generators and checksums.
+a good collection of ciphers, hash functions, pseudo-random number generators
+and multi-precision integers algorithms.
 
 
 Multiple precision integers
@@ -26,15 +27,20 @@ Symmetric ciphers
 
 ### Block ciphers
 
-- AES
+- AES (Rijndael)
 - DES and Triple DES
 
-### Block cipher mode of operation
+### Block ciphers mode of operation
 
-- ECB
-- CBC
-- GCM
-- CTR
+- ECB (electronic codebook)
+- CBC (cipher block chaining)
+- CFB (cipher feedback)
+- CTR (counter)
+- GCM (Galois counter mode)
+
+### Stream ciphers
+
+- Trivium
 
 
 Public key algorithms
@@ -60,16 +66,16 @@ Elliptic Curve
 --------------
 
 - Basic arithmetic (add,dbl,mul)
-- Load of NIST-P256 EC parameters
+- NIST-P256 EC parameters
 
 
 Pseudo random numbers generators
 --------------------------------
 
-- OS agnostic CSPRNG with AES-CTR
-- Weak portable PRNG
+- AES-CTR CSPRNG
 - Posix CSPRNG (using '/dev/urandom')
 - Windows CSPRNG (using 'CryptGenRandom')
+- Weak portable PRNG
 
 Message authentication code
 ---------------------------
@@ -81,7 +87,7 @@ Message authentication code
 Hash
 ----
 
-### Cryptographic hash
+### Secure hash
 
 - MD5
 - SHA-256
@@ -95,7 +101,7 @@ Hash
 ### Checksums
 
 - LRC
-- 8-bit trivial checksum
+- Trivial checksum
 
 
 Classical ciphers
@@ -111,4 +117,4 @@ Utilities
 ---------
 
 - Base64 encoder/decoder
-
+- Memxor

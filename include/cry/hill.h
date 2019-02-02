@@ -11,7 +11,7 @@
  * To decrypt the message each ciphertext block of n octets is instead left
  * multiplied by the inverse matrix A^-1.
  *
- * Given the cleartext x=<x1,...,xn> and the ciphertext y=<x1...yn> 
+ * Given the cleartext x=<x1,...,xn> and the ciphertext y=<x1...yn>
  * Encryption function: E(x) = A * x = y
  * Encryption function: D(y) = A^-1 * y = x
  *
