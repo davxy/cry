@@ -68,26 +68,59 @@ void cry_cfb_iv_set(struct cry_cfb_ctx *ctx, const unsigned char *iv,
                     unsigned int size);
 
 /**
+ * Encrypt/Decrypt function.
+ *
+ * @param ctx   CFB context.
+ * @param dst   Destination pointer.
+ * @param src   Source pointer.
+ * @param size  Size of source/destination.
+ */
+void cry_cfb_crypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
+                   const unsigned char *src, unsigned int size);
+
+/**
  * Encryption function.
+ *
+ * @param ctx   CFB context.
+ * @param dst   Destination pointer (ciphertext).
+ * @param src   Source pointer (cleartext).
+ * @param size  Size of cleartext.
+ */
+#define cry_cfb_encrypt cry_cfb_crypt
+
+/**
+ * Decryption function.
  *
  * @param ctx   CFB context.
  * @param dst   Destination pointer (cleartext).
  * @param src   Source pointer (ciphertext).
  * @param size  Size of ciphertext.
  */
-void cry_cfb_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+#define cry_cfb_decrypt cry_cfb_crypt
+
+
+/**
+ * Encryption function.
+ *
+ * @param ctx   CFB context.
+ * @param dst   Destination pointer (ciphertext).
+ * @param src   Source pointer (cleartext).
+ * @param size  Size of source/destination.
+ */
+void cry_cfb8_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
+                      const unsigned char *src, unsigned int size);
 
 /**
  * Decryption function.
  *
  * @param ctx   CFB context.
- * @param dst   Destination pointer (ciphertext).
- * @param src   Source pointer (cleartext).
+ * @param dst   Destination pointer (cleartext).
+ * @param src   Source pointer (ciphertext).
  * @param size  Size of ciphertext.
  */
-void cry_cfb_decrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+void cry_cfb8_decrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
+                      const unsigned char *src, unsigned int size);
+
 
 #ifdef __cplusplus
 }

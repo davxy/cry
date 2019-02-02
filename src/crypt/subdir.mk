@@ -6,6 +6,7 @@ objects-y := \
 	des.o \
     cbc.o \
     ctr.o \
+    cfb.o \
     gcm.o \
 	rsa.o \
 	trivium.o \
