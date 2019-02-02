@@ -10,6 +10,7 @@ void aes_test(void);
 void trivium_test(void);
 void hill_test(void);
 void affine_test(void);
+void crc_test(void);
 
 
 static int g_runs;
@@ -37,13 +38,9 @@ struct sub_test g_tests[] = {
     SUB_TEST(trivium),
     SUB_TEST(hill),
     SUB_TEST(affine),
+    SUB_TEST(crc),
 #endif
 #if 0
-   TEST_ELEM(cbc),
-   TEST_ELEM(ctr),
-   TEST_ELEM(gcm),
-   TEST_ELEM(des),
-   TEST_ELEM(crc),
    TEST_ELEM(md5),
    TEST_ELEM(sha256),
    TEST_ELEM(cmac),

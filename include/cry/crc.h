@@ -123,7 +123,7 @@ uint16_t cry_crc16_ibm(const unsigned char *in, size_t n);
  *
  * @param ctx   CRC-16 context.
  */
-void tsc_crc16_dnp_init(struct tsc_crc16_ctx *ctx);
+void cry_crc16_dnp_init(struct cry_crc16_ctx *ctx);
 
 /**
  * CRC-16-DNP all in one function.
@@ -133,7 +133,7 @@ void tsc_crc16_dnp_init(struct tsc_crc16_ctx *ctx);
  * @param n     Number of octets in the buffer.
  * @return      CRC value.
  */
-uint16_t tsc_crc16_dnp(const uint8_t *ptr, size_t n);
+uint16_t cry_crc16_dnp(const uint8_t *ptr, size_t n);
 
 /**
  * Initialize a generic CRC-32 algoritm context.

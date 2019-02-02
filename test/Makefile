@@ -18,9 +18,9 @@ objs := \
 	aes_test.o \
 	trivium_test.o \
 	hill_test.o \
-	affine_test.o
-#	crc_test.o \
-	md5_test.o \
+	affine_test.o \
+	crc_test.o \
+#	md5_test.o \
 	sha256_test.o \
 	cmac_test.o \
 	sum_test.o \

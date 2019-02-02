@@ -1,11 +1,4 @@
-/**
- * Terranova Security Library.
- *
- * @author Giampaolo Tomassoni
- * @file   tsc_crc16_dnp.c
- */
-
-#include "tsc_crc.h"
+#include <cry/crc.h>
 
 static const uint16_t table[] = {
     0x0000, 0x365e, 0x6cbc, 0x5ae2, 0xd978, 0xef26, 0xb5c4, 0x839a,
@@ -42,24 +35,16 @@ static const uint16_t table[] = {
     0x91af, 0xa7f1, 0xfd13, 0xcb4d, 0x48d7, 0x7e89, 0x246b, 0x1235
 };
 
-void tsc_crc16_dnp_init(struct tsc_crc16_ctx *ctx)
+void cry_crc16_dnp_init(struct cry_crc16_ctx *ctx)
 {
-    tsc_crc16_init(
-        ctx,
-        0x0000,
-        table,
-        TSC_CRC_FLAG_COMPLEMENT
-    );
+    cry_crc16_init(ctx, 0x0000, table, CRY_CRC_FLAG_COMPLEMENT);
 }
 
-uint16_t tsc_crc16_dnp(const uint8_t *ptr, size_t n)
+uint16_t cry_crc16_dnp(const uint8_t *ptr, size_t n)
 {
-    struct tsc_crc16_ctx ctx;
-    uint16_t crc;
+    struct cry_crc16_ctx ctx;
 
-    tsc_crc16_dnp_init(&ctx);
-    tsc_crc16_update(&ctx, ptr, n);
-    tsc_crc16_final(&ctx, &crc);
-    return crc;
+    cry_crc16_dnp_init(&ctx);
+    cry_crc16_update(&ctx, ptr, n);
+    return cry_crc16_final(&ctx);
 }
-
