@@ -2,6 +2,7 @@
 #include <cry/aes.h>
 #include <cry/cbc.h>
 #include <cry/ctr.h>
+#include <cry/cfb.h>
 #include <cry/gcm.h>
 
 
@@ -90,7 +91,7 @@ static void aes_cbc_encrypt(int argc, char *argv[])
 
     cry_cbc_init(&ctx, &aes_ctx, &aes_itf);
     cry_cbc_key_set(&ctx, par.key, par.keylen);
-    cry_cbc_iv_set(&ctx, par.iv, 16);
+    cry_cbc_iv_set(&ctx, par.iv, par.ivlen);
     cry_cbc_encrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
@@ -108,7 +109,7 @@ static void aes_cbc_decrypt(int argc, char *argv[])
 
     cry_cbc_init(&ctx, &aes_ctx, &aes_itf);
     cry_cbc_key_set(&ctx, par.key, par.keylen);
-    cry_cbc_iv_set(&ctx, par.iv, 16);
+    cry_cbc_iv_set(&ctx, par.iv, par.ivlen);
     cry_cbc_decrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
@@ -126,7 +127,7 @@ static void aes_ctr_encrypt(int argc, char *argv[])
 
     cry_ctr_init(&ctx, &aes_ctx, &aes_itf);
     cry_ctr_key_set(&ctx, par.key, par.keylen);
-    cry_ctr_iv_set(&ctx, par.iv, 16);
+    cry_ctr_iv_set(&ctx, par.iv, par.ivlen);
     cry_ctr_encrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
@@ -144,8 +145,50 @@ static void aes_ctr_decrypt(int argc, char *argv[])
 
     cry_ctr_init(&ctx, &aes_ctx, &aes_itf);
     cry_ctr_key_set(&ctx, par.key, par.keylen);
-    cry_ctr_iv_set(&ctx, par.iv, 16);
+    cry_ctr_iv_set(&ctx, par.iv, par.ivlen);
     cry_ctr_decrypt(&ctx, dst, par.src, par.srclen);
+
+    ASSERT_EQ_BUF(dst, par.dst, par.srclen);
+}
+
+static void aes_cfb_encrypt(int argc, char *argv[], int do8)
+{
+    cry_cfb_ctx ctx;
+    cry_aes_ctx aes_ctx;
+    struct aes_param par;
+    unsigned char dst[32];
+
+    ASSERT(argc == 4);
+    param_init(&par, argc, argv);
+
+    cry_cfb_init(&ctx, &aes_ctx, &aes_itf);
+    cry_cfb_key_set(&ctx, par.key, par.keylen);
+    cry_cfb_iv_set(&ctx, par.iv, par.ivlen);
+    if (do8 == 0)
+    	cry_cfb_encrypt(&ctx, dst, par.src, par.srclen);
+    else
+    	cry_cfb8_encrypt(&ctx, dst, par.src, par.srclen);
+
+    ASSERT_EQ_BUF(dst, par.dst, par.srclen);
+}
+
+static void aes_cfb_decrypt(int argc, char *argv[], int do8)
+{
+    cry_cfb_ctx ctx;
+    cry_aes_ctx aes_ctx;
+    struct aes_param par;
+    unsigned char dst[32];
+
+    ASSERT(argc == 4);
+    param_init(&par, argc, argv);
+
+    cry_cfb_init(&ctx, &aes_ctx, &aes_itf);
+    cry_cfb_key_set(&ctx, par.key, par.keylen);
+    cry_cfb_iv_set(&ctx, par.iv, par.ivlen);
+    if (do8 == 0)
+    	cry_cfb_decrypt(&ctx, dst, par.src, par.srclen);
+    else
+    	cry_cfb8_decrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
 }
@@ -163,7 +206,7 @@ static void aes_gcm_encrypt(int argc, char *argv[])
 
     cry_gcm_init(&ctx, &aes_ctx, &aes_itf);
     cry_gcm_key_set(&ctx, par.key, par.keylen);
-    cry_gcm_iv_set(&ctx, par.iv, 16);
+    cry_gcm_iv_set(&ctx, par.iv, par.ivlen);
     cry_gcm_update(&ctx, par.aad, par.aadlen);
     cry_gcm_encrypt(&ctx, dst, par.src, par.srclen);
     cry_gcm_digest(&ctx, mac, par.maclen);
@@ -185,7 +228,7 @@ static void aes_gcm_decrypt(int argc, char *argv[])
 
     cry_gcm_init(&ctx, &aes_ctx, &aes_itf);
     cry_gcm_key_set(&ctx, par.key, par.keylen);
-    cry_gcm_iv_set(&ctx, par.iv, 16);
+    cry_gcm_iv_set(&ctx, par.iv, par.ivlen);
     cry_gcm_update(&ctx, par.aad, par.aadlen);
     cry_gcm_decrypt(&ctx, dst, par.src, par.srclen);
     cry_gcm_digest(&ctx, mac, par.maclen);
@@ -218,6 +261,14 @@ static void dispatch(int argc, char *argv[])
         aes_ctr_encrypt(argc, argv);
     else if (strcmp(test, "aes_ctr_decrypt") == 0)
         aes_ctr_decrypt(argc, argv);
+    else if (strcmp(test, "aes_cfb_encrypt") == 0)
+        aes_cfb_encrypt(argc, argv, 0);
+    else if (strcmp(test, "aes_cfb_decrypt") == 0)
+        aes_cfb_decrypt(argc, argv, 0);
+    else if (strcmp(test, "aes_cfb8_encrypt") == 0)
+        aes_cfb_encrypt(argc, argv, 1);
+    else if (strcmp(test, "aes_cfb8_decrypt") == 0)
+        aes_cfb_decrypt(argc, argv, 1);
     else if (strcmp(test, "aes_gcm_encrypt") == 0)
         aes_gcm_encrypt(argc, argv);
     else if (strcmp(test, "aes_gcm_decrypt") == 0)
@@ -230,7 +281,7 @@ void aes_test(void)
 {
     printf("* AES NIST AESAVS KAT\n");
     func_test("aes_kat_test.data", dispatch);
-    printf("* AES NIST GCM Validation\n");
+    printf("* AES GCM NIST Validation\n");
     func_test("aes_gcm_test.data", dispatch);
     printf("\n");
 }
