@@ -20,7 +20,7 @@ skip="head.tmp maketsc.sh build"
 
 cat << EOF > head.tmp
 /*
- * Copyright (C) 2012-2018, Terranova Software. All rights reserved.
+ * Copyright (C) 2012-2019, Terranova Software. All rights reserved.
  *
  * This file is part of TSC Library.
  *
