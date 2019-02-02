@@ -26,6 +26,7 @@ Given a version number MAJOR.MINOR.PATCH
 --------------------
 
 - CFB block cipher mode of operation
+- CRC16-DNP
 
 [0.0.7] - 2018-12-26
 --------------------
