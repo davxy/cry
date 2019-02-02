@@ -1,15 +1,15 @@
 #include "test.h"
 #include <cry/crc.h>
 
-#define MSG "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define MSG     ((unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+#define MSGLEN  (strlen((char *)MSG))
 
 static void crc16_ccitt_test(void)
 {
     uint16_t crc;
 #define CRC16_CCITT 0xad3b
 
-    crc = cry_crc16_ccitt(MSG, strlen(MSG));
-    TRACE("crc16-ccitt = 0x%04x\n", crc);
+    crc = cry_crc16_ccitt(MSG, MSGLEN);
     ASSERT_EQ(crc, CRC16_CCITT);
 }
 
@@ -18,9 +18,57 @@ static void crc16_ibm_test(void)
     uint16_t crc;
 #define CRC16_IBM   0xfe85
 
-    crc = cry_crc16_ibm(MSG, strlen(MSG));
-    TRACE("crc16-ibm   = 0x%04x\n", crc);
+    crc = cry_crc16_ibm(MSG, MSGLEN);
     ASSERT_EQ(crc, CRC16_IBM);
+}
+
+/* CEI EN 60870-5-1 reference pattern */
+static const unsigned char en_60870_5_1_pattern[] = {
+    0x00, 0x00, 0x00, 0x28, 0x30, 0x00, 0x3B, 0xE1,
+    0x58, 0x0F, 0x12, 0xA7, 0x46, 0x1B, 0x01, 0x00,
+    0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00
+};
+
+struct binary_test {
+    char                *name;
+    const unsigned char *pattern;
+    size_t               pattern_size;
+    unsigned short       expected;
+};
+
+static const struct binary_test brs[] = {
+    { 
+        "CEI EN 60870-5-1 reference pattern",
+        en_60870_5_1_pattern,
+        sizeof(en_60870_5_1_pattern),
+        0x02ea
+    }
+};
+
+static void crc16_dnp_test(void)
+{
+    int i;
+    uint16_t crc;
+
+    for(i = 0; i < sizeof(brs)/sizeof(*brs); ++i) {
+        crc = cry_crc16_dnp(brs[i].pattern, brs[i].pattern_size);
+        ASSERT_EQ(crc, brs[i].expected);
+    }
 }
 
 static void crc32_eth_test(void)
@@ -28,15 +76,25 @@ static void crc32_eth_test(void)
     uint32_t crc;
 #define CRC32_ETH   0Xabf77822
 
-    crc = cry_crc32_eth(MSG, strlen(MSG));
-    TRACE("crc32-eth   = 0x%08x\n", crc);
+    crc = cry_crc32_eth(MSG, MSGLEN);
     ASSERT_EQ(crc, CRC32_ETH);
 }
 
+static struct test_case tests[] = {
+    { "CRC16 CCITT", crc16_ccitt_test },
+    { "CRC16 IBM",   crc16_ibm_test },
+    { "CRC16 DNP",   crc16_dnp_test },
+    { "CRC32 ETH",   crc32_eth_test },
+};
+
+#define NTESTS (sizeof(tests) / sizeof(tests[0]))
+
 void crc_test(void)
 {
-    TRACE("msg: %s\n", MSG);
-    RUN(crc16_ccitt_test);
-    RUN(crc16_ibm_test);
-    RUN(crc32_eth_test);
+    int i;
+
+    printf("* CRC\n");
+    for (i = 0; i < NTESTS; i++)
+        run(tests[i].name, tests[i].func, NULL, NULL);
+    printf("\n");
 }
