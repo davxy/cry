@@ -32,10 +32,11 @@ Symmetric ciphers
 
 ### Block ciphers mode of operation
 
-- ECB
-- CBC
-- GCM
-- CTR
+- ECB (electronic codebook)
+- CBC (cipher block chaining)
+- CFB (cipher feedback)
+- CTR (counter)
+- GCM (Galois counter mode)
 
 ### Stream ciphers
 
