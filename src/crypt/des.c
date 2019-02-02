@@ -77,7 +77,7 @@ static const unsigned char p_tab[] = {
 
 /* S-Box table.
  * In textbooks, the presented S-Box table is usually constructed by
- * interpreting the six bits input as 
+ * interpreting the six bits input as
  *  [ R1 | C3 | C2 | C1 | C0 | R0 ]
  * Thus, for example, the output for the bit string 101100 is found
  * in row 2 and column 6.

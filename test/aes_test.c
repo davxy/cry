@@ -165,9 +165,9 @@ static void aes_cfb_encrypt(int argc, char *argv[], int do8)
     cry_cfb_key_set(&ctx, par.key, par.keylen);
     cry_cfb_iv_set(&ctx, par.iv, par.ivlen);
     if (do8 == 0)
-    	cry_cfb_encrypt(&ctx, dst, par.src, par.srclen);
+        cry_cfb_encrypt(&ctx, dst, par.src, par.srclen);
     else
-    	cry_cfb8_encrypt(&ctx, dst, par.src, par.srclen);
+        cry_cfb8_encrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
 }
@@ -186,9 +186,9 @@ static void aes_cfb_decrypt(int argc, char *argv[], int do8)
     cry_cfb_key_set(&ctx, par.key, par.keylen);
     cry_cfb_iv_set(&ctx, par.iv, par.ivlen);
     if (do8 == 0)
-    	cry_cfb_decrypt(&ctx, dst, par.src, par.srclen);
+        cry_cfb_decrypt(&ctx, dst, par.src, par.srclen);
     else
-    	cry_cfb8_decrypt(&ctx, dst, par.src, par.srclen);
+        cry_cfb8_decrypt(&ctx, dst, par.src, par.srclen);
 
     ASSERT_EQ_BUF(dst, par.dst, par.srclen);
 }

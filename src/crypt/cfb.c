@@ -36,17 +36,17 @@ void cry_cfb_crypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
     size_t n;
 
     for (n = len; n >= ctx->vlen; n -= ctx->vlen) {
-    	encrypt(ciph, ctx->v, ctx->v, ctx->vlen);
+        encrypt(ciph, ctx->v, ctx->v, ctx->vlen);
         cry_memxor2(dst, src, ctx->v, ctx->vlen);
-    	memcpy(ctx->v, dst, ctx->vlen);
-    	src += ctx->vlen;
-    	dst += ctx->vlen;
+        memcpy(ctx->v, dst, ctx->vlen);
+        src += ctx->vlen;
+        dst += ctx->vlen;
     }
 
     if (n != 0) {
-    	encrypt(ciph, ctx->v, ctx->v, ctx->vlen);
+        encrypt(ciph, ctx->v, ctx->v, ctx->vlen);
         cry_memxor2(dst, src, ctx->v, n);
-    	memcpy(ctx->v, dst, ctx->vlen);
+        memcpy(ctx->v, dst, ctx->vlen);
     }
 }
 
@@ -61,14 +61,14 @@ void cry_cfb8_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
     memcpy(buf, ctx->v, ctx->vlen);
     pos = 0;
     while (len != 0) {
-    	if (pos == ctx->vlen) {
-    		memcpy(buf, buf + ctx->vlen, ctx->vlen);
-    		pos = 0;
-    	}
-    	encrypt(ciph, ctx->v, buf + pos, ctx->vlen);
-    	buf[pos + ctx->vlen] = *(dst++) = *(src++) ^ ctx->v[0];
-    	len--;
-    	pos++;
+        if (pos == ctx->vlen) {
+            memcpy(buf, buf + ctx->vlen, ctx->vlen);
+            pos = 0;
+        }
+        encrypt(ciph, ctx->v, buf + pos, ctx->vlen);
+        buf[pos + ctx->vlen] = *(dst++) = *(src++) ^ ctx->v[0];
+        len--;
+        pos++;
     }
     memcpy(ctx->v, buf + pos, ctx->vlen);
 }
@@ -86,15 +86,14 @@ void cry_cfb8_decrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
     memcpy(buf + ctx->vlen, src, len < ctx->vlen ? len : ctx->vlen);
 
     while (len != 0) {
-    	for (i = 0; i < len && i < ctx->vlen; i++)
-        	encrypt(ciph, obuf + i, buf + i, ctx->vlen);
-    	cry_memxor2(dst, src, obuf, i);
-    	len -= i;
-    	src += i;
-    	dst += i;
-    	memcpy(buf, buf + ctx->vlen, ctx->vlen);
-    	memcpy(buf + ctx->vlen, src, len < ctx->vlen ? len : ctx->vlen);
+        for (i = 0; i < len && i < ctx->vlen; i++)
+            encrypt(ciph, obuf + i, buf + i, ctx->vlen);
+        cry_memxor2(dst, src, obuf, i);
+        len -= i;
+        src += i;
+        dst += i;
+        memcpy(buf, buf + ctx->vlen, ctx->vlen);
+        memcpy(buf + ctx->vlen, src, len < ctx->vlen ? len : ctx->vlen);
     }
     memcpy(ctx->v, buf + i, ctx->vlen);
 }
-

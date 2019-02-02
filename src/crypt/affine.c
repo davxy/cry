@@ -53,4 +53,3 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
     }
     return res;
 }
-
