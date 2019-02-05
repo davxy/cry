@@ -8,23 +8,30 @@
 #ifndef CRY_CMAC_H_
 #define CRY_CMAC_H_
 
+#include <cry/ciph.h>
 #include <stddef.h>
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-/**
- * Cipher based digest (CMAC).
- *
- * @param mac       Digest output (16 octets).
- * @param input     Input data.
- * @param size      Size of input data.
- * @param key       Key data.
- * @param keysize   Size if key.
- */
-void cry_cmac_digest(unsigned char *mac, const unsigned char *input,
-                     size_t size, const unsigned char *key, size_t keysize);
+struct cry_cmac_ctx {
+    void                      *ciph_ctx;    /**< Block cipher context */
+    const struct cry_ciph_itf *ciph_itf;    /**< Block cipher interface */
+    unsigned char k1[16];
+    unsigned char k2[16];
+    unsigned char mac[16];
+};
+
+typedef struct cry_cmac_ctx cry_cmac_ctx;
+
+void cry_cmac_init(cry_cmac_ctx *ctx, void *ciph_ctx,
+                   const cry_ciph_itf *ciph_itf,
+                   unsigned char *key, size_t keylen);
+
+void cry_cmac_update(cry_cmac_ctx *ctx, const unsigned char *data, size_t len);
+
+void cry_cmac_digest(cry_cmac_ctx *ctx, unsigned char *mac);
 
 #ifdef __cplusplus
 }
