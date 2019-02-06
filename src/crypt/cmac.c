@@ -93,11 +93,11 @@ void cry_cmac_update(cry_cmac_ctx *ctx, const unsigned char *data, size_t len)
     memset(ctx->mac, 0, 16);
     for (i = 0; i < (n - 1); i++) {
         xor_128(block, ctx->mac, &data[16*i]);
-        ctx->ciph_itf->encrypt(&ctx->ciph_ctx, ctx->mac, block, 16);
+        ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, block, 16);
     }
 
     xor_128(block, ctx->mac, last);
-    ctx->ciph_itf->encrypt(&ctx->ciph_ctx, ctx->mac, block, 16);
+    ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, block, 16);
 }
 
 void cry_cmac_digest(cry_cmac_ctx *ctx, unsigned char *mac)
