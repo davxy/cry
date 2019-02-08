@@ -35,5 +35,5 @@ void cry_crc32_digest(cry_crc32_ctx *ctx, unsigned char *out)
     out[0] = (crc >> 24) & 0xFF;
     out[1] = (crc >> 16) & 0xFF;
     out[2] = (crc >> 8)  & 0xFF;
-    out[4] = (crc & 0xFF);
+    out[3] = (crc & 0xFF);
 }
