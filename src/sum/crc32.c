@@ -26,3 +26,14 @@ uint32_t cry_crc32_final(struct cry_crc32_ctx *ctx)
                    (ctx->crc & 0xff000000) >> 24;
     return ctx->crc;
 }
+
+void cry_crc32_digest(cry_crc32_ctx *ctx, unsigned char *out)
+{
+    uint32_t crc;
+
+    crc = cry_crc32_final(ctx);
+    out[0] = (crc >> 24) & 0xFF;
+    out[1] = (crc >> 16) & 0xFF;
+    out[2] = (crc >> 8)  & 0xFF;
+    out[4] = (crc & 0xFF);
+}
