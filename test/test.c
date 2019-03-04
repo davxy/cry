@@ -11,6 +11,7 @@ void trivium_test(void);
 void hill_test(void);
 void affine_test(void);
 void crc_test(void);
+void rsa_test(void);
 
 
 static int g_runs;
@@ -28,7 +29,6 @@ struct sub_test {
 
 struct sub_test g_tests[] = {
     SUB_TEST(version),
-#if 1
     SUB_TEST(memxor),
     SUB_TEST(base64),
     SUB_TEST(mpi),
@@ -39,7 +39,7 @@ struct sub_test g_tests[] = {
     SUB_TEST(hill),
     SUB_TEST(affine),
     SUB_TEST(crc),
-#endif
+    SUB_TEST(rsa),
 #if 0
    TEST_ELEM(md5),
    TEST_ELEM(sha256),
@@ -57,7 +57,6 @@ struct sub_test g_tests[] = {
    TEST_ELEM(sha256),
    TEST_ELEM(cmac),
    TEST_ELEM(sum),
-   TEST_ELEM(rsa),
    TEST_ELEM(rand),
    TEST_ELEM(dh),
    TEST_ELEM(dsa),

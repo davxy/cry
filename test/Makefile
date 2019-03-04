@@ -20,11 +20,11 @@ objs := \
 	hill_test.o \
 	affine_test.o \
 	crc_test.o \
+	rsa_test.o \
 #	md5_test.o \
 	sha256_test.o \
 	cmac_test.o \
 	sum_test.o \
-	rsa_test.o \
 	rand_test.o \
 	dh_test.o \
 	dsa_test.o \

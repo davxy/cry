@@ -196,3 +196,51 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     }
     return res;
 }
+
+#define MAX_ITER    10000
+
+int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits)
+{
+    int res;
+    cry_mpi phi, p, q, p1, q1, one;
+    cry_mpi_digit one_dig;
+    int hbits = bits >> 1;
+    unsigned int i;
+
+
+    if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->m, NULL)) != 0)
+        return res;
+    if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi, NULL)) != 0)
+        goto e;
+    i = MAX_ITER;
+    if ((res = cry_mpi_prime(&p, hbits, &i)) != 0)
+        goto e;
+    i = MAX_ITER;
+    if ((res = cry_mpi_prime(&q, hbits, &i)) != 0)
+        goto e;
+    if ((res = cry_mpi_mul(&ctx->m, &p, &q)) != 0)
+        goto e;
+
+    one.alloc = 1;
+    one.used = 1;
+    one.sign = 0;
+    one.data = &one_dig;
+
+    if ((res = cry_mpi_sub(&p1, &p, &one)) != 0)
+        goto e;
+    if ((res = cry_mpi_sub(&q1, &q, &one)) != 0)
+        goto e;
+    if ((res = cry_mpi_mul(&phi, &p1, &q1)) != 0)
+        goto e;
+
+    /* Find key */
+    for (i = 0; i < MAX_ITER; i++) {
+        cry_mpi_rand(&ctx->e, bits);
+        if ((res = cry_mpi_inv(&ctx->d, &ctx->e, &phi)) == 0)
+            break;
+    }
+e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, NULL);
+    if (res != 0)
+        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->m, NULL);
+    return res;
+}

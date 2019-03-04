@@ -32,6 +32,9 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
                     const unsigned char *in, size_t inlen);
 
+int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits);
+
+
 #ifdef __cplusplus
 }
 #endif

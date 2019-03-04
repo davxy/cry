@@ -1,6 +1,15 @@
 #include "test.h"
 #include <cry/rsa.h>
 
+
+
+static void keygen(void)
+{
+    cry_rsa_ctx rsa;
+
+    ASSERT_OK(cry_rsa_keygen(&rsa, 1024));
+}
+
 static const unsigned char modulus[] = {
     0xC4, 0xF8, 0xE9, 0xE1, 0x5D, 0xCA, 0xDF, 0x2B,
     0x96, 0xC7, 0x63, 0xD9, 0x81, 0x00, 0x6A, 0x64,
@@ -47,7 +56,7 @@ static const unsigned char cipher_text[] = {
 #define PLAIN_LEN sizeof(plain_text)
 #define CIPHER_LEN sizeof(cipher_text)
 
-void rsa_test(void)
+static void encrypt_decrypt(void)
 {
     cry_rsa_ctx rsa;
     size_t outlen;
@@ -58,57 +67,60 @@ void rsa_test(void)
     cry_mpi_init_bin(&rsa.e, public, sizeof(public));
     cry_mpi_init_bin(&rsa.d, private, sizeof(private));
 
-    TRACE("m-bits: %d\n", cry_mpi_count_bits(&rsa.m));
-    TRACE("e-bits: %d\n", cry_mpi_count_bits(&rsa.e));
-    TRACE("d-bits: %d\n", cry_mpi_count_bits(&rsa.d));
-    PRINT_MPI("m", &rsa.m, 16);
-    PRINT_MPI("e", &rsa.e, 16);
-    PRINT_MPI("d", &rsa.d, 16);
-
-    /*
-     * ES-PKCS1-v1.5
-     */
-
     rsa.flags = 0;
     ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
                               plain_text, PLAIN_LEN));
     if (cipher_buf) {
-        PRINT_HEX("ciphertext", cipher_buf, outlen);
         ASSERT_EQ(outlen, CIPHER_LEN);
 
         ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
                                    cipher_buf, outlen));
         if (plain_buf) {
-            PRINT_HEX("plaintext ", plain_buf, outlen);
             ASSERT_EQ(outlen, PLAIN_LEN);
             ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
             free(plain_buf);
         }
         free(cipher_buf);
     }
+    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+}
 
-    /*
-     * SSA-PKCS1-v1.5
-     */
+
+static void sign_verify(void)
+{
+    cry_rsa_ctx rsa;
+    size_t outlen;
+    unsigned char *cipher_buf;
+    unsigned char *plain_buf;
+
+    cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
+    cry_mpi_init_bin(&rsa.e, public, sizeof(public));
+    cry_mpi_init_bin(&rsa.d, private, sizeof(private));
 
     rsa.flags = CRY_RSA_FLAG_SIGN;
     ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
                               plain_text, PLAIN_LEN));
     if (cipher_buf) {
-        PRINT_HEX("ciphertext", cipher_buf, outlen);
         ASSERT_EQ(outlen, CIPHER_LEN);
         ASSERT_EQ_BUF(cipher_buf, cipher_text, outlen);
 
         ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
                     cipher_buf, outlen));
         if (plain_buf) {
-            PRINT_HEX("plaintext ", plain_buf, outlen);
             ASSERT_EQ(outlen, PLAIN_LEN);
             ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
             free(plain_buf);
         }
         free(cipher_buf);
     }
-
     cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+}
+
+void rsa_test(void)
+{
+    printf("* RSA Test\n");
+    run("keygen", keygen, NULL, NULL);
+    run("encrypt-decrypt", encrypt_decrypt, NULL, NULL);
+    run("sign-verify", sign_verify, NULL, NULL);
+    printf("\n");
 }
