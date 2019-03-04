@@ -67,7 +67,7 @@ int cry_mpi_init_int(cry_mpi *a, long val)
         if ((res = cry_mpi_set_int(a, val)) < 0)
             cry_mpi_clear(a);
     }
-    return 0;
+    return res;
 }
 
 int cry_mpi_set_int(cry_mpi *a, long val)
