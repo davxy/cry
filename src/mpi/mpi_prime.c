@@ -185,7 +185,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     }
 
     /* If z = p-1, pass! */
-    if ((res = cry_mpi_add(&z, &z, &one) < 0))
+    if ((res = cry_mpi_add(&z, &z, &one)) < 0)
         goto e;
     res = (cry_mpi_cmp(&z, p) == 0) ? 1 : 0;
 e:  cry_mpi_clear_list(&a, &m, &z, &tmp, NULL);
