@@ -53,7 +53,7 @@
         </option>
         <option>
           <name>DDFFile</name>
-          <state>$TOOLKIT_DIR$\config\debugger\iorx600_generic.ddf</state>
+          <state>$TOOLKIT_DIR$\config\debugger\iorx600-rxv2_generic.ddf</state>
         </option>
         <option>
           <name>DebuggerUseExtraOptions</name>

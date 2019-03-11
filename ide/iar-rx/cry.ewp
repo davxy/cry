@@ -17,7 +17,7 @@
         <debug>1</debug>
         <option>
           <name>OGChipSelectMenu</name>
-          <state>RX600	Generic RX600</state>
+          <state>RX600-rxv2	Generic RX600-RXv2</state>
         </option>
         <option>
           <name>GenDoubleSize</name>
@@ -119,7 +119,7 @@
         </option>
         <option>
           <name>HeapSize</name>
-          <state>0x400</state>
+          <state>0x0</state>
         </option>
         <option>
           <name>GenSubnormalNumbers</name>
@@ -196,7 +196,7 @@
         </option>
         <option>
           <name>IccOptLevel</name>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccOptStrategy</name>
@@ -205,12 +205,12 @@
         </option>
         <option>
           <name>IccOptLevelSlave</name>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccOptAllowList</name>
           <version>1</version>
-          <state>1001001</state>
+          <state>0000000</state>
         </option>
         <option>
           <name>IccGenerateDebugInfo</name>
@@ -669,7 +669,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>tsc.out</state>
+          <state>cry.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -947,7 +947,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\Users\dgalassi\dev\TSC\ide\iar-rx\Debug\Exe\tsc.a</state>
+          <state>C:\Users\dgalassi\dev\TSC\ide\iar-rx\Debug\Exe\cry.a</state>
         </option>
       </data>
     </settings>
@@ -972,7 +972,7 @@
         <debug>0</debug>
         <option>
           <name>OGChipSelectMenu</name>
-          <state></state>
+          <state>RX600-rxv2	Generic RX600-RXv2</state>
         </option>
         <option>
           <name>GenDoubleSize</name>
@@ -992,7 +992,7 @@
         </option>
         <option>
           <name>GOutputBinary</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>ExePath</name>
@@ -1018,11 +1018,11 @@
         </option>
         <option>
           <name>GenRTDescription</name>
-          <state></state>
+          <state>To be used with the normal configuration of the C/EC++ runtime library.</state>
         </option>
         <option>
           <name>GenRTConfigPath</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\LIB\dlrxflln.h</state>
         </option>
         <option>
           <name>GenLibInFormatter</name>
@@ -1031,7 +1031,7 @@
         </option>
         <option>
           <name>GenLibInFormatterDescription</name>
-          <state></state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GenLibOutFormatter</name>
@@ -1040,7 +1040,7 @@
         </option>
         <option>
           <name>GenLibOutFormatterDescription</name>
-          <state></state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1066,15 +1066,15 @@
         </option>
         <option>
           <name>StackSize</name>
-          <state>###Uninitialized###</state>
+          <state>0x0</state>
         </option>
         <option>
           <name>IStackSize</name>
-          <state>###Uninitialized###</state>
+          <state>0x100</state>
         </option>
         <option>
           <name>HeapSize</name>
-          <state>###Uninitialized###</state>
+          <state>0x400</state>
         </option>
         <option>
           <name>GenSubnormalNumbers</name>
@@ -1173,7 +1173,7 @@
         </option>
         <option>
           <name>IccOutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>IccProcessor</name>
@@ -1274,7 +1274,8 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state></state>
+          <state>$PROJ_DIR$\..\..\src</state>
+          <state>$PROJ_DIR$\..\..\include</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1623,7 +1624,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>###Unitialized###</state>
+          <state>cry.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -1901,7 +1902,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>###Unitialized###</state>
+          <state>C:\Users\dgalassi\dev\TSC\ide\iar-rx\Release\Exe\cry.a</state>
         </option>
       </data>
     </settings>
@@ -1914,144 +1915,225 @@
   <group>
     <name>crypto</name>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_aes.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\aes.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_aes2.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\affine.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_cbc.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\base64.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_cmac.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\cbc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_ctr.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\cfb.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_ecdsa.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\cmac.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\crypto\tsc_gcm.c</name>
+      <name>$PROJ_DIR$\..\..\src\crypt\ctr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\des.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\dh.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\dsa.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\ecdh.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\ecdsa.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\gcm.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\hill.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\hmac.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\memxor.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\memxor.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\crypt\trivium.c</name>
     </file>
   </group>
   <group>
-    <name>ec</name>
+    <name>ecp</name>
     <file>
-      <name>$PROJ_DIR$\..\..\src\ec\tsc_ec_keygen.c</name>
+      <name>$PROJ_DIR$\..\..\src\ecp\ec_nist_p256.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\ec\tsc_ec_nist_p256.c</name>
+      <name>$PROJ_DIR$\..\..\src\ecp\ecp_add.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\ec\tsc_ec_point_add.c</name>
+      <name>$PROJ_DIR$\..\..\src\ecp\ecp_copy.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\ec\tsc_ec_point_dbl.c</name>
+      <name>$PROJ_DIR$\..\..\src\ecp\ecp_dbl.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\ec\tsc_ec_point_mul.c</name>
-    </file>
-  </group>
-  <group>
-    <name>md</name>
-    <file>
-      <name>$PROJ_DIR$\..\..\src\md\tsc_md5.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\src\md\tsc_sha256.c</name>
+      <name>$PROJ_DIR$\..\..\src\ecp\ecp_mul.c</name>
     </file>
   </group>
   <group>
-    <name>misc</name>
+    <name>hash</name>
     <file>
-      <name>$PROJ_DIR$\..\..\src\misc\tsc_memxor.c</name>
+      <name>$PROJ_DIR$\..\..\src\hash\md5.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\misc\tsc_memxor.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\src\misc\tsc_misc.h</name>
+      <name>$PROJ_DIR$\..\..\src\hash\sha256.c</name>
     </file>
   </group>
   <group>
     <name>mpi</name>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_add.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_abs.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_add_abs.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_add.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_cmp.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_add_abs.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_cmp_abs.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_bin.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_core.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_cmp.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_div.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_cmp_abs.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_div_abs.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_core.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_extra.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_div.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_init_bin.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_div_abs.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_init_str.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_exp.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_inv.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_gcd.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_mul.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_inv.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_print.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_lcm.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_pvt.h</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_list.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_rand.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mod_exp.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_shl.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mul.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_shr.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mul_abs.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_sub.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mul_baseline.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\mpi\tsc_mpi_sub_abs.c</name>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mul_comba.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mul_karatsuba.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_mul_toom3.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_prime.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_pvt.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_rand.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_shl.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_shr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_sqr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_sqrt.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_str.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_sub.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\mpi\mpi_sub_abs.c</name>
     </file>
   </group>
   <group>
-    <name>rand</name>
+    <name>prng</name>
     <file>
-      <name>$PROJ_DIR$\..\..\src\rand\tsc_rand_dummy.c</name>
+      <name>$PROJ_DIR$\..\..\src\prng\prng_aes.c</name>
     </file>
   </group>
   <group>
     <name>sum</name>
     <file>
-      <name>$PROJ_DIR$\..\..\src\sum\tsc_crc16.c</name>
+      <name>$PROJ_DIR$\..\..\src\sum\crc16.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\sum\tsc_crc16_mb.c</name>
+      <name>$PROJ_DIR$\..\..\src\sum\crc16_ccitt.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\src\sum\tsc_lrc.c</name>
+      <name>$PROJ_DIR$\..\..\src\sum\crc16_dnp.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\sum\crc16_ibm.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\sum\crc32.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\sum\crc32_eth.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\sum\cs8.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\src\sum\lrc.c</name>
     </file>
   </group>
+  <file>
+    <name>$PROJ_DIR$\..\..\src\misc.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\src\misc.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\..\src\version.c</name>
+  </file>
 </project>
 
 
