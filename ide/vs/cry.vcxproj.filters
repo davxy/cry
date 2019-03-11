@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files\crypto">
+      <UniqueIdentifier>{fbfcf593-5e17-496c-a3dd-bd2b1a64f6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\cry">
+      <UniqueIdentifier>{3b6970bd-f967-4791-b996-c718bb8d4494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mpi">
+      <UniqueIdentifier>{f0856407-8cae-4acb-b01b-b9af98244e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hash">
+      <UniqueIdentifier>{d81722ea-b793-46cf-a1ca-35752314a790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecp">
+      <UniqueIdentifier>{cfce8065-4b4c-4920-ae63-c84c23b5a019}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\prng">
+      <UniqueIdentifier>{8b87a17a-1a54-4c83-9d64-012b435131ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sum">
+      <UniqueIdentifier>{13c0dc6a-caab-4308-a288-b2ade542a07f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\cry\aes.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\affine.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\base64.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\cbc.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\cfb.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\ciph.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\cmac.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\crc.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\ctr.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\des.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\dh.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\dsa.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\ec.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\ecdh.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\ecdsa.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\ecp.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\gcm.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\hash.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\hill.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\hmac.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\md5.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\memxor.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\mpi.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\prng.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\rsa.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\sha256.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\sum.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\trivium.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\cry\version.h">
+      <Filter>Header Files\cry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\crypt\memxor.h">
+      <Filter>Source Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mpi\mpi_pvt.h">
+      <Filter>Source Files\mpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\misc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\crypt\aes.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\affine.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\base64.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\cbc.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\cfb.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\cmac.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\ctr.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\des.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\dh.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\dsa.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\ecdh.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\ecdsa.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\gcm.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\hill.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\hmac.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\memxor.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\rsa.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\crypt\trivium.c">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_abs.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_add.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_add_abs.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_bin.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_cmp.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_cmp_abs.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_core.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_div.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_div_abs.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_exp.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_gcd.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_inv.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_lcm.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_list.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mod_exp.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mul.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mul_abs.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mul_baseline.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mul_comba.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mul_karatsuba.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_mul_toom3.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_prime.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_print.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_rand.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_shl.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_shr.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_sqr.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_sqrt.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_str.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_sub.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpi\mpi_sub_abs.c">
+      <Filter>Source Files\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\hash\md5.c">
+      <Filter>Source Files\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\hash\sha256.c">
+      <Filter>Source Files\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\misc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\version.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecp\ec_nist_p256.c">
+      <Filter>Source Files\ecp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecp\ecp_add.c">
+      <Filter>Source Files\ecp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecp\ecp_copy.c">
+      <Filter>Source Files\ecp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecp\ecp_dbl.c">
+      <Filter>Source Files\ecp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ecp\ecp_mul.c">
+      <Filter>Source Files\ecp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\prng\prng_aes.c">
+      <Filter>Source Files\prng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\crc16.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\crc16_ccitt.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\crc16_dnp.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\crc16_ibm.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\crc32.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\crc32_eth.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\cs8.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sum\lrc.c">
+      <Filter>Source Files\sum</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

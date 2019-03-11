@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\cry\aes.h" />
+    <ClInclude Include="..\..\include\cry\affine.h" />
+    <ClInclude Include="..\..\include\cry\base64.h" />
+    <ClInclude Include="..\..\include\cry\cbc.h" />
+    <ClInclude Include="..\..\include\cry\cfb.h" />
+    <ClInclude Include="..\..\include\cry\ciph.h" />
+    <ClInclude Include="..\..\include\cry\cmac.h" />
+    <ClInclude Include="..\..\include\cry\crc.h" />
+    <ClInclude Include="..\..\include\cry\ctr.h" />
+    <ClInclude Include="..\..\include\cry\des.h" />
+    <ClInclude Include="..\..\include\cry\dh.h" />
+    <ClInclude Include="..\..\include\cry\dsa.h" />
+    <ClInclude Include="..\..\include\cry\ec.h" />
+    <ClInclude Include="..\..\include\cry\ecdh.h" />
+    <ClInclude Include="..\..\include\cry\ecdsa.h" />
+    <ClInclude Include="..\..\include\cry\ecp.h" />
+    <ClInclude Include="..\..\include\cry\gcm.h" />
+    <ClInclude Include="..\..\include\cry\hash.h" />
+    <ClInclude Include="..\..\include\cry\hill.h" />
+    <ClInclude Include="..\..\include\cry\hmac.h" />
+    <ClInclude Include="..\..\include\cry\md5.h" />
+    <ClInclude Include="..\..\include\cry\memxor.h" />
+    <ClInclude Include="..\..\include\cry\mpi.h" />
+    <ClInclude Include="..\..\include\cry\prng.h" />
+    <ClInclude Include="..\..\include\cry\rsa.h" />
+    <ClInclude Include="..\..\include\cry\sha256.h" />
+    <ClInclude Include="..\..\include\cry\sum.h" />
+    <ClInclude Include="..\..\include\cry\trivium.h" />
+    <ClInclude Include="..\..\include\cry\version.h" />
+    <ClInclude Include="..\..\src\crypt\memxor.h" />
+    <ClInclude Include="..\..\src\misc.h" />
+    <ClInclude Include="..\..\src\mpi\mpi_pvt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\crypt\aes.c" />
+    <ClCompile Include="..\..\src\crypt\affine.c" />
+    <ClCompile Include="..\..\src\crypt\base64.c" />
+    <ClCompile Include="..\..\src\crypt\cbc.c" />
+    <ClCompile Include="..\..\src\crypt\cfb.c" />
+    <ClCompile Include="..\..\src\crypt\cmac.c" />
+    <ClCompile Include="..\..\src\crypt\ctr.c" />
+    <ClCompile Include="..\..\src\crypt\des.c" />
+    <ClCompile Include="..\..\src\crypt\dh.c" />
+    <ClCompile Include="..\..\src\crypt\dsa.c" />
+    <ClCompile Include="..\..\src\crypt\ecdh.c" />
+    <ClCompile Include="..\..\src\crypt\ecdsa.c" />
+    <ClCompile Include="..\..\src\crypt\gcm.c" />
+    <ClCompile Include="..\..\src\crypt\hill.c" />
+    <ClCompile Include="..\..\src\crypt\hmac.c" />
+    <ClCompile Include="..\..\src\crypt\memxor.c" />
+    <ClCompile Include="..\..\src\crypt\rsa.c" />
+    <ClCompile Include="..\..\src\crypt\trivium.c" />
+    <ClCompile Include="..\..\src\ecp\ecp_add.c" />
+    <ClCompile Include="..\..\src\ecp\ecp_copy.c" />
+    <ClCompile Include="..\..\src\ecp\ecp_dbl.c" />
+    <ClCompile Include="..\..\src\ecp\ecp_mul.c" />
+    <ClCompile Include="..\..\src\ecp\ec_nist_p256.c" />
+    <ClCompile Include="..\..\src\hash\md5.c" />
+    <ClCompile Include="..\..\src\hash\sha256.c" />
+    <ClCompile Include="..\..\src\misc.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_abs.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_add.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_add_abs.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_bin.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_cmp.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_cmp_abs.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_core.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_div.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_div_abs.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_exp.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_gcd.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_inv.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_lcm.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_list.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mod_exp.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mul.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mul_abs.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mul_baseline.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mul_comba.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mul_karatsuba.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_mul_toom3.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_prime.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_print.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_rand.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_shl.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_shr.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_sqr.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_sqrt.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_str.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_sub.c" />
+    <ClCompile Include="..\..\src\mpi\mpi_sub_abs.c" />
+    <ClCompile Include="..\..\src\prng\prng_aes.c" />
+    <ClCompile Include="..\..\src\sum\crc16.c" />
+    <ClCompile Include="..\..\src\sum\crc16_ccitt.c" />
+    <ClCompile Include="..\..\src\sum\crc16_dnp.c" />
+    <ClCompile Include="..\..\src\sum\crc16_ibm.c" />
+    <ClCompile Include="..\..\src\sum\crc32.c" />
+    <ClCompile Include="..\..\src\sum\crc32_eth.c" />
+    <ClCompile Include="..\..\src\sum\cs8.c" />
+    <ClCompile Include="..\..\src\sum\lrc.c" />
+    <ClCompile Include="..\..\src\version.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{58BBB1D2-A1FB-4BA9-8075-509646BE0538}</ProjectGuid>
+    <RootNamespace>cry</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\src;$(ProjectDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
