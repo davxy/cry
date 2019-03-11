@@ -1,7 +1,7 @@
 #!/bin/bash
 
 base=$(cd $1; pwd)
-target=$(cd $2; pwd)"/tsc"
+target=$(cd $2; pwd)"/TSC"
 
 
 if [[ $1 == "" ]]; then
