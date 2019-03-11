@@ -27,7 +27,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/rand/tsc_rand_unix.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/prng/prng_weak.c|src/prng/prng_win.c|src/prng/prng_posix.c|src/rand/tsc_rand_unix.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -67,19 +67,39 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/rand/tsc_rand_unix.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/prng/prng_weak.c|src/prng/prng_win.c|src/prng/prng_posix.c|src/rand/tsc_rand_unix.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="tsc.com.arm.eclipse.build.project.baremetal.lib.932852492" name="Bare-metal Library" projectType="com.arm.eclipse.build.project.baremetal.lib"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/tsc"/>
+		</configuration>
+		<configuration configurationName="aclara">
+			<resource resourceType="PROJECT" workspacePath="/tsc"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649;com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649.;com.arm.tool.c.compiler.baremetal.lib.debug.1473156668;com.arm.tool.c.compiler.input.491935006">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.arm.eclipse.builder.armcc.ARMCompilerDiscoveryProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668;com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.;com.arm.tool.c.compiler.baremetal.lib.debug.181624601;com.arm.tool.cpp.compiler.input.624412625">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.arm.eclipse.builder.armcc.ARMCompilerDiscoveryProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668;com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.;com.arm.tool.c.compiler.baremetal.lib.debug.181624601;com.arm.tool.c.compiler.input.447837509">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.arm.eclipse.builder.armcc.ARMCompilerDiscoveryProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649;com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649.;com.arm.tool.c.compiler.baremetal.lib.debug.1473156668;com.arm.tool.cpp.compiler.input.1334128993">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.arm.eclipse.builder.armcc.ARMCompilerDiscoveryProfile"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
