@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.arm.eclipse.builder.armcc.error" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="com.arm.eclipse.build.artefact.baremetal.lib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=com.arm.eclipse.build.artefact.baremetal.lib" cleanCommand="clean" description="" id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668" name="Debug" parent="com.arm.eclipse.build.config.baremetal.lib.debug">
+					<folderInfo id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668." name="/" resourcePath="">
+						<toolChain id="com.arm.toolchain.baremetal.lib.debug.1929990556" name="ARM Compiler 5" superClass="com.arm.toolchain.baremetal.lib.debug">
+							<targetPlatform id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668..170901893" name=""/>
+							<builder buildPath="${workspace_loc:/tsc}/Debug" id="com.arm.toolchain.baremetal.builder.579741858" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="com.arm.toolchain.baremetal.builder"/>
+							<tool id="com.arm.tool.c.compiler.baremetal.lib.debug.181624601" name="ARM C Compiler 5" superClass="com.arm.tool.c.compiler.baremetal.lib.debug">
+								<inputType id="com.arm.tool.c.compiler.input.447837509" superClass="com.arm.tool.c.compiler.input"/>
+								<inputType id="com.arm.tool.cpp.compiler.input.624412625" superClass="com.arm.tool.cpp.compiler.input"/>
+							</tool>
+							<tool id="com.arm.tool.cpp.compiler.baremetal.lib.debug.1992810746" name="ARM C++ Compiler 5" superClass="com.arm.tool.cpp.compiler.baremetal.lib.debug"/>
+							<tool id="com.arm.tool.assembler.343004249" name="ARM Assembler 5" superClass="com.arm.tool.assembler"/>
+							<tool id="com.arm.tool.c.linker.177404051" name="ARM Linker 5" superClass="com.arm.tool.c.linker"/>
+							<tool id="com.arm.tool.librarian.1187978972" name="ARM Librarian 5" superClass="com.arm.tool.librarian"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src/rand/tsc_rand_unix.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649" moduleId="org.eclipse.cdt.core.settings" name="aclara">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.arm.eclipse.builder.armcc.error" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="com.arm.eclipse.build.artefact.baremetal.lib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=com.arm.eclipse.build.artefact.baremetal.lib" cleanCommand="clean" description="" id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649" name="aclara" parent="com.arm.eclipse.build.config.baremetal.lib.debug">
+					<folderInfo id="com.arm.eclipse.build.config.baremetal.lib.debug.1031877668.135053649." name="/" resourcePath="">
+						<toolChain id="com.arm.toolchain.baremetal.lib.debug.1043815768" name="ARM Compiler 5" superClass="com.arm.toolchain.baremetal.lib.debug">
+							<targetPlatform id="com.arm.toolchain.baremetal.lib.debug.1043815768.855907464" name=""/>
+							<builder buildPath="${workspace_loc:/tsc}/Debug" id="com.arm.toolchain.baremetal.builder.568485778" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="com.arm.toolchain.baremetal.builder"/>
+							<tool id="com.arm.tool.c.compiler.baremetal.lib.debug.1473156668" name="ARM C Compiler 5" superClass="com.arm.tool.c.compiler.baremetal.lib.debug">
+								<option id="com.arm.tool.c.compiler.option.incpath.1478589064" name="Include path (-I)" superClass="com.arm.tool.c.compiler.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+								</option>
+								<option id="com.arm.tool.c.compiler.baremetal.lib.debug.option.opt.1374661449" name="Optimization level" superClass="com.arm.tool.c.compiler.baremetal.lib.debug.option.opt" value="com.arm.tool.c.compiler.option.optlevel.max" valueType="enumerated"/>
+								<option id="com.arm.tool.c.compiler.option.optfor.556906701" name="Optimize for" superClass="com.arm.tool.c.compiler.option.optfor" value="com.arm.tool.c.compiler.option.optfor.time" valueType="enumerated"/>
+								<option id="com.arm.tool.c.compiler.option.targetcpu.1505472215" name="Target CPU (--cpu)" superClass="com.arm.tool.c.compiler.option.targetcpu" value="Cortex-M3" valueType="string"/>
+								<option id="com.arm.tool.c.compiler.options.debug.enabled.1923634201" name="Enable debug (-g)" superClass="com.arm.tool.c.compiler.options.debug.enabled" value="false" valueType="boolean"/>
+								<inputType id="com.arm.tool.c.compiler.input.491935006" superClass="com.arm.tool.c.compiler.input"/>
+								<inputType id="com.arm.tool.cpp.compiler.input.1334128993" superClass="com.arm.tool.cpp.compiler.input"/>
+							</tool>
+							<tool id="com.arm.tool.cpp.compiler.baremetal.lib.debug.1055268670" name="ARM C++ Compiler 5" superClass="com.arm.tool.cpp.compiler.baremetal.lib.debug"/>
+							<tool id="com.arm.tool.assembler.280993119" name="ARM Assembler 5" superClass="com.arm.tool.assembler"/>
+							<tool id="com.arm.tool.c.linker.839993914" name="ARM Linker 5" superClass="com.arm.tool.c.linker"/>
+							<tool id="com.arm.tool.librarian.1420973115" name="ARM Librarian 5" superClass="com.arm.tool.librarian"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src/rand/tsc_rand_unix.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="tsc.com.arm.eclipse.build.project.baremetal.lib.932852492" name="Bare-metal Library" projectType="com.arm.eclipse.build.project.baremetal.lib"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope"/>
+</cproject>
