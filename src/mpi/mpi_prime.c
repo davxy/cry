@@ -222,7 +222,7 @@ int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
     int res = -1;
     unsigned int i, itermax;
 
-    if (bits & 0x07 || bits == 0)
+    if ((bits & 0x07) || bits == 0)
         return -1; /* Not a multiple of 8 bit */
 
     itermax = (iter) ? *iter : ITERMAX;
