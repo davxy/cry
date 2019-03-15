@@ -40,9 +40,6 @@ static void cbc_compute_subkeys(cry_cmac_ctx *ctx,
         k2[CRY_CMAC_BLOCK_SIZE-1] ^= 0x87;
 }
 
-
-
-
 void cry_cmac_init(cry_cmac_ctx *ctx, void *ciph_ctx,
                    const cry_ciph_itf *ciph_itf,
                    unsigned char *key, size_t keylen)
