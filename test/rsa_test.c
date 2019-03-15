@@ -1,13 +1,18 @@
 #include "test.h"
 #include <cry/rsa.h>
+#include <cry/prng.h>
 
-
+/* Just for... coverage :-) */
+#define KEYGEN_BITS 256
 
 static void keygen(void)
 {
     cry_rsa_ctx rsa;
 
-    ASSERT_OK(cry_rsa_keygen(&rsa, 1024));
+    /* Seed the PRNG to make results predictable */
+    cry_prng_init((unsigned char *)RAND_SEED_RAW, RAND_SEED_SIZ);
+
+    ASSERT_OK(cry_rsa_keygen(&rsa, KEYGEN_BITS));
 }
 
 static const unsigned char modulus[] = {
@@ -119,8 +124,8 @@ static void sign_verify(void)
 void rsa_test(void)
 {
     printf("* RSA Test\n");
-    run("keygen", keygen, NULL, NULL);
-    run("encrypt-decrypt", encrypt_decrypt, NULL, NULL);
-    run("sign-verify", sign_verify, NULL, NULL);
+    run("Keygen 512", keygen, NULL, NULL);
+    run("Encrypt-Decrypt", encrypt_decrypt, NULL, NULL);
+    run("Sign-Verify", sign_verify, NULL, NULL);
     printf("\n");
 }
