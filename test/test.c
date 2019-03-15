@@ -4,13 +4,14 @@ void version_test(void);
 void memxor_test(void);
 void base64_test(void);
 void mpi_test(void);
-void hmac_test(void);
 void des_test(void);
 void aes_test(void);
 void trivium_test(void);
 void hill_test(void);
 void affine_test(void);
 void crc_test(void);
+void hmac_test(void);
+void cmac_test(void);
 
 
 static int g_runs;
@@ -28,42 +29,28 @@ struct sub_test {
 
 struct sub_test g_tests[] = {
     SUB_TEST(version),
-#if 1
     SUB_TEST(memxor),
     SUB_TEST(base64),
     SUB_TEST(mpi),
-    SUB_TEST(hmac),
     SUB_TEST(des),
     SUB_TEST(aes),
     SUB_TEST(trivium),
     SUB_TEST(hill),
     SUB_TEST(affine),
     SUB_TEST(crc),
-#endif
+    SUB_TEST(hmac),
+    SUB_TEST(cmac),
 #if 0
    TEST_ELEM(md5),
    TEST_ELEM(sha256),
-   TEST_ELEM(cmac),
    TEST_ELEM(sum),
    TEST_ELEM(rsa),
-   TEST_ELEM(rand),
    TEST_ELEM(dh),
    TEST_ELEM(dsa),
    TEST_ELEM(ecp),
    TEST_ELEM(ecdsa),
    TEST_ELEM(ecdh),
-   TEST_ELEM(crc),
-   TEST_ELEM(md5),
-   TEST_ELEM(sha256),
-   TEST_ELEM(cmac),
-   TEST_ELEM(sum),
-   TEST_ELEM(rsa),
    TEST_ELEM(rand),
-   TEST_ELEM(dh),
-   TEST_ELEM(dsa),
-   TEST_ELEM(ecp),
-   TEST_ELEM(ecdsa),
-   TEST_ELEM(ecdh),
 #endif
 };
 
