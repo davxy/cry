@@ -166,7 +166,7 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
 
     do {
         if (trials > 0) {
-            cry_prng_rand(key, keylen);
+            cry_prng_aes_rand(key, keylen);
             trials--;
         }
 

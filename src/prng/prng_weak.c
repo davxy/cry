@@ -22,7 +22,7 @@ static int init = 0;
     ((r) = (z[0] ^ z[1] ^ z[2] ^ z[3])); \
     } while(0)
 
-int cry_prng_init(const unsigned char *seed, size_t seed_siz)
+int cry_prng_weak_init(const unsigned char *seed, size_t seed_siz)
 {
     init = 1;
     uint32_t fallback[4] = {1,2,3,4};
@@ -35,14 +35,14 @@ int cry_prng_init(const unsigned char *seed, size_t seed_siz)
     return 0;
 }
 
-int cry_prng_rand(unsigned char *buf, size_t siz)
+int cry_prng_weak_rand(unsigned char *buf, size_t siz)
 {
     int i, iter = siz / 4;
     uint32_t *buf32 = (uint32_t *) buf;
     uint32_t r;
 
     if (!init)
-        cry_prng_init(NULL, 0);
+        cry_prng_weak_init(NULL, 0);
 
     for (i = 0; i < iter; i++, buf32++)
         RAND_GET(*buf32);
