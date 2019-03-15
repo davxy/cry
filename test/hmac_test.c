@@ -54,7 +54,6 @@ static void dispatch(int argc, char *argv[])
 
     argv++;
     argc--;
-
     if (strcmp(test, "hmac_digest") == 0)
         hmac_digest(argc, argv);
     else

@@ -114,7 +114,7 @@ struct binary_test {
 };
 
 static const struct binary_test brs[] = {
-    { 
+    {
         "CEI EN 60870-5-1 reference pattern",
         en_60870_5_1_pattern,
         sizeof(en_60870_5_1_pattern),
