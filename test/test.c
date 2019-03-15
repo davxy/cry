@@ -43,7 +43,6 @@ struct sub_test g_tests[] = {
 #if 0
    TEST_ELEM(md5),
    TEST_ELEM(sha256),
-   TEST_ELEM(sum),
    TEST_ELEM(rsa),
    TEST_ELEM(dh),
    TEST_ELEM(dsa),

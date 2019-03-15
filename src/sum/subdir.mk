@@ -6,6 +6,4 @@ objects-y := \
     crc16_ibm.o \
 	crc16_dnp.o \
     crc32.o \
-    crc32_eth.o \
-	cs8.o \
-	lrc.o
+    crc32_eth.o
