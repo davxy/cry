@@ -185,7 +185,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     }
 
     /* If z = p-1, pass! */
-    if ((res = cry_mpi_add(&z, &z, &one) < 0))
+    if ((res = cry_mpi_add(&z, &z, &one)) < 0)
         goto e;
     res = (cry_mpi_cmp(&z, p) == 0) ? 1 : 0;
 e:  cry_mpi_clear_list(&a, &m, &z, &tmp, NULL);
@@ -222,7 +222,7 @@ int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
     int res = -1;
     unsigned int i, itermax;
 
-    if (bits & 0x07 || bits == 0)
+    if ((bits & 0x07) || bits == 0)
         return -1; /* Not a multiple of 8 bit */
 
     itermax = (iter) ? *iter : ITERMAX;
