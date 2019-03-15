@@ -20,8 +20,9 @@ int cry_mpi_rand(cry_mpi *r, unsigned int bits)
     }
     r->used = digs;
 
-    if ((res = cry_prng_rand((unsigned char *)r->data,
-                    digs * sizeof(cry_mpi_digit))) != 0)
+    res = cry_prng_aes_rand((unsigned char *)r->data,
+                            digs * sizeof(cry_mpi_digit));
+    if (res != 0)
         return res;
 
     msb = bits - CRY_MPI_DIGIT_BITS * (digs - 1);
