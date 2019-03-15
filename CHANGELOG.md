@@ -27,6 +27,8 @@ Given a version number MAJOR.MINOR.PATCH
 
 - CFB block cipher mode of operation
 - CRC16-DNP
+- removed trivial LRC and 8-bit checksum
+- Incremental CMAC implementation
 
 [0.0.7] - 2018-12-26
 --------------------

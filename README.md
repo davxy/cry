@@ -80,8 +80,8 @@ Pseudo random numbers generators
 Message authentication code
 ---------------------------
 
-- CMAC
 - HMAC
+- CMAC
 
 
 Hash
@@ -96,12 +96,8 @@ Hash
 
 - CRC16-CCITT
 - CRC16-IBM
+- CRC16-DNP
 - CRC32-Ethernet
-
-### Checksums
-
-- LRC
-- Trivial checksum
 
 
 Classical ciphers
