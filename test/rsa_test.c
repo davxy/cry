@@ -13,6 +13,8 @@ static void keygen(void)
     cry_prng_aes_init(NULL, 0);
 
     ASSERT_OK(cry_rsa_keygen(&rsa, KEYGEN_BITS));
+
+    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
 }
 
 static const unsigned char modulus[] = {
@@ -176,6 +178,10 @@ static void rsa_pkcs1_encrypt(int argc, char *argv[])
 
     ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
                               par.clrraw, par.clrlen));
+
+    free(par.mraw);
+    free(cipher_buf);
+    cry_mpi_clear_list(&rsa.m, &rsa.e, NULL);
 }
 
 static void dispatch(int argc, char *argv[])
