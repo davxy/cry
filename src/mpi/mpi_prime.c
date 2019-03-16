@@ -106,11 +106,11 @@ static int calc_b_and_m(cry_mpi *x, const cry_mpi *p)
     one.alloc = 1;
     one.sign = 0;
 
-    if (cry_mpi_init_copy(x, p) < 0)
-        return -1;
+    if ((ret = cry_mpi_copy(x, p)) < 0)
+        return ret;
 
     if ((ret = cry_mpi_sub(x, x, &one)) < 0)
-        goto e;
+        return ret;
 
     for (ret = 0; !cry_mpi_is_odd(x); ret++) {
         if (cry_mpi_shr(x, x, 1) < 0) { /* div by 2 */
@@ -118,8 +118,6 @@ static int calc_b_and_m(cry_mpi *x, const cry_mpi *p)
             break;
         }
     }
-e:  if (ret < 0)
-        cry_mpi_clear(x);
     return ret;
 }
 

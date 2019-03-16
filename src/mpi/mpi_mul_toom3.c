@@ -90,6 +90,11 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     int res, B;
     cry_mpi w0, w1, w2, w3, w4, a0, a1, a2, b0, b1, b2, t1, t2;
 
+    if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
     /* init temps */
     if ((res = cry_mpi_init_list(&w0, &w1, &w2, &w3, &w4,
                                  &a0, &a1, &a2, &b0, &b1,

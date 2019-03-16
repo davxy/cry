@@ -43,7 +43,7 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m)
         cry_mpi_zero(&s0);
         ret = -1;
     }
-    cry_mpi_clear_list(&r0, &r1, &s0, &s1, NULL);
+    cry_mpi_clear_list(&r0, &r1, &s0, &s1, &q, NULL);
     return ret;
 }
 
