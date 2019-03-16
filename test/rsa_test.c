@@ -121,11 +121,81 @@ static void sign_verify(void)
     cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
 }
 
+struct rsa_param {
+    unsigned int   mlen;
+    unsigned int   elen;
+    unsigned int   clrlen;
+    unsigned int   ciplen;
+    unsigned char *mraw;
+    unsigned char *eraw;
+    unsigned char *clrraw;
+    unsigned char *cipraw;
+};
+
+/*
+ * Params:
+ * p0 : M
+ * p1 : E
+ * p2 : cleartext
+ * p3 : ciphertext
+ */
+static void rsa_param_init(struct rsa_param *par, int argc, char *argv[])
+{
+    memset(par, 0, sizeof(*par));
+
+    ASSERT(argc == 4);
+
+    par->mlen = strlen(argv[0]) >> 1;
+    par->elen = strlen(argv[1]) >> 1;
+    par->clrlen = strlen(argv[2]) >> 1;
+    par->ciplen = strlen(argv[3]) >> 1;
+    par->mraw = malloc(par->mlen + par->elen + par->clrlen + par->ciplen);
+    par->eraw = par->mraw + par->mlen;
+    par->clrraw = par->eraw + par->elen;
+    par->cipraw = par->clrraw + par->clrlen;
+
+    raw_init(par->mraw, par->mlen, argv[0]);
+    raw_init(par->eraw, par->elen, argv[1]);
+    raw_init(par->clrraw, par->clrlen, argv[2]);
+    raw_init(par->cipraw, par->ciplen, argv[3]);
+
+}
+
+static void rsa_pkcs1_encrypt(int argc, char *argv[])
+{
+    struct rsa_param par;
+    cry_rsa_ctx rsa;
+    size_t outlen;
+    unsigned char *cipher_buf;
+
+    cry_prng_init(NULL, 0);
+    rsa_param_init(&par, argc, argv);
+    cry_mpi_init_bin(&rsa.m, par.mraw, par.mlen);
+    cry_mpi_init_bin(&rsa.e, par.eraw, par.elen);
+    rsa.flags = 0;
+
+    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+                              par.clrraw, par.clrlen));
+}
+
+static void dispatch(int argc, char *argv[])
+{
+    char *test = *argv;
+
+    argv++;
+    argc--;
+    if (strcmp(test, "rsa_pkcs1_encrypt") == 0)
+        rsa_pkcs1_encrypt(argc, argv);
+    else
+        printf("Test '%s' not defined\n", test);
+}
+
 void rsa_test(void)
 {
     printf("* RSA Test\n");
     run("Keygen 512", keygen, NULL, NULL);
     run("Encrypt-Decrypt", encrypt_decrypt, NULL, NULL);
     run("Sign-Verify", sign_verify, NULL, NULL);
+    func_test("rsa_test.data", dispatch);
     printf("\n");
 }
