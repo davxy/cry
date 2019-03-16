@@ -22,13 +22,14 @@ Given a version number MAJOR.MINOR.PATCH
 - PATCH incremented for bug fixes
 
 
-[0.0.8] - Unreleased
+[0.0.8] - 2019-03-16
 --------------------
 
 - CFB block cipher mode of operation
 - CRC16-DNP
 - removed trivial LRC and 8-bit checksum
 - Incremental CMAC implementation
+- RSA keypair generator
 
 [0.0.7] - 2018-12-26
 --------------------
