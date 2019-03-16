@@ -21,9 +21,9 @@ objs := \
 	crc_test.o \
 	hmac_test.o \
 	cmac_test.o \
+	rsa_test.o \
 #	md5_test.o \
 	sha256_test.o \
-	rsa_test.o \
 	rand_test.o \
 	dh_test.o \
 	dsa_test.o \

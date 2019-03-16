@@ -80,5 +80,8 @@ void run(const char *name, void (* test)(void),
     cry_mpi_print(mpi, rad); \
     } while(0)
 
+/* Constant seed to make "rand" results predictable */
+#define RAND_SEED_RAW  "RANDSEED"
+#define RAND_SEED_SIZ  (sizeof(RAND_SEED_RAW) - 1)
 
 #endif /* _TEST_H_ */
