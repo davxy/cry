@@ -10,7 +10,7 @@ static void keygen(void)
     cry_rsa_ctx rsa;
 
     /* Seed the PRNG to make results predictable */
-    cry_prng_init((unsigned char *)RAND_SEED_RAW, RAND_SEED_SIZ);
+    cry_prng_aes_init(NULL, 0);
 
     ASSERT_OK(cry_rsa_keygen(&rsa, KEYGEN_BITS));
 }
@@ -168,7 +168,7 @@ static void rsa_pkcs1_encrypt(int argc, char *argv[])
     size_t outlen;
     unsigned char *cipher_buf;
 
-    cry_prng_init(NULL, 0);
+    cry_prng_aes_init(NULL, 0);
     rsa_param_init(&par, argc, argv);
     cry_mpi_init_bin(&rsa.m, par.mraw, par.mlen);
     cry_mpi_init_bin(&rsa.e, par.eraw, par.elen);
