@@ -41,17 +41,13 @@ static int nozero_rand(unsigned char *dst, unsigned int n)
                     break;
                 }
             }
-            if (k > 0) {
-                fprintf(stderr, "FIXED AFTER: %d\n", k);
-            }
             if (dst[n] == 0) {
-                fprintf(stderr, "still 0... exiting\n");
-                exit(0);
-                return -1; /* No Way!!! Probability is ~0 */
+                res = -1; /* No Way!!! */
+                break;
             }
         }
     }
-    return 0;
+    return res;
 }
 
 /*
@@ -90,7 +86,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
         } else {
             if ((res = nozero_rand(padded_block + 2,
                             mod_siz - block_siz - 3)) < 0)
-                return res;
+                break;
         }
 
         *out = realloc(*out, *out_siz);
