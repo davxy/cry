@@ -199,7 +199,7 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits)
 {
     int res;
     cry_mpi phi, p, q, p1, q1, one;
-    cry_mpi_digit one_dig;
+    cry_mpi_digit one_dig = 1;
     int hbits = bits >> 1;
     unsigned int i;
 
