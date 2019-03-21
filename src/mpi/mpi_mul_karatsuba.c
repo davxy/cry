@@ -7,6 +7,11 @@ int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     int B, hB, res;
     cry_mpi x0, x1, y0, y1, z0, z1, z2;
 
+    if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
     /* minimum number of digits */
     B = CRY_MIN(a->used, b->used);
     /* divide by two */

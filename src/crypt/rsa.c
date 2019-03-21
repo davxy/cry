@@ -30,28 +30,24 @@ static int nozero_rand(unsigned char *dst, unsigned int n)
     int res, k;
     unsigned char buf[16];
 
-    if ((res = cry_prng_rand(dst, n)) < 0)
+    if ((res = cry_prng_aes_rand(dst, n)) < 0)
         return res;
     while (n-- > 0) {
         if (dst[n] == 0) {
-            cry_prng_rand(buf, sizeof(buf));
+            cry_prng_aes_rand(buf, sizeof(buf));
             for (k = 0; k < sizeof(buf); k++) {
                 if (buf[k] != 0) {
                     dst[n] = buf[k];
                     break;
                 }
             }
-            if (k > 0) {
-                fprintf(stderr, "FIXED AFTER: %d\n", k);
-            }
             if (dst[n] == 0) {
-                fprintf(stderr, "still 0... exiting\n");
-                exit(0);
-                return -1; /* No Way!!! Probability is ~0 */
+                res = -1; /* No Way!!! */
+                break;
             }
         }
     }
-    return 0;
+    return res;
 }
 
 /*
@@ -90,7 +86,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
         } else {
             if ((res = nozero_rand(padded_block + 2,
                             mod_siz - block_siz - 3)) < 0)
-                return res;
+                break;
         }
 
         *out = realloc(*out, *out_siz);
@@ -194,5 +190,53 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
         *out_siz = 0;
         *out = NULL;
     }
+    return res;
+}
+
+#define MAX_ITER    10000
+
+int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits)
+{
+    int res;
+    cry_mpi phi, p, q, p1, q1, one;
+    cry_mpi_digit one_dig = 1;
+    int hbits = bits >> 1;
+    unsigned int i;
+
+
+    if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->m, NULL)) != 0)
+        return res;
+    if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi, NULL)) != 0)
+        goto e;
+    i = MAX_ITER;
+    if ((res = cry_mpi_prime(&p, hbits, &i)) != 0)
+        goto e;
+    i = MAX_ITER;
+    if ((res = cry_mpi_prime(&q, hbits, &i)) != 0)
+        goto e;
+    if ((res = cry_mpi_mul(&ctx->m, &p, &q)) != 0)
+        goto e;
+
+    one.alloc = 1;
+    one.used = 1;
+    one.sign = 0;
+    one.data = &one_dig;
+
+    if ((res = cry_mpi_sub(&p1, &p, &one)) != 0)
+        goto e;
+    if ((res = cry_mpi_sub(&q1, &q, &one)) != 0)
+        goto e;
+    if ((res = cry_mpi_mul(&phi, &p1, &q1)) != 0)
+        goto e;
+
+    /* Find key */
+    for (i = 0; i < MAX_ITER; i++) {
+        cry_mpi_rand(&ctx->e, bits);
+        if ((res = cry_mpi_inv(&ctx->d, &ctx->e, &phi)) == 0)
+            break;
+    }
+e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, NULL);
+    if (res != 0)
+        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->m, NULL);
     return res;
 }

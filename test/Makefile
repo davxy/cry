@@ -13,18 +13,17 @@ objs := \
 	memxor_test.o \
 	base64_test.o \
 	mpi_test.o \
-	hmac_test.o \
 	des_test.o \
 	aes_test.o \
 	trivium_test.o \
 	hill_test.o \
 	affine_test.o \
 	crc_test.o \
+	hmac_test.o \
+	cmac_test.o \
+	rsa_test.o \
 #	md5_test.o \
 	sha256_test.o \
-	cmac_test.o \
-	sum_test.o \
-	rsa_test.o \
 	rand_test.o \
 	dh_test.o \
 	dsa_test.o \

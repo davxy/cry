@@ -1,7 +1,5 @@
 # src/subdir.mk
 
-objects-y := \
-    version.o \
-    misc.o
+objects-y := version.o misc.o
 
-subdirs-y += mpi crypt hash prng sum ecp
+subdirs-y += mpi crypt hash prng crc ecp

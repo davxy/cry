@@ -55,11 +55,13 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     int res, ix, iy, iz, tx, ty, pa;
     cry_mpi_digit c0, c1, c2, *tmpx, *tmpy;
     cry_mpi tmp, *dst;
-    size_t digs = a->used + b->used;
 
-    c0 = c1 = c2 = 0;
-    pa = CRY_MIN(digs, a->used + b->used);
+    if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
 
+    pa = a->used + b->used;
     if (r == a || r == b) {
         if ((res = cry_mpi_init_size(&tmp, pa)) != 0)
             return res;
@@ -70,6 +72,7 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     }
     cry_mpi_set_used(dst, pa);
 
+    c0 = c1 = c2 = 0;
     for (ix = 0; ix < pa; ix++) {
 
         /* get offsets into the two bignums */

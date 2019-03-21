@@ -15,7 +15,7 @@ struct prng_bc_ctx {
 static struct prng_bc_ctx prng_ctx;
 static int init = 0;
 
-int cry_prng_init(const unsigned char *seed, size_t seed_siz)
+int cry_prng_aes_init(const unsigned char *seed, size_t seed_siz)
 {
     size_t sz;
     unsigned char key[BLOCK_SIZ] = {0};
@@ -42,10 +42,10 @@ int cry_prng_init(const unsigned char *seed, size_t seed_siz)
         if (++ctr[__i]) break; \
     } while (0)
 
-int cry_prng_rand(unsigned char *buf, size_t siz)
+int cry_prng_aes_rand(unsigned char *buf, size_t siz)
 {
     if (!init)
-        cry_prng_init(NULL, 0);
+        cry_prng_aes_init(NULL, 0);
 
     /* eventually store the previous call residual */
     for ( ; prng_ctx.ix && siz; siz--) {

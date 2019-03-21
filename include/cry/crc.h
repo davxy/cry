@@ -53,7 +53,7 @@ extern "C"{
  * @param tab   precomputed lookup table.
  * @param flags algorithm behaviour flags.
  */
-void cry_crc16_init(struct cry_crc16_ctx *ctx, uint16_t start,
+void cry_crc16_init(cry_crc16_ctx *ctx, uint16_t start,
                     const uint16_t *tab, unsigned char flags);
 
 /**
@@ -63,8 +63,7 @@ void cry_crc16_init(struct cry_crc16_ctx *ctx, uint16_t start,
  * @param in    Buffer pointer.
  * @param n     Number of octets in the buffer.
  */
-void cry_crc16_update(struct cry_crc16_ctx *ctx,
-                      const unsigned char *in, size_t n);
+void cry_crc16_update(cry_crc16_ctx *ctx, const unsigned char *in, size_t n);
 
 /**
  * CRC finalize
@@ -72,7 +71,15 @@ void cry_crc16_update(struct cry_crc16_ctx *ctx,
  * @param ctx   CRC-16 context.
  * @return      CRC result.
  */
-uint16_t cry_crc16_final(struct cry_crc16_ctx *ctx);
+uint16_t cry_crc16_final(cry_crc16_ctx *ctx);
+
+/**
+ * CRC finalize with a byte array output.
+ *
+ * @param ctx   CRC-16 context.
+ * @param out   CRC as a BE byte array.
+ */
+void cry_crc16_digest(cry_crc16_ctx *ctx, unsigned char *out);
 
 /**
  * Initialize as a CRC-16-CCITT algorithm.
@@ -82,7 +89,7 @@ uint16_t cry_crc16_final(struct cry_crc16_ctx *ctx);
  *
  * @param ctx   CRC-16 context.
  */
-void cry_crc16_ccitt_init(struct cry_crc16_ctx *ctx);
+void cry_crc16_ccitt_init(cry_crc16_ctx *ctx);
 
 /**
  * CRC-16-CCITT all in one function.
@@ -102,7 +109,7 @@ uint16_t cry_crc16_ccitt(const unsigned char *in, size_t n);
  *
  * @param ctx   CRC-16 context.
  */
-void cry_crc16_ibm_init(struct cry_crc16_ctx *ctx);
+void cry_crc16_ibm_init(cry_crc16_ctx *ctx);
 
 /**
  * CRC-16-IBM all in one function.
@@ -123,17 +130,17 @@ uint16_t cry_crc16_ibm(const unsigned char *in, size_t n);
  *
  * @param ctx   CRC-16 context.
  */
-void cry_crc16_dnp_init(struct cry_crc16_ctx *ctx);
+void cry_crc16_dnp_init(cry_crc16_ctx *ctx);
 
 /**
  * CRC-16-DNP all in one function.
  *
  *
- * @param ptr   Buffer pointer.
+ * @param in    Buffer pointer.
  * @param n     Number of octets in the buffer.
  * @return      CRC value.
  */
-uint16_t cry_crc16_dnp(const uint8_t *ptr, size_t n);
+uint16_t cry_crc16_dnp(const uint8_t *in, size_t n);
 
 /**
  * Initialize a generic CRC-32 algoritm context.
@@ -143,7 +150,7 @@ uint16_t cry_crc16_dnp(const uint8_t *ptr, size_t n);
  * @param tab   precomputed lookup table.
  * @param flags algorithm behaviour flags.
  */
-void cry_crc32_init(struct cry_crc32_ctx *ctx, uint32_t start,
+void cry_crc32_init(cry_crc32_ctx *ctx, uint32_t start,
                     const uint32_t *tab, unsigned char flags);
 
 /**
@@ -153,8 +160,7 @@ void cry_crc32_init(struct cry_crc32_ctx *ctx, uint32_t start,
  * @param in    Buffer pointer.
  * @param n     Number of octets in the buffer.
  */
-void cry_crc32_update(struct cry_crc32_ctx *ctx,
-                      const unsigned char *in, size_t n);
+void cry_crc32_update(cry_crc32_ctx *ctx, const unsigned char *in, size_t n);
 
 /**
  * CRC finalize
@@ -162,7 +168,15 @@ void cry_crc32_update(struct cry_crc32_ctx *ctx,
  * @param ctx   CRC-32 context.
  * @return      CRC result.
  */
-uint32_t cry_crc32_final(struct cry_crc32_ctx *ctx);
+uint32_t cry_crc32_final(cry_crc32_ctx *ctx);
+
+/**
+ * CRC finalize with a byte array output.
+ *
+ * @param ctx   CRC-32 context.
+ * @param out   CRC as a BE byte array.
+ */
+void cry_crc32_digest(cry_crc32_ctx *ctx, unsigned char *out);
 
 /**
  * Initialize as a CRC-32-ETH algorithm.
@@ -174,7 +188,7 @@ uint32_t cry_crc32_final(struct cry_crc32_ctx *ctx);
  *
  * @param ctx   CRC-32 context.
  */
-void cry_crc32_eth_init(struct cry_crc32_ctx *ctx);
+void cry_crc32_eth_init(cry_crc32_ctx *ctx);
 
 /**
  * CRC-32-ETH all in one function.

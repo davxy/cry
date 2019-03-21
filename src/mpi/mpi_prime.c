@@ -106,11 +106,11 @@ static int calc_b_and_m(cry_mpi *x, const cry_mpi *p)
     one.alloc = 1;
     one.sign = 0;
 
-    if (cry_mpi_init_copy(x, p) < 0)
-        return -1;
+    if ((ret = cry_mpi_copy(x, p)) < 0)
+        return ret;
 
     if ((ret = cry_mpi_sub(x, x, &one)) < 0)
-        goto e;
+        return ret;
 
     for (ret = 0; !cry_mpi_is_odd(x); ret++) {
         if (cry_mpi_shr(x, x, 1) < 0) { /* div by 2 */
@@ -118,8 +118,6 @@ static int calc_b_and_m(cry_mpi *x, const cry_mpi *p)
             break;
         }
     }
-e:  if (ret < 0)
-        cry_mpi_clear(x);
     return ret;
 }
 
@@ -185,7 +183,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     }
 
     /* If z = p-1, pass! */
-    if ((res = cry_mpi_add(&z, &z, &one) < 0))
+    if ((res = cry_mpi_add(&z, &z, &one)) < 0)
         goto e;
     res = (cry_mpi_cmp(&z, p) == 0) ? 1 : 0;
 e:  cry_mpi_clear_list(&a, &m, &z, &tmp, NULL);
@@ -222,7 +220,7 @@ int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
     int res = -1;
     unsigned int i, itermax;
 
-    if (bits & 0x07 || bits == 0)
+    if ((bits & 0x07) || bits == 0)
         return -1; /* Not a multiple of 8 bit */
 
     itermax = (iter) ? *iter : ITERMAX;
