@@ -37,7 +37,8 @@ static const uint16_t table[] = {
 
 void cry_crc16_dnp_init(struct cry_crc16_ctx *ctx)
 {
-    cry_crc16_init(ctx, 0x0000, table, CRY_CRC_FLAG_COMPLEMENT);
+    cry_crc16_init(ctx, 0x0000, table,
+            CRY_CRC_FLAG_COMPLEMENT | CRY_CRC_FLAG_SWAP);
 }
 
 uint16_t cry_crc16_dnp(const uint8_t *ptr, size_t n)
