@@ -2370,6 +2370,27 @@
         </settings>
     </configuration>
     <group>
+        <name>crc</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crc\crc16.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crc\crc16_ccitt.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crc\crc16_dnp.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crc\crc16_ibm.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crc\crc32.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crc\crc32_eth.c</name>
+        </file>
+    </group>
+    <group>
         <name>crypt</name>
         <file>
             <name>$PROJ_DIR$\..\..\src\crypt\aes.c</name>
@@ -2421,6 +2442,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\src\crypt\memxor.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\src\crypt\rsa.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\src\crypt\trivium.c</name>
@@ -2552,34 +2576,10 @@
     <group>
         <name>prng</name>
         <file>
+            <name>$PROJ_DIR$\..\..\src\prng\prng_aes.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\src\prng\prng_weak.c</name>
-        </file>
-    </group>
-    <group>
-        <name>sum</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\crc16.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\crc16_ccitt.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\crc16_dnp.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\crc16_ibm.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\crc32.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\crc32_eth.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\cs8.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\src\sum\lrc.c</name>
         </file>
     </group>
     <file>
