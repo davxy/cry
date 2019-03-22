@@ -33,7 +33,7 @@ EOF
 rm -rf $target
 mkdir $target
 
-files=`find $base -type f | grep -v '/\.'`
+files=`find $base -type f | grep -Ev '(.git|.o$)'`
 
 for src in $files
 do
