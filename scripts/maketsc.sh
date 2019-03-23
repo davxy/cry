@@ -9,12 +9,7 @@ else
 fi
 base=$(cd $base; pwd)
 
-if [[ $2 == "" ]]; then
-    target="."
-else
-    target=$2
-fi
-target=$(cd $target; pwd)/TSC
+target=$(cd .; pwd)/TSC
 
 echo "Building TSC from CRY directory"
 echo "Src: $base"
@@ -52,6 +47,7 @@ do
     dir=`dirname $fname`
     mkdir -p $target/$dir
     dst=$target/$fname
+    echo $dst
     cp $src $dst
     # Replace names within the file
     sed -i -e 's/cry_/tsc_/g' -e 's/CRY_/TSC_/g' $dst
