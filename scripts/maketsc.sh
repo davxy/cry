@@ -69,6 +69,9 @@ sed -i 's/cry/tsc/g' $target/Makefile $target/test/Makefile
 # Rename the include tree dir
 mv $target/include/cry $target/include/tsc
 
+# Copy ide project files
+cp -r $base/ide $target/ide
+
 # Remove not required files
 rm head.tmp
 cd $target
