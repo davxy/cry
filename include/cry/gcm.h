@@ -26,9 +26,9 @@ struct cry_gcm_ctx {
     /** Hashing subkey. */
     unsigned char              key[CRY_GCM_BLOCK_SIZE];
     /** Authenticated data length. */
-    unsigned int               auth_len;
+    size_t                     auth_len;
     /** Cipher data length. */
-    unsigned int               ciph_len;
+    size_t                     ciph_len;
 };
 
 typedef struct cry_gcm_ctx cry_gcm_ctx;
@@ -56,7 +56,7 @@ void cry_gcm_init(struct cry_gcm_ctx *ctx, void *ciph_ctx,
  * @param size  Size of cipher key.
  */
 void cry_gcm_key_set(struct cry_gcm_ctx *ctx, const unsigned char *key,
-                     unsigned int size);
+                     size_t size);
 
 /**
  * Set of the initialization vector.
@@ -66,7 +66,7 @@ void cry_gcm_key_set(struct cry_gcm_ctx *ctx, const unsigned char *key,
  * @param size  Size of the initialization vector.
  */
 void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
-                    unsigned int size);
+                    size_t size);
 
 /**
  * Encryption function.
@@ -77,7 +77,7 @@ void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
  * @param size  Size of source/destination buffers.
  */
 void cry_gcm_encrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+                     const unsigned char *src, size_t size);
 
 /**
  * Decryption function.
@@ -88,7 +88,7 @@ void cry_gcm_encrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
  * @param size  Size of source/destination buffers.
  */
 void cry_gcm_decrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+                     const unsigned char *src, size_t size);
 
 /**
  * Set the additional authentication data.
@@ -101,7 +101,7 @@ void cry_gcm_decrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
  *              Constraint: auth_size % GCM_BLOCK_SIZE == 0.
  */
 void cry_gcm_update(struct cry_gcm_ctx *ctx, const unsigned char *aad,
-                    unsigned int size);
+                    size_t size);
 
 /**
  * Generate the GCM MAC (GMAC).
@@ -111,7 +111,7 @@ void cry_gcm_update(struct cry_gcm_ctx *ctx, const unsigned char *aad,
  * @param size  Should be <= GCM_BLOCK_SIZE (16).
  */
 void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
-                    unsigned int size);
+                    size_t size);
 
 #ifdef __cplusplus
 }

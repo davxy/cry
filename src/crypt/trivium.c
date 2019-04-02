@@ -161,13 +161,13 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
 }
 
 void cry_trivium_encrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, unsigned int size)
+                         const unsigned char *src, size_t size)
 {
     operate(ctx, dst, src, size);
 }
 
 void cry_trivium_decrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, unsigned int size)
+                         const unsigned char *src, size_t size)
 {
     operate(ctx, dst, src, size);
 }

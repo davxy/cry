@@ -37,7 +37,7 @@ typedef uint64_t cry_mpi_dword;
         ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BYTES + 1) : 0)
 
 
-int cry_mpi_grow(cry_mpi *a, unsigned int size);
+int cry_mpi_grow(cry_mpi *a, size_t size);
 
 int cry_mpi_shrd(cry_mpi *a, int n);
 

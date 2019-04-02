@@ -202,7 +202,7 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest)
     uint32_t in[16];
     int mdi;
     unsigned int i, ii;
-    unsigned int padlen;
+    size_t padlen;
 
     /* save number of bits */
     in[14] = ctx->len[0];

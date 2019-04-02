@@ -16,7 +16,7 @@ extern "C"{
  * @param size  Number of bytes to XOR.
  */
 void cry_memxor(unsigned char *dst, const unsigned char *src,
-                unsigned int size);
+                size_t size);
 
 /**
  * XOR two memory regions.
@@ -29,7 +29,7 @@ void cry_memxor(unsigned char *dst, const unsigned char *src,
  * @param size  Number of bytes to XOR.
  */
 void cry_memxor2(unsigned char *dst, const unsigned char *src1,
-                 const unsigned char *src2, unsigned int size);
+                 const unsigned char *src2, size_t size);
 
 #ifdef __cplusplus
 }
