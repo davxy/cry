@@ -37,9 +37,9 @@ int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max)
     int n, ret;
 
     n = cry_mpi_count_bits(max);
-    if ((ret = cry_mpi_rand(a, n)) != 0)
-        return ret;
-    if (cry_mpi_cmp_abs(a, max) >= 0)
-        ret = cry_mpi_mod(a, a, max);
-    return 0;
+    if ((ret = cry_mpi_rand(a, n)) == 0) {
+        if (cry_mpi_cmp_abs(a, max) >= 0)
+            ret = cry_mpi_mod(a, a, max);
+    }
+    return ret;
 }

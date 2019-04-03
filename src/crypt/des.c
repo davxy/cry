@@ -1,13 +1,6 @@
 #include <cry/des.h>
 
-#define GET_BIT(buf, bit) \
-    (buf[(bit) / 8] & (0x80 >> ((bit) % 8)))
 
-#define SET_BIT(buf, bit) \
-    (buf[(bit) / 8] |= (0x80 >> ((bit) % 8)))
-
-#define CLEAR_BIT(buf, bit) \
-    (buf[(bit) / 8] &= ~(0x80 >> ((bit) % 8)))
 
 #define EXPANSION_BLOCK_SIZE    6
 #define PC1_KEY_SIZE            7
@@ -136,6 +129,14 @@ static const unsigned char sbox[8][64] = {
     }
 };
 
+
+
+#define GET_BIT(buf, bit) \
+    (buf[(bit) / 8] & (0x80 >> ((bit) % 8)))
+
+#define SET_BIT(buf, bit) \
+    (buf[(bit) / 8] |= (0x80 >> ((bit) % 8)))
+
 /*
  * Implement the initial and final permutation functions. 'permute_tab'
  * and 'dst' must have exactly len and len * 8 number of entries,
@@ -149,11 +150,10 @@ static void permute(unsigned char *dst, const unsigned char *src,
 {
     unsigned int i;
 
+    memset(dst, 0, len);
     for (i = 0; i < len * 8; i++) {
         if (GET_BIT(src, tab[i] - 1))
             SET_BIT(dst, i);
-        else
-            CLEAR_BIT(dst, i);
     }
 }
 
