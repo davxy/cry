@@ -13,12 +13,12 @@ static const cry_ciph_itf aes_itf = {
 };
 
 struct aes_param {
-    unsigned int  keylen;
-    unsigned int  ivlen;
-    unsigned int  aadlen;
-    unsigned int  srclen;
-    unsigned int  dstlen;
-    unsigned int  maclen;
+    size_t keylen;
+    size_t ivlen;
+    size_t aadlen;
+    size_t srclen;
+    size_t dstlen;
+    size_t maclen;
     unsigned char key[32];
     unsigned char iv[16];
     unsigned char mac[16];

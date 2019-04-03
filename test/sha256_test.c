@@ -16,7 +16,7 @@ static const char sha256_hash[] = {
 void sha256_test(void)
 {
     struct cry_sha256_ctx sha256;
-    unsigned int len, i;
+    size_t len, i;
 
     cry_sha256_init(&sha256);
     for (i = 0; i < ARLEN(input); i++) {

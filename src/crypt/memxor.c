@@ -50,10 +50,11 @@
  *      dst  :      [----------]
  */
 void cry_memxor2(unsigned char *dst, const unsigned char *src1,
-                 const unsigned char *src2, unsigned int n)
+                 const unsigned char *src2, size_t size)
 {
     size_t i, j;
     unsigned char *tmp, t;
+    size_t n = size;
 
     if (src2 < src1) {
         tmp = (unsigned char *)src1;
@@ -100,8 +101,10 @@ void cry_memxor2(unsigned char *dst, const unsigned char *src1,
 }
 
 void cry_memxor(unsigned char *dst, const unsigned char *src,
-                unsigned int n)
+                size_t size)
 {
+    size_t n = size;
+
     if (dst <= src) {
         while (n--)
             *dst++ ^= *src++;

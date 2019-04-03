@@ -128,7 +128,7 @@ void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
 }
 
 static void gcm_operate(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                        const unsigned char *src, unsigned int size)
+                        const unsigned char *src, size_t size)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;

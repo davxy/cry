@@ -14,7 +14,7 @@ static const char md5_hash[] = {
 void md5_test(void)
 {
     struct cry_md5_ctx md5;
-    unsigned int len, i;
+    size_t len, i;
 
     cry_md5_init(&md5);
     for (i = 0; i < ARLEN(input); i++) {
