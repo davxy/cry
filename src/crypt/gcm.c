@@ -83,7 +83,7 @@ void cry_gcm_init(struct cry_gcm_ctx *ctx, void *ciph_ctx,
 }
 
 void cry_gcm_key_set(struct cry_gcm_ctx *gcm, const unsigned char *key,
-                     unsigned int size)
+                     size_t size)
 {
     void *ciph = gcm->ciph_ctx;
     cry_ciph_encrypt_f encrypt = gcm->ciph_itf->encrypt;
@@ -105,7 +105,7 @@ void cry_gcm_key_set(struct cry_gcm_ctx *gcm, const unsigned char *key,
 
 
 void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
-                    unsigned int size)
+                    size_t size)
 {
     if (size == (CRY_GCM_BLOCK_SIZE-4)) {
         memcpy(ctx->iv, iv, CRY_GCM_BLOCK_SIZE-4);
@@ -128,7 +128,7 @@ void cry_gcm_iv_set(struct cry_gcm_ctx *ctx, const unsigned char *iv,
 }
 
 static void gcm_operate(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                        const unsigned char *src, unsigned int size)
+                        const unsigned char *src, size_t size)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;
@@ -158,7 +158,7 @@ static void gcm_operate(struct cry_gcm_ctx *ctx, unsigned char *dst,
 }
 
 void cry_gcm_encrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     gcm_operate(ctx, dst, src, size);
     gcm_hash(ctx->hs, ctx->key, dst, size);
@@ -166,7 +166,7 @@ void cry_gcm_encrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
 }
 
 void cry_gcm_decrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     gcm_hash(ctx->hs, ctx->key, src, size);
     gcm_operate(ctx, dst, src, size);
@@ -174,14 +174,14 @@ void cry_gcm_decrypt(struct cry_gcm_ctx *ctx, unsigned char *dst,
 }
 
 void cry_gcm_update(struct cry_gcm_ctx *ctx, const unsigned char *aad,
-                    unsigned int size)
+                    size_t size)
 {
     gcm_hash(ctx->hs, ctx->key, aad, size);
     ctx->auth_len += size;
 }
 
 void cry_gcm_digest(struct cry_gcm_ctx *ctx, unsigned char *mac,
-                    unsigned int size)
+                    size_t size)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;

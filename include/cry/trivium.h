@@ -80,7 +80,7 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
  * @param size  Number of bytes.
  */
 void cry_trivium_encrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, unsigned int size);
+                         const unsigned char *src, size_t size);
 
 /**
  * Decryption function.
@@ -91,7 +91,7 @@ void cry_trivium_encrypt(cry_trivium_ctx *ctx, unsigned char *dst,
  * @param size  Number of bytes.
  */
 void cry_trivium_decrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, unsigned int size);
+                         const unsigned char *src, size_t size);
 
 
 

@@ -3,9 +3,9 @@
 
 
 struct trivium_param {
-    unsigned int  keylen;
-    unsigned int  ivlen;
-    unsigned int  buflen;
+    size_t keylen;
+    size_t ivlen;
+    size_t buflen;
     unsigned char key[10];
     unsigned char iv[10];
     unsigned char buf[512];

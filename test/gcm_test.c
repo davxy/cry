@@ -12,12 +12,12 @@ static const struct cry_ciph_itf aes_itf = {
 
 void cry_aes_128_gcm_encrypt(unsigned char *dst,
                              const unsigned char *src,
-                             const unsigned int src_size,
+                             size_t src_size,
                              const unsigned char *key,
                              const unsigned char *iv,
                              unsigned char *mac,
                              const unsigned char *aad,
-                             unsigned int aad_size)
+                             size_t aad_size)
 {
     struct cry_aes_ctx aes;
     struct cry_gcm_ctx gcm;
@@ -35,12 +35,12 @@ void cry_aes_128_gcm_encrypt(unsigned char *dst,
 
 void cry_aes_128_gcm_decrypt(unsigned char *dst,
                              const unsigned char *src,
-                             const unsigned int src_size,
+                             size_t src_size,
                              const unsigned char *key,
                              const unsigned char *iv,
                              unsigned char *mac,
                              const unsigned char *aad,
-                             unsigned int aad_size)
+                             size_t aad_size)
 {
     struct cry_aes_ctx aes;
     struct cry_gcm_ctx gcm;

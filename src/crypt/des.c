@@ -146,7 +146,7 @@ static const unsigned char sbox[8][64] = {
  * specification.
  */
 static void permute(unsigned char *dst, const unsigned char *src,
-                    const unsigned char *tab, unsigned int len)
+                    const unsigned char *tab, size_t len)
 {
     unsigned int i;
 
@@ -203,7 +203,7 @@ static void ror(unsigned char *buf)
 }
 
 static void memxor(unsigned char *dst, unsigned char *src,
-                   unsigned int len)
+                   size_t len)
 {
     while (len--)
         *dst++ ^= *src++;
@@ -301,7 +301,7 @@ static void des_block_operate(unsigned char *dst, const unsigned char *src,
 }
 
 void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     while (size) {
         des_block_operate(dst, src, ctx->key, 1);
@@ -316,7 +316,7 @@ void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
 }
 
 void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     while (size) {
         if (ctx->keylen == 24) {
@@ -334,7 +334,7 @@ void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
 }
 
 void cry_des_key_set(cry_des_ctx *ctx, unsigned char *key,
-                     unsigned int size)
+                     size_t size)
 {
     memset(ctx, 0, sizeof(*ctx));
     if (size > CRY_DES_BLOCK_SIZE*3)

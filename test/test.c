@@ -182,7 +182,7 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw)
 
 #define EMPTY_STRING "NULL"
 
-int raw_init(unsigned char *raw, unsigned int rawlen, const char *asc)
+int raw_init(unsigned char *raw, size_t rawlen, const char *asc)
 {
     int len;
 

@@ -38,7 +38,7 @@ int cry_mpi_copy(cry_mpi *d, const cry_mpi *s);
 
 int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s);
 
-int cry_mpi_init_size(cry_mpi *a, unsigned int size);
+int cry_mpi_init_size(cry_mpi *a, size_t size);
 
 int cry_mpi_init_int(cry_mpi *a, long val);
 
@@ -46,11 +46,11 @@ int cry_mpi_set_int(cry_mpi *a, long val);
 
 int cry_mpi_get_int(cry_mpi *a, long *val);
 
-int cry_mpi_init_bin(cry_mpi *a, const void *b, unsigned int size);
+int cry_mpi_init_bin(cry_mpi *a, const void *b, size_t size);
 
-int cry_mpi_load_bin(cry_mpi *a, const void *b, unsigned int size);
+int cry_mpi_load_bin(cry_mpi *a, const void *b, size_t size);
 
-int cry_mpi_store_bin(const cry_mpi *a, void *b, unsigned int size, int pad);
+int cry_mpi_store_bin(const cry_mpi *a, void *b, size_t size, int pad);
 
 int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s);
 

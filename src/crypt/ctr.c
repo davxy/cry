@@ -15,7 +15,7 @@ void cry_ctr_init(struct cry_ctr_ctx *ctx, void *ciph_ctx,
 }
 
 void cry_ctr_key_set(struct cry_ctr_ctx *ctx, const unsigned char *key,
-                     unsigned int size)
+                     size_t size)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_key_set_f key_set = ctx->ciph_itf->key_set;
@@ -24,7 +24,7 @@ void cry_ctr_key_set(struct cry_ctr_ctx *ctx, const unsigned char *key,
 }
 
 void cry_ctr_iv_set(struct cry_ctr_ctx *ctx, const unsigned char *iv,
-                    unsigned int size)
+                    size_t size)
 {
     ctx->ctrlen  = CRY_MIN(CRY_CTR_BLOCK_MAX, size);
     memcpy(ctx->ctr, iv, ctx->ctrlen);
@@ -32,7 +32,7 @@ void cry_ctr_iv_set(struct cry_ctr_ctx *ctx, const unsigned char *iv,
 }
 
 void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int len)
+                     const unsigned char *src, size_t len)
 {
     unsigned char buf[BUF_LEN];
     void *ciph = ctx->ciph_ctx;

@@ -6,7 +6,7 @@
 /* Digits allocation quantum */
 #define MPI_PREC    8
 
-int cry_mpi_grow(cry_mpi *a, unsigned int digs)
+int cry_mpi_grow(cry_mpi *a, size_t digs)
 {
     cry_mpi_digit *tmp;
 
@@ -44,7 +44,7 @@ int cry_mpi_init(cry_mpi *a)
 /*
  * Init an cry_mpi for a given size
  */
-int cry_mpi_init_size(cry_mpi *a, unsigned int size)
+int cry_mpi_init_size(cry_mpi *a, size_t size)
 {
     a->data = malloc(sizeof(cry_mpi_digit) * size);
     if (a->data == NULL)

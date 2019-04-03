@@ -6,6 +6,8 @@
 #ifndef CRY_CIPH_H_
 #define CRY_CIPH_H_
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -32,10 +34,10 @@ typedef void (* cry_ciph_clean_f)(void *ctx);
  * @param size  Key size.
  */
 typedef void (* cry_ciph_key_set_f)(void *ctx, const unsigned char *key,
-                                    unsigned int size);
+                                    size_t size);
 
 typedef void (* cry_ciph_iv_set_f)(void *ctx, const unsigned char *iv,
-                                   unsigned int size);
+                                   size_t size);
 
 /**
  * Encrypt function pointer type.
@@ -47,7 +49,7 @@ typedef void (* cry_ciph_iv_set_f)(void *ctx, const unsigned char *iv,
  */
 typedef void (* cry_ciph_encrypt_f)(void *ctx, unsigned char *dst,
                                     const unsigned char *src,
-                                    unsigned int size);
+                                    size_t size);
 
 /**
  * Decrypt function pointer type.
@@ -59,7 +61,7 @@ typedef void (* cry_ciph_encrypt_f)(void *ctx, unsigned char *dst,
  */
 typedef void (* cry_ciph_decrypt_f)(void *ctx, unsigned char *dst,
                                     const unsigned char *src,
-                                    unsigned int size);
+                                    size_t size);
 
 #ifdef __cplusplus
 }

@@ -124,10 +124,10 @@ static void sign_verify(void)
 }
 
 struct rsa_param {
-    unsigned int   mlen;
-    unsigned int   elen;
-    unsigned int   clrlen;
-    unsigned int   ciplen;
+    size_t mlen;
+    size_t elen;
+    size_t clrlen;
+    size_t ciplen;
     unsigned char *mraw;
     unsigned char *eraw;
     unsigned char *clrraw;

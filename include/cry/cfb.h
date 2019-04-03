@@ -26,7 +26,7 @@ struct cry_cfb_ctx {
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Initialization vector length */
-    unsigned int               vlen;
+    size_t                     vlen;
     /** Initialization vector data. */
     unsigned char              v[CRY_CFB_BLOCK_MAX];
 };
@@ -55,7 +55,7 @@ void cry_cfb_init(struct cry_cfb_ctx *ctx, void *ciph_ctx,
  * @param size  Size of cipher key.
  */
 void cry_cfb_key_set(struct cry_cfb_ctx *ctx, const unsigned char *key,
-                     unsigned int size);
+                     size_t size);
 
 /**
  * Set the initialization vector in the CFB context.
@@ -65,7 +65,7 @@ void cry_cfb_key_set(struct cry_cfb_ctx *ctx, const unsigned char *key,
  * @param size  Size of initialization vector (<= CRY_CFB_BLOCK_SIZE).
  */
 void cry_cfb_iv_set(struct cry_cfb_ctx *ctx, const unsigned char *iv,
-                    unsigned int size);
+                    size_t size);
 
 /**
  * Encrypt/Decrypt function.
@@ -76,7 +76,7 @@ void cry_cfb_iv_set(struct cry_cfb_ctx *ctx, const unsigned char *iv,
  * @param size  Size of source/destination.
  */
 void cry_cfb_crypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                   const unsigned char *src, unsigned int size);
+                   const unsigned char *src, size_t size);
 
 /**
  * Encryption function.
@@ -108,7 +108,7 @@ void cry_cfb_crypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
  * @param size  Size of source/destination.
  */
 void cry_cfb8_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                      const unsigned char *src, unsigned int size);
+                      const unsigned char *src, size_t size);
 
 /**
  * Decryption function.
@@ -119,7 +119,7 @@ void cry_cfb8_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
  * @param size  Size of ciphertext.
  */
 void cry_cfb8_decrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                      const unsigned char *src, unsigned int size);
+                      const unsigned char *src, size_t size);
 
 
 #ifdef __cplusplus
