@@ -1,0 +1,46 @@
+################################################################################
+#
+# MD5 RFC1321 Test Vectors
+#
+################################################################################
+
+################################################################################
+# MD5 vectors
+# p0  data
+# p1  out
+################################################################################
+
+mbedtls_md5 Test vector RFC1321 #1
+md5_digest
+NULL
+d41d8cd98f00b204e9800998ecf8427e
+
+mbedtls_md5 Test vector RFC1321 #2
+md5_digest
+a
+0cc175b9c0f1b6a831c399e269772661
+
+mbedtls_md5 Test vector RFC1321 #3
+md5_digest
+abc
+900150983cd24fb0d6963f7d28e17f72
+
+mbedtls_md5 Test vector RFC1321 #4
+md5_digest
+message digest
+f96b697d7cb7938d525a2f31aaf161d0
+
+mbedtls_md5 Test vector RFC1321 #5
+md5_digest
+abcdefghijklmnopqrstuvwxyz
+c3fcd3d76192e4007dfb496cca67e13b
+
+mbedtls_md5 Test vector RFC1321 #6
+md5_digest
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+d174ab98d277d9f5a5611c2c9f419d9f
+
+mbedtls_md5 Test vector RFC1321 #7
+md5_digest
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+57edf4a22be3c955ac49da2e2107b67a
