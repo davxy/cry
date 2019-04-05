@@ -21,6 +21,13 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
+[0.0.9] - Unreleased
+--------------------
+
+Added
+
+* SHA1 message digest
+
 
 [0.0.8] - 2019-03-16
 --------------------
