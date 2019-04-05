@@ -2,4 +2,5 @@
 
 objects-y := \
     md5.o \
+    sha1.o \
     sha256.o

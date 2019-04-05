@@ -103,4 +103,20 @@
  */
 unsigned long cry_long_inv(unsigned long val, unsigned long mod);
 
+/**
+ * Secure memset.
+ *
+ * Implementation that should never be optimized out by the compiler.
+ *
+ * @param dst   Destination buffer pointer.
+ * @param val   Constant filling value.
+ * @param len   Destination buffer size.
+ */
+#define cry_memset(dst, val, len) do { \
+    volatile unsigned char *__dst = (unsigned char*)dst; \
+    size_t __len = len; \
+    while(__len--) \
+        *__dst++ = (val); \
+    } while (0)
+
 #endif /* CRY_MISC_H_ */
