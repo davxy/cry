@@ -13,7 +13,9 @@ void crc_test(void);
 void hmac_test(void);
 void cmac_test(void);
 void rsa_test(void);
+void md5_test(void);
 void sha1_test(void);
+void sha256_test(void);
 
 static int g_runs;
 int g_fails;
@@ -42,13 +44,13 @@ struct sub_test g_tests[] = {
     SUB_TEST(hmac),
     SUB_TEST(cmac),
     SUB_TEST(rsa),
+    SUB_TEST(md5),
     SUB_TEST(sha1),
+    SUB_TEST(sha256),
 #if 0
    TEST_ELEM(rand),
    TEST_ELEM(dh),
    TEST_ELEM(dsa),
-   TEST_ELEM(md5),
-   TEST_ELEM(sha256),
    TEST_ELEM(ecp),
    TEST_ELEM(ecdh),
    TEST_ELEM(ecdsa),

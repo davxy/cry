@@ -24,6 +24,7 @@ static void sha1_digest(int argc, char *argv[])
     param_init(&par, argc, argv);
     cry_sha1(out, par.data, par.len);
     ASSERT_EQ_BUF(out, par.hash, CRY_SHA1_DIGEST_SIZE);
+    free(par.data);
 }
 
 static void dispatch(int argc, char *argv[])

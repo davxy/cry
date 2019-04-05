@@ -24,12 +24,46 @@ typedef struct cry_sha256_ctx cry_sha256_ctx;
 extern "C" {
 #endif
 
+/**
+ * Initialize SHA-256 context.
+ *
+ * @param ctx   SHA-256 context to be initialized
+ */
 void cry_sha256_init(struct cry_sha256_ctx *ctx);
 
+/**
+ * Clear SHA-256 context.
+ *
+ * @param ctx   SHA-256 context to be cleared
+ */
+void cry_sha256_clear(cry_sha256_ctx *ctx);
+
+/**
+ * SHA-256 process buffer.
+ *
+ * @param ctx   SHA-256 context.
+ * @param data  Buffer holding the data.
+ * @param len   Length of the input data.
+ */
 void cry_sha256_update(struct cry_sha256_ctx *ctx, const unsigned char *data,
                        size_t size);
 
+/**
+ * Final digest.
+ *
+ * @param ctx   SHA-256 context
+ * @param out   SHA-256 result
+ */
 void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *digest);
+
+/**
+ * SHA-256 computation of a given input.
+ *
+ * @out  SHA-256 result buffer (shall be at least 32 bytes).
+ * @data Input data buffer.
+ * @len  Input data length.
+ */
+void cry_sha256(unsigned char *out, const unsigned char *data, size_t len);
 
 #ifdef __cplusplus
 }

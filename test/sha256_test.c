@@ -1,31 +1,49 @@
 #include "test.h"
 #include <cry/sha256.h>
 
-static char *input[] = {
-    "This file is part of CRY software.",
-    "CRY is free software",
+struct sha256_param {
+    size_t len;
+    unsigned char *data;
+    unsigned char hash[CRY_SHA256_DIGEST_SIZE];
 };
 
-static const char sha256_hash[] = {
-    0x0f,0x02,0x31,0x2e,0x48,0xa2,0xdd,0x86,
-    0x97,0xf2,0xa1,0xd5,0xd4,0x29,0xb6,0x22,
-    0x20,0x00,0x67,0xaf,0xc1,0x31,0x82,0x4d,
-    0x57,0x30,0x75,0xda,0xa5,0x82,0x54,0x99
-};
+static void param_init(struct sha256_param *par, int argc, char *argv[])
+{
+    memset(par, 0, sizeof(*par));
+    par->len = strlen(argv[0]) >> 1;
+    par->data = malloc(par->len);
+    par->len = raw_init(par->data, par->len, argv[0]);
+    raw_init(par->hash, CRY_SHA256_DIGEST_SIZE, argv[1]);
+}
+
+static void sha256_digest(int argc, char *argv[])
+{
+    struct sha256_param par;
+    unsigned char out[CRY_SHA256_DIGEST_SIZE];
+
+    param_init(&par, argc, argv);
+    cry_sha256(out, par.data, par.len);
+    ASSERT_EQ_BUF(out, par.hash, CRY_SHA256_DIGEST_SIZE);
+    free(par.data);
+}
+
+static void dispatch(int argc, char *argv[])
+{
+    char *test = *argv;
+
+    argv++;
+    argc--;
+    ASSERT(argc == 2);
+
+    if (strcmp(test, "sha256_digest") == 0)
+        sha256_digest(argc, argv);
+    else
+        printf("Test '%s' not defined\n", test);
+}
 
 void sha256_test(void)
 {
-    struct cry_sha256_ctx sha256;
-    size_t len, i;
-
-    cry_sha256_init(&sha256);
-    for (i = 0; i < ARLEN(input); i++) {
-        len = strlen(input[i]);
-        PRINT_ASC("input", input[i], len);
-        cry_sha256_update(&sha256, input[i], len);
-    }
-    cry_sha256_digest(&sha256, buf);
-
-    PRINT_HEX("sha256", buf, 32);
-    ASSERT_EQ_BUF(buf, sha256_hash, 32);
+    printf("* SHA256 NIST CAVS Vectors\n");
+    func_test("sha256_test.data", dispatch);
+    printf("\n");
 }
