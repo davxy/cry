@@ -13,6 +13,7 @@ void crc_test(void);
 void hmac_test(void);
 void cmac_test(void);
 void rsa_test(void);
+void md5_test(void);
 void sha1_test(void);
 void sha256_test(void);
 
@@ -43,6 +44,7 @@ struct sub_test g_tests[] = {
     SUB_TEST(hmac),
     SUB_TEST(cmac),
     SUB_TEST(rsa),
+    SUB_TEST(md5),
     SUB_TEST(sha1),
     SUB_TEST(sha256),
 #if 0
