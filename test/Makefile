@@ -23,8 +23,8 @@ objs := \
 	cmac_test.o \
 	rsa_test.o \
 	sha1_test.o \
-#	md5_test.o \
 	sha256_test.o \
+#	md5_test.o \
 	rand_test.o \
 	dh_test.o \
 	dsa_test.o \
