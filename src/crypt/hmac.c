@@ -35,7 +35,7 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
     hash_itf->update(ctx->hash_ctx, pad, BLOCK_SIZE);
 }
 
-void cry_hmac_update(cry_hmac_ctx *ctx, unsigned char *in, size_t in_len)
+void cry_hmac_update(cry_hmac_ctx *ctx, const unsigned char *in, size_t in_len)
 {
     ctx->hash_itf->update(ctx->hash_ctx, in, in_len);
 }

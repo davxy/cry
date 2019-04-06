@@ -37,16 +37,16 @@ void cry_md5_init(struct cry_md5_ctx *ctx);
 /**
  * Clear MD5 context.
  *
- * @param ctx   SHA-1 context to be cleared
+ * @param ctx   MD5 context to be cleared
  */
 void cry_md5_clear(cry_md5_ctx *ctx);
 
 /**
  * Add data to the MD5 hash.
  *
- * @param ctx       MD5 context.
- * @param data      Data array.
- * @param size      Data array size in octets.
+ * @param ctx   MD5 context.
+ * @param data  Data array.
+ * @param size  Data array size in octets.
  */
 void cry_md5_update(struct cry_md5_ctx *ctx, const unsigned char *data,
                     size_t size);
@@ -62,9 +62,9 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest);
 /**
  * MD5 computation of a given input.
  *
- * @out  MD5 result buffer (shall be at least 16 bytes).
- * @data Input data buffer.
- * @len  Input data length.
+ * @out     MD5 result buffer (shall be at least 16 bytes).
+ * @data    Input data buffer.
+ * @len     Input data length.
  */
 void cry_md5(unsigned char *out, const unsigned char *data, size_t len);
 
