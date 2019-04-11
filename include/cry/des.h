@@ -21,7 +21,7 @@ struct cry_des_ctx {
 typedef struct cry_des_ctx cry_des_ctx;
 
 
-void cry_des_key_set(cry_des_ctx *ctx, unsigned char *key,
+void cry_des_key_set(cry_des_ctx *ctx, const unsigned char *key,
                      size_t size);
 
 void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,

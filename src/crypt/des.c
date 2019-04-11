@@ -333,7 +333,7 @@ void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
     }
 }
 
-void cry_des_key_set(cry_des_ctx *ctx, unsigned char *key,
+void cry_des_key_set(cry_des_ctx *ctx, const unsigned char *key,
                      size_t size)
 {
     memset(ctx, 0, sizeof(*ctx));
