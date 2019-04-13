@@ -27,6 +27,8 @@ Given a version number MAJOR.MINOR.PATCH
 Added
 
 * SHA1 message digest
+* SonarQube contunuous code quality inspection support.
+  Tools: cppcheck, vera++, valgrind, gcovr, sonar-scanner
 
 
 [0.0.8] - 2019-03-16
