@@ -111,8 +111,8 @@ static size_t keylen_trim(size_t *keylen)
 
     if (*keylen > CRY_HILL_KEYLEN_MAX)
         *keylen = CRY_HILL_KEYLEN_MAX;
-    for (n = 1; (z=n*n) < *keylen; n++)
-        ;
+    for (n = 1; (z=n*n) < *keylen; n++) {
+    }
     if (z > *keylen) {
         n--;
         *keylen = n*n;

@@ -195,7 +195,8 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     int i, j, res, paf = 1;
     struct cry_ecp dp, r;
 
-    if ((res = cry_mpi_init_list(&dp.x, &dp.y, &r.x, &r.y, NULL)) != 0)
+    if ((res = cry_mpi_init_list(&dp.x, &dp.y, &r.x, &r.y,
+                                (cry_mpi *) NULL)) != 0)
         return res;
 
     if ((res = cry_mpi_copy(&dp.x, &p1->x)) != 0)
@@ -223,7 +224,7 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     }
 
     cry_ecp_swap(pr, &r);
-e:  cry_mpi_clear_list(&dp.x, &dp.y, &r.x, &r.y, NULL);
+e:  cry_mpi_clear_list(&dp.x, &dp.y, &r.x, &r.y, (cry_mpi *) NULL);
     return res;
 }
 

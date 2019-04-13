@@ -2,15 +2,15 @@
 #include <string.h>
 #include "../misc.h"
 
-#define ROTLEFT(a,b) (((a) << (b)) | ((a) >> (32-(b))))
-#define ROTRIGHT(a,b) (((a) >> (b)) | ((a) << (32-(b))))
+#define ROTLEFT(a, b)  (((a) << (b)) | ((a) >> (32 - (b))))
+#define ROTRIGHT(a, b) (((a) >> (b)) | ((a) << (32 - (b))))
 
-#define CH(x,y,z) (((x) & (y)) ^ (~(x) & (z)))
-#define MAJ(x,y,z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
-#define EP0(x) (ROTRIGHT(x,2) ^ ROTRIGHT(x,13) ^ ROTRIGHT(x,22))
-#define EP1(x) (ROTRIGHT(x,6) ^ ROTRIGHT(x,11) ^ ROTRIGHT(x,25))
-#define SIG0(x) (ROTRIGHT(x,7) ^ ROTRIGHT(x,18) ^ ((x) >> 3))
-#define SIG1(x) (ROTRIGHT(x,17) ^ ROTRIGHT(x,19) ^ ((x) >> 10))
+#define CH(x, y, z)  (((x) & (y)) ^ (~(x) & (z)))
+#define MAJ(x, y, z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
+#define EP0(x)  (ROTRIGHT(x,  2) ^ ROTRIGHT(x, 13) ^ ROTRIGHT(x, 22))
+#define EP1(x)  (ROTRIGHT(x,  6) ^ ROTRIGHT(x, 11) ^ ROTRIGHT(x, 25))
+#define SIG0(x) (ROTRIGHT(x,  7) ^ ROTRIGHT(x, 18) ^ ((x) >> 3))
+#define SIG1(x) (ROTRIGHT(x, 17) ^ ROTRIGHT(x, 19) ^ ((x) >> 10))
 
 static const uint32_t k[64] = {
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
@@ -54,8 +54,8 @@ static void cry_sha256_transform(cry_sha256_ctx *ctx,
     h = ctx->state[7];
 
     for (i = 0; i < 64; ++i) {
-        t1 = h + EP1(e) + CH(e,f,g) + k[i] + m[i];
-        t2 = EP0(a) + MAJ(a,b,c);
+        t1 = h + EP1(e) + CH(e, f, g) + k[i] + m[i];
+        t2 = EP0(a) + MAJ(a, b, c);
         h = g;
         g = f;
         f = e;

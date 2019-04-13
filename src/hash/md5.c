@@ -20,25 +20,25 @@
     (a) += F ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 #define GG(a, b, c, d, x, s, ac) do { \
     (a) += G ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 #define HH(a, b, c, d, x, s, ac) do { \
     (a) += H ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 #define II(a, b, c, d, x, s, ac) do { \
     (a) += I ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 static void cry_md5_process(uint32_t *buf, uint32_t *in)
 {

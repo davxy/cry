@@ -47,12 +47,12 @@ int cry_mpi_shld(cry_mpi *a, int n);
 #define cry_mpi_adjust(a) do { \
     while ((a)->used > 0 && (a)->data[(a)->used - 1] == 0) \
         ((a)->used)--; \
-    } while(0)
+    } while (0)
 
 #define cry_mpi_set_used(a, n) do { \
     (a)->used = (n); \
     memset((a)->data, 0, (n) * CRY_MPI_DIGIT_BYTES); \
-    } while(0)
+    } while (0)
 
 #define cry_mpi_set_bit(a, bit) \
     ((a)->data[(bit) / CRY_MPI_DIGIT_BITS] |= \

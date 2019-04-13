@@ -12,7 +12,7 @@
      "adcl  $0, %2       \n\t"                      \
      : "=r"(c0), "=r"(c1), "=r"(c2)                 \
      : "0"(c0), "1"(c1), "2"(c2), "m"(i), "m"(j)    \
-     : "%eax","%edx","cc")
+     : "%eax", "%edx", "cc")
 
 #elif defined(CRY_ARCH_X86_64)
 

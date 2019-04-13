@@ -58,9 +58,9 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s);
 
 int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s);
 
-int cry_mpi_init_list(cry_mpi *a, ...);
+int cry_mpi_init_list(cry_mpi *a, ... /* (cry_mpi *)NULL */);
 
-void cry_mpi_clear_list(cry_mpi *a, ...);
+void cry_mpi_clear_list(cry_mpi *a, ... /* (cry_mpi *)NULL */);
 
 /*
  *  Arithmetic
@@ -110,7 +110,6 @@ int cry_mpi_lcm(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m);
 
-
 int cry_mpi_mul_baseline(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
@@ -118,8 +117,6 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
-
-
 
 /*
  * Utilities
@@ -138,7 +135,7 @@ size_t cry_mpi_count_bits(const cry_mpi *a);
     cry_mpi __t = *(a);         \
     *(a) = *(b);                \
     *(b) = __t;                 \
-    } while(0)
+    } while (0)
 
 #define cry_mpi_is_zero(a) \
     ((a)->used == 0)
@@ -160,7 +157,7 @@ void cry_mpi_print(const cry_mpi *a, unsigned int radix);
 #define cry_mpi_zero(a) do { \
     (a)->sign = 0;           \
     (a)->used = 0;           \
-    } while(0)
+    } while (0)
 
 int cry_mpi_rand(cry_mpi *a, unsigned int bits);
 

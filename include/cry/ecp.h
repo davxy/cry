@@ -17,10 +17,10 @@ struct cry_ecp {
 typedef struct cry_ecp cry_ecp;
 
 #define cry_ecp_init(p) \
-    cry_mpi_init_list(&(p)->x, &(p)->y, NULL)
+    cry_mpi_init_list(&(p)->x, &(p)->y, (cry_mpi *) NULL)
 
 #define cry_ecp_clear(p) \
-    cry_mpi_clear_list(&(p)->x, &(p)->y, NULL)
+    cry_mpi_clear_list(&(p)->x, &(p)->y, (cry_mpi *) NULL)
 
 #define cry_ecp_swap(a, b) do {     \
     cry_mpi_swap(&(a)->x, &(b)->x); \

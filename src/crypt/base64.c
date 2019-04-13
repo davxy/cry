@@ -36,7 +36,7 @@ size_t cry_base64_encode(char *out, const char *in, size_t len)
 
         in += 3;
         len -= 3;
-    } while(len != 0);
+    } while (len != 0);
     return outlen;
 }
 
@@ -91,6 +91,6 @@ size_t cry_base64_decode(char *out, const char *in, size_t len)
 
         in += 4;
         len -= 4;
-    } while(len != 0);
+    } while (len != 0);
     return outlen;
 }

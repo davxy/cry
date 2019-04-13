@@ -153,7 +153,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
         return store_str_hex(a, s);
     }
 
-    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, NULL)) != 0)
+    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, (cry_mpi *) NULL)) != 0)
         return ret;
 
     if ((ret = cry_mpi_copy(&tmp, a)) != 0)
@@ -181,7 +181,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
         i--;
     }
 
-e:  cry_mpi_clear_list(&tmp, &rad, &rem, NULL);
+e:  cry_mpi_clear_list(&tmp, &rad, &rem, (cry_mpi *) NULL);
     return ret;
 }
 

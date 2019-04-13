@@ -35,6 +35,6 @@ int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
         }
     }
     cry_mpi_swap(r, &exp);
-e:  cry_mpi_clear_list(&tmp, &exp, NULL);
+e:  cry_mpi_clear_list(&tmp, &exp, (cry_mpi *) NULL);
     return res;
 }

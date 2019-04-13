@@ -73,7 +73,6 @@ static void gcm_hash_sizes(unsigned char *hash, const unsigned char *key,
 }
 
 
-
 void cry_gcm_init(struct cry_gcm_ctx *ctx, void *ciph_ctx,
                   const struct cry_ciph_itf *ciph_itf)
 {

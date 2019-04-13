@@ -60,7 +60,6 @@
 } while (0)
 
 
-
 void cry_trivium_init(cry_trivium_ctx *ctx)
 {
     memset(ctx, 0, sizeof(*ctx));
