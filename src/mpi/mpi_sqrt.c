@@ -61,7 +61,7 @@ int cry_mpi_sqrt(cry_mpi *r, const cry_mpi *a)
         return 0;
     }
 
-    if ((res = cry_mpi_init_list(&t1, &t2, NULL)) != 0)
+    if ((res = cry_mpi_init_list(&t1, &t2, (cry_mpi *) NULL)) != 0)
         return res;
     if ((res = cry_mpi_copy(&t1, a)) != 0)
         goto e;
@@ -90,6 +90,6 @@ int cry_mpi_sqrt(cry_mpi *r, const cry_mpi *a)
 
     cry_mpi_swap(r, &t1);
 
-e:  cry_mpi_clear_list(&t1, &t2, NULL);
+e:  cry_mpi_clear_list(&t1, &t2, (cry_mpi *) NULL);
     return res;
 }

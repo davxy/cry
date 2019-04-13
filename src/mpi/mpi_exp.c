@@ -6,7 +6,7 @@ int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
     int sign = b->sign ? cry_mpi_is_odd(e) : 0;
     cry_mpi t, c, one;
 
-    if ((res = cry_mpi_init_list(&t, &one, &c, NULL)) != 0)
+    if ((res = cry_mpi_init_list(&t, &one, &c, (cry_mpi *) NULL)) != 0)
         return res;
 
     if ((res = cry_mpi_copy(&c, e)) != 0)
@@ -27,6 +27,6 @@ int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
 
     cry_mpi_swap(&t, r);
     r->sign = sign;
-e:  cry_mpi_clear_list(&t, &one, &c, NULL);
+e:  cry_mpi_clear_list(&t, &one, &c, (cry_mpi *) NULL);
     return 0;
 }
