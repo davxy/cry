@@ -2,8 +2,8 @@ libcry.a
 build
 src/config.h
 test/test
-out
+doc/html
+.scannerwork
 *.o
 *.gcda
 *.gcno
-doc/html

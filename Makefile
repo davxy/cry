@@ -110,3 +110,36 @@ test: $(target)
 
 testclean:
 	make -C test clean
+
+###############################################################################
+# Code quality tools reports
+###############################################################################
+
+# Overwrite from command line with: `make SONAR_SCANNER=<path>`
+SONAR_SCANNER := sonar-scanner
+
+VERA_SKIP := "T0(10|11|12|13|19)"
+
+cppcheck:
+	@echo "Running cppcheck ..."
+	@cppcheck --language=c --std=c89 --force --enable=all --suppress=variableScope --suppress=unusedFunction --suppress=missingIncludeSystem --xml -I src -I include src 2> build/cppcheck-report.xml
+
+# Vera++: static code checker focusing on code style issues
+vera:
+	@echo "Running vera++ ..."
+	@find src include -type f -regextype sed -iregex ".*/*\.\(c\|h\)" -print | vera++ - -showrules -nodup 2> vera.tmp
+	@cat vera.tmp | grep -v -E $(VERA_SKIP) | scripts/vera2report.perl > build/vera-report.xml
+	@rm vera.tmp
+
+valgrind: test
+	@echo "Running valgrind ..."
+	@cd test; valgrind --xml=yes --xml-file=valgrind-report.xml --leak-check=full --show-leak-kinds=all --track-origins=yes ./test; cd ..
+	@mv test/valgrind-report.xml build/valgrind-report.xml
+
+coverage: valgrind
+	@echo "Running gcovr ..."
+	@gcovr --xml --root . > build/gcovr-report.xml
+
+sonar: cppcheck vera coverage valgrind
+	@echo "Running sonar-scanner ..."
+	@$(SONAR_SCANNER) -Dproject.settings=scripts/sonar-project.properties

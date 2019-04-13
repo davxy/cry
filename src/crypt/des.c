@@ -1,7 +1,5 @@
 #include <cry/des.h>
 
-
-
 #define EXPANSION_BLOCK_SIZE    6
 #define PC1_KEY_SIZE            7
 #define SUBKEY_SIZE             6
@@ -128,7 +126,6 @@ static const unsigned char sbox[8][64] = {
          0, 15,  6, 12, 10,  9, 13,  0, 15,  3,  3,  5,  5,  6,  8, 11
     }
 };
-
 
 
 #define GET_BIT(buf, bit) \

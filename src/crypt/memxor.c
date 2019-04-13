@@ -68,7 +68,7 @@ void cry_memxor2(unsigned char *dst, const unsigned char *src1,
             dst[i] = src1[i] ^ src2[i];
     } else if (src2 <= dst || (src1 <= dst && dst + n <= src2)) {
         /* Case 2 */
-        while(n != 0) {
+        while (n != 0) {
             n--;
             dst[n] = src1[n] ^ src2[n];
         }

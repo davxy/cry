@@ -24,8 +24,8 @@ static int mod_2e(cry_mpi *r, const cry_mpi *a, unsigned int e)
         r->data[x++] = 0;
 
     /* clear the digit that is not completely outside/inside the modulus */
-    r->data[e / CRY_MPI_DIGIT_BITS] &=
-            (cry_mpi_digit) ((((cry_mpi_digit) 1) << (((cry_mpi_digit) e) % CRY_MPI_DIGIT_BITS)) - ((cry_mpi_digit) 1));
+    r->data[e / CRY_MPI_DIGIT_BITS] &= (cry_mpi_digit) ((((cry_mpi_digit) 1) <<
+                (((cry_mpi_digit) e) % CRY_MPI_DIGIT_BITS)) - ((cry_mpi_digit) 1));
 
     cry_mpi_adjust(r);
     return 0;

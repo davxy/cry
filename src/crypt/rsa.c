@@ -168,8 +168,8 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
          * start of data
          */
         i = 2;
-        while (padded_block[i++])
-            ;
+        while (padded_block[i++]) {
+        }
 
         *out_siz += mod_siz - i;
         *out = realloc(*out, *out_siz);
