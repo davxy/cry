@@ -115,8 +115,8 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
 #define cry_memset(dst, val, len) do { \
     volatile unsigned char *__dst = (unsigned char*)dst; \
     size_t __len = len; \
-    while(__len--) \
+    while (__len--) \
         *__dst++ = (val); \
-    } while (0)
+} while (0)
 
 #endif /* CRY_MISC_H_ */

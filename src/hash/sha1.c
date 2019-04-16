@@ -10,7 +10,7 @@
     (W[t & 0x0F] = CRY_ROTL32(tmp, 1)) \
 )
 
-#define P(a,b,c,d,e,x) do { \
+#define P(a, b, c, d, e, x) do { \
     e += CRY_ROTL32(a, 5) + F(b, c, d) + K + x; \
     b  = CRY_ROTL32(b, 30); \
     } while (0)
@@ -174,17 +174,17 @@ void cry_sha1_update(cry_sha1_ctx *ctx, const unsigned char *data, size_t len)
     size_t fill;
     uint32_t left;
 
-    if(len == 0)
+    if (len == 0)
         return;
 
     left = ctx->len[0] & 0x3F;
     fill = 64 - left;
 
     ctx->len[0] += (uint32_t) len;
-    if(ctx->len[0] < (uint32_t) len)
+    if (ctx->len[0] < (uint32_t) len)
         ctx->len[1]++;
 
-    if(left && len >= fill) {
+    if (left && len >= fill) {
         memcpy(ctx->data + left, data, fill);
         cry_sha1_process(ctx, ctx->data);
         data += fill;
@@ -192,13 +192,13 @@ void cry_sha1_update(cry_sha1_ctx *ctx, const unsigned char *data, size_t len)
         left = 0;
     }
 
-    while(len >= 64) {
+    while (len >= 64) {
         cry_sha1_process(ctx, data);
         data += 64;
         len  -= 64;
     }
 
-    if(len > 0)
+    if (len > 0)
         memcpy(ctx->data + left, data, len);
 }
 
