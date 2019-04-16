@@ -1,4 +1,4 @@
-image: davxy/linux-builder
+image: davxy/sonar-builder
 
 stages:
     - build
