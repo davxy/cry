@@ -80,7 +80,7 @@ LDFLAGS  = $(lflags-y)
 DATE := $(shell date +'%y%m%d')
 
 
-.PHONY: all cry clean test testclean
+.PHONY: all cry clean test testclean doc
 
 all: cry
 
@@ -110,6 +110,9 @@ test: $(target)
 
 testclean:
 	make -C test clean
+
+doc:
+	cd doc; doxygen Doxyfile.in
 
 ###############################################################################
 # Code quality tools reports
