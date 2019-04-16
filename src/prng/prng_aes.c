@@ -21,15 +21,18 @@ int cry_prng_aes_init(const unsigned char *seed, size_t seed_siz)
     unsigned char key[BLOCK_SIZ] = {0};
 
     sz = CRY_MIN(seed_siz, BLOCK_SIZ);
-    memcpy(key, seed, sz);
+    if (seed != NULL)
+        memcpy(key, seed, sz);
     cry_aes_key_set(&prng_ctx.aes, key, BLOCK_SIZ);
 
-    seed += sz;
+    if (seed != NULL)
+        seed += sz;
     seed_siz -= sz;
 
     sz = CRY_MIN(seed_siz, BLOCK_SIZ);
     memset(prng_ctx.ctr, 0, BLOCK_SIZ);
-    memcpy(prng_ctx.ctr, seed, sz);
+    if (seed != NULL)
+        memcpy(prng_ctx.ctr, seed, sz);
 
     prng_ctx.ix = 0;
     init = 1;

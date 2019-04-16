@@ -20,12 +20,12 @@ static int init = 0;
     ((r) = ((z[3] << 3) ^ z[3]) >> 12); \
     (z[3] = ((z[3] & 4294967168UL) << 13) ^ (r)); \
     ((r) = (z[0] ^ z[1] ^ z[2] ^ z[3])); \
-    } while(0)
+    } while (0)
 
 int cry_prng_weak_init(const unsigned char *seed, size_t seed_siz)
 {
     init = 1;
-    uint32_t fallback[4] = {1,2,3,4};
+    uint32_t fallback[4] = { 1, 2, 3, 4 };
 
     if (!seed) {
         seed = (unsigned char *)fallback;

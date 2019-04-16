@@ -90,7 +90,8 @@ Hash
 ### Secure hash
 
 - MD5
-- SHA-256
+- SHA1
+- SHA256
 
 ### CRC
 

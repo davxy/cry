@@ -12,7 +12,7 @@
      "adcl  $0, %2       \n\t"                      \
      : "=r"(c0), "=r"(c1), "=r"(c2)                 \
      : "0"(c0), "1"(c1), "2"(c2), "m"(i), "m"(j)    \
-     : "%eax","%edx","cc")
+     : "%eax", "%edx", "cc")
 
 #elif defined(CRY_ARCH_X86_64)
 
@@ -72,7 +72,7 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     }
     cry_mpi_set_used(dst, pa);
 
-    c0 = c1 = c2 = 0;
+    c1 = c2 = 0;
     for (ix = 0; ix < pa; ix++) {
 
         /* get offsets into the two bignums */

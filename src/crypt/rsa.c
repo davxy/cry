@@ -68,7 +68,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     if (!padded_block)
         return -1;
 
-    if ((res = cry_mpi_init_list(&c, &m, NULL)) != 0) {
+    if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *) NULL)) != 0) {
         free(padded_block);
         return res;
     }
@@ -110,7 +110,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     }
 
     free(padded_block);
-    cry_mpi_clear_list(&c, &m, NULL);
+    cry_mpi_clear_list(&c, &m, (cry_mpi *) NULL);
     if (res != 0) {
         *out_siz = 0;
         *out = NULL;
@@ -136,7 +136,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     if (!padded_block)
         return -1;
 
-    if ((res = cry_mpi_init_list(&c, &m, NULL)) != 0) {
+    if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *) NULL)) != 0) {
         free(padded_block);
         return res;
     }
@@ -168,8 +168,8 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
          * start of data
          */
         i = 2;
-        while (padded_block[i++])
-            ;
+        while (padded_block[i++]) {
+        }
 
         *out_siz += mod_siz - i;
         *out = realloc(*out, *out_siz);
@@ -185,7 +185,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     }
 
     free(padded_block);
-    cry_mpi_clear_list(&c, &m, NULL);
+    cry_mpi_clear_list(&c, &m, (cry_mpi *) NULL);
     if (res != 0) {
         *out_siz = 0;
         *out = NULL;
@@ -204,10 +204,12 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits)
     unsigned int i;
 
 
-    if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->m, NULL)) != 0)
+    if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->m,
+            (cry_mpi *) NULL)) != 0)
         return res;
-    if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi, NULL)) != 0)
-        goto e;
+    if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi,
+            (cry_mpi *) NULL)) != 0)
+        goto e; /* FIXME: shall release only d,e,m */
     i = MAX_ITER;
     if ((res = cry_mpi_prime(&p, hbits, &i)) != 0)
         goto e;
@@ -235,8 +237,8 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits)
         if ((res = cry_mpi_inv(&ctx->d, &ctx->e, &phi)) == 0)
             break;
     }
-e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, NULL);
+e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, (cry_mpi *) NULL);
     if (res != 0)
-        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->m, NULL);
+        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->m, (cry_mpi *) NULL);
     return res;
 }

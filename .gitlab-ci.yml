@@ -1,4 +1,4 @@
-image: davxy/builder
+image: davxy/linux-builder
 
 stages:
     - build
@@ -6,26 +6,27 @@ stages:
     - deploy
 
 # Build
-
 build:
     stage: build
     script:
         - make
 
 # Test
-
 test:
     stage: test
+    dependencies:
+        - build
     script:
         - make test
         - (cd test; time ./test)
         - gcovr --exclude test -r . | grep TOTAL
 
 # Deploy
-
 deploy:
     stage: deploy
-    script:
-        - echo "TODO"
+    dependencies:
+        - test
     only:
         - tags
+    script:
+        - make doc

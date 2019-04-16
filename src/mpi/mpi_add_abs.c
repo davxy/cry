@@ -6,9 +6,9 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     cry_mpi_digit t, l, c, *rp, *ap, *bp;
 
     if (a->used < b->used) {
-        const cry_mpi *t = a;
+        const cry_mpi *swp = a;
         a = b;
-        b = t;
+        b = swp;
     }
     max = a->used;
     min = b->used;

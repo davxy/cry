@@ -1,4 +1,6 @@
 #include <cry/md5.h>
+#include <string.h>
+#include "../misc.h"
 
 /* F, G and H are basic MD5 functions: selection, majority, parity */
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
@@ -18,28 +20,27 @@
     (a) += F ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 #define GG(a, b, c, d, x, s, ac) do { \
     (a) += G ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 #define HH(a, b, c, d, x, s, ac) do { \
     (a) += H ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
 #define II(a, b, c, d, x, s, ac) do { \
     (a) += I ((b), (c), (d)) + (x) + (uint32_t)(ac); \
     (a) = ROTATE_LEFT ((a), (s)); \
     (a) += (b); \
-    } while(0)
+    } while (0)
 
-/* Basic MD5 step. Transform buf based on in. */
-static void cry_md5_transform(uint32_t *buf, uint32_t *in)
+static void cry_md5_process(uint32_t *buf, uint32_t *in)
 {
     uint32_t a = buf[0];
     uint32_t b = buf[1];
@@ -143,14 +144,20 @@ static void cry_md5_transform(uint32_t *buf, uint32_t *in)
 
 void cry_md5_init(struct cry_md5_ctx *ctx)
 {
-    ctx->len[0] = 0U;
-    ctx->len[1] = 0U;
+    memset(ctx, 0, sizeof(*ctx));
     /* Load magic initialization constants. */
-    ctx->buf[0] = 0x67452301U;
-    ctx->buf[1] = 0xefcdab89U;
-    ctx->buf[2] = 0x98badcfeU;
-    ctx->buf[3] = 0x10325476U;
+    ctx->state[0] = 0x67452301;
+    ctx->state[1] = 0xefcdab89;
+    ctx->state[2] = 0x98badcfe;
+    ctx->state[3] = 0x10325476;
 }
+
+
+void cry_md5_clear(cry_md5_ctx *ctx)
+{
+    cry_memset(ctx, 0, sizeof(*ctx));
+}
+
 
 void cry_md5_update(struct cry_md5_ctx *ctx, const unsigned char *data,
                     size_t size)
@@ -170,39 +177,30 @@ void cry_md5_update(struct cry_md5_ctx *ctx, const unsigned char *data,
 
     while (size--) {
         /* add new character to buffer, increment mdi */
-        ctx->in[mdi++] = *data++;
+        ctx->data[mdi++] = *data++;
 
         /* transform if necessary */
         if (mdi == 0x40) {
             for (i = 0, ii = 0; i < 16; i++, ii += 4) {
-                in[i] = (((uint32_t)ctx->in[ii+3]) << 24) |
-                        (((uint32_t)ctx->in[ii+2]) << 16) |
-                        (((uint32_t)ctx->in[ii+1]) << 8) |
-                        ((uint32_t)ctx->in[ii]);
+                in[i] = (((uint32_t)ctx->data[ii+3]) << 24) |
+                        (((uint32_t)ctx->data[ii+2]) << 16) |
+                        (((uint32_t)ctx->data[ii+1]) << 8) |
+                         ((uint32_t)ctx->data[ii]);
             }
-            cry_md5_transform(ctx->buf, in);
+            cry_md5_process(ctx->state, in);
             mdi = 0;
         }
     }
 }
 
-static const unsigned char padding[64] = {
-    0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
 
 void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest)
 {
     uint32_t in[16];
     int mdi;
     unsigned int i, ii;
-    unsigned int padlen;
+    size_t padlen;
+    unsigned char pad[64] = { 0 };
 
     /* save number of bits */
     in[14] = ctx->len[0];
@@ -213,23 +211,35 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest)
 
     /* pad out to 56 mod 64 */
     padlen = (mdi < 56) ? (56 - mdi) : (120 - mdi);
-    cry_md5_update(ctx, padding, padlen);
+    pad[0] = 0x80;
+    cry_md5_update(ctx, pad, padlen);
 
-    /* append length in bits and transform */
+    /* append length in bits and process */
     for (i = 0, ii = 0; i < 14; i++, ii += 4) {
-        in[i] = (((uint32_t)ctx->in[ii+3]) << 24) |
-                (((uint32_t)ctx->in[ii+2]) << 16) |
-                (((uint32_t)ctx->in[ii+1]) << 8) |
-                 ((uint32_t)ctx->in[ii]);
+        in[i] = (((uint32_t)ctx->data[ii+3]) << 24) |
+                (((uint32_t)ctx->data[ii+2]) << 16) |
+                (((uint32_t)ctx->data[ii+1]) << 8) |
+                 ((uint32_t)ctx->data[ii]);
     }
 
-    cry_md5_transform(ctx->buf, in);
+    cry_md5_process(ctx->state, in);
 
     /* store buffer in digest */
     for (i = 0, ii = 0; i < 4; i++, ii += 4) {
-        digest[ii]   = (unsigned char)  (ctx->buf[i] & 0xFF);
-        digest[ii+1] = (unsigned char) ((ctx->buf[i] >> 8) & 0xFF);
-        digest[ii+2] = (unsigned char) ((ctx->buf[i] >> 16) & 0xFF);
-        digest[ii+3] = (unsigned char) ((ctx->buf[i] >> 24) & 0xFF);
+        digest[ii]   = (unsigned char)  (ctx->state[i] & 0xFF);
+        digest[ii+1] = (unsigned char) ((ctx->state[i] >> 8) & 0xFF);
+        digest[ii+2] = (unsigned char) ((ctx->state[i] >> 16) & 0xFF);
+        digest[ii+3] = (unsigned char) ((ctx->state[i] >> 24) & 0xFF);
     }
+}
+
+
+void cry_md5(unsigned char *out, const unsigned char *data, size_t len)
+{
+    cry_md5_ctx ctx;
+
+    cry_md5_init(&ctx);
+    cry_md5_update(&ctx, data, len);
+    cry_md5_digest(&ctx, out);
+    cry_md5_clear(&ctx);
 }

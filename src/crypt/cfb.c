@@ -12,7 +12,7 @@ void cry_cfb_init(struct cry_cfb_ctx *ctx, void *ciph_ctx,
 }
 
 void cry_cfb_key_set(struct cry_cfb_ctx *ctx, const unsigned char *key,
-                     unsigned int size)
+                     size_t size)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_key_set_f key_set = ctx->ciph_itf->key_set;
@@ -21,7 +21,7 @@ void cry_cfb_key_set(struct cry_cfb_ctx *ctx, const unsigned char *key,
 }
 
 void cry_cfb_iv_set(struct cry_cfb_ctx *ctx, const unsigned char *iv,
-                    unsigned int size)
+                    size_t size)
 {
     ctx->vlen  = CRY_MIN(CRY_CFB_BLOCK_MAX, size);
     memcpy(ctx->v, iv, ctx->vlen);
@@ -29,7 +29,7 @@ void cry_cfb_iv_set(struct cry_cfb_ctx *ctx, const unsigned char *iv,
 }
 
 void cry_cfb_crypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                   const unsigned char *src, unsigned int len)
+                   const unsigned char *src, size_t len)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;
@@ -51,7 +51,7 @@ void cry_cfb_crypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
 }
 
 void cry_cfb8_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                      const unsigned char *src, unsigned int len)
+                      const unsigned char *src, size_t len)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;
@@ -74,7 +74,7 @@ void cry_cfb8_encrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
 }
 
 void cry_cfb8_decrypt(struct cry_cfb_ctx *ctx, unsigned char *dst,
-                      const unsigned char *src, unsigned int len)
+                      const unsigned char *src, size_t len)
 {
     void *ciph = ctx->ciph_ctx;
     cry_ciph_encrypt_f encrypt = ctx->ciph_itf->encrypt;

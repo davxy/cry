@@ -29,7 +29,7 @@ struct cry_ctr_ctx {
     /** Counter. */
     unsigned char              ctr[CRY_CTR_BLOCK_MAX];
     /** Counter length */
-    unsigned int               ctrlen;
+    size_t                     ctrlen;
 };
 
 typedef struct cry_ctr_ctx cry_ctr_ctx;
@@ -56,7 +56,7 @@ void cry_ctr_init(struct cry_ctr_ctx *ctx, void *ciph_ctx,
  * @param size  Size of cipher key.
  */
 void cry_ctr_key_set(struct cry_ctr_ctx *ctx, const unsigned char *key,
-                     unsigned int size);
+                     size_t size);
 
 /**
  * Set the initialization vector in the CTR context.
@@ -66,7 +66,7 @@ void cry_ctr_key_set(struct cry_ctr_ctx *ctx, const unsigned char *key,
  * @param size  Size of initialization vector (<= CRY_CTR_BLOCK_SIZE).
  */
 void cry_ctr_iv_set(struct cry_ctr_ctx *ctx, const unsigned char *iv,
-                    unsigned int size);
+                    size_t size);
 
 /**
  * Encryption function.
@@ -77,7 +77,7 @@ void cry_ctr_iv_set(struct cry_ctr_ctx *ctx, const unsigned char *iv,
  * @param size  Size of ciphertext.
  */
 void cry_ctr_encrypt(struct cry_ctr_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size);
+                     const unsigned char *src, size_t size);
 
 #ifdef __cplusplus
 }

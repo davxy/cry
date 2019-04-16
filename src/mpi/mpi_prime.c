@@ -131,7 +131,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     cry_mpi_digit dig = 1;
     unsigned int b, i;
 
-    if ((res = cry_mpi_init_list(&a, &m, &z, &tmp, NULL)) < 0)
+    if ((res = cry_mpi_init_list(&a, &m, &z, &tmp, (cry_mpi *) NULL)) < 0)
         return res;
 
     one.data = &dig;
@@ -186,7 +186,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     if ((res = cry_mpi_add(&z, &z, &one)) < 0)
         goto e;
     res = (cry_mpi_cmp(&z, p) == 0) ? 1 : 0;
-e:  cry_mpi_clear_list(&a, &m, &z, &tmp, NULL);
+e:  cry_mpi_clear_list(&a, &m, &z, &tmp, (cry_mpi *) NULL);
     return res;
 }
 

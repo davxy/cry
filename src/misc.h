@@ -30,13 +30,13 @@
 #define CRY_WRITE16_LE(val, dst) do { \
     ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 8) & 0xff); \
     ((uint8_t *)(dst))[0] = (uint8_t) ((val) & 0xff); \
-    } while(0)
+    } while (0)
 
 /** Architecture independent big endian 16 bit value write. */
 #define CRY_WRITE16_BE(val, dst) do { \
     ((uint8_t *)(dst))[0] = (uint8_t)(((val) >> 8) & 0xff); \
     ((uint8_t *)(dst))[1] = (uint8_t) ((val) & 0xff); \
-    } while(0)
+    } while (0)
 
 /** Architecture independent little endian 16 bit value read. */
 #define CRY_READ16_LE(val, src) \
@@ -54,7 +54,7 @@
     ((uint8_t *)(dst))[2] = (uint8_t)(((val) >> 16) & 0xff); \
     ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 8) & 0xff); \
     ((uint8_t *)(dst))[0] = (uint8_t) ((val) & 0xff); \
-} while(0)
+} while (0)
 
 /** Architecture independent big endian 32 bit value write. */
 #define CRY_WRITE32_BE(val, dst) do { \
@@ -62,7 +62,7 @@
     ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 16U) & 0xffU); \
     ((uint8_t *)(dst))[2] = (uint8_t)(((val) >> 8U) & 0xffU); \
     ((uint8_t *)(dst))[3] = (uint8_t) ((val) & 0xff); \
-} while(0)
+} while (0)
 
 /** Architecture independent little endian 32 bit value read. */
 #define CRY_READ32_LE(val, src) \
@@ -83,7 +83,7 @@
     (v1) ^= (v2); \
     (v2) ^= (v1); \
     (v1) ^= (v2); \
-    } while(0)
+    } while (0)
 
 /** Rotate the bits left */
 #define CRY_ROTL(val, size, bits) \
@@ -102,5 +102,21 @@
  *              If the value is not invertible returns 0.
  */
 unsigned long cry_long_inv(unsigned long val, unsigned long mod);
+
+/**
+ * Secure memset.
+ *
+ * Implementation that should never be optimized out by the compiler.
+ *
+ * @param dst   Destination buffer pointer.
+ * @param val   Constant filling value.
+ * @param len   Destination buffer size.
+ */
+#define cry_memset(dst, val, len) do { \
+    volatile unsigned char *__dst = (unsigned char*)dst; \
+    size_t __len = len; \
+    while(__len--) \
+        *__dst++ = (val); \
+    } while (0)
 
 #endif /* CRY_MISC_H_ */

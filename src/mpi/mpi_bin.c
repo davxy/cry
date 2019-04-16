@@ -4,7 +4,7 @@
 /*
  * Initialize a big number from big endian binary data.
  */
-int cry_mpi_load_bin(cry_mpi *x, const void *b, unsigned int size)
+int cry_mpi_load_bin(cry_mpi *x, const void *b, size_t size)
 {
     unsigned int i, m, res;
     cry_mpi_digit l;
@@ -40,7 +40,7 @@ int cry_mpi_load_bin(cry_mpi *x, const void *b, unsigned int size)
  * Write a big number to a memory buffer in big endian byte order.
  */
 int cry_mpi_store_bin(const cry_mpi *x, void *buf,
-        unsigned int bufsiz, int pad)
+        size_t bufsiz, int pad)
 {
     int i;
     unsigned long l;
@@ -63,7 +63,7 @@ int cry_mpi_store_bin(const cry_mpi *x, void *buf,
     return 0;
 }
 
-int cry_mpi_init_bin(cry_mpi *x, const void *b, unsigned int size)
+int cry_mpi_init_bin(cry_mpi *x, const void *b, size_t size)
 {
     int res;
 

@@ -5,8 +5,7 @@ static int mod_2e(cry_mpi *r, const cry_mpi *a, unsigned int e)
 {
     int x, res;
 
-    /* if e is <= 0 then zero the int */
-    if (e <= 0) {
+    if (e == 0) {
         cry_mpi_zero(r);
         return 0;
     }
@@ -25,8 +24,8 @@ static int mod_2e(cry_mpi *r, const cry_mpi *a, unsigned int e)
         r->data[x++] = 0;
 
     /* clear the digit that is not completely outside/inside the modulus */
-    r->data[e / CRY_MPI_DIGIT_BITS] &=
-            (cry_mpi_digit) ((((cry_mpi_digit) 1) << (((cry_mpi_digit) e) % CRY_MPI_DIGIT_BITS)) - ((cry_mpi_digit) 1));
+    r->data[e / CRY_MPI_DIGIT_BITS] &= (cry_mpi_digit) ((((cry_mpi_digit) 1) <<
+                (((cry_mpi_digit) e) % CRY_MPI_DIGIT_BITS)) - ((cry_mpi_digit) 1));
 
     cry_mpi_adjust(r);
     return 0;
@@ -98,7 +97,7 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     /* init temps */
     if ((res = cry_mpi_init_list(&w0, &w1, &w2, &w3, &w4,
                                  &a0, &a1, &a2, &b0, &b1,
-                                 &b2, &t1, &t2, NULL)) != 0) {
+                                 &b2, &t1, &t2, (cry_mpi *) NULL)) != 0) {
        return res;
     }
 
@@ -259,6 +258,6 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
 e:  cry_mpi_clear_list(&w0, &w1, &w2, &w3, &w4,
                        &a0, &a1, &a2, &b0, &b1,
-                       &b2, &t1, &t2, NULL);
+                       &b2, &t1, &t2, (cry_mpi *) NULL);
     return res;
 }

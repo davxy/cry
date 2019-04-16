@@ -1,14 +1,5 @@
 #include <cry/des.h>
 
-#define GET_BIT(buf, bit) \
-    (buf[(bit) / 8] & (0x80 >> ((bit) % 8)))
-
-#define SET_BIT(buf, bit) \
-    (buf[(bit) / 8] |= (0x80 >> ((bit) % 8)))
-
-#define CLEAR_BIT(buf, bit) \
-    (buf[(bit) / 8] &= ~(0x80 >> ((bit) % 8)))
-
 #define EXPANSION_BLOCK_SIZE    6
 #define PC1_KEY_SIZE            7
 #define SUBKEY_SIZE             6
@@ -136,6 +127,13 @@ static const unsigned char sbox[8][64] = {
     }
 };
 
+
+#define GET_BIT(buf, bit) \
+    (buf[(bit) / 8] & (0x80 >> ((bit) % 8)))
+
+#define SET_BIT(buf, bit) \
+    (buf[(bit) / 8] |= (0x80 >> ((bit) % 8)))
+
 /*
  * Implement the initial and final permutation functions. 'permute_tab'
  * and 'dst' must have exactly len and len * 8 number of entries,
@@ -145,15 +143,14 @@ static const unsigned char sbox[8][64] = {
  * specification.
  */
 static void permute(unsigned char *dst, const unsigned char *src,
-                    const unsigned char *tab, unsigned int len)
+                    const unsigned char *tab, size_t len)
 {
     unsigned int i;
 
+    memset(dst, 0, len);
     for (i = 0; i < len * 8; i++) {
         if (GET_BIT(src, tab[i] - 1))
             SET_BIT(dst, i);
-        else
-            CLEAR_BIT(dst, i);
     }
 }
 
@@ -203,7 +200,7 @@ static void ror(unsigned char *buf)
 }
 
 static void memxor(unsigned char *dst, unsigned char *src,
-                   unsigned int len)
+                   size_t len)
 {
     while (len--)
         *dst++ ^= *src++;
@@ -301,7 +298,7 @@ static void des_block_operate(unsigned char *dst, const unsigned char *src,
 }
 
 void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     while (size) {
         des_block_operate(dst, src, ctx->key, 1);
@@ -316,7 +313,7 @@ void cry_des_encrypt(cry_des_ctx *ctx, unsigned char *dst,
 }
 
 void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
-                     const unsigned char *src, unsigned int size)
+                     const unsigned char *src, size_t size)
 {
     while (size) {
         if (ctx->keylen == 24) {
@@ -333,8 +330,8 @@ void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
     }
 }
 
-void cry_des_key_set(cry_des_ctx *ctx, unsigned char *key,
-                     unsigned int size)
+void cry_des_key_set(cry_des_ctx *ctx, const unsigned char *key,
+                     size_t size)
 {
     memset(ctx, 0, sizeof(*ctx));
     if (size > CRY_DES_BLOCK_SIZE*3)

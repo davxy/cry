@@ -4,9 +4,9 @@
 
 
 struct cmac_param {
-    unsigned int  keylen;
-    unsigned int  msglen;
-    unsigned int  maclen;
+    size_t keylen;
+    size_t msglen;
+    size_t maclen;
     unsigned char key[256];
     unsigned char msg[256];
     unsigned char mac[64];
