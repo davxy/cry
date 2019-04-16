@@ -3,6 +3,7 @@ image: davxy/linux-builder
 stages:
     - build
     - test
+    - sonar
     - deploy
 
 # Build
@@ -20,6 +21,16 @@ test:
         - make test
         - (cd test; time ./test)
         - gcovr --exclude test -r . | grep TOTAL
+
+# Sonar
+sonar:
+    stage: sonar
+    dependencies:
+        - test
+    only:
+        - tsc
+    script:
+        - make sonar
 
 # Deploy
 deploy:
