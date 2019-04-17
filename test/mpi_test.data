@@ -3,9 +3,17 @@
 # p0 : input size
 ################################################################################
 
-Initialize with given size
+Initialize with given size (0)
+mpi_init_size
+0
+
+Initialize with given size (1)
 mpi_init_size
 1
+
+Initialize with given size (100)
+mpi_init_size
+100
 
 ################################################################################
 # Set primitive integer value

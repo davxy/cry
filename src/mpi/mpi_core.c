@@ -46,10 +46,13 @@ int cry_mpi_init(cry_mpi *a)
  */
 int cry_mpi_init_size(cry_mpi *a, size_t size)
 {
-    a->data = malloc(sizeof(cry_mpi_digit) * size);
-    if (a->data == NULL)
-        return -1;
-
+    if (size != 0) {
+        a->data = malloc(sizeof(cry_mpi_digit) * size);
+        if (a->data == NULL)
+            return -1;
+    } else {
+        a->data = NULL;
+    }
     a->used = 0;
     a->alloc = size;
     a->sign = 0;
