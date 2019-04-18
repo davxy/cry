@@ -109,81 +109,55 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
      */
 
     /* a = a2 * B**2 + a1 * B + a0 */
-    if ((res = mod_2e(&a0, a, CRY_MPI_DIGIT_BITS * B)) != 0)
-        goto e;
-    if ((res = cry_mpi_copy(&a1, a)) != 0)
-        goto e;
-    cry_mpi_shrd(&a1, B);
-    if ((res = mod_2e(&a1, &a1, CRY_MPI_DIGIT_BITS * B)) != 0)
-        goto e;
-    if ((res = cry_mpi_copy(&a2, a)) != 0)
-        goto e;
-    cry_mpi_shrd(&a2, B*2);
+    CRY_CHK(res = mod_2e(&a0, a, CRY_MPI_DIGIT_BITS * B), e);
+    CRY_CHK(res = cry_mpi_copy(&a1, a), e);
+    CRY_CHK(res = cry_mpi_shrd(&a1, B), e);
+    CRY_CHK(res = mod_2e(&a1, &a1, CRY_MPI_DIGIT_BITS * B), e);
+    CRY_CHK(res = cry_mpi_copy(&a2, a), e);
+    CRY_CHK(res = cry_mpi_shrd(&a2, B*2), e);
 
     /* b = b2 * B**2 + b1 * B + b0 */
-    if ((res = mod_2e(&b0, b, CRY_MPI_DIGIT_BITS * B)) != 0)
-        goto e;
-    if ((res = cry_mpi_copy(&b1, b)) != 0)
-        goto e;
-    cry_mpi_shrd(&b1, B);
-    if ((res = mod_2e(&b1, &b1, CRY_MPI_DIGIT_BITS * B)) != 0)
-        goto e;
-    if ((res = cry_mpi_copy(&b2, b)) != 0)
-        goto e;
-    cry_mpi_shrd(&b2, B*2);
+    CRY_CHK(res = mod_2e(&b0, b, CRY_MPI_DIGIT_BITS * B), e);
+    CRY_CHK(res = cry_mpi_copy(&b1, b), e);
+    CRY_CHK(res = cry_mpi_shrd(&b1, B), e);
+    CRY_CHK(res = mod_2e(&b1, &b1, CRY_MPI_DIGIT_BITS * B), e);
+    CRY_CHK(res = cry_mpi_copy(&b2, b), e);
+    CRY_CHK(res = cry_mpi_shrd(&b2, B*2), e);
 
     /*
      * Evaluation (using Bodrato's steps)
      */
 
     /* t1 = a0 + a2 */
-    if ((res = cry_mpi_add(&t1, &a0, &a2)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(&t1, &a0, &a2), e);
     /* t2 = b0 + b2 */
-    if ((res = cry_mpi_add(&t2, &b0, &b2)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(&t2, &b0, &b2), e);
 
     /* w1 = ((a0 + a2) + a1)((b0 + b2) + b1) */
-    if ((res = cry_mpi_add(&w1, &t1, &a1)) != 0)
-        goto e;
-    if ((res = cry_mpi_add(&w2, &t2, &b1)) != 0)
-        goto e;
-    if ((res = cry_mpi_mul(&w1, &w1, &w2)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(&w1, &t1, &a1), e);
+    CRY_CHK(res = cry_mpi_add(&w2, &t2, &b1), e);
+    CRY_CHK(res = cry_mpi_mul(&w1, &w1, &w2), e);
 
     /* w2 = ((a0 + a2) - a1)((b0 + b2) - b1) */
-    if ((res = cry_mpi_sub(&t1, &t1, &a1)) != 0)
-        goto e;
-    if ((res = cry_mpi_sub(&t2, &t2, &b1)) != 0)
-        goto e;
-    if ((res = cry_mpi_mul(&w2, &t1, &t2)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_sub(&t1, &t1, &a1), e);
+    CRY_CHK(res = cry_mpi_sub(&t2, &t2, &b1), e);
+    CRY_CHK(res = cry_mpi_mul(&w2, &t1, &t2), e);
 
     /* t1 = 2*((a0+a2-a1) + a2) - a0 = a0 - a1 + 4a2 */
-    if ((res = cry_mpi_add(&t1, &t1, &a2)) != 0)
-        goto e;
-    if ((res = cry_mpi_shl(&t1, &t1, 1)) != 0)
-        goto e;
-    if ((res = cry_mpi_sub(&t1, &t1, &a0)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(&t1, &t1, &a2), e);
+    CRY_CHK(res = cry_mpi_shl(&t1, &t1, 1), e);
+    CRY_CHK(res = cry_mpi_sub(&t1, &t1, &a0), e);
     /* t2 = 2*((b0+b2-b1) + b2) - b0 = b0 - 2a1 + 4a2 */
-    if ((res = cry_mpi_add(&t2, &t2, &b2)) != 0)
-        goto e;
-    if ((res = cry_mpi_shl(&t2, &t2, 1)) != 0)
-        goto e;
-    if ((res = cry_mpi_sub(&t2, &t2, &b0)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(&t2, &t2, &b2), e);
+    CRY_CHK(res = cry_mpi_shl(&t2, &t2, 1), e);
+    CRY_CHK(res = cry_mpi_sub(&t2, &t2, &b0), e);
     /* w3 = t1 * t2 */
-    if ((res = cry_mpi_mul(&w3, &t1, &t2)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_mul(&w3, &t1, &t2), e);
 
     /* w0 = a0 * b0 */
-    if ((res = cry_mpi_mul(&w0, &a0, &b0)) != 0)
-        goto e;
-
+    CRY_CHK(res = cry_mpi_mul(&w0, &a0, &b0), e);
     /* w4 = a2 * b2 */
-    if ((res = cry_mpi_mul(&w4, &a2, &b2)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_mul(&w4, &a2, &b2), e);
 
     /*
      * Interpolation
@@ -193,68 +167,47 @@ int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
      *  w2  = 1 -1  1 -1  1   x r2
      *  w3    1 -2  4 -8  16    r3
      *  w4    0  0  0  0  1     r4
-     *
      */
 
     /* w3 = (w3 - w1)/3 */
-    if ((res = cry_mpi_sub(&w3, &w3, &w1)) != 0)
-        goto e;
-    if ((res = div3(&w3)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_sub(&w3, &w3, &w1), e);
+    CRY_CHK(res = div3(&w3), e);
 
     /* w1 = (w1 - w2)/2 */
-    if ((res = cry_mpi_sub(&w1, &w1, &w2)) != 0)
-        goto e;
-    if ((res = cry_mpi_shr(&w1, &w1, 1)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_sub(&w1, &w1, &w2), e);
+    CRY_CHK(res = cry_mpi_shr(&w1, &w1, 1), e);
 
     /* w2 = w2 - w0 */
-    if ((res = cry_mpi_sub(&w2, &w2, &w0)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_sub(&w2, &w2, &w0), e);
 
     /* w3 = (w2 - w3)/2 + 2*w4 */
-    if ((res = cry_mpi_sub(&w3, &w2, &w3)) != 0)
-        goto e;
-    if ((res = cry_mpi_shr(&w3, &w3, 1)) != 0)
-        goto e;
-    if ((res = cry_mpi_shl(&t1, &w4, 1)) != 0)
-        goto e;
-    if ((res = cry_mpi_add(&w3, &w3, &t1)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_sub(&w3, &w2, &w3), e);
+    CRY_CHK(res = cry_mpi_shr(&w3, &w3, 1), e);
+    CRY_CHK(res = cry_mpi_shl(&t1, &w4, 1), e);
+    CRY_CHK(res = cry_mpi_add(&w3, &w3, &t1), e);
 
     /* w2 = w2 + w1 - w4 */
-    if ((res = cry_mpi_add(&w2, &w2, &w1)) != 0)
-        goto e;
-    if ((res = cry_mpi_sub(&w2, &w2, &w4)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(&w2, &w2, &w1), e);
+    CRY_CHK(res = cry_mpi_sub(&w2, &w2, &w4), e);
 
     /* w1 = w1 - w3 */
-    if ((res = cry_mpi_sub(&w1, &w1, &w3)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_sub(&w1, &w1, &w3), e);
 
     /*
      * Reconstruction
      */
 
     /* Shift wn by B*n */
-    if ((res = cry_mpi_shld(&w1, 1*B)) != 0)
-        goto e;
-    if ((res = cry_mpi_shld(&w2, 2*B)) != 0)
-        goto e;
-    if ((res = cry_mpi_shld(&w3, 3*B)) != 0)
-        goto e;
-    if ((res = cry_mpi_shld(&w4, 4*B)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_shld(&w1, 1*B), e);
+    CRY_CHK(res = cry_mpi_shld(&w2, 2*B), e);
+    CRY_CHK(res = cry_mpi_shld(&w3, 3*B), e);
+    CRY_CHK(res = cry_mpi_shld(&w4, 4*B), e);
 
     /* Add the parts */
-    if ((res = cry_mpi_add(r, &w0, &w1)) != 0)
-        goto e;
-    if ((res = cry_mpi_add(&t1, &w2, &w3)) != 0)
-        goto e;
-    if ((res = cry_mpi_add(&t1, &w4, &t1)) != 0)
-        goto e;
-    if ((res = cry_mpi_add(r, &t1, r)) != 0)
-        goto e;
+    CRY_CHK(res = cry_mpi_add(r, &w0, &w1), e);
+    CRY_CHK(res = cry_mpi_add(&t1, &w2, &w3), e);
+    CRY_CHK(res = cry_mpi_add(&t1, &w4, &t1), e);
+    CRY_CHK(res = cry_mpi_add(r, &t1, r), e);
 
 e:  cry_mpi_clear_list(&w0, &w1, &w2, &w3, &w4,
                        &a0, &a1, &a2, &b0, &b1,
