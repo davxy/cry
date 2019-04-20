@@ -6,7 +6,7 @@ int cry_mpi_mul(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
     sign = a->sign ^ b->sign;
     res = cry_mpi_mul_abs(r, a, b);
-    if (res == 0)
+    if (res == 0 && !cry_mpi_is_zero(r))
         r->sign = sign;
     return res;
 }
