@@ -441,7 +441,6 @@ c92e20b990846a1037594736fd02ce34f1776d4c019b0d31c4b5bdb0df568ea2292223e70d6dad39
 # p0 : base
 # p1 : exponent
 # p2 : result
-# p3 : return value
 ################################################################################
 
 Exp 0^0
@@ -455,12 +454,6 @@ mpi_exp
 0
 3
 0
-
-Exp 1^0
-mpi_exp
-1
-0
-1
 
 Exp 1^0
 mpi_exp
@@ -491,4 +484,89 @@ mpi_exp
 a229253d93c944fc43566ac26a1986
 30
 14d7bb1fdade0b6777acca09ce7a6c8eb05712d6d5095f32a72e676c74457a9505b6edffa669aa76dd44e9cc0227ff05e7a4deca7373e6f0277c433779953d9601600789abb903d348546908216ffee0ef49bd009869746314a8938510b8dd0ff577d9f2328736d063ef2db26efc2ba08fea3a3dc7420234f0eee96aca616c8f32c70739a62f8acdd124988185cd2a8cfc676a77283d91fe224ac2ba210b9be462f965bd31de90da961da4e76f493d65623e53245a06ed05a879376551eb891cb94c7b2d1b0f204c3fd24edae77151e09e66079e4692038b18feffe37fb0690d4589703e2e904c431d4e6310aa4131e31ec1835435c900d8e4e6c7b68b61b9ada4af220bb27c68e07ad6bb738d1c40f50ee21cf9b170699fc5324ca78c00d0bcf0d3b96fca607ea3d860d4c5a1d36ae31bf1576638c40b07924aa434400d296e1d15eb757f0459a25d704e7d1fe310f26f1e87f41fed31ef29974ebf68b1324a8f3dea7ff596bd7b5cd68bfc9a802fb2e88eced504195822078167e1abd29818b8af6b5a2ec79b29060b14a57acc3223f0855608f0cadc138aafc347253cb9efded0f79cfe4e1254b4ea7c5029b81318315d49bd31b132a6d919721e5015c389471d377b15bedf10288f978bdc0c49318420c1ed3c75b6e69aa3099c947be90d6b0a491a97f8f3baec64c75bdac33f89291b56cde1d033a6b4305ba739d534818d37daae5d38a63bc9983774da903c20b45bd4443599f6e05c43aa62e474194f0b1802cb0a6400682c2cd8fc204f21dfdeb81d44bcd818b85a87ed3c9e1b17ea7a88531f77eb3a2a693679ab8b93688fc362798380540c3efe50a82aa7a5d62e401e9944b6641f8f3e644446873cc477182670ec282e9c824377c9d8e02f8150a75f2eaf2fbbf14b60b4f66b62798d59b55ae2cd4f4c7ddf87a737ff05c9f531e1445388fc18400346074704bf136ba6ffc9e857f6fc9aa398c92d3bc77754565d0e3681881c1000000000000
+
+################################################################################
+# Modular Exponentiation (Binary)
+# p0 : base
+# p1 : exponent
+# p2 : modulo
+# p3 : result
+################################################################################
+
+Mod-Exp negative exponent
+mpi_mod_exp
+aa
+-bb
+cc
+Z-1
+
+Mod-Exp negative modulo
+mpi_mod_exp
+aa
+bb
+-cc
+Z-1
+
+Mod-Exp zero modulo
+mpi_mod_exp
+aa
+bb
+0
+Z-1
+
+Exp test positive base, even exponent, mod 1
+mpi_mod_exp
+a229253d93c944fc43566ac26a1986
+4
+1
+0
+
+Exp test positive base, odd exponent, mod 1
+mpi_mod_exp
+a229253d93c944fc43566ac26a1986
+3
+1
+0
+
+Exp test positive base, even exponent
+mpi_mod_exp
+a229253d93c944fc43566ac26a1986
+4320
+e61e910917b59098227918ca1da479df17683dd2
+bfbc68970341b41013377a7077f0dcaa8f843aa8
+
+Exp test positive base, odd exponent
+mpi_mod_exp
+a229253d93c944fc43566ac26a1986
+4321
+e61e910917b59098227918ca1da479df17683dd2
+52afc7d51a54654397ab299411758b6de8d14390
+
+Exp test negative base, even exponent, mod 1
+mpi_mod_exp
+-a229253d93c944fc43566ac26a1986
+4
+1
+0
+
+Exp test negative base, odd exponent, mod 1
+mpi_mod_exp
+-a229253d93c944fc43566ac26a1986
+3
+1
+0
+
+Exp test negative base, even exponent
+mpi_mod_exp
+-a229253d93c944fc43566ac26a1986
+4320
+e61e910917b59098227918ca1da479df17683dd2
+bfbc68970341b41013377a7077f0dcaa8f843aa8
+
+Exp test negative base, odd exponent
+mpi_mod_exp
+-a229253d93c944fc43566ac26a1986
+4321
+e61e910917b59098227918ca1da479df17683dd2
+936ec933fd612b548acdef360c2eee712e96fa42
 
