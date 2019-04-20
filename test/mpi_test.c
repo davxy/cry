@@ -95,7 +95,6 @@ static void mpi_shl(int argc, char *argv[])
 
     ASSERT_EQ(argc, 3);
     bits = atoi(argv[1]);
-
     ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
 
     ASSERT(cry_mpi_shl(g_mpi1, g_mpi0, bits) == 0);
@@ -110,7 +109,6 @@ static void mpi_shr(int argc, char *argv[])
 
     ASSERT_EQ(argc, 3);
     bits = atoi(argv[1]);
-
     ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
 
     ASSERT(cry_mpi_shr(g_mpi1, g_mpi0, bits) == 0);
@@ -131,22 +129,29 @@ static void mpi_abs(int argc, char *argv[])
     ASSERT(strcmp((char *)g_buf, argv[1]) == 0);
 }
 
+#define ERROR_FLAG 'Z'
 typedef int (* binary_op_f)(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
 {
+    int res;
+
     ASSERT_EQ(argc, 3);
 
     ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
     ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
 
-    ASSERT(op(g_mpi2, g_mpi0, g_mpi1) == 0);
+    res = op(g_mpi2, g_mpi0, g_mpi1);
 
-    ASSERT(cry_mpi_store_str(g_mpi2, 16, (char *)g_buf) == 0);
-    ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
+    if (*argv[2] != ERROR_FLAG) {
+        cry_mpi_print(g_mpi2, 16);
+        ASSERT(res == 0);
+        ASSERT(cry_mpi_store_str(g_mpi2, 16, (char *)g_buf) == 0);
+        ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
+    } else {
+        ASSERT(atoi(argv[2] + 1) == res);
+    }
 }
-
-
 
 static void mpi_dispatch(int argc, char *argv[])
 {
@@ -186,6 +191,8 @@ static void mpi_dispatch(int argc, char *argv[])
         mpi_binary_op(argc, argv, cry_mpi_mul_karatsuba);
     else if (strcmp(test, "mpi_mul_toom3") == 0)
         mpi_binary_op(argc, argv, cry_mpi_mul_toom3);
+    else if (strcmp(test, "mpi_exp") == 0)
+        mpi_binary_op(argc, argv, cry_mpi_exp);
     else
         printf("Test '%s' not defined\n", test);
 

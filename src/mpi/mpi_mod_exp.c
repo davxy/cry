@@ -11,11 +11,15 @@ int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
     int i, j, res = 0;
     cry_mpi exp, tmp;
 
-    if ((res = cry_mpi_init_int(&exp, 1)) != 0)
+    if (cry_mpi_is_neg(e) || (m != NULL && cry_mpi_is_neg(m)))
+        return -1;
+
+    if ((res = cry_mpi_init_list(&tmp, &exp, NULL)) != 0)
         return res;
-    if ((res = cry_mpi_init_copy(&tmp, b)) != 0) {
-        cry_mpi_clear(&exp);
-        return res;
+
+    if ((res = cry_mpi_set_int(&exp, 1)) != 0 ||
+        (res = cry_mpi_copy(&tmp, b)) != 0) {
+        goto e;
     }
 
     /* For each block */
