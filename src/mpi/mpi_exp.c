@@ -6,6 +6,9 @@ int cry_mpi_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e)
     int sign = b->sign ? cry_mpi_is_odd(e) : 0;
     cry_mpi t, c, one;
 
+    if (cry_mpi_is_neg(e))
+        return -1;
+
     if ((res = cry_mpi_init_list(&t, &one, &c, (cry_mpi *) NULL)) != 0)
         return res;
 

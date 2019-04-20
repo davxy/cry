@@ -5,6 +5,7 @@
 #include <string.h> /* memset */
 #include <limits.h>
 #include <stdint.h>
+#include "../misc.h"
 
 /*
  * Double precision digits
