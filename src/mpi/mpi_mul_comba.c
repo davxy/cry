@@ -67,7 +67,8 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
             return res;
         dst = &tmp;
     } else {
-        cry_mpi_grow(r, pa);
+        if ((res = cry_mpi_grow(r, pa)) != 0)
+            return res;
         dst = r;
     }
     cry_mpi_set_used(dst, pa);
