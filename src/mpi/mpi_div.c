@@ -8,7 +8,7 @@ int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
     if ((res = cry_mpi_div_abs(q, r, a, b)) != 0)
         return res;
 
-    if (sign) {
+    if (sign != 0) {
         if (q) {
             cry_mpi one;
             cry_mpi_digit one_dig = 1;
@@ -16,7 +16,6 @@ int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
             one.sign = 0;
             one.used = one.alloc = 1;
             one.data = &one_dig;
-
             q->sign = 1;
             res = cry_mpi_sub(q, q, &one);
         }
