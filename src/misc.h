@@ -15,6 +15,10 @@
 /** Macro used to compute the maximum of two integral values. */
 #define CRY_MAX(a, b)     (((a) > (b)) ? (a) : (b))
 
+/** Batch operation exception. Rollback to a well known exit point 'e' */
+#define CRY_CHK(exp, label) \
+    do { if ((exp) != 0) goto label; } while (0)
+
 /**
  * Increments a big endian value of a give size.
  * Used to directly increment a value within a buffer.

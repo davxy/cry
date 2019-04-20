@@ -5,6 +5,7 @@
 #include <string.h> /* memset */
 #include <limits.h>
 #include <stdint.h>
+#include "../misc.h"
 
 /*
  * Double precision digits
@@ -57,5 +58,9 @@ int cry_mpi_shld(cry_mpi *a, int n);
 #define cry_mpi_set_bit(a, bit) \
     ((a)->data[(bit) / CRY_MPI_DIGIT_BITS] |= \
          1U << ((bit) % CRY_MPI_DIGIT_BITS))
+
+#define cry_mpi_is_bit_set(n, b) \
+    (((n)->data[b / CRY_MPI_DIGIT_BITS] & \
+      ((cry_mpi_digit)1 << ((b) % CRY_MPI_DIGIT_BITS))) != 0)
 
 #endif /* CRY_MPI_PVT_H_ */

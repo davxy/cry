@@ -19,21 +19,14 @@ int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     B = hB << 1;
 
     /* init copy all the temporaries */
-    if ((res = cry_mpi_init_size(&x0, hB)) < 0)
-        goto e0;
-    if ((res = cry_mpi_init_size(&x1, a->used - hB)) < 0)
-        goto e1;
-    if ((res = cry_mpi_init_size(&y0, hB)) < 0)
-        goto e2;
-    if ((res = cry_mpi_init_size(&y1, b->used - hB)) < 0)
-        goto e3;
+    CRY_CHK(res = cry_mpi_init_size(&x0, hB), e0);
+    CRY_CHK(res = cry_mpi_init_size(&x1, a->used - hB), e1);
+    CRY_CHK(res = cry_mpi_init_size(&y0, hB), e2);
+    CRY_CHK(res = cry_mpi_init_size(&y1, b->used - hB), e3);
 
-    if ((res = cry_mpi_init_size(&z0, B)) < 0)
-        goto e4;
-    if ((res = cry_mpi_init_size(&z1, B)) < 0)
-        goto e5;
-    if ((res = cry_mpi_init_size(&z2, B)) < 0)
-        goto e6;
+    CRY_CHK(res = cry_mpi_init_size(&z0, B), e4);
+    CRY_CHK(res = cry_mpi_init_size(&z1, B), e5);
+    CRY_CHK(res = cry_mpi_init_size(&z2, B), e6);
 
     /* Shift the digits */
     x0.used = y0.used = hB;
@@ -67,7 +60,6 @@ int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         tmpy = y1.data;
         for (x = hB; x < b->used; x++)
             *tmpy++ = *tmpb++;
-
     }
 
     /*
@@ -77,31 +69,19 @@ int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     cry_mpi_adjust(&x0);
     cry_mpi_adjust(&y0);
 
-    if ((res = cry_mpi_mul_abs(&z0, &x0, &y0)) < 0) /* z0 = x0*y0 */
-        goto e7;
-    if ((res = cry_mpi_mul_abs(&z2, &x1, &y1)) < 0) /* z2 = x1*y1 */
-        goto e7;
+    CRY_CHK(res = cry_mpi_mul_abs(&z0, &x0, &y0), e7); /* z0 = x0*y0 */
+    CRY_CHK(res = cry_mpi_mul_abs(&z2, &x1, &y1), e7); /* z2 = x1*y1 */
     /* Use x0 for temporary storage */
-    if ((res = cry_mpi_add(&z1, &x1, &x0)) < 0) /* z1 = x1+x0 */
-        goto e7;
-    if ((res = cry_mpi_add(&x0, &y1, &y0)) < 0) /* x0 = y1+y0 */
-        goto e7;
-    if ((res = cry_mpi_mul_abs(&z1, &z1, &x0)) < 0) /* z1 = (x1+x0)(y1+y0) */
-        goto e7;
-    if ((res = cry_mpi_add(&x0, &z0, &z2)) < 0) /* x0 = z0+z2 */
-        goto e7;
-    if ((res = cry_mpi_sub(&z1, &z1, &x0)) < 0) /* z1=(x1+x0)*(y1+y0)-(z0+z2) */
-        goto e7;
+    CRY_CHK(res = cry_mpi_add(&z1, &x1, &x0), e7);     /* z1 = x1+x0 */
+    CRY_CHK(res = cry_mpi_add(&x0, &y1, &y0), e7);     /* x0 = y1+y0 */
+    CRY_CHK(res = cry_mpi_mul_abs(&z1, &z1, &x0), e7); /* z1 = (x1+x0)(y1+y0) */
+    CRY_CHK(res = cry_mpi_add(&x0, &z0, &z2), e7);     /* x0 = z0+z2 */
+    CRY_CHK(res = cry_mpi_sub(&z1, &z1, &x0), e7); /* z1=(x1+x0)*(y1+y0)-(z0+z2) */
+    CRY_CHK(res = cry_mpi_shld(&z1, hB), e7);
+    CRY_CHK(res = cry_mpi_shld(&z2, B), e7);
 
-    if ((res = cry_mpi_shld(&z1, hB)) < 0)
-        goto e7;
-    if ((res = cry_mpi_shld(&z2, B)) < 0)
-        goto e7;
-
-    if ((res = cry_mpi_add(&z1, &z0, &z1)) < 0)
-        goto e7;
-    if ((res = cry_mpi_add(r, &z1, &z2)) < 0)   /* r = z2<<B + z1<<hB + z0 */
-        goto e7;
+    CRY_CHK(res = cry_mpi_add(&z1, &z0, &z1), e7);
+    CRY_CHK(res = cry_mpi_add(r, &z1, &z2), e7); /* r = z2<<B + z1<<hB + z0 */
 
 e7: cry_mpi_clear(&z2);
 e6: cry_mpi_clear(&z1);
