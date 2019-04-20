@@ -20,7 +20,7 @@ int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
         if ((res = cry_mpi_sqr(&exp, &exp)) != 0 ||
             (m != NULL && (res = cry_mpi_mod(&exp, &exp, m)) != 0))
             goto e;
-        if (cry_mpi_is_bit_set(e,bits) != 0) {
+        if (cry_mpi_is_bit_set(e, bits) != 0) {
             if ((res = cry_mpi_mul(&exp, &exp, b)) != 0 ||
                 (m != NULL && (res = cry_mpi_mod(&exp, &exp, m)) != 0))
                 goto e;
