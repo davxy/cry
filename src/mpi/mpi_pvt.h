@@ -59,4 +59,8 @@ int cry_mpi_shld(cry_mpi *a, int n);
     ((a)->data[(bit) / CRY_MPI_DIGIT_BITS] |= \
          1U << ((bit) % CRY_MPI_DIGIT_BITS))
 
+#define cry_mpi_is_bit_set(n, b) \
+    (((n)->data[b / CRY_MPI_DIGIT_BITS] & \
+      ((cry_mpi_digit)1 << ((b) % CRY_MPI_DIGIT_BITS))) != 0)
+
 #endif /* CRY_MPI_PVT_H_ */
