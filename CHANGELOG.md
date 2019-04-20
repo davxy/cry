@@ -30,6 +30,10 @@ Added
 * Continuous code quality inspection.
   Tools: cppcheck, vera++, valgrind, gcovr, sonar-scanner, clang.
 
+Fixed
+
+* MPI product of negative value by zero returning negative zero.
+
 
 [0.0.8] - 2019-03-16
 --------------------
