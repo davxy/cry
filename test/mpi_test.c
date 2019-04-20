@@ -169,7 +169,6 @@ static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
     res = op(g_mpi3, g_mpi0, g_mpi1, g_mpi2);
 
     if (*argv[3] != ERROR_FLAG) {
-        cry_mpi_print(g_mpi3, 16);
         ASSERT(res == 0);
         ASSERT(cry_mpi_store_str(g_mpi3, 16, (char *)g_buf) == 0);
         ASSERT(strcmp((char *)g_buf, argv[3]) == 0);

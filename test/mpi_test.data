@@ -461,12 +461,6 @@ mpi_exp
 0
 1
 
-Exp 1^0
-mpi_exp
-1
-0
-1
-
 Exp negative exponent
 mpi_exp
 aa
