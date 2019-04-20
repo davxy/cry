@@ -144,7 +144,6 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
     res = op(g_mpi2, g_mpi0, g_mpi1);
 
     if (*argv[2] != ERROR_FLAG) {
-        cry_mpi_print(g_mpi2, 16);
         ASSERT(res == 0);
         ASSERT(cry_mpi_store_str(g_mpi2, 16, (char *)g_buf) == 0);
         ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
