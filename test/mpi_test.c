@@ -1,7 +1,7 @@
 #include "test.h"
+#include "malloc_mock.h"
 #include <cry/mpi.h>
 #include <stdlib.h>
-
 
 cry_mpi *g_mpi_buf;
 #define g_mpi0 (&g_mpi_buf[0])
@@ -225,11 +225,27 @@ static void mpi_dispatch(int argc, char *argv[])
     mpi_teardown();
 }
 
+static void mul_karatsuba(void)
+{
+    char *argv[] = {
+        "mpi_mul_karatsuba",
+        "12345678",
+        "12345678",
+        "Z-1"
+    };
+    g_malloc_mock_count = 9;
+    mpi_dispatch(4, argv);
+}
 
+static void coverage(void)
+{
+   mul_karatsuba();
+}
 
 void mpi_test(void)
 {
     printf("* MPI\n");
-    func_test("mpi_test.data", mpi_dispatch);
+    //func_test("mpi_test.data", mpi_dispatch);
+    coverage();
     printf("\n");
 }
