@@ -4,11 +4,12 @@ CC := gcc
 
 CFLAGS := -O0 -g3 -Wall
 CPPFLAGS = -I. -I../include -I../src
-LDFLAGS := --coverage
+LDFLAGS := --coverage -Wl,--wrap=malloc,--wrap=realloc,--wrap=calloc,--wrap=free
 
 
 objs := \
 	test.o \
+	malloc_mock.o \
 	version_test.o \
 	memxor_test.o \
 	base64_test.o \
