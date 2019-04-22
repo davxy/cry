@@ -239,7 +239,7 @@ struct args {
 static struct args g_malloc_fail_tests[] = {
     { "Comba", 4, { "mpi_mul_comba", "12345678", "12345678", "OOM" }},
     { "Karatsuba", 4, { "mpi_mul_karatsuba", "12345678", "12345678", "OOM" }},
-    { "Toom-3", 4, { "mpi_mul_karatsuba", "12345678", "12345678", "OOM" }},
+    { "Toom-3", 4, { "mpi_mul_toom3", "12345678", "12345678", "OOM" }},
 };
 
 static void malloc_fails(void)
