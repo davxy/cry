@@ -133,7 +133,9 @@ static void mpi_abs(int argc, char *argv[])
 
 static void check(int res, cry_mpi *num, char *res_str)
 {
-    if (*res_str != ERROR_FLAG) {
+    if (strcmp(res_str, "OOM") == 0) {
+        ASSERT ((res == -1 && g_malloc_mock_state == MALLOC_MOCK_FAILED) || res == 0);
+    } else if (*res_str != ERROR_FLAG) {
         ASSERT(res == 0);
         ASSERT(cry_mpi_store_str(num, 16, (char *)g_buf) == 0);
         ASSERT(strcmp((char *)g_buf, res_str) == 0);
@@ -153,6 +155,8 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
     ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
     ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
 
+    if (strcmp(argv[2], "OOM") == 0)
+        g_malloc_mock_state = MALLOC_MOCK_ACTIVE;
     res = op(g_mpi2, g_mpi0, g_mpi1);
 
     check(res, g_mpi2, argv[2]);
@@ -171,6 +175,8 @@ static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
     ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
     ASSERT(cry_mpi_load_str(g_mpi2, 16, argv[2]) == 0);
 
+    if (strcmp(argv[2], "OOM") == 0)
+        g_malloc_mock_state = MALLOC_MOCK_ACTIVE;
     res = op(g_mpi3, g_mpi0, g_mpi1, g_mpi2);
 
     check(res, g_mpi3, argv[3]);
@@ -224,27 +230,41 @@ static void mpi_dispatch(int argc, char *argv[])
     mpi_teardown();
 }
 
-static void mul_karatsuba(void)
-{
-    char *argv[] = {
-        "mpi_mul_karatsuba",
-        "12345678",
-        "12345678",
-        "Z-1"
-    };
-    g_malloc_mock_count = 9;
-    mpi_dispatch(4, argv);
-}
+struct args {
+    char *name;
+    int argc;
+    char *argv[10];
+};
 
-static void coverage(void)
+static struct args g_malloc_fail_tests[] = {
+    { "Comba", 4, { "mpi_mul_comba", "12345678", "12345678", "OOM" }},
+    { "Karatsuba", 4, { "mpi_mul_karatsuba", "12345678", "12345678", "OOM" }},
+    { "Toom-3", 4, { "mpi_mul_karatsuba", "12345678", "12345678", "OOM" }},
+};
+
+static void malloc_fails(void)
 {
-   mul_karatsuba();
+    size_t t, i;
+
+    printf("    Malloc fails\n");
+    for (t = 0; t < ARLEN(g_malloc_fail_tests); t++) {
+        printf("      %s \n", g_malloc_fail_tests[t].name);
+        i = 0;
+        do {
+            g_malloc_mock_state = MALLOC_MOCK_IDLE;
+            g_malloc_mock_count = i++;
+            mpi_dispatch(g_malloc_fail_tests[t].argc, g_malloc_fail_tests[t].argv);
+        } while (g_malloc_mock_state == MALLOC_MOCK_FAILED);
+        printf("        count: %u\n", (unsigned)i);
+        g_malloc_mock_state = MALLOC_MOCK_IDLE; /* restore normal behavior */
+    }
 }
 
 void mpi_test(void)
 {
     printf("* MPI\n");
-    //func_test("mpi_test.data", mpi_dispatch);
-    coverage();
+    func_test("mpi_test.data", mpi_dispatch);
+    malloc_fails();
+
     printf("\n");
 }
