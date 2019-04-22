@@ -31,14 +31,14 @@
  * 2,048, a widely recommended number.)
  */
 
-static const int small_primes[] =
-{
+static const unsigned int small_primes[] = {
       3,    5,    7,   11,   13,   17,   19,   23,
      29,   31,   37,   41,   43,   47,   53,   59,
      61,   67,   71,   73,   79,   83,   89,   97,
     101,  103,  107,  109,  113,  127,  131,  137,
     139,  149,  151,  157,  163,  167,  173,  179,
     181,  191,  193,  197,  199,  211,  223,  227,
+#if CRY_MPI_DIGIT_MAX != UCHAR_MAX
     229,  233,  239,  241,  251,  257,  263,  269,
     271,  277,  281,  283,  293,  307,  311,  313,
     317,  331,  337,  347,  349,  353,  359,  367,
@@ -53,7 +53,8 @@ static const int small_primes[] =
     787,  797,  809,  811,  821,  823,  827,  829,
     839,  853,  857,  859,  863,  877,  881,  883,
     887,  907,  911,  919,  929,  937,  941,  947,
-    953,  967,  971,  977,  983,  991,  997, -103
+    953,  967,  971,  977,  983,  991,  997, 1009
+#endif
 };
 
 
@@ -66,7 +67,8 @@ static const int small_primes[] =
  */
 static int is_obviously_not_prime(const cry_mpi *p)
 {
-    int i, res = 0;
+    int res = 0;
+    size_t i;
     cry_mpi d, m;
     cry_mpi_digit dig;
 
@@ -78,7 +80,7 @@ static int is_obviously_not_prime(const cry_mpi *p)
     if ((res = cry_mpi_init(&m)) < 0)
         return res;
 
-    for (i = 0;  small_primes[i] > 0;  i++) {
+    for (i = 0; i < CRY_ARRAY_LEN(small_primes);  i++) {
         dig = (cry_mpi_digit)small_primes[i];
         if ((res = cry_mpi_mod(&m, p, &d)) < 0)
             break;

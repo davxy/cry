@@ -1,4 +1,5 @@
 #include "mpi_pvt.h"
+#include <stdio.h>
 
 int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
 {
@@ -35,6 +36,8 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
                     >> (CRY_MPI_DIGIT_BITS - 1);
             dd <<= 1; /* mul by 2 */
             dd += ((cry_mpi_dword)*tmpt + c);
+            if (ch == 0 && dd < ((cry_mpi_dword)*tmpt + c))
+                ch = (cry_mpi_dword)1U << CRY_MPI_DIGIT_BITS;
             /* store lower part */
             *tmpt++ = (cry_mpi_digit)dd;
             /* get the new carry */
