@@ -21,7 +21,8 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
-[0.0.9] - Unreleased
+
+[0.0.9] - 2019-04-22
 --------------------
 
 Added
@@ -30,9 +31,16 @@ Added
 * Continuous code quality inspection.
   Tools: cppcheck, vera++, valgrind, gcovr, sonar-scanner, clang.
 
+Changed
+
+* Configurable MPI digit size and memory alloc quantum.
+* MPI exponentiation refactory.
+
 Fixed
 
 * MPI product of negative value by zero returning negative zero.
+* MPI potential uninitialized memory access when digit size is 1.
+* MPI square unhandled integer overflow when digit size is 1.
 
 
 [0.0.8] - 2019-03-16
