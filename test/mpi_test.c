@@ -130,6 +130,18 @@ static void mpi_abs(int argc, char *argv[])
     ASSERT(strcmp((char *)g_buf, argv[1]) == 0);
 }
 
+static void mpi_sqr(int argc, char *argv[])
+{
+    ASSERT_EQ(argc, 2);
+
+    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+
+    ASSERT(cry_mpi_sqr(g_mpi1, g_mpi0) == 0);
+
+    ASSERT(cry_mpi_store_str(g_mpi1, 16, (char *)g_buf) == 0);
+    ASSERT(strcmp((char *)g_buf, argv[1]) == 0);
+}
+
 #define ERROR_FLAG 'Z'
 
 static void check(int res, cry_mpi *num, char *res_str)
@@ -219,6 +231,8 @@ static void mpi_dispatch(int argc, char *argv[])
         mpi_binary_op(argc, argv, cry_mpi_exp);
     else if (strcmp(test, "mpi_mod_exp") == 0)
         mpi_binary_mod_op(argc, argv, cry_mpi_mod_exp);
+    else if (strcmp(test, "mpi_sqr") == 0)
+        mpi_sqr(argc, argv);
     else
         printf("Test '%s' not defined\n", test);
 
