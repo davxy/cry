@@ -25,6 +25,11 @@ typedef uint16_t cry_mpi_dword;
 # error "Invalid ULONG_MAX value"
 #endif
 
+/* Allocation quantum */
+#ifndef CRY_MPI_QUANTUM
+#define CRY_MPI_QUANTUM     8
+#endif
+
 /* Number of bytes in one digit */
 #define CRY_MPI_DIGIT_BYTES  sizeof(cry_mpi_digit)
 

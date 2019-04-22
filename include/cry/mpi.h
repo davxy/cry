@@ -9,7 +9,9 @@
 #include <stddef.h>
 #include <limits.h>
 
-#define CRY_MPI_DIGIT_MAX  ULONG_MAX
+/* TODO: move to config.mk */
+#define CRY_MPI_DIGIT_MAX   UCHAR_MAX
+#define CRY_MPI_QUANTUM     1
 
 #ifndef CRY_MPI_DIGIT_MAX
 #define CRY_MPI_DIGIT_MAX  ULONG_MAX
