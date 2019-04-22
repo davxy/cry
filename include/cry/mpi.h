@@ -7,11 +7,25 @@
 #define CRY_MPI_H_
 
 #include <stddef.h>
+#include <limits.h>
 
-typedef unsigned long cry_mpi_digit;
-//typedef unsigned char cry_mpi_digit;
+#define CRY_MPI_DIGIT_MAX  ULONG_MAX
 
-#define CRY_MPI_DIGIT_MAX    ((cry_mpi_digit)-1)
+#ifndef CRY_MPI_DIGIT_MAX
+#define CRY_MPI_DIGIT_MAX  ULONG_MAX
+#endif
+
+#if CRY_MPI_DIGIT_MAX == ULONG_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned long
+#elif CRY_MPI_DIGIT_MAX == USHRT_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned short
+#elif CRY_MPI_DIGIT_MAX == UCHAR_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned char
+#else
+#error "Unsupported MPI digit max value"
+#endif
+
+typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
 
 struct cry_mpi {
     int           sign;
