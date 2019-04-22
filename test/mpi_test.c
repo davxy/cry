@@ -56,6 +56,7 @@ static void mpi_set_int(int argc, char *argv[])
 
     ASSERT_EQ(argc, 1);
     l1 = atol(argv[0]);
+
     ASSERT_OK(cry_mpi_set_int(g_mpi0, l1));
     ASSERT_OK(cry_mpi_get_int(g_mpi0, &l2));
 
