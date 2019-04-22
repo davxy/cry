@@ -3,24 +3,31 @@
 
 #include <cry/mpi.h>
 #include <string.h> /* memset */
-#include <limits.h>
 #include <stdint.h>
 #include "../misc.h"
 
 /*
  * Double precision digits
  */
-
-#if ULONG_MAX == 18446744073709551615UL
+#if CRY_MPI_DIGIT_MAX == 18446744073709551615UL
 # if defined(_WIN32) || defined(__GNUC__)
 typedef unsigned __int128 cry_mpi_dword;
 # else
 typedef uint128_t cry_mpi_dword;
 # endif
-#elif ULONG_MAX == 4294967295UL
+#elif CRY_MPI_DIGIT_MAX == 4294967295UL
 typedef uint64_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 65535UL
+typedef uint32_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 255UL
+typedef uint16_t cry_mpi_dword;
 #else
 # error "Invalid ULONG_MAX value"
+#endif
+
+/* Allocation quantum */
+#ifndef CRY_MPI_QUANTUM
+#define CRY_MPI_QUANTUM     8
 #endif
 
 /* Number of bytes in one digit */

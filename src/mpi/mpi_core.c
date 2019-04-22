@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-/* Digits allocation quantum */
-#define MPI_PREC    8
-
 int cry_mpi_grow(cry_mpi *a, size_t digs)
 {
     cry_mpi_digit *tmp;
@@ -14,7 +10,7 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
         return 0;
 
     /* ensure there are always at least MPI_PREC digits extra on top */
-    digs += (MPI_PREC * 2) - (digs % MPI_PREC);
+    digs += (CRY_MPI_QUANTUM * 2) - (digs % CRY_MPI_QUANTUM);
     /* reallocate the array */
     tmp = (cry_mpi_digit *) realloc(a->data, sizeof(cry_mpi_digit) * digs);
     if (tmp == NULL)
@@ -30,13 +26,13 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
 int cry_mpi_init(cry_mpi *a)
 {
     /* allocate required memory and clear it */
-    a->data = (cry_mpi_digit *) malloc(sizeof(cry_mpi_digit) * MPI_PREC);
+    a->data = (cry_mpi_digit *) malloc(sizeof(cry_mpi_digit) * CRY_MPI_QUANTUM);
     if (a->data == NULL)
         return -1;
 
     /* finalize the initialization */
     a->used = 0;
-    a->alloc = MPI_PREC;
+    a->alloc = CRY_MPI_QUANTUM;
     a->sign = 0;
     return 0;
 }
@@ -77,23 +73,23 @@ int cry_mpi_set_int(cry_mpi *a, long val)
 {
     int res;
     size_t used = CRY_MPI_BYTES_TO_DIGS(sizeof(val));
-    cry_mpi_dword dd;
+    unsigned long uval;
 
     if ((res = cry_mpi_grow(a, used)) < 0)
         return res;
 
     if (val < 0) {
         a->sign = 1;
-        dd = -val;
+        uval = (unsigned long)-val;
     } else {
         a->sign = 0;
-        dd = val;
+        uval = (unsigned long)val;
     }
 
     a->used = 0;
-    while (dd != 0 && a->used < used) {
-        a->data[a->used++] = (cry_mpi_digit) dd;
-        dd >>= CRY_MPI_DIGIT_BITS;
+    while (uval != 0 && a->used < used) {
+        a->data[a->used++] = (cry_mpi_digit) uval;
+        uval >>= CRY_MPI_DIGIT_BITS;
     }
     return res;
 }
@@ -104,13 +100,13 @@ int cry_mpi_get_int(cry_mpi *a, long *val)
     size_t i;
     long rval = 0;
 
-    used = cry_mpi_count_bytes(a);
-    if (used > sizeof(long))
+    used = cry_mpi_count_bits(a);
+    if (used > 8*sizeof(long) - 1) /* consider the sign bit */
         return -1;
 
     i = a->used;
     while (i-- > 0) {
-        rval <<= sizeof(cry_mpi_digit);
+        rval <<= CRY_MPI_DIGIT_BITS;;
         rval |= a->data[i];
     }
     *val = (a->sign == 0) ? rval : -rval;

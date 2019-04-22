@@ -120,9 +120,9 @@ int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
         return res;
     cry_mpi_set_used(&q, a->used + 2);
 
-    if ((res = cry_mpi_init(&t1)) != 0)
+    if ((res = cry_mpi_init_size(&t1, 8)) != 0)
         goto LBL_Q;
-    if ((res = cry_mpi_init(&t2)) != 0)
+    if ((res = cry_mpi_init_size(&t2, 8)) != 0)
         goto LBL_T1;
     if ((res = cry_mpi_init_copy(&x, a)) != 0)
         goto LBL_T2;
