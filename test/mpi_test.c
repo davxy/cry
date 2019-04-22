@@ -131,6 +131,17 @@ static void mpi_abs(int argc, char *argv[])
 
 #define ERROR_FLAG 'Z'
 
+static void check(int res, cry_mpi *num, char *res_str)
+{
+    if (*res_str != ERROR_FLAG) {
+        ASSERT(res == 0);
+        ASSERT(cry_mpi_store_str(num, 16, (char *)g_buf) == 0);
+        ASSERT(strcmp((char *)g_buf, res_str) == 0);
+    } else {
+        ASSERT(atoi(res_str + 1) == res);
+    }
+}
+
 typedef int (* binary_op_f)(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
@@ -144,13 +155,7 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
 
     res = op(g_mpi2, g_mpi0, g_mpi1);
 
-    if (*argv[2] != ERROR_FLAG) {
-        ASSERT(res == 0);
-        ASSERT(cry_mpi_store_str(g_mpi2, 16, (char *)g_buf) == 0);
-        ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
-    } else {
-        ASSERT(atoi(argv[2] + 1) == res);
-    }
+    check(res, g_mpi2, argv[2]);
 }
 
 typedef int (* binary_mod_op_f)(cry_mpi *r, const cry_mpi *a,
@@ -168,13 +173,7 @@ static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
 
     res = op(g_mpi3, g_mpi0, g_mpi1, g_mpi2);
 
-    if (*argv[3] != ERROR_FLAG) {
-        ASSERT(res == 0);
-        ASSERT(cry_mpi_store_str(g_mpi3, 16, (char *)g_buf) == 0);
-        ASSERT(strcmp((char *)g_buf, argv[3]) == 0);
-    } else {
-        ASSERT(atoi(argv[3] + 1) == res);
-    }
+    check(res, g_mpi3, argv[3]);
 }
 
 static void mpi_dispatch(int argc, char *argv[])
@@ -224,8 +223,6 @@ static void mpi_dispatch(int argc, char *argv[])
 
     mpi_teardown();
 }
-
-
 
 void mpi_test(void)
 {
