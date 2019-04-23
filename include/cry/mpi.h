@@ -6,17 +6,19 @@
 #ifndef CRY_MPI_H_
 #define CRY_MPI_H_
 
-#include <cry/config.h>
 #include <stddef.h>
 #include <limits.h>
 
-#ifdef CRY_MPI_DEBUG_CONF
-#define CRY_MPI_DIGIT_MAX UCHAR_MAX
-#endif
-
 /* Digit max value */
 #ifndef CRY_MPI_DIGIT_MAX
-#define CRY_MPI_DIGIT_MAX ULONG_MAX
+# ifndef CRY_HAS_NO_CONFIG_H
+# include <cry/config.h>
+# endif
+# ifndef CRY_MPI_DEBUG_CONF
+# define CRY_MPI_DIGIT_MAX ULONG_MAX
+# else
+# define CRY_MPI_DIGIT_MAX UCHAR_MAX
+# endif
 #endif
 
 /** Definition of the digit type macro */
@@ -34,6 +36,12 @@
 
 /** Digit type definition */
 typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
+
+/** Number of bytes in one digit */
+#define CRY_MPI_DIGIT_BYTES sizeof(cry_mpi_digit)
+
+/** Number of bits in one digit */
+#define CRY_MPI_DIGIT_BITS  (CRY_MPI_DIGIT_BYTES << 3)
 
 struct cry_mpi {
     int           sign;

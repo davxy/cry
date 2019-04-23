@@ -89,7 +89,6 @@ cry: $(target)
 clean:
 	@$(RM) $(binary_dir) $(config) *.a
 	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
-	@touch $(config)
 
 $(objects): Makefile config.mk $(config)
 
