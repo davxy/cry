@@ -47,3 +47,10 @@ CRY_ECP_MUL_WIN=y
 # Elliptic curve point multiplication with sliding window algorithm (faster)
 # Have precedence against the simple windowed one.
 CRY_ECP_MUL_SLIDING_WIN=y
+
+################################################################################
+# Miscelanea configurations
+################################################################################
+
+CRY_MPI_DEBUG_CONF=y
+
