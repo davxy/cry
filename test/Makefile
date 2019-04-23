@@ -4,7 +4,7 @@ CC := gcc
 
 CFLAGS := -O0 -g3 -Wall
 CPPFLAGS = -I. -I../include -I../src
-LDFLAGS := --coverage -Wl,--wrap=malloc,--wrap=realloc,--wrap=calloc,--wrap=free
+LDFLAGS := --coverage -Wl,--wrap=malloc,--wrap=realloc,--wrap=free
 
 
 objs := \
