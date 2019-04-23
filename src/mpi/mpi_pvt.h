@@ -6,6 +6,12 @@
 #include <stdint.h>
 #include "../misc.h"
 
+/** Number of bytes in one digit */
+#define CRY_MPI_DIGIT_BYTES sizeof(cry_mpi_digit)
+
+/** Number of bits in one digit */
+#define CRY_MPI_DIGIT_BITS  (CRY_MPI_DIGIT_BYTES << 3)
+
 /*
  * Double precision digits
  */
@@ -25,16 +31,15 @@ typedef uint16_t cry_mpi_dword;
 # error "Invalid ULONG_MAX value"
 #endif
 
-/* Allocation quantum */
-#ifndef CRY_MPI_QUANTUM
-#define CRY_MPI_QUANTUM     8
+
+#ifdef CRY_MPI_DEBUG_CONF
+#define CRY_MPI_QUANTUM     1
 #endif
 
-/* Number of bytes in one digit */
-#define CRY_MPI_DIGIT_BYTES  sizeof(cry_mpi_digit)
-
-/* Number of bits in one digit */
-#define CRY_MPI_DIGIT_BITS   (CRY_MPI_DIGIT_BYTES << 3)
+/* Allocation quantum */
+#ifndef CRY_MPI_QUANTUM
+#define CRY_MPI_QUANTUM    8
+#endif
 
 /* Bits to digits */
 #define CRY_MPI_BITS_TO_DIGS(a) \

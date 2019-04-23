@@ -7,7 +7,7 @@ CP := cp
 RM := rm -rf
 
 source_dir := src
-config := $(source_dir)/config.h
+config := include/cry/config.h
 
 #
 # Get build name
@@ -26,7 +26,7 @@ target = $(binary_dir)/libcry.a
 
 .SUFFIXES:
 
-includes-y	:= -Iinclude -Isrc -include $(config)
+includes-y := -Iinclude -Isrc -include $(config)
 
 cflags-y := -Wall -MMD -MP
 cflags-$(CRY_COVERAGE) += --coverage
@@ -51,7 +51,7 @@ endif
 endif
 
 
-objects-y 	:=
+objects-y :=
 paths-y	:=
 objects_list :=
 
@@ -89,6 +89,7 @@ cry: $(target)
 clean:
 	@$(RM) $(binary_dir) $(config) *.a
 	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
+	@touch $(config)
 
 $(objects): Makefile config.mk $(config)
 

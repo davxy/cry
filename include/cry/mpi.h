@@ -6,27 +6,33 @@
 #ifndef CRY_MPI_H_
 #define CRY_MPI_H_
 
+#include <cry/config.h>
 #include <stddef.h>
 #include <limits.h>
 
-/* TODO: move to config.mk */
-#define CRY_MPI_DIGIT_MAX   UCHAR_MAX
-#define CRY_MPI_QUANTUM     1
-
-#ifndef CRY_MPI_DIGIT_MAX
-#define CRY_MPI_DIGIT_MAX  ULONG_MAX
+#ifdef CRY_MPI_DEBUG_CONF
+#define CRY_MPI_DIGIT_MAX UCHAR_MAX
 #endif
 
+/* Digit max value */
+#ifndef CRY_MPI_DIGIT_MAX
+#define CRY_MPI_DIGIT_MAX ULONG_MAX
+#endif
+
+/** Definition of the digit type macro */
 #if CRY_MPI_DIGIT_MAX == ULONG_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned long
 #elif CRY_MPI_DIGIT_MAX == USHRT_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned short
+#elif CRY_MPI_DIGIT_MAX == UINT_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned int
 #elif CRY_MPI_DIGIT_MAX == UCHAR_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned char
 #else
 #error "Unsupported MPI digit max value"
 #endif
 
+/** Digit type definition */
 typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
 
 struct cry_mpi {
