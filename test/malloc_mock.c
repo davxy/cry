@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int g_malloc_mock_count = -1;
-int g_malloc_mock_state = MALLOC_MOCK_IDLE;
+int g_malloc_mock_state = MALLOC_MOCK_STOPPED;
 
 void *__real_malloc(size_t size);
 void *__real_realloc(void *ptr, size_t size);
