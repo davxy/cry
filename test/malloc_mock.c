@@ -37,13 +37,6 @@ void *__wrap_malloc(size_t size)
     if (mock_update() == MALLOC_MOCK_FAILED)
         return NULL;
 
-    if (g_malloc_mock_state == MALLOC_MOCK_ACTIVE) {
-        if (g_malloc_mock_count == 0) {
-            g_malloc_mock_state = MALLOC_MOCK_FAILED;
-            return NULL;
-        }
-        g_malloc_mock_count--;
-    }
     head = __real_malloc(HEAD_SIZE + size);
     if (head == NULL)
         return NULL;
@@ -57,11 +50,12 @@ void *__wrap_realloc(void *ptr, size_t size)
 {
     struct mem_head *head;
 
+    if (ptr == NULL)
+        return __wrap_malloc(size);
+
     if (mock_update() == MALLOC_MOCK_FAILED)
         return NULL;
 
-    if (ptr == NULL)
-        return __wrap_malloc(size);
     head = ((struct mem_head *)ptr) - 1;
     if (head->magic != MAGIC) {
         printf(">>> Warning: realloc of a not alloced buffer\n");
