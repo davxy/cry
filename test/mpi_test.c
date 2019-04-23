@@ -252,9 +252,10 @@ static void mpi_dispatch(int argc, char *argv[])
 
 
 static struct malloc_fail_args g_malloc_fail_tests[] = {
+    { 5, { "Baseline", "mpi_mul_baseline", "12345678", "12345678", "14b66dc1df4d840" }},
     { 5, { "Comba", "mpi_mul_comba", "12345678", "12345678", "14b66dc1df4d840" }},
-    { 5, { "Karatsuba", "mpi_mul_karatsuba", "12345678", "12345678", "14b66dc1df4d840" }},
-    { 5, { "Toom-3", "mpi_mul_toom3", "12345678", "12345678", "14b66dc1df4d840" }},
+    { 5, { "Karatsuba", "mpi_mul_karatsuba", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+    { 5, { "Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
 };
 
 
