@@ -148,6 +148,7 @@ static void check(int res, cry_mpi *num, char *res_str)
 {
     if (*res_str != ERROR_FLAG) {
         ASSERT(res == 0);
+        ASSERT(cry_mpi_count_bytes(num) <= BIGBUF_SIZ); /* Safety first */
         ASSERT(cry_mpi_store_str(num, 16, (char *)g_buf) == 0);
         ASSERT(strcmp((char *)g_buf, res_str) == 0);
     } else {

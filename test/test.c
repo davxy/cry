@@ -20,7 +20,7 @@ void sha256_test(void);
 static int g_runs;
 int g_fails;
 int g_verbose;
-unsigned char g_buf[BUFSIZ];
+unsigned char g_buf[BIGBUF_SIZ];
 
 
 struct sub_test {
@@ -86,7 +86,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
     int i;
     char *curr;
     size_t left;
-    static char argbuf[BUFSIZ];
+    static char argbuf[BIGBUF_SIZ];
     int fails;
 
     file = fopen(datafile, "r");
@@ -114,6 +114,11 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
                 break; /* last parameter read */
             params[i] = curr;
             cnt = strlen(params[i]) + 1;
+            if (cnt > left) {
+                printf("Args buffer memory exhausted... skip test set\n");
+                fclose(file);
+                return;
+            }
             curr += cnt;
             left -= cnt;
             i++;
