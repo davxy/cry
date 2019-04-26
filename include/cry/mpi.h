@@ -22,14 +22,14 @@
 #endif
 
 /** Definition of the digit type macro */
-#if CRY_MPI_DIGIT_MAX == ULONG_MAX
-#define CRY_MPI_DIGIT_TYPE unsigned long
+#if CRY_MPI_DIGIT_MAX == UCHAR_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned char
 #elif CRY_MPI_DIGIT_MAX == USHRT_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned short
 #elif CRY_MPI_DIGIT_MAX == UINT_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned int
-#elif CRY_MPI_DIGIT_MAX == UCHAR_MAX
-#define CRY_MPI_DIGIT_TYPE unsigned char
+#elif CRY_MPI_DIGIT_MAX == ULONG_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned long
 #else
 #error "Unsupported MPI digit max value"
 #endif

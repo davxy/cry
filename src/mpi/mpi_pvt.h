@@ -7,20 +7,21 @@
 #include "../misc.h"
 
 /* Double precision digits */
-#if CRY_MPI_DIGIT_MAX == 18446744073709551615UL
+
+#if CRY_MPI_DIGIT_MAX == 255UL
+typedef uint16_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 65535UL
+typedef uint32_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 4294967295UL
+typedef uint64_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 18446744073709551615UL
 # if defined(_WIN32) || defined(__GNUC__)
 typedef unsigned __int128 cry_mpi_dword;
 # else
 typedef uint128_t cry_mpi_dword;
 # endif
-#elif CRY_MPI_DIGIT_MAX == 4294967295UL
-typedef uint64_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 65535UL
-typedef uint32_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 255UL
-typedef uint16_t cry_mpi_dword;
 #else
-# error "Invalid ULONG_MAX value"
+# error "Invalid DIGIT_MAX value"
 #endif
 
 /* Digit max value */
