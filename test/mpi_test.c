@@ -2,39 +2,41 @@
 #include <cry/mpi.h>
 #include <stdlib.h>
 
-#define ERROR_FLAG 'Z'
+#define ERROR_FLAG      'Z'
+#define MPI_BUF_LEN     6
 
-cry_mpi *g_mpi_buf;
+static int g_exp_res;
+static cry_mpi *g_mpi_buf;
+
 #define g_mpi0 (&g_mpi_buf[0])
 #define g_mpi1 (&g_mpi_buf[1])
 #define g_mpi2 (&g_mpi_buf[2])
 #define g_mpi3 (&g_mpi_buf[3])
-#define g_mpi4 (&g_mpi_buf[4])
-#define g_mpi5 (&g_mpi_buf[5])
-#define MPI_BUF_LEN   6
+#define g_mpi_r1 (&g_mpi_buf[4])
+#define g_mpi_r2 (&g_mpi_buf[5])
 
-void mpi_setup(void)
+
+static void mpi_setup(void)
 {
+    g_exp_res = 0;
     g_mpi_buf = malloc(sizeof(cry_mpi)*MPI_BUF_LEN);
-    cry_mpi_init_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, g_mpi4, g_mpi5, NULL);
+    cry_mpi_init_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, g_mpi_r1, g_mpi_r2, NULL);
 }
 
-void mpi_teardown(void)
+static void mpi_teardown(void)
 {
-    cry_mpi_clear_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, g_mpi4, g_mpi5, NULL);
+    cry_mpi_clear_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, g_mpi_r1, g_mpi_r2, NULL);
     free(g_mpi_buf);
 }
 
-static int mpi_load_args(int *exp_res, int argc, char *argv[])
+static int mpi_load_args(int argc, char *argv[])
 {
     size_t i;
     int res = 0;
 
-    if (*argv[argc-1] != ERROR_FLAG) {
-        *exp_res = 0;
-    } else {
+    if (*argv[argc-1] == ERROR_FLAG) {
         argc--;
-        *exp_res = atoi(argv[argc]+1);
+        g_exp_res = atoi(argv[argc]+1);
     }
 
     for (i = 0; i < argc; i++) {
@@ -115,89 +117,42 @@ static void mpi_cmp(int argc, char *argv[])
     ASSERT(cry_mpi_cmp(g_mpi0, g_mpi1) == res);
 }
 
-static void mpi_shl(int argc, char *argv[])
+
+static void mpi_shift(int argc, char *argv[], int left)
 {
-    int bits;
+    int res, bits;
 
     ASSERT_EQ(argc, 3);
     bits = atoi(argv[1]);
     ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+    ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[2]) == 0);
 
-    ASSERT(cry_mpi_shl(g_mpi1, g_mpi0, bits) == 0);
+    if (left == 1)
+        res = cry_mpi_shl(g_mpi_r1, g_mpi0, bits);
+    else
+        res = cry_mpi_shr(g_mpi_r1, g_mpi0, bits);
 
-    ASSERT(cry_mpi_store_str(g_mpi1, 16, (char *)g_buf) == 0);
-    ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
+    ASSERT(res == 0);
+    ASSERT(cry_mpi_cmp(g_mpi_r1, g_mpi1) == 0);
 }
 
-static void mpi_shr(int argc, char *argv[])
+
+typedef int (* unary_op_f)(cry_mpi *r, const cry_mpi *a);
+
+static void mpi_unary_op(int argc, char *argv[], unary_op_f op)
 {
-    int bits;
+    int res;
 
-    ASSERT_EQ(argc, 3);
-    bits = atoi(argv[1]);
-    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
-
-    ASSERT(cry_mpi_shr(g_mpi1, g_mpi0, bits) == 0);
-
-    ASSERT(cry_mpi_store_str(g_mpi1, 16, (char *)g_buf) == 0);
-    ASSERT(strcmp((char *)g_buf, argv[2]) == 0);
-}
-
-static void mpi_abs(int argc, char *argv[])
-{
     ASSERT_EQ(argc, 2);
+    ASSERT_OK(mpi_load_args(argc, argv));
 
-    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
+    res = op(g_mpi_r1, g_mpi0);
 
-    ASSERT(cry_mpi_abs(g_mpi1, g_mpi0) == 0);
-
-    ASSERT(cry_mpi_store_str(g_mpi1, 16, (char *)g_buf) == 0);
-    ASSERT(strcmp((char *)g_buf, argv[1]) == 0);
+    ASSERT_EQ(res, g_exp_res);
+    if (res == 0)
+        ASSERT(cry_mpi_cmp(g_mpi_r1, g_mpi1) == 0);
 }
 
-static void mpi_div(int argc, char *argv[])
-{
-    int res, exp_res = 0;
-
-    ASSERT_EQ(argc, 4);
-    ASSERT(mpi_load_args(&exp_res, argc, argv) == 0);
-
-    res = cry_mpi_div(g_mpi4, g_mpi5, g_mpi0, g_mpi1);
-
-    ASSERT(res == exp_res);
-    if (res == 0) {
-        cry_mpi_print(g_mpi0, 16);
-        cry_mpi_print(g_mpi1, 16);
-        cry_mpi_print(g_mpi4, 16);
-        cry_mpi_print(g_mpi5, 16);
-        ASSERT(cry_mpi_cmp(g_mpi2, g_mpi4) == 0);
-        ASSERT(cry_mpi_cmp(g_mpi3, g_mpi5) == 0);
-    }
-}
-
-static void mpi_sqr(int argc, char *argv[])
-{
-    ASSERT_EQ(argc, 2);
-
-    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
-
-    ASSERT(cry_mpi_sqr(g_mpi1, g_mpi0) == 0);
-
-    ASSERT(cry_mpi_store_str(g_mpi1, 16, (char *)g_buf) == 0);
-    ASSERT(strcmp((char *)g_buf, argv[1]) == 0);
-}
-
-static void check(int res, cry_mpi *num, char *res_str)
-{
-    if (*res_str != ERROR_FLAG) {
-        ASSERT(res == 0);
-        ASSERT(cry_mpi_count_bytes(num) <= BIGBUF_SIZ); /* Safety first */
-        ASSERT(cry_mpi_store_str(num, 16, (char *)g_buf) == 0);
-        ASSERT(strcmp((char *)g_buf, res_str) == 0);
-    } else {
-        ASSERT(atoi(res_str + 1) == res);
-    }
-}
 
 typedef int (* binary_op_f)(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
@@ -206,14 +161,15 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
     int res;
 
     ASSERT_EQ(argc, 3);
+    ASSERT_OK(mpi_load_args(argc, argv));
 
-    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
-    ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
+    res = op(g_mpi_r1, g_mpi0, g_mpi1);
 
-    res = op(g_mpi2, g_mpi0, g_mpi1);
-
-    check(res, g_mpi2, argv[2]);
+    ASSERT_EQ(res, g_exp_res);
+    if (res == 0)
+        ASSERT(cry_mpi_cmp(g_mpi_r1, g_mpi2) == 0);
 }
+
 
 typedef int (* binary_mod_op_f)(cry_mpi *r, const cry_mpi *a,
         const cry_mpi *b, const cry_mpi *m);
@@ -223,15 +179,32 @@ static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
     int res;
 
     ASSERT_EQ(argc, 4);
+    ASSERT_OK(mpi_load_args(argc, argv));
 
-    ASSERT(cry_mpi_load_str(g_mpi0, 16, argv[0]) == 0);
-    ASSERT(cry_mpi_load_str(g_mpi1, 16, argv[1]) == 0);
-    ASSERT(cry_mpi_load_str(g_mpi2, 16, argv[2]) == 0);
+    res = op(g_mpi_r1, g_mpi0, g_mpi1, g_mpi2);
 
-    res = op(g_mpi3, g_mpi0, g_mpi1, g_mpi2);
-
-    check(res, g_mpi3, argv[3]);
+    ASSERT_EQ(res, g_exp_res);
+    if (res == 0)
+        ASSERT(cry_mpi_cmp(g_mpi_r1, g_mpi3) == 0);
 }
+
+
+static void mpi_div(int argc, char *argv[])
+{
+    int res;
+
+    ASSERT_EQ(argc, 4);
+    ASSERT(mpi_load_args(argc, argv) == 0);
+
+    res = cry_mpi_div(g_mpi_r1, g_mpi_r2, g_mpi0, g_mpi1);
+
+    ASSERT(res == g_exp_res);
+    if (res == 0) {
+        ASSERT(cry_mpi_cmp(g_mpi_r1, g_mpi2) == 0);
+        ASSERT(cry_mpi_cmp(g_mpi_r2, g_mpi3) == 0);
+    }
+}
+
 
 static void mpi_dispatch(int argc, char *argv[])
 {
@@ -252,13 +225,13 @@ static void mpi_dispatch(int argc, char *argv[])
     else if (strcmp(test, "mpi_load_store_str") == 0)
         mpi_load_store_str(argc, argv);
     else if (strcmp(test, "mpi_abs") == 0)
-        mpi_abs(argc, argv);
+        mpi_unary_op(argc, argv, cry_mpi_abs);
     else if (strcmp(test, "mpi_cmp") == 0)
         mpi_cmp(argc, argv);
     else if (strcmp(test, "mpi_shl") == 0)
-        mpi_shl(argc, argv);
+        mpi_shift(argc, argv, 1);
     else if (strcmp(test, "mpi_shr") == 0)
-        mpi_shr(argc, argv);
+        mpi_shift(argc, argv, 0);
     else if (strcmp(test, "mpi_add") == 0)
         mpi_binary_op(argc, argv, cry_mpi_add);
     else if (strcmp(test, "mpi_sub") == 0)
@@ -280,7 +253,7 @@ static void mpi_dispatch(int argc, char *argv[])
     else if (strcmp(test, "mpi_mod_exp") == 0)
         mpi_binary_mod_op(argc, argv, cry_mpi_mod_exp);
     else if (strcmp(test, "mpi_sqr") == 0)
-        mpi_sqr(argc, argv);
+        mpi_unary_op(argc, argv, cry_mpi_sqr);
     else
         printf("Test '%s' not defined\n", test);
 
