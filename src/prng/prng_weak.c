@@ -24,9 +24,9 @@ static int init = 0;
 
 int cry_prng_weak_init(const unsigned char *seed, size_t seed_siz)
 {
-    init = 1;
-    uint32_t fallback[4] = { 1, 2, 3, 4 };
+    uint32_t fallback[4] = { 0x12345678, 0x87654321, 0xabcdef09, 0x90fedcba };
 
+    init = 1;
     if (!seed) {
         seed = (unsigned char *)fallback;
         seed_siz = sizeof(fallback);

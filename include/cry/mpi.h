@@ -9,25 +9,39 @@
 #include <stddef.h>
 #include <limits.h>
 
-/* TODO: move to config.mk */
-#define CRY_MPI_DIGIT_MAX   UCHAR_MAX
-#define CRY_MPI_QUANTUM     1
-
+/* Digit max value */
 #ifndef CRY_MPI_DIGIT_MAX
-#define CRY_MPI_DIGIT_MAX  ULONG_MAX
+# ifndef CRY_HAS_NO_CONFIG_H
+# include <cry/config.h>
+# endif
+# ifndef CRY_MPI_DEBUG_CONF
+# define CRY_MPI_DIGIT_MAX ULONG_MAX
+# else
+# define CRY_MPI_DIGIT_MAX UCHAR_MAX
+# endif
 #endif
 
-#if CRY_MPI_DIGIT_MAX == ULONG_MAX
-#define CRY_MPI_DIGIT_TYPE unsigned long
+/** Definition of the digit type macro */
+#if CRY_MPI_DIGIT_MAX == UCHAR_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned char
 #elif CRY_MPI_DIGIT_MAX == USHRT_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned short
-#elif CRY_MPI_DIGIT_MAX == UCHAR_MAX
-#define CRY_MPI_DIGIT_TYPE unsigned char
+#elif CRY_MPI_DIGIT_MAX == UINT_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned int
+#elif CRY_MPI_DIGIT_MAX == ULONG_MAX
+#define CRY_MPI_DIGIT_TYPE unsigned long
 #else
 #error "Unsupported MPI digit max value"
 #endif
 
+/** Digit type definition */
 typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
+
+/** Number of bytes in one digit */
+#define CRY_MPI_DIGIT_BYTES sizeof(cry_mpi_digit)
+
+/** Number of bits in one digit */
+#define CRY_MPI_DIGIT_BITS  (CRY_MPI_DIGIT_BYTES << 3)
 
 struct cry_mpi {
     int           sign;

@@ -6,35 +6,35 @@
 #include <stdint.h>
 #include "../misc.h"
 
-/*
- * Double precision digits
- */
-#if CRY_MPI_DIGIT_MAX == 18446744073709551615UL
+/* Double precision digits */
+
+#if CRY_MPI_DIGIT_MAX == 255UL
+typedef uint16_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 65535UL
+typedef uint32_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 4294967295UL
+typedef uint64_t cry_mpi_dword;
+#elif CRY_MPI_DIGIT_MAX == 18446744073709551615UL
 # if defined(_WIN32) || defined(__GNUC__)
 typedef unsigned __int128 cry_mpi_dword;
 # else
 typedef uint128_t cry_mpi_dword;
 # endif
-#elif CRY_MPI_DIGIT_MAX == 4294967295UL
-typedef uint64_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 65535UL
-typedef uint32_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 255UL
-typedef uint16_t cry_mpi_dword;
 #else
-# error "Invalid ULONG_MAX value"
+# error "Invalid DIGIT_MAX value"
 #endif
 
-/* Allocation quantum */
+/* Digit max value */
 #ifndef CRY_MPI_QUANTUM
-#define CRY_MPI_QUANTUM     8
+# ifndef CRY_HAS_NO_CONFIG_H
+# include <cry/config.h>
+# endif
+# ifndef CRY_MPI_DEBUG_CONF
+# define CRY_MPI_QUANTUM 8
+# else
+# define CRY_MPI_QUANTUM 1
+# endif
 #endif
-
-/* Number of bytes in one digit */
-#define CRY_MPI_DIGIT_BYTES  sizeof(cry_mpi_digit)
-
-/* Number of bits in one digit */
-#define CRY_MPI_DIGIT_BITS   (CRY_MPI_DIGIT_BYTES << 3)
 
 /* Bits to digits */
 #define CRY_MPI_BITS_TO_DIGS(a) \
