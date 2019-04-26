@@ -93,7 +93,7 @@ cleanup:
  * but fixed to treat these cases.
  */
 
-#define MP_MASK CRY_MPI_DIGIT_MAX
+//#define MP_MASK CRY_MPI_DIGIT_MAX
 
 int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
                     const cry_mpi *b)
@@ -149,7 +149,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
     }
 
     /* reset y by shifting it back down */
-    cry_mpi_shrd(&y, n - t);
+    cry_mpi_shrd(&y, n-t);
 
     /* Step 3. for i from n down to (t + 1) */
     for (i = n; i >= (t + 1); i--) {
@@ -162,38 +162,36 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
          * else set q{i-t-1} to (xi*b + x{i-1})/yt
          */
         if (x.data[i] == y.data[t]) {
-            q.data[i - t - 1] = (cry_mpi_digit)-1;
+            q.data[i-t-1] = CRY_MPI_DIGIT_MAX;;
         } else {
             cry_mpi_dword tmp;
 
-            tmp = ((cry_mpi_dword) x.data[i])
-                        << ((cry_mpi_dword) CRY_MPI_DIGIT_BITS);
-            tmp |= ((cry_mpi_dword) x.data[i - 1]);
+            tmp = ((cry_mpi_dword) x.data[i]) << CRY_MPI_DIGIT_BITS;
+            tmp |= ((cry_mpi_dword) x.data[i-1]);
             tmp /= ((cry_mpi_dword) y.data[t]);
-            if (tmp > (cry_mpi_dword) MP_MASK)
-                tmp = MP_MASK;
-            q.data[i - t - 1] =
-                (cry_mpi_digit) (tmp & (cry_mpi_dword) (MP_MASK));
+            if (tmp > (cry_mpi_dword) CRY_MPI_DIGIT_MAX)
+                tmp = CRY_MPI_DIGIT_MAX;
+            q.data[i-t-1] = (cry_mpi_digit) (tmp & CRY_MPI_DIGIT_MAX);
         }
 
         /*
          * while (q{i-t-1} * (yt * b + y{t-1})) > xi * b**2 + xi-1 * b + xi-2
          *  do q{i-t-1} -= 1;
          */
-        q.data[i - t - 1] = (q.data[i - t - 1] + 1) & MP_MASK;
+        q.data[i-t-1] = (q.data[i-t-1] + 1) & CRY_MPI_DIGIT_MAX;
         do {
-            q.data[i - t - 1] = (q.data[i - t - 1] - 1) & MP_MASK;
+            q.data[i-t-1] = (q.data[i-t-1] - 1) & CRY_MPI_DIGIT_MAX;
 
             /* find left hand */
             cry_mpi_zero(&t1);
-            t1.data[0] = (t - 1 < 0) ? 0 : y.data[t - 1];
+            t1.data[0] = (t-1 < 0) ? 0 : y.data[t-1];
             t1.data[1] = y.data[t];
             t1.used = 2;
-            CRY_CHK(res = cry_mpi_mul_dig(&t1, &t1, q.data[i - t - 1]), e5);
+            CRY_CHK(res = cry_mpi_mul_dig(&t1, &t1, q.data[i-t-1]), e5);
 
             /* find right hand */
-            t2.data[0] = (i - 2 < 0) ? 0 : x.data[i - 2];
-            t2.data[1] = (i - 1 < 0) ? 0 : x.data[i - 1];
+            t2.data[0] = (i-2 < 0) ? 0 : x.data[i-2];
+            t2.data[1] = (i-1 < 0) ? 0 : x.data[i-1];
             t2.data[2] = x.data[i];
             t2.used = 3;
         } while (cry_mpi_cmp_abs(&t1, &t2) == 1);
@@ -211,7 +209,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
             CRY_CHK(res = cry_mpi_copy (&t1, &y), e5);
             CRY_CHK(res = cry_mpi_shld (&t1, i - t - 1), e5);
             CRY_CHK(res = cry_mpi_add (&x, &x, &t1), e5);
-            q.data[i - t - 1] = (q.data[i - t - 1] - 1UL) & MP_MASK;
+            q.data[i-t-1] = (q.data[i-t-1] - 1UL) & CRY_MPI_DIGIT_MAX;
         }
     }
 
