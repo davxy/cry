@@ -92,9 +92,6 @@ cleanup:
  * The overall algorithm is as described as 14.20 from HAC
  * but fixed to treat these cases.
  */
-
-//#define MP_MASK CRY_MPI_DIGIT_MAX
-
 int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
                     const cry_mpi *b)
 {
