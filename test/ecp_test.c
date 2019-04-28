@@ -1,35 +1,41 @@
 #include "test.h"
 #include <cry/ecp.h>
-#include <cry/ec.h>
 
-static cry_ec ec;
-
-#define P1X "2"
-#define P1Y "3"
-#define P2X "4"
-#define P2Y "5"
-
-void ecp_add(void)
+/* y^2 = x^3 + 2x + 2 (mod 17)
+ * Generator point = (5, 1)
+ * Generator order = 19
+ */
+static void load_curve(cry_ecp_grp *ec)
 {
-    cry_ecp p1, p2, pr;
-
-    cry_ecp_init(&p1);
-    cry_ecp_init(&p2);
-    cry_ecp_init(&pr);
-
-    ASSERT_OK(cry_mpi_init_str(&p1.x, 16, P1X));
-    ASSERT_OK(cry_mpi_init_str(&p1.y, 16, P1Y));
-    ASSERT_OK(cry_mpi_init_str(&p2.x, 16, P2X));
-    ASSERT_OK(cry_mpi_init_str(&p2.y, 16, P2Y));
-    ASSERT_OK(cry_ecp_add(&pr, &p1, &p2, &ec.p));
-
-    cry_ecp_clear(&p1);
-    cry_ecp_clear(&p2);
-    cry_ecp_clear(&pr);
+    cry_mpi_init_int(&ec->a, 2);
+    cry_mpi_init_int(&ec->b, 2);
+    cry_mpi_init_int(&ec->p, 17);
+    cry_mpi_init_int(&ec->n, 19);
+    cry_mpi_init_int(&ec->g.x, 5);
+    cry_mpi_init_int(&ec->g.y, 1);
+    cry_mpi_init_int(&ec->g.z, 1);
 }
 
 void ecp_test(void)
 {
-    ASSERT_OK(cry_ec_init_nist_p256(&ec));
-    RUN(ecp_add);
+#if 0
+    cry_ecp_grp ec;
+    cry_ecp p;
+
+    load_curve(&ec);
+    cry_ecp_init(&p);
+    cry_ecp_dbl(&p, &ec.g, &ec);
+    cry_mpi_print(&ec.g.x, 10);
+    cry_mpi_print(&ec.g.y, 10);
+    int i = 0;
+    while (cry_mpi_cmp(&p.x, &ec.g.x) != 0 ||
+           cry_mpi_cmp(&p.y, &ec.g.y) != 0) {
+        printf("-----\n");
+        cry_mpi_print(&p.x, 10);
+        cry_mpi_print(&p.y, 10);
+        if (++i == 19)
+            printf("*\n");
+        cry_ecp_add(&p, &p, &ec.g, &ec);
+    }
+#endif
 }

@@ -1,8 +1,8 @@
-#include <cry/ec.h>
+#include <cry/ecp.h>
 
 /* NIST Curve P-256 parameters */
 
-int cry_ec_set_nist_p256(cry_ec *ec)
+int cry_ecp_grp_set_nist_p256(cry_ecp_grp *ec)
 {
     int res;
 
@@ -56,13 +56,13 @@ int cry_ec_set_nist_p256(cry_ec *ec)
     return 0;
 }
 
-int cry_ec_init_nist_p256(cry_ec *ec)
+int cry_ecp_grp_init_nist_p256(cry_ecp_grp *ec)
 {
     int res;
 
-    if ((res = cry_ec_init(ec)) == 0) {
-        if ((res = cry_ec_set_nist_p256(ec)) != 0)
-            cry_ec_clear(ec);
+    if ((res = cry_ecp_grp_init(ec)) == 0) {
+        if ((res = cry_ecp_grp_set_nist_p256(ec)) != 0)
+            cry_ecp_grp_clear(ec);
     }
     return res;
 }

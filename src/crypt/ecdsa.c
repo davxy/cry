@@ -28,7 +28,7 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_signature *sign,
     CHK(cry_mpi_copy(&X.x, &ctx->ec.g.x));
     CHK(cry_mpi_copy(&X.y, &ctx->ec.g.y));
 
-    CHK(cry_ecp_mul(&X, &X, &k, &ctx->ec.a, &ctx->ec.p));
+    CHK(cry_ecp_mul(&X, &X, &k, &ctx->ec));
 
     /* r = x mod n */
     CHK(cry_mpi_mod(&sign->r, &X.x, &ctx->ec.n));
@@ -79,9 +79,9 @@ int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_signature *sign,
     CHK(cry_mpi_mod(&w, &w, &ctx->ec.n));
 
     /* (x1, y1) = u1 * G + u2 * Q */
-    CHK(cry_ecp_mul(&G, &ctx->ec.g, &z, &ctx->ec.a, &ctx->ec.p));
-    CHK(cry_ecp_mul(&Q, &ctx->q, &w, &ctx->ec.a, &ctx->ec.p));
-    CHK(cry_ecp_add(&G, &G, &Q, &ctx->ec.p));
+    CHK(cry_ecp_mul(&G, &ctx->ec.g, &z, &ctx->ec));
+    CHK(cry_ecp_mul(&Q, &ctx->q, &w, &ctx->ec));
+    CHK(cry_ecp_add(&G, &G, &Q, &ctx->ec));
 
     /* r = x1 mod n */
     CHK(cry_mpi_mod(&G.x, &G.x, &ctx->ec.n));
@@ -91,11 +91,11 @@ e:  cry_mpi_clear_list(&z, &w, &G.x, &G.y, &Q.x, &Q.y, (cry_mpi *) NULL);
     return res;
 }
 
-int cry_ecdsa_keygen(const cry_ec *ec, cry_mpi *d, cry_ecp *q)
+int cry_ecdsa_keygen(const cry_ecp_grp *ec, cry_mpi *d, cry_ecp *q)
 {
     int res;
 
     if ((res = cry_mpi_rand_range(d, &ec->p)) == 0)
-        res = cry_ecp_mul(q, &ec->g, d, &ec->a, &ec->p);
+        res = cry_ecp_mul(q, &ec->g, d, ec);
     return res;
 }

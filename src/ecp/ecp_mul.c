@@ -1,17 +1,14 @@
 #include <cry/ecp.h>
-#include "mpi/mpi_pvt.h" /* CRY_MPI_DIGIT_BITS */
 #include <stdlib.h>      /* malloc() */
 
-
 #define CHK(exp) do { if ((res = (exp)) != 0) goto e; } while (0)
-
 
 #if defined(CRY_ECP_MUL_SLIDING_WIN)
 
 #define WINPTS     8
 
 int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
-                const cry_mpi *a, const cry_mpi *p)
+                const cry_ecp_grp *grp)
 {
     int res, i, j, w, paf = 1;
     struct cry_ecp r, *win = NULL;
@@ -32,17 +29,17 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
             goto e1;
         }
     }
-    CHK(cry_ecp_copy(&win[0], p1));             /* 1P (tmp) */
-    CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 2P (tmp) */
-    CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 4P (tmp) */
-    CHK(cry_ecp_dbl(&win[0], &win[0], a, p));   /* 8P */
-    CHK(cry_ecp_add(&win[1], &win[0], p1, p));  /* 9P */
-    CHK(cry_ecp_add(&win[2], &win[1], p1, p));  /* 10P */
-    CHK(cry_ecp_add(&win[3], &win[2], p1, p));  /* 11P */
-    CHK(cry_ecp_add(&win[4], &win[3], p1, p));  /* 12P */
-    CHK(cry_ecp_add(&win[5], &win[4], p1, p));  /* 13P */
-    CHK(cry_ecp_add(&win[6], &win[5], p1, p));  /* 14P */
-    CHK(cry_ecp_add(&win[7], &win[6], p1, p));  /* 15P */
+    CHK(cry_ecp_copy(&win[0], p1));                 /* 1P (tmp) */
+    CHK(cry_ecp_dbl(&win[0], &win[0], grp));        /* 2P (tmp) */
+    CHK(cry_ecp_dbl(&win[0], &win[0], grp));        /* 4P (tmp) */
+    CHK(cry_ecp_dbl(&win[0], &win[0], grp));        /* 8P */
+    CHK(cry_ecp_add(&win[1], &win[0], p1, grp));    /* 9P */
+    CHK(cry_ecp_add(&win[2], &win[1], p1, grp));    /* 10P */
+    CHK(cry_ecp_add(&win[3], &win[2], p1, grp));    /* 11P */
+    CHK(cry_ecp_add(&win[4], &win[3], p1, grp));    /* 12P */
+    CHK(cry_ecp_add(&win[5], &win[4], p1, grp));    /* 13P */
+    CHK(cry_ecp_add(&win[6], &win[5], p1, grp));    /* 14P */
+    CHK(cry_ecp_add(&win[7], &win[6], p1, grp));    /* 15P */
     /*
      * END window generation
      */
@@ -54,7 +51,7 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
         while (j > 0) {
             j--;
             if (!paf)
-                CHK(cry_ecp_dbl(&r, &r, a, p));
+                CHK(cry_ecp_dbl(&r, &r, grp));
 
             if (!(k->data[i] & ((cry_mpi_digit)1 << j)))
                 continue;
@@ -67,9 +64,8 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
                         j = CRY_MPI_DIGIT_BITS;
                     }
                     j--;
-                    if (!paf) {
-                        CHK(cry_ecp_dbl(&r, &r, a, p));
-                    }
+                    if (!paf)
+                        CHK(cry_ecp_dbl(&r, &r, grp));
                     w <<= 1;
                     if (k->data[i] & ((cry_mpi_digit)1 << j))
                         w |= 1;
@@ -78,7 +74,7 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
                 // if (w >= 8)
                 //    w -= 8;
                 if (!paf) {
-                    CHK(cry_ecp_add(&r, &r, &win[w], p));
+                    CHK(cry_ecp_add(&r, &r, &win[w], grp));
                 } else {
                     paf = 0; /* First addition */
                     CHK(cry_ecp_copy(&r, &win[w]));
@@ -86,7 +82,7 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
             } else {
                 /* special case */
                 if (!paf) {
-                    CHK(cry_ecp_add(&r, &r, p1, p));
+                    CHK(cry_ecp_add(&r, &r, p1, grp));
                 } else {
                     paf = 0; /* First addition */
                     CHK(cry_ecp_copy(&r, p1));
@@ -111,11 +107,13 @@ e0: cry_ecp_clear(&r);
 #define WINMSK      (WINPTS-1)
 
 int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
-                const cry_mpi *a, const cry_mpi *p)
+                const cry_ecp_grp *grp)
 {
     int res, i, j, w, paf = 1;
     struct cry_ecp r, *win = NULL;
     cry_mpi_digit msk;
+    cry_mpi *a = &grp->a;
+    cry_mpi *p = &grp->p;
 
     if ((res = cry_ecp_init(&r)) != 0)
         return res;
@@ -190,10 +188,12 @@ e0: cry_ecp_clear(&r);
 #else /* !CRY_ECP_MUL_WIN */
 
 int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
-                const cry_mpi *a, const cry_mpi *p)
+                const cry_ecp_grp *grp)
 {
     int i, j, res, paf = 1;
     struct cry_ecp dp, r;
+    cry_mpi *a = &grp->a;
+    cry_mpi *p = &grp->p;
 
     if ((res = cry_mpi_init_list(&dp.x, &dp.y, &r.x, &r.y,
                                 (cry_mpi *) NULL)) != 0)

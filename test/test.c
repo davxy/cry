@@ -16,6 +16,7 @@ void rsa_test(void);
 void md5_test(void);
 void sha1_test(void);
 void sha256_test(void);
+void ecp_test(void);
 
 static int g_runs;
 int g_fails;
@@ -47,13 +48,13 @@ struct sub_test g_tests[] = {
     SUB_TEST(md5),
     SUB_TEST(sha1),
     SUB_TEST(sha256),
+    SUB_TEST(ecp),
 #if 0
-   TEST_ELEM(rand),
-   TEST_ELEM(dh),
-   TEST_ELEM(dsa),
-   TEST_ELEM(ecp),
-   TEST_ELEM(ecdh),
-   TEST_ELEM(ecdsa),
+    SUB_TEST(rand),
+    SUB_TEST(dh),
+    SUB_TEST(dsa),
+    SUB_TEST(ecdh),
+    SUB_TEST(ecdsa),
 #endif
 };
 
