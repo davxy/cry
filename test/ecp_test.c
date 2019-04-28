@@ -18,24 +18,21 @@ static void load_curve(cry_ecp_grp *ec)
 
 void ecp_test(void)
 {
-#if 0
     cry_ecp_grp ec;
     cry_ecp p;
+    int i = 1;
 
     load_curve(&ec);
     cry_ecp_init(&p);
-    cry_ecp_dbl(&p, &ec.g, &ec);
-    cry_mpi_print(&ec.g.x, 10);
-    cry_mpi_print(&ec.g.y, 10);
-    int i = 0;
-    while (cry_mpi_cmp(&p.x, &ec.g.x) != 0 ||
-           cry_mpi_cmp(&p.y, &ec.g.y) != 0) {
-        printf("-----\n");
+    cry_ecp_copy(&p, &ec.g);
+    do {
+        printf("n = %d\n", i);
         cry_mpi_print(&p.x, 10);
         cry_mpi_print(&p.y, 10);
-        if (++i == 19)
-            printf("*\n");
+        cry_mpi_print(&p.z, 10);
+        printf("--------------------\n");
         cry_ecp_add(&p, &p, &ec.g, &ec);
-    }
-#endif
+        i++;
+    } while (cry_mpi_cmp(&p.x, &ec.g.x) != 0 ||
+             cry_mpi_cmp(&p.y, &ec.g.y) != 0);
 }

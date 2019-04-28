@@ -9,11 +9,6 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     cry_mpi num, den, lam;
     cry_ecp r;
 
-    if (cry_mpi_cmp(&p1->x, &p2->x) == 0 &&
-        cry_mpi_cmp(&p1->y, &p2->y) == 0) {
-        return cry_ecp_dbl(pr, p1, grp);
-    }
-
     /* Check if one of the two points is the infinity point */
     if (cry_ecp_is_zero(p1))
         return (pr != p2) ? cry_ecp_copy(pr, p2) : 0;
@@ -26,7 +21,21 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     }
 
     CHK(cry_mpi_sub(&num, &p2->y, &p1->y)); /* num = y2 - y1 */
+    CHK(cry_mpi_mod(&num, &num, &grp->p));
     CHK(cry_mpi_sub(&den, &p2->x, &p1->x)); /* den = x2 - x1 */
+    CHK(cry_mpi_mod(&den, &den, &grp->p));
+    if (cry_mpi_is_zero(&den)) {
+        if (cry_mpi_is_zero(&num))
+            res = cry_ecp_dbl(pr, p1, grp);
+        else
+            cry_ecp_set_zero(pr);
+        /*
+         * Shall we check that p1.y+p2.y==0 (mod p) ?
+         * Is guaranteed that p1.x==p2.x is sufficient condition to say that
+         * p2 is the inverse of p1???
+         */
+        goto e;
+    }
     CHK(cry_mpi_inv(&den, &den, &grp->p));  /* den^(-1) (mod p) */
     CHK(cry_mpi_mul(&lam, &num, &den));     /* lam = num / den */
 
