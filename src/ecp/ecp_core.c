@@ -15,6 +15,20 @@ void cry_ecp_clear(cry_ecp *p)
     cry_mpi_clear_list(&p->x, &p->y, &p->z, (cry_mpi *) NULL);
 }
 
+int cry_ecp_init_int(cry_ecp *p, long x, long y)
+{
+    int res;
+
+    if ((res = cry_ecp_init(p)) == 0) {
+        if ((res = cry_mpi_set_int(&p->x, x)) == 0) {
+            if ((res = cry_mpi_set_int(&p->y, y)) == 0)
+                res = cry_mpi_set_int(&p->z, 1);
+        }
+        if (res != 0)
+            cry_ecp_clear(p);
+    }
+    return res;
+}
 
 int cry_ecp_copy(cry_ecp *d, const cry_ecp *s)
 {
