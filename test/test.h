@@ -5,8 +5,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define BIGBUF_SIZ  8192
+
 extern int g_fails;
-extern unsigned char g_buf[BUFSIZ];
+extern unsigned char g_buf[BIGBUF_SIZ];
 
 
 typedef void (* test_func_t)(void);

@@ -89,7 +89,9 @@ int cry_mpi_set_int(cry_mpi *a, long val)
     a->used = 0;
     while (uval != 0 && a->used < used) {
         a->data[a->used++] = (cry_mpi_digit) uval;
+#if CRY_MPI_DIGIT_MAX != ULONG_MAX
         uval >>= CRY_MPI_DIGIT_BITS;
+#endif
     }
     return res;
 }
@@ -101,12 +103,14 @@ int cry_mpi_get_int(cry_mpi *a, long *val)
     long rval = 0;
 
     used = cry_mpi_count_bits(a);
-    if (used > 8*sizeof(long) - 1) /* consider the sign bit */
+    /* consider the sign bit */
+    if (used > 8*sizeof(long) - ((a->sign == 0) ? 1 : 0))
         return -1;
-
     i = a->used;
     while (i-- > 0) {
-        rval <<= CRY_MPI_DIGIT_BITS;;
+#if CRY_MPI_DIGIT_MAX != ULONG_MAX
+        rval <<= CRY_MPI_DIGIT_BITS;
+#endif
         rval |= a->data[i];
     }
     *val = (a->sign == 0) ? rval : -rval;

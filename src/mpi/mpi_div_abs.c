@@ -92,10 +92,7 @@ cleanup:
  * The overall algorithm is as described as 14.20 from HAC
  * but fixed to treat these cases.
  */
-
-#define MP_MASK ((cry_mpi_digit)-1)
-
-int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
+int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
                     const cry_mpi *b)
 {
     cry_mpi q, x, y, t1, t2;
@@ -107,27 +104,22 @@ int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
 
     /* if a < b then q=0, r = a */
     if (cry_mpi_cmp_abs(a, b) < 0) {
-        if (d)
-            res = cry_mpi_copy(d, a);
+        if (rr != NULL)
+            res = cry_mpi_copy(rr, a);
         else
             res = 0;
-        if (c)
-            cry_mpi_zero(c);
+        if (rq != NULL)
+            cry_mpi_zero(rq);
         return res;
     }
 
-    if ((res = cry_mpi_init_size(&q, a->used + 2)) != 0)
-        return res;
+    CRY_CHK(res = cry_mpi_init_size(&q, a->used + 2), e0);
     cry_mpi_set_used(&q, a->used + 2);
 
-    if ((res = cry_mpi_init_size(&t1, 2)) != 0)
-        goto LBL_Q;
-    if ((res = cry_mpi_init_size(&t2, 3)) != 0)
-        goto LBL_T1;
-    if ((res = cry_mpi_init_copy(&x, a)) != 0)
-        goto LBL_T2;
-    if ((res = cry_mpi_init_copy(&y, b)) != 0)
-        goto LBL_X;
+    CRY_CHK(res = cry_mpi_init_size(&t1, 2), e1);
+    CRY_CHK(res = cry_mpi_init_size(&t2, 3), e2);
+    CRY_CHK(res = cry_mpi_init_copy(&x, a), e3);
+    CRY_CHK(res = cry_mpi_init_copy(&y, b), e4);
 
     /* fix the sign */
     x.sign = y.sign = 0;
@@ -136,10 +128,8 @@ int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
     norm = cry_mpi_count_bits(&y) % CRY_MPI_DIGIT_BITS;
     if (norm < (int)(CRY_MPI_DIGIT_BITS-1)) {
         norm = (CRY_MPI_DIGIT_BITS-1) - norm;
-        if ((res = cry_mpi_shl(&x, &x, norm)) != 0)
-            goto LBL_Y;
-        if ((res = cry_mpi_shl(&y, &y, norm)) != 0)
-            goto LBL_Y;
+        CRY_CHK(res = cry_mpi_shl(&x, &x, norm), e5);
+        CRY_CHK(res = cry_mpi_shl(&y, &y, norm), e5);
     } else {
         norm = 0;
     }
@@ -149,25 +139,19 @@ int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
     t = y.used - 1;
 
     /* while (x >= y*b**n-t) do { q[n-t] += 1; x -= y*b**{n-t} } */
-    if ((res = cry_mpi_shld(&y, n - t)) != 0) { /* y = y*b**{n-t} */
-        goto LBL_Y;
-    }
-
+    CRY_CHK(res = cry_mpi_shld(&y, n - t), e5);  /* y = y*b**{n-t} */
     while (cry_mpi_cmp(&x, &y) != -1) {
         ++(q.data[n - t]);
-        if ((res = cry_mpi_sub(&x, &x, &y)) != 0) {
-            goto LBL_Y;
-        }
+        CRY_CHK(res = cry_mpi_sub(&x, &x, &y), e5);
     }
 
     /* reset y by shifting it back down */
-    cry_mpi_shrd(&y, n - t);
+    cry_mpi_shrd(&y, n-t);
 
     /* Step 3. for i from n down to (t + 1) */
     for (i = n; i >= (t + 1); i--) {
-        if (i > x.used) {
+        if (i > x.used)
             continue;
-        }
 
         /*
          * Step 3.1
@@ -175,40 +159,36 @@ int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
          * else set q{i-t-1} to (xi*b + x{i-1})/yt
          */
         if (x.data[i] == y.data[t]) {
-            q.data[i - t - 1] = (cry_mpi_digit)-1;
+            q.data[i-t-1] = CRY_MPI_DIGIT_MAX;;
         } else {
             cry_mpi_dword tmp;
 
-            tmp = ((cry_mpi_dword) x.data[i])
-                        << ((cry_mpi_dword) CRY_MPI_DIGIT_BITS);
-            tmp |= ((cry_mpi_dword) x.data[i - 1]);
+            tmp = ((cry_mpi_dword) x.data[i]) << CRY_MPI_DIGIT_BITS;
+            tmp |= ((cry_mpi_dword) x.data[i-1]);
             tmp /= ((cry_mpi_dword) y.data[t]);
-            if (tmp > (cry_mpi_dword) MP_MASK)
-                tmp = MP_MASK;
-            q.data[i - t - 1] =
-                (cry_mpi_digit) (tmp & (cry_mpi_dword) (MP_MASK));
+            if (tmp > (cry_mpi_dword) CRY_MPI_DIGIT_MAX)
+                tmp = CRY_MPI_DIGIT_MAX;
+            q.data[i-t-1] = (cry_mpi_digit) (tmp & CRY_MPI_DIGIT_MAX);
         }
 
         /*
          * while (q{i-t-1} * (yt * b + y{t-1})) > xi * b**2 + xi-1 * b + xi-2
          *  do q{i-t-1} -= 1;
          */
-        q.data[i - t - 1] = (q.data[i - t - 1] + 1) & MP_MASK;
+        q.data[i-t-1] = (q.data[i-t-1] + 1) & CRY_MPI_DIGIT_MAX;
         do {
-            q.data[i - t - 1] = (q.data[i - t - 1] - 1) & MP_MASK;
+            q.data[i-t-1] = (q.data[i-t-1] - 1) & CRY_MPI_DIGIT_MAX;
 
             /* find left hand */
             cry_mpi_zero(&t1);
-            t1.data[0] = (t - 1 < 0) ? 0 : y.data[t - 1];
+            t1.data[0] = (t-1 < 0) ? 0 : y.data[t-1];
             t1.data[1] = y.data[t];
             t1.used = 2;
-            if ((res = cry_mpi_mul_dig(&t1, &t1, q.data[i - t - 1])) != 0) {
-                goto LBL_Y;
-            }
+            CRY_CHK(res = cry_mpi_mul_dig(&t1, &t1, q.data[i-t-1]), e5);
 
             /* find right hand */
-            t2.data[0] = (i - 2 < 0) ? 0 : x.data[i - 2];
-            t2.data[1] = (i - 1 < 0) ? 0 : x.data[i - 1];
+            t2.data[0] = (i-2 < 0) ? 0 : x.data[i-2];
+            t2.data[1] = (i-1 < 0) ? 0 : x.data[i-1];
             t2.data[2] = x.data[i];
             t2.used = 3;
         } while (cry_mpi_cmp_abs(&t1, &t2) == 1);
@@ -217,59 +197,41 @@ int cry_mpi_div_abs(cry_mpi *c, cry_mpi *d, const cry_mpi *a,
          * Step 3.3
          * x = x - q{i-t-1} * y * b**{i-t-1}
          */
-        if ((res = cry_mpi_mul_dig(&t1, &y, q.data[i - t - 1])) != 0) {
-            goto LBL_Y;
-        }
-
-        if ((res = cry_mpi_shld (&t1, i - t - 1)) != 0) {
-            goto LBL_Y;
-        }
-
-        if ((res = cry_mpi_sub (&x, &x, &t1)) != 0) {
-            goto LBL_Y;
-        }
+        CRY_CHK(res = cry_mpi_mul_dig(&t1, &y, q.data[i - t - 1]), e5);
+        CRY_CHK(res = cry_mpi_shld (&t1, i - t - 1), e5);
+        CRY_CHK(res = cry_mpi_sub (&x, &x, &t1), e5);
 
         /* if x < 0 then { x = x + y*b**{i-t-1}; q{i-t-1} -= 1; } */
         if (x.sign == 1) {
-            if ((res = cry_mpi_copy (&t1, &y)) != 0) {
-                goto LBL_Y;
-            }
-            if ((res = cry_mpi_shld (&t1, i - t - 1)) != 0) {
-                goto LBL_Y;
-            }
-            if ((res = cry_mpi_add (&x, &x, &t1)) != 0) {
-                goto LBL_Y;
-            }
-
-            q.data[i - t - 1] = (q.data[i - t - 1] - 1UL) & MP_MASK;
+            CRY_CHK(res = cry_mpi_copy (&t1, &y), e5);
+            CRY_CHK(res = cry_mpi_shld (&t1, i - t - 1), e5);
+            CRY_CHK(res = cry_mpi_add (&x, &x, &t1), e5);
+            q.data[i-t-1] = (q.data[i-t-1] - 1UL) & CRY_MPI_DIGIT_MAX;
         }
     }
 
     /*
      * Now q is the quotient and x is the remainder
-     * [which we have to normalize]
+     * (which we have to normalize)
      */
-
-    if (c) {
+    if (rq != NULL) {
         cry_mpi_adjust(&q);
-        cry_mpi_swap(&q, c);
-        c->sign = 0;
+        cry_mpi_swap(&q, rq);
+        rq->sign = 0;
     }
-
-    if (d) {
+    if (rr != NULL) {
         cry_mpi_shr(&x, &x, norm);
-        cry_mpi_swap(&x, d);
-        d->sign = 0;
+        cry_mpi_swap(&x, rr);
+        rr->sign = 0;
     }
-
     res = 0;
 
-LBL_Y:cry_mpi_clear (&y);
-LBL_X:cry_mpi_clear (&x);
-LBL_T2:cry_mpi_clear (&t2);
-LBL_T1:cry_mpi_clear (&t1);
-LBL_Q:cry_mpi_clear (&q);
-    return res;
+e5: cry_mpi_clear (&y);
+e4: cry_mpi_clear (&x);
+e3: cry_mpi_clear (&t2);
+e2: cry_mpi_clear (&t1);
+e1: cry_mpi_clear (&q);
+e0: return res;
 }
 
 #endif /* CRY_DIV_SMALL */
