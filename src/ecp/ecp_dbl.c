@@ -9,6 +9,9 @@ int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_ecp_grp *grp)
     cry_mpi num, den, lam;
     cry_ecp r;
 
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
+
     if ((res = cry_mpi_init_list(&num, &den, &lam,
             &r.x, &r.y, &r.z, (cry_mpi *) NULL)) != 0) {
         return res;

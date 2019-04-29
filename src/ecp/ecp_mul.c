@@ -14,6 +14,9 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     int res, i, j, w, paf = 1;
     struct cry_ecp r, *win = NULL;
 
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
+
     if ((res = cry_ecp_init(&r)) != 0)
         return res;
 
@@ -116,6 +119,9 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     cry_mpi *a = &grp->a;
     cry_mpi *p = &grp->p;
 
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
+
     if ((res = cry_ecp_init(&r)) != 0)
         return res;
 
@@ -195,6 +201,9 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     struct cry_ecp dp, r;
     cry_mpi *a = &grp->a;
     cry_mpi *p = &grp->p;
+
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
 
     if ((res = cry_mpi_init_list(&dp.x, &dp.y, &r.x, &r.y,
                                 (cry_mpi *) NULL)) != 0)
