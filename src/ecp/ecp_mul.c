@@ -1,7 +1,8 @@
 #include <cry/ecp.h>
 #include <stdlib.h>      /* malloc() */
+#include "../misc.h"
 
-#define CHK(exp) do { if ((res = (exp)) != 0) goto e; } while (0)
+#define CHK(exp) CRY_CHK(res = (exp), e)
 
 #if defined(CRY_ECP_MUL_SLIDING_WIN)
 
