@@ -18,10 +18,19 @@ struct test_case {
     test_func_t func;
 };
 
+
 typedef void (* dispatch_func_t)(int argc, char *argv[]);
 
-
 void func_test(const char *datafile, dispatch_func_t dispatch);
+
+
+struct malloc_fail_args {
+    int   argc;
+    char *argv[10];
+};
+
+void malloc_fail_tests(struct malloc_fail_args *args, size_t num,
+                       dispatch_func_t dispatch);
 
 void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
 

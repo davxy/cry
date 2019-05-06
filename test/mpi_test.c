@@ -1,4 +1,5 @@
 #include "test.h"
+#include "malloc_mock.h"
 #include <cry/mpi.h>
 #include <stdlib.h>
 
@@ -154,6 +155,17 @@ static void mpi_unary_op(int argc, char *argv[], unary_op_f op)
 }
 
 
+#define RUNM(test) do { \
+    if (g_malloc_mock_state == MALLOC_MOCK_READY) \
+        g_malloc_mock_state = MALLOC_MOCK_ACTIVE; \
+    test; \
+    if (g_malloc_mock_state == MALLOC_MOCK_FAILED) { \
+        ASSERT(res == -1); \
+        return; \
+    } \
+} while (0)
+
+
 typedef int (* binary_op_f)(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
@@ -163,7 +175,7 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
     ASSERT_EQ(argc, 3);
     ASSERT_OK(mpi_load_args(argc, argv));
 
-    res = op(g_mpi_r1, g_mpi0, g_mpi1);
+    RUNM(res = op(g_mpi_r1, g_mpi0, g_mpi1));
 
     ASSERT_EQ(res, g_exp_res);
     if (res == 0)
@@ -181,7 +193,7 @@ static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
     ASSERT_EQ(argc, 4);
     ASSERT_OK(mpi_load_args(argc, argv));
 
-    res = op(g_mpi_r1, g_mpi0, g_mpi1, g_mpi2);
+    RUNM(res = op(g_mpi_r1, g_mpi0, g_mpi1, g_mpi2));
 
     ASSERT_EQ(res, g_exp_res);
     if (res == 0)
@@ -196,7 +208,7 @@ static void mpi_div(int argc, char *argv[])
     ASSERT_EQ(argc, 4);
     ASSERT(mpi_load_args(argc, argv) == 0);
 
-    res = cry_mpi_div(g_mpi_r1, g_mpi_r2, g_mpi0, g_mpi1);
+    RUNM(res = cry_mpi_div(g_mpi_r1, g_mpi_r2, g_mpi0, g_mpi1));
 
     ASSERT(res == g_exp_res);
     if (res == 0) {
@@ -260,9 +272,20 @@ static void mpi_dispatch(int argc, char *argv[])
     mpi_teardown();
 }
 
+
+static struct malloc_fail_args g_malloc_fail_tests[] = {
+    { 5, { "Multiply Baseline", "mpi_mul_baseline", "12345678", "12345678", "14b66dc1df4d840" }},
+    { 5, { "Multiply Comba", "mpi_mul_comba", "12345678", "12345678", "14b66dc1df4d840" }},
+    { 5, { "Multiply Karatsuba", "mpi_mul_karatsuba", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+    { 5, { "Multiply Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+};
+
+
 void mpi_test(void)
 {
     printf("* MPI\n");
     func_test("mpi_test.data", mpi_dispatch);
+    malloc_fail_tests(g_malloc_fail_tests,
+            ARLEN(g_malloc_fail_tests), mpi_dispatch);
     printf("\n");
 }
