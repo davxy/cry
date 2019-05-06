@@ -24,9 +24,6 @@ int cry_mpi_mul_baseline(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     pa = a->used;
     /* iterate through every digit in the first operand */
     for (i = 0; i < pa; i++) {
-        /* limit ourselves to making digs digits of output */
-        if (digs < i)
-            break;
         pb = CRY_MIN(b->used, digs - i);
         /* copy of the digit to be used within the nested loop */
         tmpx = a->data[i];
