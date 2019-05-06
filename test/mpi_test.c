@@ -274,10 +274,10 @@ static void mpi_dispatch(int argc, char *argv[])
 
 
 static struct malloc_fail_args g_malloc_fail_tests[] = {
-    { 5, { "Baseline", "mpi_mul_baseline", "12345678", "12345678", "14b66dc1df4d840" }},
-    { 5, { "Comba", "mpi_mul_comba", "12345678", "12345678", "14b66dc1df4d840" }},
-    { 5, { "Karatsuba", "mpi_mul_karatsuba", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
-    { 5, { "Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+    { 5, { "Multiply Baseline", "mpi_mul_baseline", "12345678", "12345678", "14b66dc1df4d840" }},
+    { 5, { "Multiply Comba", "mpi_mul_comba", "12345678", "12345678", "14b66dc1df4d840" }},
+    { 5, { "Multiply Karatsuba", "mpi_mul_karatsuba", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+    { 5, { "Multiply Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
 };
 
 
@@ -285,7 +285,7 @@ void mpi_test(void)
 {
     printf("* MPI\n");
     func_test("mpi_test.data", mpi_dispatch);
-    malloc_fail_tests(g_malloc_fail_tests, ARLEN(g_malloc_fail_tests),
-                      mpi_dispatch);
+    malloc_fail_tests(g_malloc_fail_tests,
+            ARLEN(g_malloc_fail_tests), mpi_dispatch);
     printf("\n");
 }

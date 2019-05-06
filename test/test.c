@@ -157,16 +157,19 @@ void malloc_fail_tests(struct malloc_fail_args *args, size_t num,
 {
     size_t i, fail_after;
 
-    printf("    Malloc fails\n");
+    if (g_verbose != 0)
+        printf("    Malloc fails\n");
     for (i = 0; i < num; i++) {
-        printf("      %s \n", args[i].argv[0]);
+        if (g_verbose != 0)
+            printf("      %s \n", args[i].argv[0]);
         fail_after = 0;
         do {
             g_malloc_mock_state = MALLOC_MOCK_READY;
             g_malloc_mock_count = fail_after++;
             dispatch(args[i].argc - 1, args[i].argv + 1);
         } while (g_malloc_mock_state == MALLOC_MOCK_FAILED);
-        printf("        count: %u\n", (unsigned)fail_after);
+        if (g_verbose != 0)
+            printf("        fail-counter: %u\n", (unsigned)fail_after);
     }
     g_malloc_mock_state = MALLOC_MOCK_STOPPED;
 }
