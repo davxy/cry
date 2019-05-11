@@ -693,7 +693,7 @@ static void ecp_grp_load(cry_ecp_grp *grp,
 
 int cry_ecp_grp_load(cry_ecp_grp *grp, int grp_id)
 {
-    int res;
+    int res = 0;
 
     switch (grp_id) {
 #ifdef CRY_ECP_GRP_SECP192R1_ENABLE
