@@ -16,7 +16,7 @@ static void load_curve(cry_ecp_grp *ec)
     cry_mpi_init_int(&ec->g.z, 1);
 }
 
-void ecp_test(void)
+void ecp_dummy_test(void)
 {
     cry_ecp_grp ec;
     cry_ecp p;
@@ -35,4 +35,19 @@ void ecp_test(void)
         i++;
     } while (cry_mpi_cmp(&p.x, &ec.g.x) != 0 ||
              cry_mpi_cmp(&p.y, &ec.g.y) != 0);
+}
+
+void nist_grp_load()
+{
+    cry_ecp_grp grp;
+
+    cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP224R1);
+    cry_mpi_print(&grp.a, 16);
+    cry_mpi_print(&grp.b, 16);
+}
+
+void ecp_test(void)
+{
+    nist_grp_load();
+    //ecp_dummy_test();
 }

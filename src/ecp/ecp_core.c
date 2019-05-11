@@ -35,9 +35,8 @@ int cry_ecp_grp_init(cry_ecp_grp *ec)
     res = cry_mpi_init_list(&ec->p, &ec->a, &ec->b, &ec->n,
                             &ec->g.x, &ec->g.y, &ec->g.z,
                             (cry_mpi *) NULL);
-    if (res == 0) {
+    if (res == 0)
         cry_ecp_set_zero(&ec->g);
-    }
     return res;
 }
 

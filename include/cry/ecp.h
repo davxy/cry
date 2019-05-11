@@ -8,6 +8,17 @@
 
 #include <cry/mpi.h>
 
+#define CRY_ECP_GRP_SECP192R1   0
+#define CRY_ECP_GRP_SECP224R1   1
+#define CRY_ECP_GRP_SECP256R1   2
+#define CRY_ECP_GRP_SECP384R1   3
+#define CRY_ECP_GRP_SECP521R1   4
+#define CRY_ECP_GRP_SECP192K1   5
+#define CRY_ECP_GRP_SECP224K1   6
+#define CRY_ECP_GRP_SECP256K1   7
+#define CRY_ECP_GRP_BP256R1     8
+#define CRY_ECP_GRP_BP384R1     9
+#define CRY_ECP_GRP_BP512R1     10
 /**
  * EC point
  */
@@ -74,5 +85,8 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
 int cry_ecp_grp_init(cry_ecp_grp *ec);
 
 void cry_ecp_grp_clear(cry_ecp_grp *ec);
+
+int cry_ecp_grp_load(cry_ecp_grp *grp, int grp_id);
+
 
 #endif /* CRY_ECP_H_ */

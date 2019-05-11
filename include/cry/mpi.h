@@ -43,11 +43,14 @@ typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
 /** Number of bits in one digit */
 #define CRY_MPI_DIGIT_BITS  (CRY_MPI_DIGIT_BYTES << 3)
 
+/**
+ * MPI structure.
+ */
 struct cry_mpi {
-    int           sign;
-    size_t        used;
-    size_t        alloc;
-    cry_mpi_digit *data;
+    int           sign;     /**< Non-zero if negative */
+    size_t        used;     /**< Number of used digits */
+    size_t        alloc;    /**< Allocated digits */
+    cry_mpi_digit *data;    /**< Pointer to digits */
 };
 
 typedef struct cry_mpi cry_mpi;
