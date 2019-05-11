@@ -8,8 +8,8 @@ int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
     if ((res = cry_mpi_div_abs(q, r, a, b)) != 0)
         return res;
 
-    if (sign != 0) {
-        if (q) {
+    if (sign != 0 && !cry_mpi_is_zero(r)) {
+        if (q != NULL) {
             cry_mpi one;
             cry_mpi_digit one_dig = 1;
 
@@ -19,7 +19,7 @@ int cry_mpi_div(cry_mpi *q, cry_mpi *r, const cry_mpi *a,
             q->sign = 1;
             res = cry_mpi_sub(q, q, &one);
         }
-        if (r)
+        if (r != NULL)
             res = cry_mpi_sub_abs(r, b, r);
     }
     return res;

@@ -16,8 +16,8 @@
 #define CRY_MAX(a, b)     (((a) > (b)) ? (a) : (b))
 
 /** Batch operation exception. Rollback to a well known exit point 'e' */
-#define CRY_CHK(exp, label) \
-    do { if ((exp) != 0) goto label; } while (0)
+#define CRY_CHK(exp, lab) \
+    do { if ((exp) != 0) goto lab; } while (0)
 
 /**
  * Increments a big endian value of a give size.

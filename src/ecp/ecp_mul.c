@@ -1,7 +1,8 @@
 #include <cry/ecp.h>
 #include <stdlib.h>      /* malloc() */
+#include "../misc.h"
 
-#define CHK(exp) do { if ((res = (exp)) != 0) goto e; } while (0)
+#define CHK(exp) CRY_CHK(res = (exp), e)
 
 #if defined(CRY_ECP_MUL_SLIDING_WIN)
 
@@ -12,6 +13,9 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
 {
     int res, i, j, w, paf = 1;
     struct cry_ecp r, *win = NULL;
+
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
 
     if ((res = cry_ecp_init(&r)) != 0)
         return res;
@@ -115,6 +119,9 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     cry_mpi *a = &grp->a;
     cry_mpi *p = &grp->p;
 
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
+
     if ((res = cry_ecp_init(&r)) != 0)
         return res;
 
@@ -187,45 +194,65 @@ e0: cry_ecp_clear(&r);
 
 #else /* !CRY_ECP_MUL_WIN */
 
+#if 1
+
+#include "../mpi/mpi_pvt.h"
+
 int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
                 const cry_ecp_grp *grp)
 {
-    int i, j, res, paf = 1;
-    struct cry_ecp dp, r;
-    cry_mpi *a = &grp->a;
-    cry_mpi *p = &grp->p;
+    int res;
+    cry_ecp r;
+    size_t bits;
 
-    if ((res = cry_mpi_init_list(&dp.x, &dp.y, &r.x, &r.y,
-                                (cry_mpi *) NULL)) != 0)
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
+
+    if ((res = cry_mpi_init_list(&r.x, &r.y, &r.z, (cry_mpi *) NULL)) != 0)
         return res;
 
-    if ((res = cry_mpi_copy(&dp.x, &p1->x)) != 0)
-        goto e;
-    if ((res = cry_mpi_copy(&dp.y, &p1->y)) != 0)
-        goto e;
-
-    for (i = 0; i < k->used; i++) {
-        for (j = 0; j < CRY_MPI_DIGIT_BITS; j++) {
-            if (k->data[i] & (1UL << j)) {
-                if (!paf) {
-                    if ((res = cry_ecp_add(&r, &r, &dp, p)) != 0)
-                        goto e;
-                } else {
-                    paf = 0; /* First addition */
-                    if ((res = cry_mpi_copy(&r.x, &dp.x)) != 0)
-                        goto e;
-                    if ((res = cry_mpi_copy(&r.y, &dp.y)) != 0)
-                        goto e;
-                }
-            }
-            if ((res = cry_ecp_dbl(&dp, &dp, a, p)) != 0)
-                goto e;
-        }
+    cry_ecp_set_zero(&r);
+    bits = cry_mpi_count_bits(k);
+    while (bits-- > 0) {
+        CHK(cry_ecp_dbl(&r, &r, grp));
+        if (cry_mpi_is_bit_set(k, bits) != 0)
+            CHK(cry_ecp_add(&r, &r, p1, grp));
     }
 
     cry_ecp_swap(pr, &r);
-e:  cry_mpi_clear_list(&dp.x, &dp.y, &r.x, &r.y, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&r.x, &r.y, &r.z, (cry_mpi *) NULL);
     return res;
 }
+#else
+int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
+                const cry_ecp_grp *grp)
+{
+    int i, j, res;
+    struct cry_ecp dp, r;
+
+    if (cry_ecp_is_zero(p1))
+        return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
+
+    if ((res = cry_mpi_init_list(&dp.x, &dp.y, &dp.z, &r.x, &r.y, &r.z,
+                                (cry_mpi *) NULL)) != 0)
+        return res;
+
+    cry_ecp_set_zero(&r);
+    /* Old implementation */
+    CHK(cry_ecp_copy(&dp, p1));
+    for (i = 0; i < k->used; i++) {
+        for (j = 0; j < CRY_MPI_DIGIT_BITS; j++) {
+            if (k->data[i] & (1UL << j))
+                CHK(cry_ecp_add(&r, &r, &dp, grp));
+            CHK(cry_ecp_dbl(&dp, &dp, grp));
+        }
+    }
+    cry_ecp_swap(pr, &r);
+
+e:  cry_mpi_clear_list(&dp.x, &dp.y, &dp.z, &r.x, &r.y, &r.z,
+                       (cry_mpi *) NULL);
+    return res;
+}
+#endif
 
 #endif /* CRY_ECP_MUL_WIN */

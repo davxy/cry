@@ -14,7 +14,6 @@ int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
         return -1;
 
     res = cry_mpi_init_int(&exp, 1);
-
     bits = cry_mpi_count_bits(e);
     while (bits-- > 0) {
         if ((res = cry_mpi_sqr(&exp, &exp)) != 0 ||

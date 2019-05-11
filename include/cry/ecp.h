@@ -53,6 +53,8 @@ int cry_ecp_init(cry_ecp *p);
 
 void cry_ecp_clear(cry_ecp *p);
 
+int cry_ecp_init_int(cry_ecp *p, long x, long y);
+
 int cry_ecp_copy(cry_ecp *pr, const cry_ecp *p1);
 
 int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
