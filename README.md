@@ -65,17 +65,16 @@ Public key algorithms
 Elliptic Curve
 --------------
 
-- Basic arithmetic (add,dbl,mul)
-- NIST-P256 EC parameters
+- EC group arithmetic.
+- NIST recommended elliptic curve domain parameters over Fp.
+- Brainpool standard curve domain parameters over Fp (RFC 5639).
 
 
 Pseudo random numbers generators
 --------------------------------
 
 - AES-CTR CSPRNG
-- Posix CSPRNG (using '/dev/urandom')
-- Windows CSPRNG (using 'CryptGenRandom')
-- Weak portable PRNG
+- Weak fast PRNG
 
 Message authentication code
 ---------------------------

@@ -21,6 +21,14 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
+[0.0.10] - Unreleased
+---------------------
+
+Added
+
+* Some NIST recommended elliptic curve domain parameters over Fp.
+* Some Brainpool standard curve domain parameters over Fp (RFC 5639).
+
 
 [0.0.9] - 2019-04-22
 --------------------
