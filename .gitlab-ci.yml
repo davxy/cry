@@ -18,7 +18,7 @@ test:
         - build
     script:
         - make test
-        - (cd test; time ./test)
+        - (cd test; valgrind --leak-check=full --error-exitcode=2 ./test)
         - gcovr --exclude test -r . | grep TOTAL
 
 # Deploy
