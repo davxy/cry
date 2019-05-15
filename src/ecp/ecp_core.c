@@ -57,6 +57,6 @@ int cry_ecp_grp_init(cry_ecp_grp *ec)
 void cry_ecp_grp_clear(cry_ecp_grp *ec)
 {
     cry_mpi_clear_list(&ec->p, &ec->a, &ec->b, &ec->n,
-                       &ec->g.x, &ec->g.y, &ec->g.y,
+                       &ec->g.x, &ec->g.y, &ec->g.z,
                        (cry_mpi *) NULL);
 }
