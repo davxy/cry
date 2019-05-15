@@ -6,10 +6,10 @@
 #ifndef CRY_ECDH_
 #define CRY_ECDH_
 
-#include <cry/ec.h>
+#include <cry/ecp.h>
 
 struct cry_ecdh_ctx {
-    cry_ec      ec;  /**> Elliptic curve parameters */
+    cry_ecp_grp ec;  /**> Elliptic curve group */
     cry_mpi     d;   /**> Private key */
     cry_ecp     q;   /**> Public key */
     cry_ecp     z;   /**> Shared secret */

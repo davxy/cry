@@ -22,7 +22,7 @@ CRY_COVERAGE=y
 #CRY_ARCH_x86=y
 
 ################################################################################
-# Algorithms
+# Algorithms tweaks
 ################################################################################
 
 # Use Extended Euclidean Algorithm to compute inverse.
@@ -47,6 +47,22 @@ CRY_ECP_MUL_WIN=y
 # Elliptic curve point multiplication with sliding window algorithm (faster)
 # Have precedence against the simple windowed one.
 CRY_ECP_MUL_SLIDING_WIN=y
+
+################################################################################
+# Elliptic curves group parameters
+################################################################################
+
+CRY_ECP_GRP_SECP192R1_ENABLE=y
+CRY_ECP_GRP_SECP224R1_ENABLE=y
+CRY_ECP_GRP_SECP256R1_ENABLE=y
+CRY_ECP_GRP_SECP384R1_ENABLE=y
+CRY_ECP_GRP_SECP521R1_ENABLE=y
+CRY_ECP_GRP_SECP192K1_ENABLE=y
+CRY_ECP_GRP_SECP224K1_ENABLE=y
+CRY_ECP_GRP_SECP256K1_ENABLE=y
+CRY_ECP_GRP_BP256R1_ENABLE=y
+CRY_ECP_GRP_BP384R1_ENABLE=y
+CRY_ECP_GRP_BP512R1_ENABLE=y
 
 ################################################################################
 # Miscelanea configurations

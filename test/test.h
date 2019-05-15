@@ -43,6 +43,8 @@ int raw_init(unsigned char *raw, size_t rawlen, const char *asc);
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void));
 
+#define RUN(test) run(#test, test, NULL, NULL)
+
 #define ASSERT(test) do { \
     if ((test) == 0) { \
         g_fails++; \
