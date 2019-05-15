@@ -7,7 +7,7 @@
  *  Generator point = (5, 1)
  *  Generator order = 19
  */
-static void load_simple_curve(cry_ecp_grp *ec)
+static void simple_curve_init(cry_ecp_grp *ec)
 {
     cry_mpi_init_int(&ec->a, 2);
     cry_mpi_init_int(&ec->b, 2);
@@ -41,36 +41,43 @@ static void point_check(const cry_ecp *p, const cry_ecp_grp *grp)
 
 static void add_test(void)
 {
-    cry_ecp_grp ec;
+    cry_ecp_grp grp;
     cry_ecp p;
     int i = 0;
 
-    load_simple_curve(&ec);
+    simple_curve_init(&grp);
     cry_ecp_init(&p);
     do {
         //printf("n = %d\n", i);
         //cry_mpi_print(&p.x, 10);
         //cry_mpi_print(&p.y, 10);
         //cry_mpi_print(&p.z, 10);
-        point_check(&p, &ec);
+        point_check(&p, &grp);
         //printf("--------------------\n");
-        cry_ecp_add(&p, &p, &ec.g, &ec);
+        cry_ecp_add(&p, &p, &grp.g, &grp);
         i++;
     } while (!cry_ecp_is_zero(&p));
+    cry_ecp_grp_clear(&grp);
+    cry_ecp_clear(&p);
 }
 
 static void mul_test(void)
 {
-    cry_ecp_grp ec;
+    cry_ecp_grp grp;
     cry_ecp p;
     cry_mpi v;
 
-    load_simple_curve(&ec);
+    simple_curve_init(&grp);
     cry_ecp_init_int(&p, 9, 16);    /* p = 5g = (9, 16) */
     cry_mpi_init_int(&v, 2);
-    point_check(&p, &ec);
-    cry_ecp_mul(&p, &p, &v, &ec);   /* 2p = 10g = (7,11) */
-    point_check(&p, &ec);
+
+    point_check(&p, &grp);
+    cry_ecp_mul(&p, &p, &v, &grp);  /* 2p = 10g = (7,11) */
+    point_check(&p, &grp);
+
+    cry_ecp_grp_clear(&grp);
+    cry_ecp_clear(&p);
+    cry_mpi_clear(&v);
 }
 
 static void secp192r1_load_test(void)
