@@ -28,6 +28,7 @@ Added
 
 * Some NIST recommended elliptic curve domain parameters over Fp.
 * Some Brainpool standard curve domain parameters over Fp (RFC 5639).
+* Malloc mock and Valgrind used to execute CI unit-tests
 
 
 [0.0.9] - 2019-04-22
