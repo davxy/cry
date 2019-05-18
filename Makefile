@@ -7,7 +7,7 @@ CP := cp
 RM := rm -rf
 
 source_dir := src
-config := include/cry/config.h
+config_h := include/cry/config.h
 
 #
 # Get build name
@@ -26,7 +26,7 @@ target = $(binary_dir)/libcry.a
 
 .SUFFIXES:
 
-includes-y := -Iinclude -Isrc -include $(config)
+includes-y := -Iinclude -Isrc -include $(config_h)
 
 cflags-y := -Wall -MMD -MP
 cflags-$(CRY_COVERAGE) += --coverage
@@ -80,36 +80,39 @@ LDFLAGS  = $(lflags-y)
 DATE := $(shell date +'%y%m%d')
 
 
-.PHONY: all cry clean test testclean doc
+.PHONY: all cry clean test testclean doc config
 
 all: cry
 
 cry: $(target)
 
 clean:
-	@$(RM) $(binary_dir) $(config) *.a
+	@echo "Cleanup ..."
+	@$(RM) $(binary_dir) *.a
 	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
 
-$(objects): Makefile config.mk $(config)
+config: config.mk
+	@echo "Building config ..."
+	@printf "/*\n * Automatically generated. Do not edit.\n */\n\n" > $(config_h)
+	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' $< >> $(config_h)
 
 $(target): $(objects)
 	$(AR) rcs $@ $^
 	$(CP) $(target) .
 
-$(config): config.mk
-	@printf "/*\n * Automatically generated. Do not edit.\n */\n\n" > $(config)
-	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' $< >> $(config)
-	@echo "#define CRY_RELEASE $(DATE)" >> $(config)
-	@echo "#define CRY_CFLAGS \"$(CFLAGS)\"" >> $(config)
+$(objects): Makefile $(config_h)
+
+$(config_h): config.mk
+	$(MAKE) config
 
 $(binary_dir)/%.o: $(source_dir)/%.c
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 test: $(target)
-	make -C test
+	$(MAKE) -C test
 
 testclean:
-	make -C test clean
+	$(MAKE) -C test clean
 
 doc:
 	cd doc; doxygen Doxyfile.in
