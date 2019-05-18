@@ -22,5 +22,3 @@
 #define CRY_ECP_GRP_BP384R1_ENABLE
 #define CRY_ECP_GRP_BP512R1_ENABLE
 #define CRY_MPI_DEBUG_CONF
-#define CRY_RELEASE 190517
-#define CRY_CFLAGS "-MMD -MP -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -Wmissing-prototypes --coverage -fno-stack-protector -O0 -g3 -fno-inline"

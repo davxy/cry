@@ -72,12 +72,10 @@ $(eval $(call include_subdir,src))
 objects = $(call src_to_bin_dir,$(objects_list))
 depends = $(patsubst %.o,%.d,$(objects))
 
-CPPFLAGS = $(includes-y)
-CFLAGS   = $(cflags-y)
-AFLAGS   = $(aflags-y)
-LDFLAGS  = $(lflags-y)
-
-DATE := $(shell date +'%y%m%d')
+CPPFLAGS := $(includes-y)
+CFLAGS   := $(cflags-y)
+AFLAGS   := $(aflags-y)
+LDFLAGS  := $(lflags-y)
 
 
 .PHONY: all cry clean test testclean doc config
