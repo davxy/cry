@@ -1,4 +1,5 @@
 #include "mpi_pvt.h"
+#include <cry/config.h>
 
 #ifdef CRY_MPI_DIV_SMALL
 

@@ -1,13 +1,14 @@
-include config.mk
+source_dir := src
+config_mk := config/config.mk
+config_h := include/cry/config.h
+
+include $(config_mk)
 
 CC := gcc
 AR := ar
 AWK := awk
 CP := cp
 RM := rm -rf
-
-source_dir := src
-config := include/cry/config.h
 
 #
 # Get build name
@@ -26,7 +27,7 @@ target = $(binary_dir)/libcry.a
 
 .SUFFIXES:
 
-includes-y := -Iinclude -Isrc -include $(config)
+includes-y := -Iinclude -Isrc
 
 cflags-y := -Wall -MMD -MP
 cflags-$(CRY_COVERAGE) += --coverage
@@ -72,44 +73,46 @@ $(eval $(call include_subdir,src))
 objects = $(call src_to_bin_dir,$(objects_list))
 depends = $(patsubst %.o,%.d,$(objects))
 
-CPPFLAGS = $(includes-y)
-CFLAGS   = $(cflags-y)
-AFLAGS   = $(aflags-y)
-LDFLAGS  = $(lflags-y)
-
-DATE := $(shell date +'%y%m%d')
+CPPFLAGS := $(includes-y)
+CFLAGS   := $(cflags-y)
+AFLAGS   := $(aflags-y)
+LDFLAGS  := $(lflags-y)
 
 
-.PHONY: all cry clean test testclean doc
+.PHONY: all cry clean config test testclean doc
 
 all: cry
 
 cry: $(target)
 
 clean:
-	@$(RM) $(binary_dir) $(config) *.a
+	@echo "Cleanup ..."
+	@$(RM) $(binary_dir) *.a
 	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
 
-$(objects): Makefile config.mk $(config)
+config: $(config_mk)
+	@echo "Building config ..."
+	@printf "/*\n * Automatically generated. Do not edit.\n */\n\n" > $(config_h)
+	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' $< >> $(config_h)
+
 
 $(target): $(objects)
 	$(AR) rcs $@ $^
 	$(CP) $(target) .
 
-$(config): config.mk
-	@printf "/*\n * Automatically generated. Do not edit.\n */\n\n" > $(config)
-	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' $< >> $(config)
-	@echo "#define CRY_RELEASE $(DATE)" >> $(config)
-	@echo "#define CRY_CFLAGS \"$(CFLAGS)\"" >> $(config)
+$(objects): Makefile $(config_h)
+
+$(config_h): $(config_mk)
+	$(MAKE) config
 
 $(binary_dir)/%.o: $(source_dir)/%.c
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 test: $(target)
-	make -C test
+	$(MAKE) -C test
 
 testclean:
-	make -C test clean
+	$(MAKE) -C test clean
 
 doc:
 	cd doc; doxygen Doxyfile.in

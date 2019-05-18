@@ -11,9 +11,7 @@
 
 /* Digit max value */
 #ifndef CRY_MPI_DIGIT_MAX
-# ifndef CRY_HAS_NO_CONFIG_H
 # include <cry/config.h>
-# endif
 # ifndef CRY_MPI_DEBUG_CONF
 # define CRY_MPI_DIGIT_MAX ULONG_MAX
 # else

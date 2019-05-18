@@ -1,5 +1,6 @@
 #include "mpi_pvt.h"
 #include "misc.h"
+#include <cry/config.h>
 
 
 #if defined(CRY_ARCH_X86)

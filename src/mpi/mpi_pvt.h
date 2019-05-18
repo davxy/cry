@@ -26,9 +26,7 @@ typedef uint128_t cry_mpi_dword;
 
 /* Digit max value */
 #ifndef CRY_MPI_QUANTUM
-# ifndef CRY_HAS_NO_CONFIG_H
 # include <cry/config.h>
-# endif
 # ifndef CRY_MPI_DEBUG_CONF
 # define CRY_MPI_QUANTUM 8
 # else
