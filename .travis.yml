@@ -1,7 +1,8 @@
 language: c
 
 script:
-  - make test && (cd test; ./test)
+  - make test config_mk=config/config_ci.mk
+  - (cd test; ./test)
 
 before_install:
   - pip install --user -q cpp-coveralls

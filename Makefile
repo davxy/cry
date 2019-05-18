@@ -1,13 +1,14 @@
-include config.mk
+source_dir := src
+config_mk := config/config.mk
+config_h := include/cry/config.h
+
+include $(config_mk)
 
 CC := gcc
 AR := ar
 AWK := awk
 CP := cp
 RM := rm -rf
-
-source_dir := src
-config_h := include/cry/config.h
 
 #
 # Get build name
@@ -26,7 +27,7 @@ target = $(binary_dir)/libcry.a
 
 .SUFFIXES:
 
-includes-y := -Iinclude -Isrc -include $(config_h)
+includes-y := -Iinclude -Isrc
 
 cflags-y := -Wall -MMD -MP
 cflags-$(CRY_COVERAGE) += --coverage
@@ -78,7 +79,7 @@ AFLAGS   := $(aflags-y)
 LDFLAGS  := $(lflags-y)
 
 
-.PHONY: all cry clean test testclean doc config
+.PHONY: all cry clean config test testclean doc
 
 all: cry
 
@@ -89,10 +90,11 @@ clean:
 	@$(RM) $(binary_dir) *.a
 	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
 
-config: config.mk
+config: $(config_mk)
 	@echo "Building config ..."
 	@printf "/*\n * Automatically generated. Do not edit.\n */\n\n" > $(config_h)
 	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' $< >> $(config_h)
+
 
 $(target): $(objects)
 	$(AR) rcs $@ $^
@@ -100,7 +102,7 @@ $(target): $(objects)
 
 $(objects): Makefile $(config_h)
 
-$(config_h): config.mk
+$(config_h): $(config_mk)
 	$(MAKE) config
 
 $(binary_dir)/%.o: $(source_dir)/%.c
