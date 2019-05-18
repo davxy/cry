@@ -1,6 +1,7 @@
+#include "misc.h"
+#include <cry/config.h>
 #include <cry/ecp.h>
 #include <stdlib.h>      /* malloc() */
-#include "../misc.h"
 
 #define CHK(exp) CRY_CHK(res = (exp), e)
 
