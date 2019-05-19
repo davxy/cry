@@ -71,14 +71,12 @@ AFLAGS   := $(aflags-y)
 LDFLAGS  := $(lflags-y)
 
 
-.PHONY: all cry clean config test testclean doc
+.PHONY: all clean config test testclean doc
 
 # Force serial run
 all:
 	$(MAKE) config
-	$(MAKE) cry
-
-cry: $(target)
+	$(MAKE) $(target)
 
 clean:
 	@echo "Cleanup ..."
@@ -88,7 +86,7 @@ clean:
 config: $(config_mk)
 	@printf "/*\n * Automatically generated from \"$^\".\n */\n\n" > tmp
 	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' < $^ >> tmp
-	@cmp -s tmp $(config_h) || (echo "Configuration update"; cp tmp $(config_h))
+	@cmp -s tmp $(config_h) && touch $(config_h) || (echo "Configuration update"; cp tmp $(config_h))
 	@$(RM) tmp
 	@echo ">>> Config:"
 	@cat $(config_h) | grep CRY_ | $(AWK) '{ printf(" * %s\n", $$2); }'
