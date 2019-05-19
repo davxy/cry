@@ -1,14 +1,16 @@
-source_dir := src
-config_mk := config/config.mk
-config_h := include/cry/config.h
+CONFIG := config/config.mk
 
-include $(config_mk)
+include $(CONFIG)
 
 CC := gcc
 AR := ar
 AWK := awk
 CP := cp
 RM := rm -rf
+
+source_dir := src
+config_mk := $(CONFIG)
+config_h := include/cry/config.h
 
 # $(call normalstr,str)
 build_name = $(shell $(CC) -dumpmachine)
@@ -86,9 +88,9 @@ clean:
 config: $(config_mk)
 	@printf "/*\n * Automatically generated from \"$^\".\n */\n\n" > tmp
 	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' < $^ >> tmp
-	@cmp -s tmp $(config_h) && touch $(config_h) || (echo "Configuration update"; cp tmp $(config_h))
+	@cmp -s tmp $(config_h) || (echo "Configuration update"; cp tmp $(config_h))
 	@$(RM) tmp
-	@echo ">>> Config:"
+	@echo ">>> Config : $(config_mk)"
 	@cat $(config_h) | grep CRY_ | $(AWK) '{ printf(" * %s\n", $$2); }'
 
 $(target): $(objects)
@@ -98,7 +100,7 @@ $(target): $(objects)
 $(objects): Makefile $(config_h)
 
 $(config_h): $(config_mk)
-	$(MAKE) config
+	touch $(config_h)
 
 $(binary_dir)/%.o: $(source_dir)/%.c
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
