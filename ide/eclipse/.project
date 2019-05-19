@@ -30,9 +30,9 @@
 			<locationURI>SOURCE_DIR/Makefile</locationURI>
 		</link>
 		<link>
-			<name>config.mk</name>
-			<type>1</type>
-			<locationURI>SOURCE_DIR/config.mk</locationURI>
+			<name>config</name>
+			<type>2</type>
+			<locationURI>SOURCE_DIR/config</locationURI>
 		</link>
 		<link>
 			<name>include</name>
