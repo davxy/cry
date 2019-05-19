@@ -2,7 +2,7 @@
 
 int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    unsigned int min, max, i;
+    size_t min, max, i;
     cry_mpi_digit c, t1, t2, *rp, *ap, *bp;
 
     if (cry_mpi_cmp_abs(a, b) < 0)

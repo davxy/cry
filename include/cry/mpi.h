@@ -122,9 +122,9 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a);
 
 int cry_mpi_sqrt(cry_mpi *r, const cry_mpi *a);
 
-int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n);
+int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, size_t n);
 
-int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);
+int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, size_t n);
 
 /*
  * More advanced arithmetic algorithms
@@ -190,7 +190,7 @@ void cry_mpi_print(const cry_mpi *a, unsigned int radix);
     (a)->used = 0;           \
     } while (0)
 
-int cry_mpi_rand(cry_mpi *a, unsigned int bits);
+int cry_mpi_rand(cry_mpi *a, size_t bits);
 
 int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max);
 

@@ -4,10 +4,10 @@
 /*
  * Generate a random integer with a given number of bits.
  */
-int cry_mpi_rand(cry_mpi *r, unsigned int bits)
+int cry_mpi_rand(cry_mpi *r, size_t bits)
 {
-    unsigned int digs, res;
-    unsigned long msb;
+    int res;
+    size_t digs, msb;
 
     digs = CRY_MPI_BITS_TO_DIGS(bits);
     if (digs == 0) {
@@ -34,7 +34,8 @@ int cry_mpi_rand(cry_mpi *r, unsigned int bits)
 
 int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max)
 {
-    int n, ret;
+    int ret;
+    size_t n;
 
     n = cry_mpi_count_bits(max);
     if ((ret = cry_mpi_rand(a, n)) == 0) {

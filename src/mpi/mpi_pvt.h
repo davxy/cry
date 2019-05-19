@@ -45,9 +45,9 @@ typedef uint128_t cry_mpi_dword;
 
 int cry_mpi_grow(cry_mpi *a, size_t size);
 
-int cry_mpi_shrd(cry_mpi *a, int n);
+int cry_mpi_shrd(cry_mpi *a, size_t n);
 
-int cry_mpi_shld(cry_mpi *a, int n);
+int cry_mpi_shld(cry_mpi *a, size_t n);
 
 /* decrease used while the most significant digit is zero */
 #define cry_mpi_adjust(a) do { \

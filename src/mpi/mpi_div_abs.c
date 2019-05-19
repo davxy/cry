@@ -6,8 +6,9 @@
 int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
                     const cry_mpi *b)
 {
+    int res;
     cry_mpi ta, tb, tq, q;
-    int res, n;
+    size_t n;
 
     /* is divisor zero ? */
     if (cry_mpi_is_zero(b))
@@ -35,26 +36,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
         ((res = cry_mpi_shl(&tq, &tq, n)) != 0))
         goto cleanup;
 
-#if 0
-    int k = 0;
-    for ( ; n >= 0; n -= k) {
-        if (cry_mpi_cmp(&tb, &ta) <= 0) {
-            if (k) {
-                if ((res = cry_mpi_shr(&tq, &tq, k)) != 0)
-                    goto cleanup;
-                k = 0;
-            }
-
-            if (((res = cry_mpi_sub(&ta, &ta, &tb)) != 0) ||
-                ((res = cry_mpi_add(&q, &q, &tq)) != 0))
-                goto cleanup;
-        }
-        k = MAX(cry_mpi_count_bits(&tb) - cry_mpi_count_bits(&ta), 1);
-        if ((res = cry_mpi_shr(&tb, &tb, k)) != 0)
-            goto cleanup;
-    }
-#else
-    while (n-- >= 0) {
+    do {
         if (cry_mpi_cmp(&tb, &ta) <= 0) {
             if (((res = cry_mpi_sub(&ta, &ta, &tb)) != 0) ||
                 ((res = cry_mpi_add(&q, &q, &tq)) != 0))
@@ -63,8 +45,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
         if (((res = cry_mpi_shr(&tb, &tb, 1)) != 0) ||
             ((res = cry_mpi_shr(&tq, &tq, 1)) != 0))
             goto cleanup;
-    }
-#endif
+    } while (n-- > 0);
 
     /* now q == quotient and ta == remainder */
     if (rq) {
@@ -96,8 +77,9 @@ cleanup:
 int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
                     const cry_mpi *b)
 {
+    int res;
     cry_mpi q, x, y, t1, t2;
-    int res, n, t, i, norm;
+    size_t n, t, i, norm;
 
     /* is divisor zero ? */
     if (cry_mpi_is_zero(b))
@@ -182,7 +164,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
 
             /* find left hand */
             cry_mpi_zero(&t1);
-            t1.data[0] = (t-1 < 0) ? 0 : y.data[t-1];
+            t1.data[0] = (t == 0) ? 0 : y.data[t-1];
             t1.data[1] = y.data[t];
             t1.used = 2;
             CRY_CHK(res = cry_mpi_mul_dig(&t1, &t1, q.data[i-t-1]), e5);
@@ -198,14 +180,14 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
          * Step 3.3
          * x = x - q{i-t-1} * y * b**{i-t-1}
          */
-        CRY_CHK(res = cry_mpi_mul_dig(&t1, &y, q.data[i - t - 1]), e5);
-        CRY_CHK(res = cry_mpi_shld (&t1, i - t - 1), e5);
+        CRY_CHK(res = cry_mpi_mul_dig(&t1, &y, q.data[i-t-1]), e5);
+        CRY_CHK(res = cry_mpi_shld (&t1, i-t-1), e5);
         CRY_CHK(res = cry_mpi_sub (&x, &x, &t1), e5);
 
         /* if x < 0 then { x = x + y*b**{i-t-1}; q{i-t-1} -= 1; } */
         if (x.sign == 1) {
             CRY_CHK(res = cry_mpi_copy (&t1, &y), e5);
-            CRY_CHK(res = cry_mpi_shld (&t1, i - t - 1), e5);
+            CRY_CHK(res = cry_mpi_shld (&t1, i-t-1), e5);
             CRY_CHK(res = cry_mpi_add (&x, &x, &t1), e5);
             q.data[i-t-1] = (q.data[i-t-1] - 1UL) & CRY_MPI_DIGIT_MAX;
         }
