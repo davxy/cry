@@ -19,7 +19,20 @@
 # endif
 #endif
 
-/** Definition of the digit type macro */
+/* Digit bytes width */
+#if CRY_MPI_DIGIT_MAX == 255UL
+#define CRY_MPI_DIGIT_BYTES  1
+#elif CRY_MPI_DIGIT_MAX == 65535UL
+#define CRY_MPI_DIGIT_BYTES  2
+#elif CRY_MPI_DIGIT_MAX == 4294967295UL
+#define CRY_MPI_DIGIT_BYTES  4
+#elif CRY_MPI_DIGIT_MAX == 18446744073709551615UL
+#define CRY_MPI_DIGIT_BYTES  8
+#else
+# error "Invalid DIGIT_MAX value"
+#endif
+
+/** Digit type definition */
 #if CRY_MPI_DIGIT_MAX == UCHAR_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned char
 #elif CRY_MPI_DIGIT_MAX == USHRT_MAX
@@ -29,14 +42,11 @@
 #elif CRY_MPI_DIGIT_MAX == ULONG_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned long
 #else
-#error "Unsupported MPI digit max value"
+#error "Invalid DIGIT_MAX value"
 #endif
 
 /** Digit type definition */
-typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
-
-/** Number of bytes in one digit */
-#define CRY_MPI_DIGIT_BYTES sizeof(cry_mpi_digit)
+typedef CRY_MPI_DIGIT_TYPE  cry_mpi_digit;
 
 /** Number of bits in one digit */
 #define CRY_MPI_DIGIT_BITS  (CRY_MPI_DIGIT_BYTES << 3)
