@@ -15,10 +15,6 @@
 /** Macro used to compute the maximum of two integral values. */
 #define CRY_MAX(a, b)     (((a) > (b)) ? (a) : (b))
 
-/** Batch operation exception. Rollback to a well known exit point 'e' */
-#define CRY_CHK(exp, lab) \
-    do { if ((exp) != 0) goto lab; } while (0)
-
 /**
  * Increments a big endian value of a give size.
  * Used to directly increment a value within a buffer.
@@ -122,5 +118,65 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
     while (__len--) \
         *__dst++ = (val); \
 } while (0)
+
+/**
+ * Operation exception. Jump to label.
+ */
+#define CRY_CHK(cond, label) do { \
+    if (!(cond)) \
+        goto label; \
+} while (0)
+
+
+/**
+ * User supplied callback function for parameter validation failure.
+ *
+ * This function will be called unless an alternative treatement
+ * is defined through the CRY_CONTRACT_FAIL macro.
+ *
+ * This function can return, and the operation will be aborted, or
+ * alternatively, through use of setjmp()/longjmp() can resume
+ * execution in the application code.
+ *
+ * @param cond  Assertion that didn't hold.
+ * @param file  File where the assertion failed.
+ * @param line  Line in the file where the assertion failed.
+ */
+void cry_contract_fail(const char *cond, const char *file, int line);
+
+#ifdef CRY_CONTRACT_VALIDATE
+
+#ifndef CRY_CONTRACT_FAIL
+#define CRY_CONTRACT_FAIL(cond) \
+        cry_contract_fail(#cond, __FILE__, __LINE__)
+#endif
+
+/**
+ * Contract validation.
+ */
+#define CRY_VALIDATE(cond) do { \
+    if (!(cond)) { \
+        CRY_CONTRACT_FAIL(cond); \
+        return; \
+    } \
+} while (0)
+
+/**
+ * Contract validation with return value.
+ */
+#define CRY_VALIDATE_RET(cond, res) do { \
+    if (!(cond)) { \
+        CRY_CONTRACT_FAIL(cond); \
+        return res; \
+    } \
+} while (0)
+
+#else /* !CRY_CONTRACT_VALIDATE */
+
+#define CRY_VALIDATE(cond)
+#define CRY_VALIDATE_RET(cond, res)
+
+#endif /* ~CRY_CONTRACT_VALIDATE */
+
 
 #endif /* CRY_MISC_H_ */
