@@ -120,10 +120,11 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
 } while (0)
 
 /**
- * Operation exception. Jump to label.
+ * Check CRY operation result.
+ * If not zero result jump to label.
  */
-#define CRY_CHK(cond, label) do { \
-    if (!(cond)) \
+#define CRY_CHK(res, label) do { \
+    if ((res) != 0) \
         goto label; \
 } while (0)
 
