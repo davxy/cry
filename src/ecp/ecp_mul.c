@@ -12,7 +12,8 @@
 int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
                 const cry_ecp_grp *grp)
 {
-    int res, i, j, w, paf = 1;
+    int res, paf = 1;
+    size_t i, j, w;
     struct cry_ecp r, *win = NULL;
 
     if (cry_ecp_is_zero(p1))

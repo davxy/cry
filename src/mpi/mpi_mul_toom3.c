@@ -1,9 +1,10 @@
 #include "mpi_pvt.h"
 #include "misc.h"
 
-static int mod_2e(cry_mpi *r, const cry_mpi *a, unsigned int e)
+static int mod_2e(cry_mpi *r, const cry_mpi *a, size_t e)
 {
-    int x, res;
+    int res;
+    size_t x;
 
     if (e == 0) {
         cry_mpi_zero(r);
@@ -15,7 +16,7 @@ static int mod_2e(cry_mpi *r, const cry_mpi *a, unsigned int e)
         return res;
 
     /* if the modulus is larger than the value than return */
-    if (e >= (int) (a->used * CRY_MPI_DIGIT_BITS))
+    if (e >= a->used * CRY_MPI_DIGIT_BITS)
         return res;
 
     /* zero digits above the last digit of the modulus */

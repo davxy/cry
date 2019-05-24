@@ -2,7 +2,7 @@
 
 int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    unsigned int min, max, i;
+    size_t min, max, i;
     cry_mpi_digit t, l, c, *rp, *ap, *bp;
 
     if (a->used < b->used) {
