@@ -17,7 +17,7 @@ test:
     dependencies:
         - build
     script:
-        - make test CONFIG=config/config_ci.mk
+        - make test CONFIG=config/config-ci.mk
         - (cd test; valgrind --leak-check=full --error-exitcode=2 ./test)
         - gcovr --exclude test -r . | grep TOTAL
 

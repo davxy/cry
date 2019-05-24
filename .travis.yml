@@ -1,7 +1,7 @@
 language: c
 
 script:
-  - make test CONFIG=config/config_ci.mk
+  - make test CONFIG=config/config-ci.mk
   - (cd test; ./test)
 
 before_install:
