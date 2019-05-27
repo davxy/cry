@@ -1,10 +1,10 @@
-libcry := ../libcry.a
-
 CC := gcc
 
 CFLAGS := -O0 -g3 -Wall
 CPPFLAGS = -I. -I../include -I../src
 LDFLAGS := --coverage -Wl,--wrap=malloc,--wrap=realloc,--wrap=calloc,--wrap=free
+
+libcry := ../libcry.a
 
 objects := \
 	test.o \
@@ -40,6 +40,9 @@ all: $(objects) $(libcry)
 clean:
 	$(RM) $(objects) test
 	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno -o -name \*.gcov \)`
+
+$(libcry):
+	$(MAKE) -C ..
 
 $(objects): ../include/cry/config.h
 
