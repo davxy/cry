@@ -217,7 +217,7 @@ int cry_mpi_is_prime(const cry_mpi *p)
  * Assumes we only ever want to generate primes with the number of bits
  * multiple of 8.
  */
-int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
+int cry_mpi_prime(cry_mpi *p, size_t bits, unsigned int *iter)
 {
     int res = -1;
     unsigned int i, itermax;

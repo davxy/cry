@@ -204,7 +204,7 @@ int cry_mpi_rand(cry_mpi *a, size_t bits);
 
 int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max);
 
-int cry_mpi_prime(cry_mpi *a, unsigned int bits, unsigned int *iter);
+int cry_mpi_prime(cry_mpi *a, size_t bits, unsigned int *iter);
 
 int cry_mpi_is_prime(const cry_mpi *a);
 

@@ -25,9 +25,10 @@
 
 #include <stdio.h>
 
-static int nozero_rand(unsigned char *dst, unsigned int n)
+static int nozero_rand(unsigned char *dst, size_t n)
 {
-    int res, k;
+    int res;
+    size_t k;
     unsigned char buf[16];
 
     if ((res = cry_prng_aes_rand(dst, n)) < 0)
@@ -56,8 +57,9 @@ static int nozero_rand(unsigned char *dst, unsigned int n)
 int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
                     const unsigned char *in, size_t in_siz)
 {
+    int res;
     cry_mpi c, m;
-    int res, mod_siz, block_siz;
+    size_t mod_siz, block_siz;
     unsigned char *padded_block;
 
     *out = NULL;
@@ -124,8 +126,9 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
 int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
                     const unsigned char *in, size_t in_siz)
 {
+    int res;
     cry_mpi c, m;
-    int res, i, mod_siz;
+    size_t i, mod_siz;
     unsigned char *padded_block;
 
     *out = NULL;
@@ -133,7 +136,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
 
     mod_siz = cry_mpi_count_bytes(&ctx->m);
     padded_block = malloc(mod_siz);
-    if (!padded_block)
+    if (padded_block == NULL)
         return -1;
 
     if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *) NULL)) != 0) {
@@ -141,7 +144,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
         return res;
     }
 
-    while (in_siz) {
+    while (in_siz > 0) {
         if (in_siz < mod_siz) {
             /* Input must be an even multiple of key modulus */
             res = -1;
@@ -195,12 +198,12 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
 
 #define MAX_ITER    10000
 
-int cry_rsa_keygen(cry_rsa_ctx *ctx, unsigned int bits)
+int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
 {
     int res;
     cry_mpi phi, p, q, p1, q1, one;
     cry_mpi_digit one_dig = 1;
-    int hbits = bits >> 1;
+    size_t hbits = bits >> 1;
     unsigned int i;
 
 
