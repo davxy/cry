@@ -170,8 +170,8 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
             CRY_CHK(res = cry_mpi_mul_dig(&t1, &t1, q.data[i-t-1]), e5);
 
             /* find right hand */
-            t2.data[0] = (i-2 < 0) ? 0 : x.data[i-2];
-            t2.data[1] = (i-1 < 0) ? 0 : x.data[i-1];
+            t2.data[0] = (i <= 1) ? 0 : x.data[i-2];
+            t2.data[1] = (i == 0) ? 0 : x.data[i-1];
             t2.data[2] = x.data[i];
             t2.used = 3;
         } while (cry_mpi_cmp_abs(&t1, &t2) == 1);

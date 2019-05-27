@@ -27,8 +27,8 @@ int cry_mpi_rand(cry_mpi *r, size_t bits)
 
     msb = bits - CRY_MPI_DIGIT_BITS * (digs - 1);
     if (msb < CRY_MPI_DIGIT_BITS)
-        r->data[digs-1] &= (1UL << msb)-1; /* Clean extra bits */
-    r->data[digs-1] |= (1UL << (msb-1));   /* Set the msb */
+        r->data[digs-1] &= ((cry_mpi_digit)1 << msb) - 1; /* Clean extra bits */
+    r->data[digs-1] |= ((cry_mpi_digit)1 << (msb - 1));   /* Set the msb */
     return 0;
 }
 

@@ -38,7 +38,8 @@ static int mod_2e(cry_mpi *r, const cry_mpi *a, size_t e)
  */
 static int div3(cry_mpi *a)
 {
-    int res, ix;
+    int res;
+    size_t i;
     cry_mpi q;
     cry_mpi_dword w, t;
     cry_mpi_digit b;
@@ -52,8 +53,9 @@ static int div3(cry_mpi *a)
     q.used = a->used;
     q.sign = a->sign;
     w = 0;
-    for (ix = a->used - 1; ix >= 0; ix--) {
-        w = (w << ((cry_mpi_dword)CRY_MPI_DIGIT_BITS)) | a->data[ix];
+    i = a->used;
+    while (i-- > 0) {
+        w = (w << ((cry_mpi_dword)CRY_MPI_DIGIT_BITS)) | a->data[i];
         if (w >= 3) {
             /* multiply w by 1/3 */
             t = (w * ((cry_mpi_dword)b)) >> CRY_MPI_DIGIT_BITS;
@@ -70,7 +72,7 @@ static int div3(cry_mpi *a)
         } else {
             t = 0;
         }
-        q.data[ix] = (cry_mpi_digit)t;
+        q.data[i] = (cry_mpi_digit)t;
     }
 
     cry_mpi_adjust(&q);
@@ -87,7 +89,8 @@ static int div3(cry_mpi *a)
  */
 int cry_mpi_mul_toom3(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    int res, B;
+    int res;
+    size_t B;
     cry_mpi w0, w1, w2, w3, w4, a0, a1, a2, b0, b1, b2, t1, t2;
 
     if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
