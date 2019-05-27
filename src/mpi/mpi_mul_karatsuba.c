@@ -4,7 +4,8 @@
 
 int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    int B, hB, res;
+    int res;
+    size_t B, hB;
     cry_mpi x0, x1, y0, y1, z0, z1, z2;
 
     if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
@@ -33,34 +34,14 @@ int cry_mpi_mul_karatsuba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     x1.used = a->used - hB;
     y1.used = b->used - hB;
 
-    {
-        register int x;
-        register cry_mpi_digit *tmpa, *tmpb, *tmpx, *tmpy;
+    memcpy(x0.data, a->data, hB * sizeof(cry_mpi_digit));
+    memcpy(y0.data, b->data, hB * sizeof(cry_mpi_digit));
 
-        /*
-         * We copy the digits directly instead of using higher level functions
-         * since we also need to shift digits.
-         */
-        tmpa = a->data;
-        tmpb = b->data;
+    if (a->used > hB)
+        memcpy(x1.data, a->data + hB, (a->used - hB) * sizeof(*x1.data));
 
-        tmpx = x0.data;
-        tmpy = y0.data;
-
-        /* TODO: use memcpy? */
-        for (x = 0; x < hB; x++) {
-            *tmpx++ = *tmpa++;
-            *tmpy++ = *tmpb++;
-        }
-
-        tmpx = x1.data;
-        for (x = hB; x < a->used; x++)
-            *tmpx++ = *tmpa++;
-
-        tmpy = y1.data;
-        for (x = hB; x < b->used; x++)
-            *tmpy++ = *tmpb++;
-    }
+    if (b->used > hB)
+        memcpy(y1.data, b->data + hB, (b->used - hB) * sizeof(*y1.data));
 
     /*
      * Only need to clamp the lower words since by definition the upper

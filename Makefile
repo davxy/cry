@@ -1,8 +1,6 @@
-source_dir := src
-config_mk := config/config.mk
-config_h := include/cry/config.h
+CONFIG := config/config.mk
 
-include $(config_mk)
+include $(CONFIG)
 
 CC := gcc
 AR := ar
@@ -10,15 +8,14 @@ AWK := awk
 CP := cp
 RM := rm -rf
 
-#
-# Get build name
-#
+source_dir := src
+config_mk := $(CONFIG)
+config_h := include/cry/config.h
 
 # $(call normalstr,str)
 build_name = $(shell $(CC) -dumpmachine)
 # convert to lowercase
 binary_dir = build/$(build_name)
-
 
 # call $(src_to_bin_dir,list)
 src_to_bin_dir = $(patsubst $(source_dir)%,$(binary_dir)%,$1)
@@ -27,30 +24,27 @@ target = $(binary_dir)/libcry.a
 
 .SUFFIXES:
 
+warnings := -Wall -Wextra -Wpedantic -Wconversion -Wshadow \
+			-Wstrict-prototypes -Wmissing-prototypes
+
 includes-y := -Iinclude -Isrc
 
-cflags-y := -Wall -MMD -MP
+cflags-y := -MMD -MP $(warnings)
 cflags-$(CRY_COVERAGE) += --coverage
 cflags-$(CRY_SHORT_ENUMS) += -fshort-enums
 cflags-$(CRY_OMIT_FRAME_POINTER) += -fomit-frame-pointer
-
-ifeq ($(CRY_STACK_PROTECTOR),y)
-cflags-y += -fstack-protector
-else
-cflags-y += -fno-stack-protector
-endif
+cflags-$(CRY_NO_STACK_PROTECTOR) += -fno-stack-protector
 
 ifeq ($(CRY_DEBUG),y)
-cflags-y += -O0 -g3 -fno-inline
+cflags-y += -O0 -g3
 else
 cflags-y += -DNDEBUG
 ifeq ($(CRY_SMALL_SIZE),y)
 cflags-y += -Os
 else
-cflags-y += -O3 -funroll-loops
+cflags-y += -O3
 endif
 endif
-
 
 objects-y :=
 paths-y	:=
@@ -79,11 +73,12 @@ AFLAGS   := $(aflags-y)
 LDFLAGS  := $(lflags-y)
 
 
-.PHONY: all cry clean config test testclean doc
+.PHONY: all clean config test testclean doc
 
-all: cry
-
-cry: $(target)
+# Force serial run
+all:
+	$(MAKE) config
+	$(MAKE) $(target)
 
 clean:
 	@echo "Cleanup ..."
@@ -91,10 +86,12 @@ clean:
 	@$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno \)`
 
 config: $(config_mk)
-	@echo "Building config ..."
-	@printf "/*\n * Automatically generated. Do not edit.\n */\n\n" > $(config_h)
-	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' $< >> $(config_h)
-
+	@printf "/*\n * Automatically generated from \"$^\".\n */\n\n" > tmp
+	@$(AWK) -F= 'NF > 1 && $$1 !~ /^[# ]/ { print "#define", $$1; }' < $^ >> tmp
+	@cmp -s tmp $(config_h) || (echo "Configuration update"; cp tmp $(config_h))
+	@$(RM) tmp
+	@echo ">>> Config : $(config_mk)"
+	@cat $(config_h) | grep CRY_ | $(AWK) '{ printf(" * %s\n", $$2); }'
 
 $(target): $(objects)
 	$(AR) rcs $@ $^
@@ -103,12 +100,12 @@ $(target): $(objects)
 $(objects): Makefile $(config_h)
 
 $(config_h): $(config_mk)
-	$(MAKE) config
+	touch $(config_h)
 
 $(binary_dir)/%.o: $(source_dir)/%.c
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
-test: $(target)
+test: all
 	$(MAKE) -C test
 
 testclean:

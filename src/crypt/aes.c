@@ -345,7 +345,7 @@ static const uint32_t mtab[256] = {
 
 static void key_invert(cry_aes_ctx *ctx)
 {
-    size_t i, j, k, nr;
+    unsigned int i, j, k, nr;
     uint32_t key, newkey, tmp;
 
     nr = ctx->nr;
@@ -376,8 +376,8 @@ void cry_aes_key_set(cry_aes_ctx *ctx, const unsigned char *key, size_t size)
         0x01, 0x02, 0x04, 0x08, 0x10,
         0x20, 0x40, 0x80, 0x1b, 0x36,
     };
-    const uint8_t *rp = rcon;
-    size_t i, nk, nr, lk;
+    const unsigned char *rp = rcon;
+    unsigned int i, nk, nr, lk;
     uint32_t tmp;
 
     /*

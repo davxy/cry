@@ -4,14 +4,15 @@
 /*
  * Initialize a big number from big endian binary data.
  */
-int cry_mpi_load_bin(cry_mpi *x, const void *b, size_t size)
+int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
 {
-    unsigned int i, m, res;
-    cry_mpi_digit l;
-    unsigned char *s = (unsigned char *)b;
+    int res;
+    size_t i, m;
+    cry_mpi_digit d;
+    unsigned char *p = (unsigned char *)buf;
 
     /* skip leading zeros */
-    for ( ; size > 0 && *s == 0; s++, size--);
+    for ( ; size > 0 && *p == 0; p++, size--);
     if (size == 0)
         return 0;
 
@@ -24,12 +25,15 @@ int cry_mpi_load_bin(cry_mpi *x, const void *b, size_t size)
     }
     x->used = i;
 
-    l = 0;
+    d = 0;
     while (size--) {
-        l = (l << 8L) | *s++;
+#if CRY_MPI_DIGIT_BITS > 8
+        d <<= 8;
+#endif
+        d |= *p++;
         if (m-- == 0) {
-            x->data[--i] = l;
-            l = 0;
+            x->data[--i] = d;
+            d = 0;
             m = CRY_MPI_DIGIT_BYTES - 1;
         }
     }
@@ -42,9 +46,9 @@ int cry_mpi_load_bin(cry_mpi *x, const void *b, size_t size)
 int cry_mpi_store_bin(const cry_mpi *x, void *buf,
         size_t bufsiz, int pad)
 {
-    int i;
-    unsigned long l;
-    unsigned char *d = (unsigned char *) buf;
+    size_t i;
+    cry_mpi_digit d;
+    unsigned char *p = (unsigned char *) buf;
 
     i = cry_mpi_count_bytes(x);
     if (bufsiz < i)
@@ -53,12 +57,12 @@ int cry_mpi_store_bin(const cry_mpi *x, void *buf,
         bufsiz = i;
     /* Add leading zeroes if necessary */
     if (bufsiz > i) {
-        memset(d, 0, bufsiz - i);
-        d += bufsiz - i;
+        memset(p, 0, bufsiz - i);
+        p += bufsiz - i;
     }
     while (i--) {
-        l = x->data[i / CRY_MPI_DIGIT_BYTES];
-        *d++ = (unsigned char)(l >> (8 * (i % CRY_MPI_DIGIT_BYTES))) & 0xff;
+        d = x->data[i / CRY_MPI_DIGIT_BYTES];
+        *p++ = (unsigned char)(d >> (8 * (i % CRY_MPI_DIGIT_BYTES))) & 0xff;
     }
     return 0;
 }

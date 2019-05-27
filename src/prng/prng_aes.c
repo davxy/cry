@@ -7,9 +7,9 @@
 
 struct prng_bc_ctx {
     cry_aes_ctx     aes;
+    size_t          ix;
     unsigned char   ctr[16];
     unsigned char   lo[16];
-    unsigned int    ix;
 };
 
 static struct prng_bc_ctx prng_ctx;

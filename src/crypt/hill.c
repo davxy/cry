@@ -158,8 +158,7 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
                   unsigned int trials)
 {
     int res = -1;
-    unsigned long det;
-    unsigned long idet;
+    unsigned char det, idet;
     size_t n;
 
     n = keylen_trim(&keylen);
@@ -176,7 +175,7 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
          * should be odd, since if gcd(det, 256)=1 -> is invertible
          */
         if ((det & 1) != 0) {
-            idet = cry_long_inv(det, 256);
+            idet = (unsigned char) cry_long_inv(det, 256);
             mtx_invert(ikey, key, n, idet);
             res = 0;
             trials = 0;
@@ -190,7 +189,7 @@ int cry_hill_init(struct cry_hill_ctx *ctx, const unsigned char *key,
               const unsigned char *ikey, size_t keylen)
 {
     int res = 0;
-    int trials = 0;
+    unsigned int trials = 0;
 
     memset(ctx, 0, sizeof(*ctx));
 
