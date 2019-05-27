@@ -24,63 +24,110 @@
  * Used to directly increment a value within a buffer.
  */
 #define CRY_INCREMENT_BE(val_ptr, val_size) do { \
-    int i = (val_size) - 1; \
-    if (++(val_ptr)[i] == 0) \
-        while (++(val_ptr)[--i] == 0 && i > 0); \
+    size_t __i = (val_size) - 1; \
+    if (++(val_ptr)[__i] == 0) \
+        while (++(val_ptr)[--__i] == 0 && __i > 0); \
     } while (0)
 
 
 /** Architecture independent little endian 16 bit value write. */
 #define CRY_WRITE16_LE(val, dst) do { \
-    ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 8) & 0xff); \
-    ((uint8_t *)(dst))[0] = (uint8_t) ((val) & 0xff); \
+    ((uint8_t *) (dst))[1] = (uint8_t) (((val) >> 8) & 0xff); \
+    ((uint8_t *) (dst))[0] = (uint8_t) (((val) >> 0) & 0xff); \
     } while (0)
 
 /** Architecture independent big endian 16 bit value write. */
 #define CRY_WRITE16_BE(val, dst) do { \
-    ((uint8_t *)(dst))[0] = (uint8_t)(((val) >> 8) & 0xff); \
-    ((uint8_t *)(dst))[1] = (uint8_t) ((val) & 0xff); \
+    ((uint8_t *) (dst))[0] = (uint8_t) (((val) >> 8) & 0xff); \
+    ((uint8_t *) (dst))[1] = (uint8_t) (((val) >> 0) & 0xff); \
     } while (0)
 
 /** Architecture independent little endian 16 bit value read. */
 #define CRY_READ16_LE(val, src) \
-    ((val) = ((((uint16_t) (src)[1]) << 8U) \
-            |  ((uint16_t) (src)[0])))
+    ((val) = ((((uint16_t) (src)[1]) << 8) | \
+              (((uint16_t) (src)[0]) << 0)))
 
 /** Architecture independent big endian 16 bit value read. */
 #define CRY_READ16_BE(val, src) \
-    ((val) = ((((uint16_t) (src)[0]) << 8U) \
-           |   ((uint16_t) (src)[1])))
+    ((val) = ((((uint16_t) (src)[0]) << 8) | \
+              (((uint16_t) (src)[1]) << 0)))
 
 /** Architecture independent little endian 32 bit value write. */
 #define CRY_WRITE32_LE(val, dst) do { \
-    ((uint8_t *)(dst))[3] = (uint8_t)(((val) >> 24) & 0xff); \
-    ((uint8_t *)(dst))[2] = (uint8_t)(((val) >> 16) & 0xff); \
-    ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 8) & 0xff); \
-    ((uint8_t *)(dst))[0] = (uint8_t) ((val) & 0xff); \
+    ((uint8_t *) (dst))[3] = (uint8_t) (((val) >> 24) & 0xff); \
+    ((uint8_t *) (dst))[2] = (uint8_t) (((val) >> 16) & 0xff); \
+    ((uint8_t *) (dst))[1] = (uint8_t) (((val) >>  8) & 0xff); \
+    ((uint8_t *) (dst))[0] = (uint8_t) (((val) >>  0) & 0xff); \
 } while (0)
 
 /** Architecture independent big endian 32 bit value write. */
 #define CRY_WRITE32_BE(val, dst) do { \
-    ((uint8_t *)(dst))[0] = (uint8_t)(((val) >> 24U) & 0xffU); \
-    ((uint8_t *)(dst))[1] = (uint8_t)(((val) >> 16U) & 0xffU); \
-    ((uint8_t *)(dst))[2] = (uint8_t)(((val) >> 8U) & 0xffU); \
-    ((uint8_t *)(dst))[3] = (uint8_t) ((val) & 0xff); \
+    ((uint8_t *) (dst))[0] = (uint8_t) (((val) >> 24) & 0xff); \
+    ((uint8_t *) (dst))[1] = (uint8_t) (((val) >> 16) & 0xff); \
+    ((uint8_t *) (dst))[2] = (uint8_t) (((val) >>  8) & 0xff); \
+    ((uint8_t *) (dst))[3] = (uint8_t) (((val) >>  0) & 0xff); \
 } while (0)
 
 /** Architecture independent little endian 32 bit value read. */
 #define CRY_READ32_LE(val, src) \
-    ((val) = ((((uint32_t) (src)[3]) << 24) \
-            | (((uint32_t) (src)[2]) << 16) \
-            | (((uint32_t) (src)[1]) << 8) \
-            |  ((uint32_t) (src)[0])))
+    ((val) = ((((uint32_t) (src)[3]) << 24) | \
+              (((uint32_t) (src)[2]) << 16) | \
+              (((uint32_t) (src)[1]) <<  8) | \
+              (((uint32_t) (src)[0]) <<  0)))
 
 /** Architecture independent big endian 32 bit value read. */
 #define CRY_READ32_BE(val, src) \
-    ((val) = ((((uint32_t) (src)[0]) << 24U) \
-            | (((uint32_t) (src)[1]) << 16U) \
-            | (((uint32_t) (src)[2]) << 8U)  \
-            |  ((uint32_t) (src)[3])))
+    ((val) = ((((uint32_t) (src)[0]) << 24) | \
+              (((uint32_t) (src)[1]) << 16) | \
+              (((uint32_t) (src)[2]) <<  8) | \
+              (((uint32_t) (src)[3]) <<  0)))
+
+/** Architecture independent little endian 64 bit value write. */
+#define CRY_WRITE64_LE(val, dst) do { \
+    ((uint8_t *) (dst))[7] = (uint8_t) (((val) >> 56) & 0xff); \
+    ((uint8_t *) (dst))[6] = (uint8_t) (((val) >> 48) & 0xff); \
+    ((uint8_t *) (dst))[5] = (uint8_t) (((val) >> 40) & 0xff); \
+    ((uint8_t *) (dst))[4] = (uint8_t) (((val) >> 32) & 0xff); \
+    ((uint8_t *) (dst))[3] = (uint8_t) (((val) >> 24) & 0xff); \
+    ((uint8_t *) (dst))[2] = (uint8_t) (((val) >> 16) & 0xff); \
+    ((uint8_t *) (dst))[1] = (uint8_t) (((val) >>  8) & 0xff); \
+    ((uint8_t *) (dst))[0] = (uint8_t) (((val) >>  0) & 0xff); \
+} while (0)
+
+/** Architecture independent big endian 64 bit value write. */
+#define CRY_WRITE64_BE(val, dst) do { \
+    ((uint8_t *) (dst))[0] = (uint8_t) (((val) >> 56) & 0xff); \
+    ((uint8_t *) (dst))[1] = (uint8_t) (((val) >> 48) & 0xff); \
+    ((uint8_t *) (dst))[2] = (uint8_t) (((val) >> 40) & 0xff); \
+    ((uint8_t *) (dst))[3] = (uint8_t) (((val) >> 32) & 0xff); \
+    ((uint8_t *) (dst))[4] = (uint8_t) (((val) >> 24) & 0xff); \
+    ((uint8_t *) (dst))[5] = (uint8_t) (((val) >> 16) & 0xff); \
+    ((uint8_t *) (dst))[6] = (uint8_t) (((val) >>  8) & 0xff); \
+    ((uint8_t *) (dst))[7] = (uint8_t) (((val) >>  0) & 0xff); \
+} while (0)
+
+/** Architecture independent little endian 64 bit value read. */
+#define CRY_READ64_LE(val, src) \
+    ((val) = ((((uint64_t) (src)[7]) << 56) | \
+              (((uint64_t) (src)[6]) << 48) | \
+              (((uint64_t) (src)[5]) << 40) | \
+              (((uint64_t) (src)[4]) << 32) | \
+              (((uint64_t) (src)[3]) << 24) | \
+              (((uint64_t) (src)[2]) << 16) | \
+              (((uint64_t) (src)[1]) <<  8) | \
+              (((uint64_t) (src)[0]) <<  0)))
+
+/** Architecture independent big endian 64 bit value read. */
+#define CRY_READ64_BE(val, src) \
+    ((val) = ((((uint64_t) (src)[0]) << 56) | \
+              (((uint64_t) (src)[1]) << 48) | \
+              (((uint64_t) (src)[2]) << 40) | \
+              (((uint64_t) (src)[3]) << 32) | \
+              (((uint64_t) (src)[4]) << 24) | \
+              (((uint64_t) (src)[5]) << 16) | \
+              (((uint64_t) (src)[6]) <<  8) | \
+              (((uint64_t) (src)[7]) <<  0)))
+
 
 /** In-place swap macro */
 #define CRY_SWAP(v1, v2) do { \
