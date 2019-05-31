@@ -24,9 +24,10 @@ target = $(binary_dir)/libcry.a
 
 .SUFFIXES:
 
-warnings := -Wall -Wextra -Wpedantic
-#-Wconversion -Wshadow -Wstrict-prototypes -Wmissing-prototypes
+warnings := -Wall -Wextra -Wshadow -Wstrict-prototypes -Wmissing-prototypes
 
+#-Wpedantic
+#-Wconversion
 includes-y := -Iinclude -Isrc
 
 cflags-y := -MMD -MP $(warnings)
