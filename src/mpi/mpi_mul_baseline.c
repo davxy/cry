@@ -4,8 +4,9 @@
 
 int cry_mpi_mul_baseline(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
+    int res;
     cry_mpi t;
-    int res, pa, pb, i, j;
+    size_t pa, pb, i, j;
     cry_mpi_digit u, tmpx, *tmpt, *tmpy;
     cry_mpi_dword dw;
     size_t digs;

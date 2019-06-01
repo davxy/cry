@@ -3,7 +3,8 @@
 
 int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
 {
-    int res, i, j, pa;
+    int res;
+    size_t i, j, pa;
     cry_mpi t;
     cry_mpi_dword dd, c, ch;
     cry_mpi_digit tmpx, *tmpt;
@@ -28,7 +29,7 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
         /* alias for where to store the result */
         tmpt = t.data + (2*i + 1);
 
-        for (j = i + 1; j < pa; j++) {
+        for (j = i+1; j < pa; j++) {
             /* first calculate the double product */
             dd = (cry_mpi_dword)tmpx * (cry_mpi_dword)a->data[j];
             /* check if mul by 2 will generate overflow */

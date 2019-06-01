@@ -166,7 +166,7 @@ int cry_mpi_init_copy(cry_mpi *d, const cry_mpi *s)
 /*
  * Quick way to get number of bits in a word
  */
-static size_t word_bits(unsigned long l)
+static size_t digit_bits(cry_mpi_digit d)
 {
     static const unsigned char bits[256] = {
         0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -187,36 +187,36 @@ static size_t word_bits(unsigned long l)
         8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
     };
 
-#if __WORDSIZE == 64
-    if (l & 0xffffffff00000000L) {
-        if (l & 0xffff000000000000L) {
-            if (l & 0xff00000000000000L)
-                return (bits[(int)(l >> 56)] + 56);
+#if CRY_MPI_DIGIT_BYTES == 8
+    if (d & 0xFFFFFFFF00000000UL) {
+        if (d & 0xFFFF000000000000UL) {
+            if (d & 0xFF00000000000000UL)
+                return bits[d >> 56] + 56U;
             else
-                return (bits[(int)(l >> 48)] + 48);
+                return bits[d >> 48] + 48U;
         } else {
-            if (l & 0x0000ff0000000000L)
-                return (bits[(int)(l >> 40)] + 40);
+            if (d & 0x0000FF0000000000UL)
+                return bits[d >> 40] + 40U;
             else
-                return (bits[(int)(l >> 32)] + 32);
+                return bits[d >> 32] + 32U;
         }
-    } else {
-#endif
-        if (l & 0xffff0000L) {
-            if (l & 0xff000000L)
-                return (bits[(int)(l >> 24L)] + 24);
-            else
-                return (bits[(int)(l >> 16L)] + 16);
-        } else {
-            if (l & 0xff00L)
-                return (bits[(int)(l >> 8)] + 8);
-            else
-                return (bits[(int)(l)]);
-        }
-#if __WORDSIZE == 64
     }
 #endif
+#if CRY_MPI_DIGIT_BYTES >= 4
+    if (d & 0xFFFF0000UL) {
+        if (d & 0xFF000000UL)
+            return bits[d >> 24] + 24U;
+        else
+            return bits[d >> 16] + 16U;
+    }
+#endif
+#if CRY_MPI_DIGIT_BYTES >= 2
+    if (d & 0xFF00UL)
+        return bits[d >> 8] + 8U;
+#endif
+    return bits[d];
 }
+
 
 /*
  * Big number size in bits
@@ -226,6 +226,6 @@ size_t cry_mpi_count_bits(const cry_mpi *a)
     size_t n = 0;
 
     if (a->used != 0)
-        n = ((a->used-1)*CRY_MPI_DIGIT_BITS) + word_bits(a->data[a->used-1]);
+        n = ((a->used-1)*CRY_MPI_DIGIT_BITS) + digit_bits(a->data[a->used-1]);
     return n;
 }

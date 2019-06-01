@@ -69,7 +69,7 @@ size_t cry_base64_decode(char *out, const char *in, size_t len)
     do {
         for (i = 0; i < 4; i++) {
             /* check for illegal base64 characters */
-            if (in[i] > 127 || unbase64[(int)in[i]] == 255)
+            if (in[i] < 0 || unbase64[(int)in[i]] == 255)
                 return -1;
         }
 

@@ -97,7 +97,7 @@ static int is_obviously_not_prime(const cry_mpi *p)
  * b is how many times does 2 divide p - 1. This gets returned.
  * m is (p-1)/(2^b).
  */
-static int calc_b_and_m(cry_mpi *x, const cry_mpi *p)
+static int calc_b_and_m(cry_mpi *m, const cry_mpi *p)
 {
     int ret = 0;
     cry_mpi one;
@@ -108,14 +108,14 @@ static int calc_b_and_m(cry_mpi *x, const cry_mpi *p)
     one.alloc = 1;
     one.sign = 0;
 
-    if ((ret = cry_mpi_copy(x, p)) < 0)
+    if ((ret = cry_mpi_copy(m, p)) < 0)
         return ret;
 
-    if ((ret = cry_mpi_sub(x, x, &one)) < 0)
+    if ((ret = cry_mpi_sub(m, m, &one)) < 0)
         return ret;
 
-    for (ret = 0; !cry_mpi_is_odd(x); ret++) {
-        if (cry_mpi_shr(x, x, 1) < 0) { /* div by 2 */
+    for (ret = 0; !cry_mpi_is_odd(m); ret++) {
+        if (cry_mpi_shr(m, m, 1) < 0) { /* div by 2 */
             ret = -1;
             break;
         }
@@ -141,9 +141,9 @@ static int passes_miller_rabin(const cry_mpi *p)
     one.alloc = 1;
     one.sign = 0;
 
-    b = calc_b_and_m(&m, p);
+    b = (unsigned int)calc_b_and_m(&m, p);
     if ((int)b < 0) {
-        res = (int)b;
+        res = -1;
         goto e;
     }
 
@@ -217,7 +217,7 @@ int cry_mpi_is_prime(const cry_mpi *p)
  * Assumes we only ever want to generate primes with the number of bits
  * multiple of 8.
  */
-int cry_mpi_prime(cry_mpi *p, unsigned int bits, unsigned int *iter)
+int cry_mpi_prime(cry_mpi *p, size_t bits, unsigned int *iter)
 {
     int res = -1;
     unsigned int i, itermax;

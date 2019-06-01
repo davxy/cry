@@ -16,6 +16,48 @@ mpi_init_size
 100
 
 ################################################################################
+# Count bits
+# p0 : input value
+# p1 : return value (number of bits)
+################################################################################
+
+Count bits zero
+mpi_count_bits
+0
+0
+
+Count bits one
+mpi_count_bits
+1
+1
+
+Count bits
+mpi_count_bits
+31
+6
+
+Count bits multi digit
+mpi_count_bits
+2b193b746a12a389ab81
+78
+
+################################################################################
+# Count bytes
+# p0 : input value
+# p1 : return value (number of bytes)
+################################################################################
+
+Count bytes zero
+mpi_count_bytes
+00
+0
+
+Count bytes
+mpi_count_bytes
+1943
+2
+
+################################################################################
 # Set primitive integer value
 # p0 : input value (primitive base 10)
 ################################################################################
@@ -31,38 +73,6 @@ mpi_set_int
 Set positive primitive (+2^31 - 1)
 mpi_set_int
 2147483647
-
-################################################################################
-# Count bits
-# p0 : input value
-# p1 : return value (number of bits)
-################################################################################
-
-Count bits
-mpi_count_bits
-1943
-13
-
-Count bits zero
-mpi_count_bits
-00
-0
-
-################################################################################
-# Count bytes
-# p0 : input value
-# p1 : return value (number of bytes)
-################################################################################
-
-Count bytes
-mpi_count_bytes
-1943
-2
-
-Count bytes zero
-mpi_count_bytes
-00
-0
 
 ################################################################################
 # Load and store string
@@ -225,12 +235,6 @@ mpi_shl
 513
 249000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 
-Shift left by a negative quantity (shl -> shr)
-mpi_shl
-1248
--1
-924
-
 ################################################################################
 # Shift right
 # p0 : input value as hex string
@@ -255,12 +259,6 @@ mpi_shr
 1248
 513
 0
-
-Shift right by a negative quantity (shr -> shl)
-mpi_shr
-1248
--1
-2490
 
 ################################################################################
 # Addition

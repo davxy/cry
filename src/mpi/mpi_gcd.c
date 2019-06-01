@@ -4,16 +4,16 @@
  * The number of less significant zero-bits.
  * Used by the binary gcd algorithm.
  */
-static unsigned int cry_mpi_lsb(struct cry_mpi *x)
+static size_t cry_mpi_lsb(struct cry_mpi *x)
 {
-    int i, j, count = 0;
+    size_t i, j, count = 0;
 
     for (i = 0; i < x->used; i++) {
         for (j = 0; j < CRY_MPI_DIGIT_BITS; j++, count++)
             if (((x->data[i] >> j) & 1) != 0)
-                return count;
+                break;
     }
-    return 0;
+    return count;
 }
 
 /*
@@ -22,8 +22,9 @@ static unsigned int cry_mpi_lsb(struct cry_mpi *x)
  */
 int cry_mpi_gcd(cry_mpi *r, const cry_mpi *x, const cry_mpi *y)
 {
+    int res;
     cry_mpi tx, ty;
-    int res, lz, lzt;
+    size_t lz, lzt;
 
     if ((res = cry_mpi_init_list(&tx, &ty, (cry_mpi *) NULL)) != 0)
         return res;

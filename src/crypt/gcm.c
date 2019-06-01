@@ -59,7 +59,7 @@ static void gcm_hash(unsigned char *hash, const unsigned char *key,
 }
 
 static void gcm_hash_sizes(unsigned char *hash, const unsigned char *key,
-                           unsigned long auth_size, unsigned long ciph_size)
+                           size_t auth_size, size_t ciph_size)
 {
     unsigned char buf[CRY_GCM_BLOCK_SIZE] = {0};
     uint32_t bits;

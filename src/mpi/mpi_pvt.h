@@ -8,13 +8,13 @@
 
 /* Double precision digits */
 
-#if CRY_MPI_DIGIT_MAX == 255UL
+#if CRY_MPI_DIGIT_BYTES == 1
 typedef uint16_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 65535UL
+#elif CRY_MPI_DIGIT_BYTES == 2
 typedef uint32_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 4294967295UL
+#elif CRY_MPI_DIGIT_BYTES == 4
 typedef uint64_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 18446744073709551615UL
+#elif CRY_MPI_DIGIT_BYTES == 8
 # if defined(_WIN32) || defined(__GNUC__)
 typedef unsigned __int128 cry_mpi_dword;
 # else
@@ -45,9 +45,9 @@ typedef uint128_t cry_mpi_dword;
 
 int cry_mpi_grow(cry_mpi *a, size_t size);
 
-int cry_mpi_shrd(cry_mpi *a, int n);
+int cry_mpi_shrd(cry_mpi *a, size_t n);
 
-int cry_mpi_shld(cry_mpi *a, int n);
+int cry_mpi_shld(cry_mpi *a, size_t n);
 
 /* decrease used while the most significant digit is zero */
 #define cry_mpi_adjust(a) do { \

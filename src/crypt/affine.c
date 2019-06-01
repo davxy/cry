@@ -9,7 +9,7 @@ void cry_affine_encrypt(struct cry_affine_ctx *ctx, unsigned char *out,
 
     k = 0;
     for (i = 0; i < len; i++) {
-        out[i] = in[i]*ctx->keya[k] + ctx->keyb[k];
+        out[i] = (unsigned char) (in[i]*ctx->keya[k] + ctx->keyb[k]);
         k++;
         if (k == ctx->keylen)
             k = 0;
@@ -23,7 +23,7 @@ void cry_affine_decrypt(struct cry_affine_ctx *ctx, unsigned char *out,
 
     k = 0;
     for (i = 0; i < len; i++) {
-        out[i] = (in[i] - ctx->keyb[k]) * ctx->inva[k];
+        out[i] = (unsigned char)((in[i] - ctx->keyb[k]) * ctx->inva[k]);
         k++;
         if (k == ctx->keylen)
             k = 0;
