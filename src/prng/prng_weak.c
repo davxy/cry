@@ -38,7 +38,7 @@ int cry_prng_weak_init(const unsigned char *seed, size_t seed_siz)
 int cry_prng_weak_rand(unsigned char *buf, size_t siz)
 {
     size_t i, iter = siz / 4;
-    uint32_t *buf32 = (uint32_t *) buf;
+    uint32_t *buf32 = (uint32_t *)buf;
     uint32_t r;
 
     if (!init)

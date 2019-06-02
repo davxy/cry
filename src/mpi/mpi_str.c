@@ -3,9 +3,9 @@
 
 
 #define ASC_TO_RAW_CHAR(c) \
-            (('0' <= (c) && (c) <= '9') ?  ((c) - '0') : \
-             ('a' <= (c) && (c) <= 'z') ? (((c) - 'a') + 10) : \
-             ('A' <= (c) && (c) <= 'Z') ? (((c) - 'A') + 10) : 0)
+    (('0' <= (c) && (c) <= '9') ?  ((c) - '0') : \
+     ('a' <= (c) && (c) <= 'z') ? (((c) - 'a') + 10) : \
+     ('A' <= (c) && (c) <= 'Z') ? (((c) - 'A') + 10) : 0)
 
 static int load_str_hex(cry_mpi *a, const char *s)
 {
@@ -42,7 +42,7 @@ static int load_str_hex(cry_mpi *a, const char *s)
 }
 
 #define RAW_TO_ASC_CHAR(c) \
-        (((c) < 10) ? ('0' + (c)) : ('a' + ((c) - 10)))
+    (((c) < 10) ? ('0' + (c)) : ('a' + ((c) - 10)))
 
 static int store_str_hex(const cry_mpi *a, char *s)
 {
@@ -154,7 +154,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
         return store_str_hex(a, s);
     }
 
-    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, (cry_mpi *) NULL)) != 0)
+    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, (cry_mpi *)NULL)) != 0)
         return ret;
 
     if ((ret = cry_mpi_copy(&tmp, a)) != 0)
@@ -182,7 +182,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
         i--;
     }
 
-e:  cry_mpi_clear_list(&tmp, &rad, &rem, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&tmp, &rad, &rem, (cry_mpi *)NULL);
     return ret;
 }
 

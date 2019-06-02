@@ -14,7 +14,7 @@
 
 /** DES context */
 struct cry_des_ctx {
-    size_t        keylen; /* 8 for normal DES, 24 for triple DES */
+    size_t keylen;        /* 8 for normal DES, 24 for triple DES */
     unsigned char key[3*CRY_DES_BLOCK_SIZE];
 };
 

@@ -1,7 +1,8 @@
 #include <cry/dsa.h>
 #include "mpi/mpi_pvt.h"
 
-#define CHK(exp) do { if ((res = (exp)) != 0) goto e; } while (0)
+#define CHK(exp) do { if ((res = (exp)) != 0) \
+                          goto e; } while (0)
 
 /*
  * c = rand()
@@ -36,7 +37,7 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
     int res;
     cry_mpi k, z;
 
-    if ((res = cry_mpi_init_list(&k, &z, (cry_mpi *) NULL)) != 0)
+    if ((res = cry_mpi_init_list(&k, &z, (cry_mpi *)NULL)) != 0)
         return res;
 
     /* k = c mod (q-1) + 1 */
@@ -60,7 +61,7 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
     CHK(cry_mpi_mul(&sign->s, &sign->s, &k));
     CHK(cry_mpi_mod(&sign->s, &sign->s, &ctx->q));
 
-e:  cry_mpi_clear_list(&k, &z, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&k, &z, (cry_mpi *)NULL);
     return res;
 }
 
@@ -70,7 +71,7 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
     int res;
     cry_mpi z, w, u1, u2;
 
-    if ((res = cry_mpi_init_list(&z, &w, &u1, &u2, (cry_mpi *) NULL)) != 0)
+    if ((res = cry_mpi_init_list(&z, &w, &u1, &u2, (cry_mpi *)NULL)) != 0)
         return res;
 
     /* w = inv(s) mod q */
@@ -99,6 +100,6 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
 
     /* Check to see if v and sig match */
     res = (cry_mpi_cmp_abs(&u1, &sign->r) == 0) ? 0 : -1;
-e:  cry_mpi_clear_list(&z, &w, &u1, &u2, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&z, &w, &u1, &u2, (cry_mpi *)NULL);
     return res;
 }

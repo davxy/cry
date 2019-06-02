@@ -10,3 +10,4 @@ echo "Checking $dirs"
 
 # Replace tabs with 4 spaces
 find $dirs -not -path '*/\.*' -type f | grep -E ".(h|c)$" | xargs -L1 uncrustify -c uncrustify.cfg --no-backup
+#find $dirs -not -path '*/\.*' -type f | grep -E ".(h|c)$" | xargs -L1 clang-format -style=file -i -verbose

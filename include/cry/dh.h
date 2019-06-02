@@ -20,7 +20,7 @@ struct cry_dh_ctx {
 typedef struct cry_dh_ctx cry_dh_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 int cry_dh_init(cry_dh_ctx *ctx);

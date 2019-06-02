@@ -34,7 +34,7 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
             dd = (cry_mpi_dword)tmpx * (cry_mpi_dword)a->data[j];
             /* check if mul by 2 will generate overflow */
             ch = (dd & (((cry_mpi_dword)1U) << (2*CRY_MPI_DIGIT_BITS - 1)))
-                    >> (CRY_MPI_DIGIT_BITS - 1);
+                 >> (CRY_MPI_DIGIT_BITS - 1);
             dd <<= 1; /* mul by 2 */
             dd += ((cry_mpi_dword)*tmpt + c);
             if (ch == 0 && dd < ((cry_mpi_dword)*tmpt + c))

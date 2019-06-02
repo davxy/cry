@@ -77,7 +77,6 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
     c1 = c2 = 0;
     for (ix = 0; ix < pa; ix++) {
-
         /* get offsets into the two bignums */
         ty = CRY_MIN(ix, b->used - 1);
         tx = ix - ty;

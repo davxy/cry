@@ -13,7 +13,7 @@ int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_ecp_grp *grp)
         return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
 
     if ((res = cry_mpi_init_list(&num, &den, &lam,
-            &r.x, &r.y, &r.z, (cry_mpi *) NULL)) != 0) {
+                                 &r.x, &r.y, &r.z, (cry_mpi *)NULL)) != 0) {
         return res;
     }
 
@@ -41,6 +41,6 @@ int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_ecp_grp *grp)
     CHK(cry_mpi_set_int(&r.z, 1));
 
     cry_ecp_swap(pr, &r);
-e:  cry_mpi_clear_list(&num, &den, &lam, &r.x, &r.y, &r.z, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&num, &den, &lam, &r.x, &r.y, &r.z, (cry_mpi *)NULL);
     return res;
 }

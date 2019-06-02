@@ -24,8 +24,8 @@
  */
 struct cry_crc16_ctx {
     const uint16_t *tab;
-    uint16_t        crc;
-    unsigned char   flags;
+    uint16_t crc;
+    unsigned char flags;
 };
 
 typedef struct cry_crc16_ctx cry_crc16_ctx;
@@ -35,14 +35,14 @@ typedef struct cry_crc16_ctx cry_crc16_ctx;
  */
 struct cry_crc32_ctx {
     const uint32_t *tab;
-    uint32_t        crc;
-    unsigned char   flags;
+    uint32_t crc;
+    unsigned char flags;
 };
 
 typedef struct cry_crc32_ctx cry_crc32_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

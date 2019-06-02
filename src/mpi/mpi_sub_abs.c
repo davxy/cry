@@ -34,13 +34,13 @@ int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
      * If there is a borrow, decrease blocks until one does not
      * reverse rollover
      */
-    for ( ; i < max && c; i++) {
+    for (; i < max && c; i++) {
         c = (*ap == 0);
         *rp++ = *ap++ - 1;
     }
     if (c)
         return -1; /* negative result not allowed */
-    for ( ; i < max; i++)
+    for (; i < max; i++)
         *rp++ = *ap++;
     cry_mpi_adjust(r); /* Adjust used counter */
     return 0;

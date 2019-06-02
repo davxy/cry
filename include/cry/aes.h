@@ -15,15 +15,15 @@
 #define CRY_AES_MODE_DECRYPT    2
 
 struct cry_aes_ctx {
-    uint32_t      keys[60];     /** Maximum size of key schedule */
-    unsigned int  nr;           /** Number of rounds */
-    int           mode;         /** Encrypt/decrypt */
+    uint32_t keys[60];          /** Maximum size of key schedule */
+    unsigned int nr;            /** Number of rounds */
+    int mode;                   /** Encrypt/decrypt */
 };
 
 typedef struct cry_aes_ctx cry_aes_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

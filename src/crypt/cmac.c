@@ -19,7 +19,8 @@ static void cbc_compute_subkeys(cry_cmac_ctx *ctx,
     unsigned char msb;
     size_t i;
 
-    ctx->ciph_itf->encrypt(ctx->ciph_ctx, k1, blank, CRY_CMAC_BLOCK_SIZE);
+    ctx->ciph_itf->encrypt(ctx->ciph_ctx, k1, blank,
+                           CRY_CMAC_BLOCK_SIZE);
 
     msb = (k1[0] & 0x80);
     for (i = 0; i < CRY_CMAC_BLOCK_SIZE; i++) {
@@ -65,7 +66,8 @@ void cry_cmac_update(cry_cmac_ctx *ctx, const unsigned char *data, size_t len)
         if (ctx->blklen < CRY_CMAC_BLOCK_SIZE || len == 0)
             return; /* may be the last block */
         xor_128(block, ctx->mac, ctx->blk);
-        ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, block, CRY_CMAC_BLOCK_SIZE);
+        ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, block,
+                               CRY_CMAC_BLOCK_SIZE);
     }
 
     /* Compute number of rounds */
@@ -77,7 +79,8 @@ void cry_cmac_update(cry_cmac_ctx *ctx, const unsigned char *data, size_t len)
     /* last block shall be processed in the digest */
     for (i = 0; i < n; i++) {
         xor_128(block, ctx->mac, &data[CRY_CMAC_BLOCK_SIZE*i]);
-        ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, block, CRY_CMAC_BLOCK_SIZE);
+        ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, block,
+                               CRY_CMAC_BLOCK_SIZE);
     }
 
     /* last block is not complete block */
@@ -98,7 +101,9 @@ static void pad(unsigned char *blk, size_t size)
 
 void cry_cmac_digest(cry_cmac_ctx *ctx, unsigned char *mac)
 {
-    unsigned char k1[CRY_CMAC_BLOCK_SIZE], k2[CRY_CMAC_BLOCK_SIZE], last[CRY_CMAC_BLOCK_SIZE];
+    unsigned char k1[CRY_CMAC_BLOCK_SIZE];
+    unsigned char k2[CRY_CMAC_BLOCK_SIZE];
+    unsigned char last[CRY_CMAC_BLOCK_SIZE];
 
     cbc_compute_subkeys(ctx, k1, k2);
 
@@ -110,6 +115,7 @@ void cry_cmac_digest(cry_cmac_ctx *ctx, unsigned char *mac)
     }
 
     xor_128(ctx->blk, ctx->mac, last);
-    ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, ctx->blk, CRY_CMAC_BLOCK_SIZE);
+    ctx->ciph_itf->encrypt(ctx->ciph_ctx, ctx->mac, ctx->blk,
+                           CRY_CMAC_BLOCK_SIZE);
     memcpy(mac, ctx->mac, sizeof(ctx->mac));
 }

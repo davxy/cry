@@ -7,7 +7,7 @@
 #define CRY_HASH_H_
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 #include <stdlib.h>
@@ -18,7 +18,7 @@ extern "C"{
  *
  * @param ctx   Crypto context
  */
-typedef void (* cry_hash_init_f) (void *ctx);
+typedef void (* cry_hash_init_f)(void *ctx);
 
 /**
  * Context cleanup.
@@ -26,7 +26,7 @@ typedef void (* cry_hash_init_f) (void *ctx);
  *
  * @param ctx   Hash context
  */
-typedef void (* cry_hash_clean_f) (void *ctx);
+typedef void (* cry_hash_clean_f)(void *ctx);
 
 /**
  * Digest update
@@ -35,8 +35,8 @@ typedef void (* cry_hash_clean_f) (void *ctx);
  * @param data  Input data
  * @param suze  Input size
  */
-typedef void (* cry_hash_update_f) (void *ctx, const uint8_t *data,
-                                    size_t size);
+typedef void (* cry_hash_update_f)(void *ctx, const uint8_t *data,
+                                   size_t size);
 
 /**
  * Finalize.
@@ -44,14 +44,14 @@ typedef void (* cry_hash_update_f) (void *ctx, const uint8_t *data,
  * @param ctx    Hash context
  * @param digest Preallocated output buffer
  */
-typedef void (* cry_hash_digest_f) (void *ctx, uint8_t *digest);
+typedef void (* cry_hash_digest_f)(void *ctx, uint8_t *digest);
 
 /**
  * Hash algorithm generic interface
  */
 struct cry_hash_itf {
-    cry_hash_init_f   init;     /**< Initialize (optional) */
-    cry_hash_clean_f  clean;    /**< Clean (optional) */
+    cry_hash_init_f init;       /**< Initialize (optional) */
+    cry_hash_clean_f clean;     /**< Clean (optional) */
     cry_hash_update_f update;   /**< Update */
     cry_hash_digest_f digest;   /**< Digest (finalize) */
 };

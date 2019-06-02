@@ -40,7 +40,7 @@ static void cry_sha256_transform(cry_sha256_ctx *ctx,
     for (i = 0, j = 0; i < 16; ++i, j += 4)
         CRY_READ32_BE(m[i], &data[j]);
 
-    for ( ; i < 64; ++i)
+    for (; i < 64; ++i)
         m[i] = SIG1(m[i - 2]) + m[i - 7] + SIG0(m[i - 15]) + m[i - 16];
 
     a = ctx->state[0];

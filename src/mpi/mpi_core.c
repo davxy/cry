@@ -12,7 +12,7 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
     /* ensure there are always at least MPI_PREC digits extra on top */
     digs += (CRY_MPI_QUANTUM * 2) - (digs % CRY_MPI_QUANTUM);
     /* reallocate the array */
-    tmp = (cry_mpi_digit *) realloc(a->data, sizeof(cry_mpi_digit) * digs);
+    tmp = (cry_mpi_digit *)realloc(a->data, sizeof(cry_mpi_digit) * digs);
     if (tmp == NULL)
         return -1;
     a->data = tmp;
@@ -26,7 +26,7 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
 int cry_mpi_init(cry_mpi *a)
 {
     /* allocate required memory and clear it */
-    a->data = (cry_mpi_digit *) malloc(sizeof(cry_mpi_digit) * CRY_MPI_QUANTUM);
+    a->data = (cry_mpi_digit *)malloc(sizeof(cry_mpi_digit) * CRY_MPI_QUANTUM);
     if (a->data == NULL)
         return -1;
 
@@ -88,7 +88,7 @@ int cry_mpi_set_int(cry_mpi *a, long val)
 
     a->used = 0;
     while (uval != 0 && a->used < used) {
-        a->data[a->used++] = (cry_mpi_digit) uval;
+        a->data[a->used++] = (cry_mpi_digit)uval;
 #if CRY_MPI_DIGIT_MAX != ULONG_MAX
         uval >>= CRY_MPI_DIGIT_BITS;
 #endif
