@@ -135,16 +135,18 @@ static void gcm_operate(struct cry_gcm_ctx *ctx, unsigned char *dst,
 
     if (src != dst) {
         for (; size >= CRY_GCM_BLOCK_SIZE; (size -= CRY_GCM_BLOCK_SIZE,
-               src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
+                                            src += CRY_GCM_BLOCK_SIZE,
+                                            dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, dst, ctx->ctr, CRY_GCM_BLOCK_SIZE);
             cry_memxor(dst, src, CRY_GCM_BLOCK_SIZE);
             CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     } else {
         for (; size >= CRY_GCM_BLOCK_SIZE; (size -= CRY_GCM_BLOCK_SIZE,
-               src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
+                                            src += CRY_GCM_BLOCK_SIZE,
+                                            dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
-            cry_memxor2 (dst, src, buffer, CRY_GCM_BLOCK_SIZE);
+            cry_memxor2(dst, src, buffer, CRY_GCM_BLOCK_SIZE);
             CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     }

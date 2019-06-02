@@ -9,7 +9,7 @@
 #include <stddef.h>
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 size_t cry_base64_encode(char *out, const char *in, size_t len);

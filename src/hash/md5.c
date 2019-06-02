@@ -185,7 +185,7 @@ void cry_md5_update(struct cry_md5_ctx *ctx, const unsigned char *data,
                 in[i] = (((uint32_t)ctx->data[ii+3]) << 24) |
                         (((uint32_t)ctx->data[ii+2]) << 16) |
                         (((uint32_t)ctx->data[ii+1]) << 8) |
-                         ((uint32_t)ctx->data[ii]);
+                        ((uint32_t)ctx->data[ii]);
             }
             cry_md5_process(ctx->state, in);
             mdi = 0;
@@ -217,17 +217,17 @@ void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest)
         in[i] = (((uint32_t)ctx->data[ii+3]) << 24) |
                 (((uint32_t)ctx->data[ii+2]) << 16) |
                 (((uint32_t)ctx->data[ii+1]) << 8) |
-                 ((uint32_t)ctx->data[ii]);
+                ((uint32_t)ctx->data[ii]);
     }
 
     cry_md5_process(ctx->state, in);
 
     /* store buffer in digest */
     for (i = 0, ii = 0; i < 4; i++, ii += 4) {
-        digest[ii]   = (unsigned char)  (ctx->state[i] & 0xFF);
-        digest[ii+1] = (unsigned char) ((ctx->state[i] >> 8) & 0xFF);
-        digest[ii+2] = (unsigned char) ((ctx->state[i] >> 16) & 0xFF);
-        digest[ii+3] = (unsigned char) ((ctx->state[i] >> 24) & 0xFF);
+        digest[ii]   = (unsigned char)(ctx->state[i] & 0xFF);
+        digest[ii+1] = (unsigned char)((ctx->state[i] >> 8) & 0xFF);
+        digest[ii+2] = (unsigned char)((ctx->state[i] >> 16) & 0xFF);
+        digest[ii+3] = (unsigned char)((ctx->state[i] >> 24) & 0xFF);
     }
 }
 

@@ -14,7 +14,7 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m)
     cry_mpi r0, r1, s0, s1, q;
 
     if ((ret = cry_mpi_init_list(&r0, &r1, &s0, &s1, &q,
-                                (cry_mpi *) NULL)) != 0)
+                                 (cry_mpi *)NULL)) != 0)
         return ret;
 
     cry_mpi_copy(&r0, a);
@@ -23,7 +23,6 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m)
     cry_mpi_set_int(&s1, 0);
 
     while (!cry_mpi_is_zero(&r1)) {
-
         /* r2 = r0 - q1*r1 */
         cry_mpi_div(&q, &r0, &r0, &r1);
         cry_mpi_swap(&r0, &r1);
@@ -45,7 +44,7 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *a, const cry_mpi *m)
         cry_mpi_zero(&s0);
         ret = -1;
     }
-    cry_mpi_clear_list(&r0, &r1, &s0, &s1, &q, (cry_mpi *) NULL);
+    cry_mpi_clear_list(&r0, &r1, &s0, &s1, &q, (cry_mpi *)NULL);
     return ret;
 }
 
@@ -62,7 +61,7 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *x, const cry_mpi *m)
     cry_mpi TA, TU, U1, U2, TB, TV, V1, V2;
 
     if ((res = cry_mpi_init_list(&TA, &TU, &U1, &U2,
-                                 &TB, &TV, &V1, &V2, (cry_mpi *) NULL)) != 0)
+                                 &TB, &TV, &V1, &V2, (cry_mpi *)NULL)) != 0)
         return res;
 
     if ((res = cry_mpi_mod(&TA, x, m)) != 0)
@@ -115,7 +114,7 @@ int cry_mpi_inv(cry_mpi *r, const cry_mpi *x, const cry_mpi *m)
     cry_mpi_swap(r, &V1);
 cleanup:
     cry_mpi_clear_list(&TA, &TB, &TU, &TV, &U1, &U2, &V1, &V2,
-                      (cry_mpi *) NULL);
+                       (cry_mpi *)NULL);
     return res;
 }
 

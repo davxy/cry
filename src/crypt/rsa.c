@@ -70,7 +70,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     if (!padded_block)
         return -1;
 
-    if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *) NULL)) != 0) {
+    if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *)NULL)) != 0) {
         free(padded_block);
         return res;
     }
@@ -87,7 +87,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
             memset(padded_block + 2, 0xFF, mod_siz - block_siz - 3);
         } else {
             if ((res = nozero_rand(padded_block + 2,
-                            mod_siz - block_siz - 3)) < 0)
+                                   mod_siz - block_siz - 3)) < 0)
                 break;
         }
 
@@ -112,7 +112,7 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     }
 
     free(padded_block);
-    cry_mpi_clear_list(&c, &m, (cry_mpi *) NULL);
+    cry_mpi_clear_list(&c, &m, (cry_mpi *)NULL);
     if (res != 0) {
         *out_siz = 0;
         *out = NULL;
@@ -139,7 +139,7 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
     if (padded_block == NULL)
         return -1;
 
-    if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *) NULL)) != 0) {
+    if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *)NULL)) != 0) {
         free(padded_block);
         return res;
     }
@@ -181,14 +181,14 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
             break;
         }
         memcpy(*out + (*out_siz - (mod_siz - i)),
-                padded_block + i, mod_siz - i);
+               padded_block + i, mod_siz - i);
 
         in_siz -= mod_siz;
         in += mod_siz;
     }
 
     free(padded_block);
-    cry_mpi_clear_list(&c, &m, (cry_mpi *) NULL);
+    cry_mpi_clear_list(&c, &m, (cry_mpi *)NULL);
     if (res != 0) {
         *out_siz = 0;
         *out = NULL;
@@ -208,10 +208,10 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
 
 
     if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->m,
-            (cry_mpi *) NULL)) != 0)
+                                 (cry_mpi *)NULL)) != 0)
         return res;
     if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi,
-            (cry_mpi *) NULL)) != 0)
+                                 (cry_mpi *)NULL)) != 0)
         goto e; /* FIXME: shall release only d,e,m */
     i = MAX_ITER;
     if ((res = cry_mpi_prime(&p, hbits, &i)) != 0)
@@ -240,8 +240,8 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
         if ((res = cry_mpi_inv(&ctx->d, &ctx->e, &phi)) == 0)
             break;
     }
-e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, (cry_mpi *)NULL);
     if (res != 0)
-        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->m, (cry_mpi *) NULL);
+        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->m, (cry_mpi *)NULL);
     return res;
 }

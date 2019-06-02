@@ -9,7 +9,7 @@
 #include <stddef.h>
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**
@@ -71,12 +71,12 @@ typedef void (* cry_ciph_decrypt_f)(void *ctx, unsigned char *dst,
  * Cipher algorithm generic interface.
  */
 struct cry_ciph_itf {
-    cry_ciph_init_f       init;
-    cry_ciph_clean_f      clean;
-    cry_ciph_key_set_f    key_set;
-    cry_ciph_iv_set_f     iv_set;
-    cry_ciph_encrypt_f    encrypt;
-    cry_ciph_decrypt_f    decrypt;
+    cry_ciph_init_f init;
+    cry_ciph_clean_f clean;
+    cry_ciph_key_set_f key_set;
+    cry_ciph_iv_set_f iv_set;
+    cry_ciph_encrypt_f encrypt;
+    cry_ciph_decrypt_f decrypt;
 };
 
 typedef struct cry_ciph_itf cry_ciph_itf;

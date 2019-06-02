@@ -9,11 +9,11 @@
 #include <cry/mpi.h>
 
 struct cry_dsa_ctx {
-    cry_mpi  g;
-    cry_mpi  p;
-    cry_mpi  q;
-    cry_mpi  pvt; /**< Private signing key */
-    cry_mpi  pub; /**< Public verification key */
+    cry_mpi g;
+    cry_mpi p;
+    cry_mpi q;
+    cry_mpi pvt;  /**< Private signing key */
+    cry_mpi pub;  /**< Public verification key */
 };
 
 typedef struct cry_dsa_ctx cry_dsa_ctx;
@@ -26,7 +26,7 @@ struct cry_dsa_signature {
 typedef struct cry_dsa_signature cry_dsa_signature;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,

@@ -12,7 +12,8 @@ int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
     unsigned char *p = (unsigned char *)buf;
 
     /* skip leading zeros */
-    for ( ; size > 0 && *p == 0; p++, size--);
+    for (; size > 0 && *p == 0; p++, size--)
+        ;
     if (size == 0)
         return 0;
 
@@ -44,11 +45,11 @@ int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
  * Write a big number to a memory buffer in big endian byte order.
  */
 int cry_mpi_store_bin(const cry_mpi *x, void *buf,
-        size_t bufsiz, int pad)
+                      size_t bufsiz, int pad)
 {
     size_t i;
     cry_mpi_digit d;
-    unsigned char *p = (unsigned char *) buf;
+    unsigned char *p = (unsigned char *)buf;
 
     i = cry_mpi_count_bytes(x);
     if (bufsiz < i)

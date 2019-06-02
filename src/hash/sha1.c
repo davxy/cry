@@ -180,8 +180,8 @@ void cry_sha1_update(cry_sha1_ctx *ctx, const unsigned char *data, size_t len)
     left = ctx->len[0] & 0x3F;
     fill = 64 - left;
 
-    ctx->len[0] += (uint32_t) len;
-    if (ctx->len[0] < (uint32_t) len)
+    ctx->len[0] += (uint32_t)len;
+    if (ctx->len[0] < (uint32_t)len)
         ctx->len[1]++;
 
     if (left && len >= fill) {
