@@ -12,10 +12,10 @@
 #define CRY_SHA256_DIGEST_SIZE 32
 
 struct cry_sha256_ctx {
-    unsigned char   data[64];
-    uint32_t        datalen;
-    uint64_t        bitlen;
-    uint32_t        state[8];
+    unsigned char data[64];
+    uint32_t datalen;
+    uint64_t bitlen;
+    uint32_t state[8];
 };
 
 typedef struct cry_sha256_ctx cry_sha256_ctx;

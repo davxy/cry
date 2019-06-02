@@ -17,13 +17,13 @@ struct cry_rsa_ctx {
     cry_mpi m;      /**< Modulus */
     cry_mpi e;      /**< Encrypt exponent */
     cry_mpi d;      /**< Decrypt exponent */
-    int     flags;  /**< Behaviour flags */
+    int flags;      /**< Behaviour flags */
 };
 
 typedef struct cry_rsa_ctx cry_rsa_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,

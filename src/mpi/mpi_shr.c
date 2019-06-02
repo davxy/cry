@@ -19,7 +19,7 @@ int cry_mpi_shrd(cry_mpi *a, size_t n)
         *bottom++ = *top++;
 
     /* zero the top digits */
-    for ( ; x < a->used; x++)
+    for (; x < a->used; x++)
         *bottom++ = 0;
 
     /* remove excess digits */

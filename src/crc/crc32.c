@@ -32,8 +32,8 @@ void cry_crc32_digest(cry_crc32_ctx *ctx, unsigned char *out)
     uint32_t crc;
 
     crc = cry_crc32_final(ctx);
-    out[0] = (unsigned char) (crc >> 24);
-    out[1] = (unsigned char) (crc >> 16);
-    out[2] = (unsigned char) (crc >> 8);
-    out[3] = (unsigned char) (crc & 0xFF);
+    out[0] = (unsigned char)(crc >> 24);
+    out[1] = (unsigned char)(crc >> 16);
+    out[2] = (unsigned char)(crc >> 8);
+    out[3] = (unsigned char)(crc & 0xFF);
 }

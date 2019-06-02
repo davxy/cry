@@ -4,7 +4,7 @@ int cry_ecp_init(cry_ecp *p)
 {
     int res;
 
-    res = cry_mpi_init_list(&p->x, &p->y, &p->z, (cry_mpi *) NULL);
+    res = cry_mpi_init_list(&p->x, &p->y, &p->z, (cry_mpi *)NULL);
     if (res == 0)
         cry_ecp_set_zero(p);
     return res;
@@ -12,7 +12,7 @@ int cry_ecp_init(cry_ecp *p)
 
 void cry_ecp_clear(cry_ecp *p)
 {
-    cry_mpi_clear_list(&p->x, &p->y, &p->z, (cry_mpi *) NULL);
+    cry_mpi_clear_list(&p->x, &p->y, &p->z, (cry_mpi *)NULL);
 }
 
 int cry_ecp_init_int(cry_ecp *p, long x, long y)
@@ -48,7 +48,7 @@ int cry_ecp_grp_init(cry_ecp_grp *ec)
 
     res = cry_mpi_init_list(&ec->p, &ec->a, &ec->b, &ec->n,
                             &ec->g.x, &ec->g.y, &ec->g.z,
-                            (cry_mpi *) NULL);
+                            (cry_mpi *)NULL);
     if (res == 0)
         cry_ecp_set_zero(&ec->g);
     return res;
@@ -58,5 +58,5 @@ void cry_ecp_grp_clear(cry_ecp_grp *ec)
 {
     cry_mpi_clear_list(&ec->p, &ec->a, &ec->b, &ec->n,
                        &ec->g.x, &ec->g.y, &ec->g.z,
-                       (cry_mpi *) NULL);
+                       (cry_mpi *)NULL);
 }

@@ -17,8 +17,8 @@
  */
 struct cry_md5_ctx {
     unsigned char data[64]; /**< Partial input buffer */
-    uint32_t      len[2];   /**< Data length in bits */
-    uint32_t      state[4]; /**< Hash state buffer */
+    uint32_t len[2];        /**< Data length in bits */
+    uint32_t state[4];      /**< Hash state buffer */
 };
 
 typedef struct cry_md5_ctx cry_md5_ctx;

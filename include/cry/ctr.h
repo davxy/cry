@@ -27,15 +27,15 @@ struct cry_ctr_ctx {
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter. */
-    unsigned char              ctr[CRY_CTR_BLOCK_MAX];
+    unsigned char ctr[CRY_CTR_BLOCK_MAX];
     /** Counter length */
-    size_t                     ctrlen;
+    size_t ctrlen;
 };
 
 typedef struct cry_ctr_ctx cry_ctr_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

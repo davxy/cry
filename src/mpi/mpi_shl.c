@@ -50,7 +50,7 @@ int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, size_t n)
 
     if (c->alloc < (c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) {
         if ((res = cry_mpi_grow(c,
-                        c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) != 0)
+                                c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) != 0)
             return res;
     }
 

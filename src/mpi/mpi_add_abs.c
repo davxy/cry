@@ -33,7 +33,7 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         *rp++ = l;
     }
 
-    for ( ; i < max && c; i++) {
+    for (; i < max && c; i++) {
         *rp = *ap++ + 1;
         c = (*rp++ == 0);
     }
@@ -41,7 +41,7 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         *rp = 1;
         r->used++;
     } else {
-        for ( ; i < max; i++)
+        for (; i < max; i++)
             *rp++ = *ap++;
     }
     return 0;

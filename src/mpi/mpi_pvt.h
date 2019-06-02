@@ -36,11 +36,11 @@ typedef uint128_t cry_mpi_dword;
 
 /* Bits to digits */
 #define CRY_MPI_BITS_TO_DIGS(a) \
-        ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BITS + 1) : 0)
+    ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BITS + 1) : 0)
 
 /* Octets to digits */
 #define CRY_MPI_BYTES_TO_DIGS(a) \
-        ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BYTES + 1) : 0)
+    ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BYTES + 1) : 0)
 
 
 int cry_mpi_grow(cry_mpi *a, size_t size);

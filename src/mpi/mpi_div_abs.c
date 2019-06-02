@@ -142,16 +142,16 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
          * else set q{i-t-1} to (xi*b + x{i-1})/yt
          */
         if (x.data[i] == y.data[t]) {
-            q.data[i-t-1] = CRY_MPI_DIGIT_MAX;;
+            q.data[i-t-1] = CRY_MPI_DIGIT_MAX;
         } else {
             cry_mpi_dword tmp;
 
-            tmp = ((cry_mpi_dword) x.data[i]) << CRY_MPI_DIGIT_BITS;
-            tmp |= ((cry_mpi_dword) x.data[i-1]);
-            tmp /= ((cry_mpi_dword) y.data[t]);
-            if (tmp > (cry_mpi_dword) CRY_MPI_DIGIT_MAX)
+            tmp = ((cry_mpi_dword)x.data[i]) << CRY_MPI_DIGIT_BITS;
+            tmp |= ((cry_mpi_dword)x.data[i-1]);
+            tmp /= ((cry_mpi_dword)y.data[t]);
+            if (tmp > (cry_mpi_dword)CRY_MPI_DIGIT_MAX)
                 tmp = CRY_MPI_DIGIT_MAX;
-            q.data[i-t-1] = (cry_mpi_digit) (tmp & CRY_MPI_DIGIT_MAX);
+            q.data[i-t-1] = (cry_mpi_digit)(tmp & CRY_MPI_DIGIT_MAX);
         }
 
         /*
@@ -181,14 +181,14 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
          * x = x - q{i-t-1} * y * b**{i-t-1}
          */
         CRY_CHK(res = cry_mpi_mul_dig(&t1, &y, q.data[i-t-1]), e5);
-        CRY_CHK(res = cry_mpi_shld (&t1, i-t-1), e5);
-        CRY_CHK(res = cry_mpi_sub (&x, &x, &t1), e5);
+        CRY_CHK(res = cry_mpi_shld(&t1, i-t-1), e5);
+        CRY_CHK(res = cry_mpi_sub(&x, &x, &t1), e5);
 
         /* if x < 0 then { x = x + y*b**{i-t-1}; q{i-t-1} -= 1; } */
         if (x.sign == 1) {
-            CRY_CHK(res = cry_mpi_copy (&t1, &y), e5);
-            CRY_CHK(res = cry_mpi_shld (&t1, i-t-1), e5);
-            CRY_CHK(res = cry_mpi_add (&x, &x, &t1), e5);
+            CRY_CHK(res = cry_mpi_copy(&t1, &y), e5);
+            CRY_CHK(res = cry_mpi_shld(&t1, i-t-1), e5);
+            CRY_CHK(res = cry_mpi_add(&x, &x, &t1), e5);
             q.data[i-t-1] = (q.data[i-t-1] - 1UL) & CRY_MPI_DIGIT_MAX;
         }
     }
@@ -209,11 +209,11 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
     }
     res = 0;
 
-e5: cry_mpi_clear (&y);
-e4: cry_mpi_clear (&x);
-e3: cry_mpi_clear (&t2);
-e2: cry_mpi_clear (&t1);
-e1: cry_mpi_clear (&q);
+e5: cry_mpi_clear(&y);
+e4: cry_mpi_clear(&x);
+e3: cry_mpi_clear(&t2);
+e2: cry_mpi_clear(&t1);
+e1: cry_mpi_clear(&q);
 e0: return res;
 }
 
