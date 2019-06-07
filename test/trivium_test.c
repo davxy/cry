@@ -49,12 +49,12 @@ static void dispatch(int argc, char *argv[])
     if (strcmp(test, "trivium_operate") == 0)
         trivium_operate(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void trivium_test(void)
 {
-    printf("* TRIVIUM ECRYPT Vectors\n");
+    TRACE("* TRIVIUM ECRYPT Vectors\n");
     func_test("trivium_ecrypt.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

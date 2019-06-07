@@ -202,17 +202,17 @@ void crc_test(void)
 {
     int i;
 
-    printf("* CRC16-CCITT\n");
+    TRACE("* CRC16-CCITT\n");
     for (i = 0; i < ARLEN(crc16_ccitt_tests); i++)
         run(crc16_ccitt_tests[i].name, crc16_ccitt_tests[i].func, NULL, NULL);
-    printf("* CRC16-IBM\n");
+    TRACE("* CRC16-IBM\n");
     for (i = 0; i < ARLEN(crc16_ibm_tests); i++)
         run(crc16_ibm_tests[i].name, crc16_ibm_tests[i].func, NULL, NULL);
-    printf("* CRC16-DNP\n");
+    TRACE("* CRC16-DNP\n");
     for (i = 0; i < ARLEN(crc16_dnp_tests); i++)
         run(crc16_dnp_tests[i].name, crc16_dnp_tests[i].func, NULL, NULL);
-    printf("* CRC32-ETH\n");
+    TRACE("* CRC32-ETH\n");
     for (i = 0; i < ARLEN(crc32_eth_tests); i++)
         run(crc32_eth_tests[i].name, crc32_eth_tests[i].func, NULL, NULL);
-    printf("\n");
+    TRACE("\n");
 }

@@ -222,12 +222,12 @@ static void dispatch(int argc, char *argv[])
     else if (strcmp(test, "des_gcm_decrypt") == 0)
         des_gcm_decrypt(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void des_test(void)
 {
-    printf("* DES OpenSSL Vectors\n");
+    TRACE("* DES OpenSSL Vectors\n");
     func_test("des_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }
