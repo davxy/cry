@@ -69,5 +69,5 @@ CRY_ECP_GRP_BP512R1_ENABLE=y
 ################################################################################
 
 #CRY_MPI_DEBUG_CONF=y
-CRY_CONTRACT_VALIDATE=y
+#CRY_CONTRACT_VALIDATE=y
 

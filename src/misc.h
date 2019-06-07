@@ -222,7 +222,7 @@ void cry_contract_fail(const char *cond, const char *file, int line);
 #else /* !CRY_CONTRACT_VALIDATE */
 
 #define CRY_VALIDATE(cond)
-#define CRY_VALIDATE_RET(cond, res)
+#define CRY_VALIDATE_RET(cond)
 
 #endif /* ~CRY_CONTRACT_VALIDATE */
 
