@@ -65,7 +65,7 @@ static void dispatch(int argc, char *argv[])
     else if (strcmp(test, "affine_decrypt") == 0)
         affine_decrypt(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void affine_test(void)
@@ -80,7 +80,7 @@ void affine_test(void)
     cry_affine_encrypt(&ctx, ciphertext, (unsigned char *)"HelloWorld", 10);
     cry_affine_decrypt(&ctx, cleartext, ciphertext, 10);
 
-    printf("* Affine Test\n");
+    TRACE("* Affine Test\n");
     func_test("affine_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

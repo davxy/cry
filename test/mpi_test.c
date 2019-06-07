@@ -267,7 +267,7 @@ static void mpi_dispatch(int argc, char *argv[])
     else if (strcmp(test, "mpi_sqr") == 0)
         mpi_unary_op(argc, argv, cry_mpi_sqr);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 
     mpi_teardown();
 }
@@ -283,9 +283,9 @@ static struct malloc_fail_args g_malloc_fail_tests[] = {
 
 void mpi_test(void)
 {
-    printf("* MPI\n");
+    TRACE("* MPI\n");
     func_test("mpi_test.data", mpi_dispatch);
     malloc_fail_tests(g_malloc_fail_tests,
             ARLEN(g_malloc_fail_tests), mpi_dispatch);
-    printf("\n");
+    TRACE("\n");
 }

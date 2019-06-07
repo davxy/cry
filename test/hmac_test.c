@@ -57,12 +57,12 @@ static void dispatch(int argc, char *argv[])
     if (strcmp(test, "hmac_digest") == 0)
         hmac_digest(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void hmac_test(void)
 {
-    printf("* HMAC NIST CAVS 11.0\n");
+    TRACE("* HMAC NIST CAVS 11.0\n");
     func_test("hmac_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

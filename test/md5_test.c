@@ -38,12 +38,12 @@ static void dispatch(int argc, char *argv[])
     if (strcmp(test, "md5_digest") == 0)
         md5_digest(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void md5_test(void)
 {
-    printf("* MD5 RFC 1321 Vectors\n");
+    TRACE("* MD5 RFC 1321 Vectors\n");
     func_test("md5_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }
