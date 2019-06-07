@@ -55,7 +55,7 @@ static void dispatch(int argc, char *argv[])
     if (strcmp(test, "cmac_aes_digest") == 0)
         cmac_aes_digest(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 
@@ -151,7 +151,7 @@ static void cmac_aes_last_incomplete(void)
 
 void cmac_test(void)
 {
-    printf("* CMAC Tests\n");
+    TRACE("* CMAC Tests\n");
     run("CMAC-AES First Sliced #1", cmac_aes_first_sliced1, NULL, NULL);
     run("CMAC-AES First Sliced #2", cmac_aes_first_sliced2, NULL, NULL);
     run("CMAC-AES Mid Sliced #1", cmac_aes_mid_sliced, NULL, NULL);
@@ -159,5 +159,5 @@ void cmac_test(void)
     run("CMAC-AES Last Incomplete", cmac_aes_last_incomplete, NULL, NULL);
 
     func_test("cmac_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

@@ -193,15 +193,15 @@ static void dispatch(int argc, char *argv[])
     if (strcmp(test, "rsa_pkcs1_encrypt") == 0)
         rsa_pkcs1_encrypt(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void rsa_test(void)
 {
-    printf("* RSA Test\n");
+    TRACE("* RSA Test\n");
     run("Keygen 512", keygen, NULL, NULL);
     run("Encrypt-Decrypt", encrypt_decrypt, NULL, NULL);
     run("Sign-Verify", sign_verify, NULL, NULL);
     func_test("rsa_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }
