@@ -3,15 +3,16 @@
 
 
 #define ASC_TO_RAW_CHAR(c) \
-        (('0' <= (c) && (c) <= '9') ?  ((c) - '0') : \
-         ('a' <= (c) && (c) <= 'z') ? (((c) - 'a') + 10) : \
-         ('A' <= (c) && (c) <= 'Z') ? (((c) - 'A') + 10) : 0)
+    (('0' <= (c) && (c) <= '9') ?  ((c) - '0') : \
+     ('a' <= (c) && (c) <= 'z') ? (((c) - 'a') + 10) : \
+     ('A' <= (c) && (c) <= 'Z') ? (((c) - 'A') + 10) : 0)
 
 static int load_str_hex(cry_mpi *a, const char *s)
 {
     int res;
     size_t i = 0, j = 0;
-    char *bin, first = 0;
+    unsigned char *bin;
+    char first = 0;
     size_t siz, len;
 
     len = strlen(s);
@@ -41,7 +42,7 @@ static int load_str_hex(cry_mpi *a, const char *s)
 }
 
 #define RAW_TO_ASC_CHAR(c) \
-        (((c) < 10) ? ('0' + (c)) : ('a' + ((c) - 10)))
+    (((c) < 10) ? ('0' + (c)) : ('a' + ((c) - 10)))
 
 static int store_str_hex(const cry_mpi *a, char *s)
 {
@@ -74,7 +75,7 @@ static int store_str_hex(const cry_mpi *a, char *s)
 int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
 {
     int ret = 0, sign;
-    unsigned long l;
+    cry_mpi_digit d;
     cry_mpi tmp, base;
 
     /* max base 36 ('z') */
@@ -110,11 +111,11 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
     while (*s == '0')
         s++;
 
-    while ((l = *s) != '\0') {
-        l = ASC_TO_RAW_CHAR(l);
-        if (radix <= l)
+    while ((d = (cry_mpi_digit)*s) != '\0') {
+        d = ASC_TO_RAW_CHAR(d);
+        if (radix <= d)
             break;
-        tmp.data[0] = l;
+        tmp.data[0] = d;
         if (cry_mpi_mul(a, a, &base) < 0)
             break;
         if (cry_mpi_add(a, a, &tmp) < 0)
@@ -153,7 +154,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
         return store_str_hex(a, s);
     }
 
-    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, (cry_mpi *) NULL)) != 0)
+    if ((ret = cry_mpi_init_list(&tmp, &rad, &rem, (cry_mpi *)NULL)) != 0)
         return ret;
 
     if ((ret = cry_mpi_copy(&tmp, a)) != 0)
@@ -181,7 +182,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
         i--;
     }
 
-e:  cry_mpi_clear_list(&tmp, &rad, &rem, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&tmp, &rad, &rem, (cry_mpi *)NULL);
     return ret;
 }
 

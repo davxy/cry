@@ -1,5 +1,5 @@
 /*
- * Automatically generated. Do not edit.
+ * Automatically generated from "config/config.mk".
  */
 
 #define CRY_DEBUG

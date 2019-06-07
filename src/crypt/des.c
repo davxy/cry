@@ -173,7 +173,7 @@ static void rol(unsigned char *buf)
     /* special handling for byte 3 */
     carry_right = (buf[3] & 0x08) >> 3;
     buf[3] = (((buf[3] << 1) |
-              ((buf[4] & 0x80) >> 7)) & ~0x10) | carry_left;
+               ((buf[4] & 0x80) >> 7)) & ~0x10) | carry_left;
 
     buf[4] = (buf[4] << 1) | ((buf[5] & 0x80) >> 7);
     buf[5] = (buf[5] << 1) | ((buf[6] & 0x80) >> 7);
@@ -192,7 +192,7 @@ static void ror(unsigned char *buf)
 
     carry_left = (buf[3] & 0x10) << 3;
     buf[3] = (((buf[3] >> 1) |
-              ((buf[2] & 0x01) << 7)) & ~0x08) | carry_right;
+               ((buf[2] & 0x01) << 7)) & ~0x08) | carry_right;
 
     buf[2] = (buf[2] >> 1) | ((buf[1] & 0x01) << 7);
     buf[1] = (buf[1] >> 1) | ((buf[0] & 0x01) << 7);
@@ -261,20 +261,20 @@ static void des_block_operate(unsigned char *dst, const unsigned char *src,
             sbox[0][(expansion_block[0] & 0xFC) >> 2] << 4;
         substitution_block[0] |=
             sbox[1][(expansion_block[0] & 0x03) << 4 |
-            (expansion_block[1] & 0xF0) >> 4];
+                    (expansion_block[1] & 0xF0) >> 4];
         substitution_block[1] =
             sbox[2][(expansion_block[1] & 0x0F) << 2 |
-            (expansion_block[2] & 0xC0) >> 6] << 4;
+                    (expansion_block[2] & 0xC0) >> 6] << 4;
         substitution_block[1] |=
             sbox[3][(expansion_block[2] & 0x3F)];
         substitution_block[2] =
             sbox[4][(expansion_block[3] & 0xFC) >> 2] << 4;
         substitution_block[2] |=
             sbox[5][(expansion_block[3] & 0x03) << 4 |
-            (expansion_block[4] & 0xF0) >> 4];
+                    (expansion_block[4] & 0xF0) >> 4];
         substitution_block[3] =
             sbox[6][(expansion_block[4] & 0x0F) << 2 |
-            (expansion_block[5] & 0xC0) >> 6] << 4;
+                    (expansion_block[5] & 0xC0) >> 6] << 4;
         substitution_block[3] |=
             sbox[7][(expansion_block[5] & 0x3F)];
 
@@ -320,8 +320,7 @@ void cry_des_decrypt(cry_des_ctx *ctx, unsigned char *dst,
             des_block_operate(dst, src, ctx->key + 2 * CRY_DES_BLOCK_SIZE, 0);
             des_block_operate(dst, dst, ctx->key + CRY_DES_BLOCK_SIZE, 1);
             des_block_operate(dst, dst, ctx->key, 0);
-        }
-        else {
+        } else {
             des_block_operate(dst, src, ctx->key, 0);
         }
         src  += CRY_DES_BLOCK_SIZE;

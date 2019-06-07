@@ -1,12 +1,10 @@
 #include "mpi_pvt.h"
 
-int cry_mpi_shrd(cry_mpi *a, int n)
+int cry_mpi_shrd(cry_mpi *a, size_t n)
 {
-    int x;
+    size_t x;
     cry_mpi_digit *bottom, *top;
 
-    if (n < 0)
-        return cry_mpi_shld(a, -n);
     if (n == 0 || cry_mpi_is_zero(a) != 0)
         return 0;
 
@@ -21,7 +19,7 @@ int cry_mpi_shrd(cry_mpi *a, int n)
         *bottom++ = *top++;
 
     /* zero the top digits */
-    for ( ; x < a->used; x++)
+    for (; x < a->used; x++)
         *bottom++ = 0;
 
     /* remove excess digits */
@@ -32,13 +30,11 @@ int cry_mpi_shrd(cry_mpi *a, int n)
 /*
  * Store quotient in c, optional remainder in d
  */
-int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n)
+int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, size_t n)
 {
+    int res;
     cry_mpi_digit D, r, rr;
-    int x, res;
-
-    if (n < 0)
-        return cry_mpi_shl(c, a, -n);
+    size_t x;
 
     /* copy */
     if (a != c) {
@@ -62,7 +58,8 @@ int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n)
         shift = CRY_MPI_DIGIT_BITS - D;
         tmpc = c->data + (c->used - 1);
         r = 0;  /* carry */
-        for (x = c->used - 1; x >= 0; x--) {
+        x = c->used;
+        while (x-- > 0) {
             /* get the lower bits of this word in a temp */
             rr = *tmpc & mask;
             /* shift the current word and mix in the carry bits from the prev */

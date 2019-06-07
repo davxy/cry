@@ -10,7 +10,7 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_signature *sign,
     cry_mpi k, z;
     cry_ecp X;
 
-    if ((res = cry_mpi_init_list(&k, &z, &X.x, &X.y, (cry_mpi *) NULL)) != 0)
+    if ((res = cry_mpi_init_list(&k, &z, &X.x, &X.y, (cry_mpi *)NULL)) != 0)
         return res;
 
     /* This should be a random number between 0 and n-1 */
@@ -46,7 +46,7 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_signature *sign,
     CHK(cry_mpi_mul(&sign->s, &sign->s, &k));
     CHK(cry_mpi_mod(&sign->s, &sign->s, &ctx->ec.n));
 
-e:  cry_mpi_clear_list(&k, &z, &X.x, &X.y, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&k, &z, &X.x, &X.y, (cry_mpi *)NULL);
     return 0;
 }
 
@@ -58,7 +58,7 @@ int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_signature *sign,
     cry_ecp G, Q;
 
     if ((res = cry_mpi_init_list(&z, &w, &G.x, &G.y,
-                                 &Q.x, &Q.y, (cry_mpi *) NULL)) != 0)
+                                 &Q.x, &Q.y, (cry_mpi *)NULL)) != 0)
         return res;
 
     /* w = inv(s) mod n */
@@ -87,7 +87,7 @@ int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_signature *sign,
     CHK(cry_mpi_mod(&G.x, &G.x, &ctx->ec.n));
 
     res = (cry_mpi_cmp_abs(&G.x, &sign->r) == 0) ? 0 : -1;
-e:  cry_mpi_clear_list(&z, &w, &G.x, &G.y, &Q.x, &Q.y, (cry_mpi *) NULL);
+e:  cry_mpi_clear_list(&z, &w, &G.x, &G.y, &Q.x, &Q.y, (cry_mpi *)NULL);
     return res;
 }
 

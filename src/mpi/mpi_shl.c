@@ -3,13 +3,12 @@
 /*
  * Shift left by a certain amount of digits
  */
-int cry_mpi_shld(cry_mpi *a, int n)
+int cry_mpi_shld(cry_mpi *a, size_t n)
 {
-    int x, res;
+    int res;
+    size_t x;
     cry_mpi_digit *top, *bottom;
 
-    if (n < 0)
-        return cry_mpi_shrd(a, -n);
     if (n == 0 || cry_mpi_is_zero(a) != 0)
         return 0;
 
@@ -35,13 +34,10 @@ int cry_mpi_shld(cry_mpi *a, int n)
 /*
  * Shift left by a certain bit count
  */
-int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n)
+int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, size_t n)
 {
     cry_mpi_digit d;
     int res;
-
-    if (n < 0)
-        return cry_mpi_shr(c, a, -n);
 
     /* copy */
     if (a != c) {
@@ -54,7 +50,7 @@ int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n)
 
     if (c->alloc < (c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) {
         if ((res = cry_mpi_grow(c,
-                        c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) != 0)
+                                c->used + (n / CRY_MPI_DIGIT_BITS) + 1)) != 0)
             return res;
     }
 

@@ -12,7 +12,7 @@
 #include <stddef.h>
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 #define CRY_CMAC_BLOCK_SIZE 16
@@ -20,9 +20,9 @@ extern "C"{
 struct cry_cmac_ctx {
     void                      *ciph_ctx;     /**< Block cipher context */
     const struct cry_ciph_itf *ciph_itf;     /**< Block cipher interface */
-    size_t                     blklen;       /**< Pending block size */
-    unsigned char              blk[CRY_CMAC_BLOCK_SIZE]; /**< Pending block */
-    unsigned char              mac[CRY_CMAC_BLOCK_SIZE]; /**< Current MAC */
+    size_t blklen;                           /**< Pending block size */
+    unsigned char blk[CRY_CMAC_BLOCK_SIZE];              /**< Pending block */
+    unsigned char mac[CRY_CMAC_BLOCK_SIZE];              /**< Current MAC */
 };
 
 typedef struct cry_cmac_ctx cry_cmac_ctx;

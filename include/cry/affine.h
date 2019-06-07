@@ -46,9 +46,9 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
                     const unsigned char *keyb, size_t keylen);
 
 void cry_affine_encrypt(struct cry_affine_ctx *ctx, unsigned char *out,
-                      const unsigned char *in, size_t len);
+                        const unsigned char *in, size_t len);
 
 void cry_affine_decrypt(struct cry_affine_ctx *ctx, unsigned char *out,
-                      const unsigned char *in, size_t len);
+                        const unsigned char *in, size_t len);
 
 #endif /* CRY_AFFINE_H_ */

@@ -41,19 +41,20 @@
 #else /* ISO C code */
 
 #define MULADD(i, j) do {                           \
-   cry_mpi_dword t;                                 \
-   t = (cry_mpi_dword)c0 + ((cry_mpi_dword)(i)) * ((cry_mpi_dword)(j)); \
-   c0 = t;                                          \
-   t = (cry_mpi_dword)c1 + (t >> CRY_MPI_DIGIT_BITS); \
-   c1 = t;                                          \
-   c2 += t >> CRY_MPI_DIGIT_BITS;                   \
+   cry_mpi_dword _t;                                \
+   _t = (cry_mpi_dword)c0 + ((cry_mpi_dword)(i)) * ((cry_mpi_dword)(j)); \
+   c0 = (cry_mpi_digit) _t;                         \
+   _t = (cry_mpi_dword)c1 + (_t >> CRY_MPI_DIGIT_BITS); \
+   c1 = (cry_mpi_digit) _t;                         \
+   c2 += (cry_mpi_digit) (_t >> CRY_MPI_DIGIT_BITS); \
    } while (0);
 
 #endif
 
 int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
-    int res, ix, iy, iz, tx, ty, pa;
+    int res;
+    size_t ix, iy, iz, tx, ty, pa;
     cry_mpi_digit c0, c1, c2, *tmpx, *tmpy;
     cry_mpi tmp, *dst;
 
@@ -76,7 +77,6 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
     c1 = c2 = 0;
     for (ix = 0; ix < pa; ix++) {
-
         /* get offsets into the two bignums */
         ty = CRY_MIN(ix, b->used - 1);
         tx = ix - ty;
