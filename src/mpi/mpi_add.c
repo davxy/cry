@@ -4,6 +4,10 @@ int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
     int ret, rsign;
 
+    CRY_VALIDATE_RET(r != NULL);
+    CRY_VALIDATE_RET(a != NULL);
+    CRY_VALIDATE_RET(b != NULL);
+
     if (a->sign == b->sign) {
         rsign = a->sign;
         ret = cry_mpi_add_abs(r, a, b);

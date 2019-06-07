@@ -165,10 +165,10 @@ void cry_contract_fail(const char *cond, const char *file, int line);
 /**
  * Contract validation with return value.
  */
-#define CRY_VALIDATE_RET(cond, res) do { \
+#define CRY_VALIDATE_RET(cond) do { \
     if (!(cond)) { \
         CRY_CONTRACT_FAIL(cond); \
-        return res; \
+        return -1; \
     } \
 } while (0)
 
