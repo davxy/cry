@@ -140,7 +140,7 @@ void cry_crc16_dnp_init(cry_crc16_ctx *ctx);
  * @param n     Number of octets in the buffer.
  * @return      CRC value.
  */
-uint16_t cry_crc16_dnp(const uint8_t *in, size_t n);
+uint16_t cry_crc16_dnp(const unsigned char *in, size_t n);
 
 /**
  * Initialize a generic CRC-32 algoritm context.
