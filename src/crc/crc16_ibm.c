@@ -1,4 +1,6 @@
 #include <cry/crc.h>
+#include <cry/assert.h>
+
 
 static const unsigned short table[] = {
     0x0000, 0xc0c1, 0xc181, 0x0140, 0xc301, 0x03c0, 0x0280, 0xc241,
@@ -37,12 +39,16 @@ static const unsigned short table[] = {
 
 void cry_crc16_ibm_init(struct cry_crc16_ctx *ctx)
 {
+    CRY_ASSERT(ctx != NULL);
+
     cry_crc16_init(ctx, 0xFFFF, table, 0);
 }
 
 unsigned short cry_crc16_ibm(const unsigned char *in, size_t n)
 {
     struct cry_crc16_ctx ctx;
+
+    CRY_ASSERT2(in != NULL);
 
     cry_crc16_ibm_init(&ctx);
     cry_crc16_update(&ctx, in, n);

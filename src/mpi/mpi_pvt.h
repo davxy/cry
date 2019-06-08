@@ -2,6 +2,7 @@
 #define CRY_MPI_PVT_H_
 
 #include <cry/mpi.h>
+#include <cry/assert.h>
 #include <string.h> /* memset */
 #include <stdint.h>
 #include "../misc.h"

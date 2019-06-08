@@ -1,4 +1,6 @@
 #include <cry/crc.h>
+#include <cry/assert.h>
+
 
 static const uint16_t table[] = {
     0x0000, 0x365e, 0x6cbc, 0x5ae2, 0xd978, 0xef26, 0xb5c4, 0x839a,
@@ -37,15 +39,19 @@ static const uint16_t table[] = {
 
 void cry_crc16_dnp_init(struct cry_crc16_ctx *ctx)
 {
+    CRY_ASSERT(ctx != NULL);
+
     cry_crc16_init(ctx, 0x0000, table,
                    CRY_CRC_FLAG_COMPLEMENT | CRY_CRC_FLAG_SWAP);
 }
 
-uint16_t cry_crc16_dnp(const uint8_t *ptr, size_t n)
+uint16_t cry_crc16_dnp(const unsigned char *in, size_t n)
 {
     struct cry_crc16_ctx ctx;
 
+    CRY_ASSERT2(in != NULL);
+
     cry_crc16_dnp_init(&ctx);
-    cry_crc16_update(&ctx, ptr, n);
+    cry_crc16_update(&ctx, in, n);
     return cry_crc16_final(&ctx);
 }

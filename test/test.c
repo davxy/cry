@@ -279,9 +279,9 @@ static void parse_args(int argc, char *argv[])
     }
 }
 
-void cry_contract_fail(const char *cond, const char *file, int line)
+void cry_assert_fail(const char *cond, const char *file, int line)
 {
-    TRACE("Contract fail: %s @ %s:%d\n", cond, file, line);
+    TRACE("Assert fail: %s @ %s:%d\n", cond, file, line);
     g_fails++;
 }
 

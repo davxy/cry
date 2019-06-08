@@ -1,4 +1,6 @@
 #include <cry/crc.h>
+#include <cry/assert.h>
+
 
 static const uint16_t table[] = {
     0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
@@ -37,6 +39,8 @@ static const uint16_t table[] = {
 
 void cry_crc16_ccitt_init(struct cry_crc16_ctx *ctx)
 {
+    CRY_ASSERT(ctx != NULL);
+
     cry_crc16_init(ctx, 0xFFFF, table,
                    CRY_CRC_FLAG_COMPLEMENT | CRY_CRC_FLAG_SWAP);
 }
@@ -44,6 +48,8 @@ void cry_crc16_ccitt_init(struct cry_crc16_ctx *ctx)
 uint16_t cry_crc16_ccitt(const unsigned char *in, size_t n)
 {
     struct cry_crc16_ctx ctx;
+
+    CRY_ASSERT2(in != NULL);
 
     cry_crc16_ccitt_init(&ctx);
     cry_crc16_update(&ctx, in, n);
