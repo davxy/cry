@@ -65,6 +65,10 @@ int cry_ecp_dbl(cry_ecp *pr, const cry_ecp *p1, const cry_ecp_grp *grp);
 int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
                 const cry_ecp_grp *grp);
 
+int cry_ecp_init_list(cry_ecp *p, ... /* (cry_ecp *)NULL */);
+
+void cry_ecp_clear_list(cry_ecp *p, ... /* (cry_ecp *)NULL */);
+
 #ifdef __cplusplus
 }
 #endif
