@@ -377,26 +377,18 @@ void cry_aes_key_set(cry_aes_ctx *ctx, const unsigned char *key, size_t size)
         0x20, 0x40, 0x80, 0x1b, 0x36,
     };
     const unsigned char *rp = rcon;
-    unsigned int i, nk, nr, lk;
+    unsigned int i, nk, lk;
     uint32_t tmp;
 
-    /*
-     * nk = the number of 32 bit words in a key.
-     * nr = the number of rounds in AES cipher.
-     */
-    if (size >= 32) {
+    /* nk = the number of 32 bit words in a key. */
+    if (size >= 32)
         nk = 8;
-        nr = 14;
-    } else if (size >= 24) {
+    else if (size >= 24)
         nk = 6;
-        nr = 12;
-    } else { /* size >= 16 */
+    else /* size >= 16 */
         nk = 4;
-        nr = 10;
-    }
-
-    lk = (CRY_AES_BLOCK_SIZE >> 2) * (nr + 1);
-    ctx->nr = nr;
+    ctx->nr = nk + 6;
+    lk = (CRY_AES_BLOCK_SIZE >> 2) * (ctx->nr + 1);
 
     /* The first round key is the key itself */
     for (i = 0; i < nk; i++)
