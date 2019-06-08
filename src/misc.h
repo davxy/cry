@@ -6,7 +6,7 @@
 #define CRY_MISC_H_
 
 #include <stdint.h>
-
+#include <stdarg.h>
 
 /** Statically get array number of elements */
 #define CRY_ARRAY_LEN(ar) (sizeof(ar)/sizeof((ar)[0]))
@@ -175,5 +175,15 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
     if ((res) != 0) \
         goto label; \
 } while (0)
+
+
+typedef int (* cry_list_elem_init_f)(void *elem, ...);
+typedef void (* cry_list_elem_clear_f)(void *elem, ...);
+
+int cry_list_init(cry_list_elem_init_f init, cry_list_elem_clear_f clear,
+                  void *first, va_list arg);
+
+void cry_list_clear(cry_list_elem_clear_f clear,
+                    void *first, va_list args);
 
 #endif /* CRY_MISC_H_ */
