@@ -46,7 +46,7 @@ typedef struct cry_ecp_grp cry_ecp_grp;
 
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 int cry_ecp_init(cry_ecp *p);

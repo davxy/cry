@@ -3,8 +3,8 @@
 #include "misc.h"
 
 
-#define S(a, n) (s##a##n)
-#define T(a)    (t##a)
+#define S(a, n) (s ## a ## n)
+#define T(a)    (t ## a)
 
 #define LOAD(s) do { \
     CRY_READ32_LE(S(1, 1), (s) +  0); \
@@ -33,7 +33,7 @@
 } while (0)
 
 
-#define S64(a, b) ((S(a, 3) << ( 96 - (b))) | (S(a, 2) >> ((b) - 64)))
+#define S64(a, b) ((S(a, 3) << (96 - (b))) | (S(a, 2) >> ((b) - 64)))
 #define S96(a, b) ((S(a, 4) << (128 - (b))) | (S(a, 3) >> ((b) - 96)))
 
 #define UPDATE() do { \
@@ -74,7 +74,7 @@ void cry_trivium_key_set(cry_trivium_ctx *ctx, const unsigned char *key,
 
     for (i = 0; i < ctx->keylen; i++)
         ctx->key[i] = key[i];
-    for ( ; i < CRY_TRIVIUM_KEYLEN; i++)
+    for (; i < CRY_TRIVIUM_KEYLEN; i++)
         ctx->key[i] = 0;
 }
 
@@ -100,11 +100,11 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
      */
     for (i = 0; i < ctx->keylen; i++)
         ctx->s[i] = ctx->key[i];
-    for ( ; i < 12; i++)
+    for (; i < 12; i++)
         ctx->s[i] = 0;
     for (i = 0; i < ctx->ivlen; i++)
         ctx->s[12 + i] = iv[i];
-    for ( ; i < 12; i++)
+    for (; i < 12; i++)
         ctx->s[12 + i] = 0;
     for (i = 0; i < 13; i++)
         ctx->s[24 + i] = 0;
@@ -152,7 +152,7 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
     if (i < size) {
         UPDATE();
         ROTATE();
-        for ( ; i < size; i++, z >>= 8)
+        for (; i < size; i++, z >>= 8)
             dst[i] = src[i] ^ (uint8_t)(z);
     }
 

@@ -11,9 +11,7 @@
 
 /* Digit max value */
 #ifndef CRY_MPI_DIGIT_MAX
-# ifndef CRY_HAS_NO_CONFIG_H
 # include <cry/config.h>
-# endif
 # ifndef CRY_MPI_DEBUG_CONF
 # define CRY_MPI_DIGIT_MAX ULONG_MAX
 # else
@@ -21,7 +19,20 @@
 # endif
 #endif
 
-/** Definition of the digit type macro */
+/* Digit bytes width */
+#if CRY_MPI_DIGIT_MAX == 255UL
+#define CRY_MPI_DIGIT_BYTES  1
+#elif CRY_MPI_DIGIT_MAX == 65535UL
+#define CRY_MPI_DIGIT_BYTES  2
+#elif CRY_MPI_DIGIT_MAX == 4294967295UL
+#define CRY_MPI_DIGIT_BYTES  4
+#elif CRY_MPI_DIGIT_MAX == 18446744073709551615UL
+#define CRY_MPI_DIGIT_BYTES  8
+#else
+# error "Invalid DIGIT_MAX value"
+#endif
+
+/** Digit type definition */
 #if CRY_MPI_DIGIT_MAX == UCHAR_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned char
 #elif CRY_MPI_DIGIT_MAX == USHRT_MAX
@@ -31,14 +42,11 @@
 #elif CRY_MPI_DIGIT_MAX == ULONG_MAX
 #define CRY_MPI_DIGIT_TYPE unsigned long
 #else
-#error "Unsupported MPI digit max value"
+#error "Invalid DIGIT_MAX value"
 #endif
 
 /** Digit type definition */
 typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
-
-/** Number of bytes in one digit */
-#define CRY_MPI_DIGIT_BYTES sizeof(cry_mpi_digit)
 
 /** Number of bits in one digit */
 #define CRY_MPI_DIGIT_BITS  (CRY_MPI_DIGIT_BYTES << 3)
@@ -47,16 +55,16 @@ typedef CRY_MPI_DIGIT_TYPE cry_mpi_digit;
  * MPI structure.
  */
 struct cry_mpi {
-    int           sign;     /**< Non-zero if negative */
-    size_t        used;     /**< Number of used digits */
-    size_t        alloc;    /**< Allocated digits */
+    int sign;               /**< Non-zero if negative */
+    size_t used;            /**< Number of used digits */
+    size_t alloc;           /**< Allocated digits */
     cry_mpi_digit *data;    /**< Pointer to digits */
 };
 
 typedef struct cry_mpi cry_mpi;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /*
@@ -124,9 +132,9 @@ int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a);
 
 int cry_mpi_sqrt(cry_mpi *r, const cry_mpi *a);
 
-int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, int n);
+int cry_mpi_shl(cry_mpi *c, const cry_mpi *a, size_t n);
 
-int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, int n);
+int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, size_t n);
 
 /*
  * More advanced arithmetic algorithms
@@ -192,11 +200,11 @@ void cry_mpi_print(const cry_mpi *a, unsigned int radix);
     (a)->used = 0;           \
     } while (0)
 
-int cry_mpi_rand(cry_mpi *a, unsigned int bits);
+int cry_mpi_rand(cry_mpi *a, size_t bits);
 
 int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max);
 
-int cry_mpi_prime(cry_mpi *a, unsigned int bits, unsigned int *iter);
+int cry_mpi_prime(cry_mpi *a, size_t bits, unsigned int *iter);
 
 int cry_mpi_is_prime(const cry_mpi *a);
 

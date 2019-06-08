@@ -48,12 +48,12 @@ static void add_test(void)
     simple_curve_init(&grp);
     cry_ecp_init(&p);
     do {
-        //printf("n = %d\n", i);
+        //TRACE("n = %d\n", i);
         //cry_mpi_print(&p.x, 10);
         //cry_mpi_print(&p.y, 10);
         //cry_mpi_print(&p.z, 10);
         point_check(&p, &grp);
-        //printf("--------------------\n");
+        //TRACE("--------------------\n");
         cry_ecp_add(&p, &p, &grp.g, &grp);
         i++;
     } while (!cry_ecp_is_zero(&p));
@@ -218,7 +218,7 @@ static void curve_params_load(void)
 
 void ecp_test(void)
 {
-    printf("* ECP load curves parameters\n");
+    TRACE("* ECP load curves parameters\n");
     curve_params_load();
     add_test();
     mul_test();

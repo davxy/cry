@@ -7,7 +7,7 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
                    const cry_hash_itf *hash_itf, size_t hash_len,
                    const unsigned char *key, size_t key_len)
 {
-    int i;
+    size_t i;
     unsigned char pad[BLOCK_SIZE];
 
     ctx->hash_ctx = hash_ctx;
@@ -42,7 +42,7 @@ void cry_hmac_update(cry_hmac_ctx *ctx, const unsigned char *in, size_t in_len)
 
 void cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac)
 {
-    int i;
+    size_t i;
     unsigned char pad[BLOCK_SIZE];
     const cry_hash_itf *hash_itf = ctx->hash_itf;
 

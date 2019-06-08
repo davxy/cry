@@ -72,16 +72,16 @@ void cry_memxor2(unsigned char *dst, const unsigned char *src1,
             n--;
             dst[n] = src1[n] ^ src2[n];
         }
-    } else if (src1 + n < src2){
+    } else if (src1 + n < src2) {
         /* Case 3 */
-        j = ((src1 + n) - dst);
+        j = (size_t)((src1 + n) - dst);
         for (i = 0; i < n; i++) {
             dst[j++] = src1[i] ^ src2[i];
             if (j == n)
                 j = 0;
         }
         /* Now shift the dst buffer */
-        j = ((src1 + n) - dst);
+        j = (size_t)((src1 + n) - dst);
         for (i = 0; i < n-1; i++) {
             t = dst[j];
             dst[j] = dst[i];

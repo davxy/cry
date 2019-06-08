@@ -32,8 +32,8 @@
 #define CRY_TRIVIUM_IVLEN   10  /* 80-bit */
 
 struct cry_trivium_ctx {
-    size_t  keylen;
-    size_t  ivlen;
+    size_t keylen;
+    size_t ivlen;
     uint8_t s[40];
     uint8_t key[CRY_TRIVIUM_KEYLEN];
 };
@@ -41,7 +41,7 @@ struct cry_trivium_ctx {
 typedef struct cry_trivium_ctx cry_trivium_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

@@ -1,4 +1,5 @@
 #include "malloc_mock.h"
+#include "test.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -62,7 +63,7 @@ void *__wrap_realloc(void *ptr, size_t size)
 
     head = ((mem_head_t *)ptr) - 1;
     if (head->magic != MAGIC) {
-        printf(">>> Warning: realloc of a not alloced buffer\n");
+        TRACE(">>> Warning: realloc of a not alloced buffer\n");
         return NULL;
     }
     if (size < head->size)
@@ -96,7 +97,7 @@ void __wrap_free(void *ptr)
         return;
     head = ((mem_head_t *)ptr) - 1;
     if (head->magic != MAGIC) {
-        printf(">>> Warning: free of a not alloced buffer\n");
+        TRACE(">>> Warning: free of a not alloced buffer\n");
         return;
     }
     memset(head, 0xFF, HEAD_SIZE + head->size);

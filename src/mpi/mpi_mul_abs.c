@@ -1,6 +1,7 @@
 #include "mpi_pvt.h"
 #include "misc.h"
 #include <stdio.h>
+#include <cry/config.h>
 
 #define KARATSUBA_CUTOFF 64
 #define TOOM3_CUTOFF     300

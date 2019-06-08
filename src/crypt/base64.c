@@ -1,7 +1,7 @@
 #include <cry/base64.h>
 
 static const char *base64 =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 size_t cry_base64_encode(char *out, const char *in, size_t len)
 {
@@ -69,23 +69,23 @@ size_t cry_base64_decode(char *out, const char *in, size_t len)
     do {
         for (i = 0; i < 4; i++) {
             /* check for illegal base64 characters */
-            if (in[i] > 127 || unbase64[(int)in[i]] == 255)
+            if (in[i] < 0 || unbase64[(int)in[i]] == 255)
                 return -1;
         }
 
         *out++ = unbase64[(int)in[0]] << 2 |
-                    (unbase64[(int)in[1]] & 0x30) >> 4;
+                 (unbase64[(int)in[1]] & 0x30) >> 4;
         outlen++;
 
         if (in[2] != '=') {
             *out++ = (unbase64[(int)in[1]] & 0x0F) << 4 |
-                        (unbase64[(int)in[2]] & 0x3C) >> 2;
+                     (unbase64[(int)in[2]] & 0x3C) >> 2;
             outlen++;
         }
 
         if (in[3] != '=') {
             *out++ = (unbase64[(int)in[2]] & 0x03) << 6 |
-                        unbase64[(int)in[3]];
+                     unbase64[(int)in[3]];
             outlen++;
         }
 

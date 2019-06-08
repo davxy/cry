@@ -34,14 +34,13 @@ static const uint32_t k[64] = {
 static void cry_sha256_transform(cry_sha256_ctx *ctx,
                                  const unsigned char *data)
 {
-    uint32_t a, b, c, d, e, f, g, h, i, j, t1, t2, m[64];
+    uint32_t a, b, c, d, e, f, g, h, t1, t2, m[64];
+    unsigned int i, j;
 
-    for (i = 0, j = 0; i < 16; ++i, j += 4) {
-        m[i] = (data[j] << 24) | (data[j + 1] << 16) |
-               (data[j + 2] << 8) | (data[j + 3]);
-    }
+    for (i = 0, j = 0; i < 16; ++i, j += 4)
+        CRY_READ32_BE(m[i], &data[j]);
 
-    for ( ; i < 64; ++i)
+    for (; i < 64; ++i)
         m[i] = SIG1(m[i - 2]) + m[i - 7] + SIG0(m[i - 15]) + m[i - 16];
 
     a = ctx->state[0];
@@ -133,14 +132,7 @@ void cry_sha256_digest(cry_sha256_ctx *ctx, unsigned char *digest)
      * and transform.
      */
     ctx->bitlen += ctx->datalen * 8;
-    ctx->data[63] = ctx->bitlen & 0xff;
-    ctx->data[62] = (ctx->bitlen >> 8) & 0xff;
-    ctx->data[61] = (ctx->bitlen >> 16) & 0xff;
-    ctx->data[60] = (ctx->bitlen >> 24) & 0xff;
-    ctx->data[59] = (ctx->bitlen >> 32) & 0xff;
-    ctx->data[58] = (ctx->bitlen >> 40) & 0xff;
-    ctx->data[57] = (ctx->bitlen >> 48) & 0xff;
-    ctx->data[56] = (ctx->bitlen >> 56) & 0xff;
+    CRY_WRITE64_BE(ctx->bitlen, &ctx->data[56]);
     cry_sha256_transform(ctx, ctx->data);
 
     /*

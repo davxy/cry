@@ -38,12 +38,12 @@ static void dispatch(int argc, char *argv[])
     if (strcmp(test, "sha256_digest") == 0)
         sha256_digest(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void sha256_test(void)
 {
-    printf("* SHA256 NIST CAVS Vectors\n");
+    TRACE("* SHA256 NIST CAVS Vectors\n");
     func_test("sha256_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

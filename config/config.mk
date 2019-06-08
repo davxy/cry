@@ -9,10 +9,10 @@
 ################################################################################
 
 CRY_DEBUG=y
-#CRY_OMIT_FRAME_POINTER=y
 #CRY_SMALL_SIZE=y
-#CRY_STACK_PROTECTOR=y
-CRY_COVERAGE=y
+#CRY_OMIT_FRAME_POINTER=y
+#CRY_NO_STACK_PROTECTOR=y
+#CRY_COVERAGE=y
 
 ################################################################################
 # Platform
@@ -68,5 +68,6 @@ CRY_ECP_GRP_BP512R1_ENABLE=y
 # Miscelanea configurations
 ################################################################################
 
-CRY_MPI_DEBUG_CONF=y
+#CRY_MPI_DEBUG_CONF=y
+#CRY_CONTRACT_VALIDATE=y
 

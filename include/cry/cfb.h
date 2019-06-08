@@ -26,15 +26,15 @@ struct cry_cfb_ctx {
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Initialization vector length */
-    size_t                     vlen;
+    size_t vlen;
     /** Initialization vector data. */
-    unsigned char              v[CRY_CFB_BLOCK_MAX];
+    unsigned char v[CRY_CFB_BLOCK_MAX];
 };
 
 typedef struct cry_cfb_ctx cry_cfb_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

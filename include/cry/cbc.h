@@ -19,15 +19,15 @@ struct cry_cbc_ctx {
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter */
-    unsigned char              ctr[CRY_CBC_BLOCK_MAX];
+    unsigned char ctr[CRY_CBC_BLOCK_MAX];
     /** Counter length */
-    size_t                     ctrlen;
+    size_t ctrlen;
 };
 
 typedef struct cry_cbc_ctx cry_cbc_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

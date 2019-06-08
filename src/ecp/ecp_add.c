@@ -17,7 +17,7 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     if (cry_ecp_is_zero(p2))
         return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
 
-    if ((res = cry_mpi_init_list(&num, &den, (cry_mpi *) NULL)) != 0)
+    if ((res = cry_mpi_init_list(&num, &den, (cry_mpi *)NULL)) != 0)
         return res;
 
     CHK0(cry_mpi_sub(&num, &p2->y, &p1->y)); /* num = y2 - y1 */
@@ -40,7 +40,7 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
         goto e0;
     }
     /* Continue with lambda computation */
-    CHK0(cry_mpi_init_list(&lam, &r.x, &r.y, &r.z, (cry_mpi *) NULL));
+    CHK0(cry_mpi_init_list(&lam, &r.x, &r.y, &r.z, (cry_mpi *)NULL));
     CHK1(cry_mpi_inv(&den, &den, &grp->p));  /* den^(-1) (mod p) */
     CHK1(cry_mpi_mul(&lam, &num, &den));     /* lam = num / den */
 
@@ -57,7 +57,7 @@ int cry_ecp_add(cry_ecp *pr, const cry_ecp *p1, const cry_ecp *p2,
     CHK1(cry_mpi_set_int(&r.z, 1));
 
     cry_ecp_swap(pr, &r);
-e1: cry_mpi_clear_list(&lam, &r.x, &r.y, &r.z, (cry_mpi *) NULL);
-e0: cry_mpi_clear_list(&num, &den, (cry_mpi *) NULL);
+e1: cry_mpi_clear_list(&lam, &r.x, &r.y, &r.z, (cry_mpi *)NULL);
+e0: cry_mpi_clear_list(&num, &den, (cry_mpi *)NULL);
     return res;
 }

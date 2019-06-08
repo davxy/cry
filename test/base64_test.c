@@ -38,14 +38,14 @@ static void base64_dispatch(int argc, char *argv[])
     else if (strcmp(test, "decode") == 0)
         decode(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 
 
 void base64_test(void)
 {
-    printf("* Base-64\n");
+    TRACE("* Base-64\n");
     func_test("base64_test.data", base64_dispatch);
-    printf("\n");
+    TRACE("\n");
 }
