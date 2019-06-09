@@ -635,6 +635,7 @@ static void ecp_grp_load(cry_ecp_grp *grp,
     ecp_mpi_load(&grp->b, b, blen);
     ecp_mpi_load(&grp->g.x, gx, gxlen);
     ecp_mpi_load(&grp->g.y, gy, gylen);
+    (void)cry_mpi_init_size(&grp->g.z, 0);
     ecp_mpi_load(&grp->n, n, nlen);
 }
 
