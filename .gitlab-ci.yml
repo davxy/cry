@@ -30,7 +30,7 @@ sonar:
     only:
         - tsc
     script:
-        - make sonar
+        - make sonar CONFIG=config/config-ci.mk
 
 # Deploy
 deploy:
