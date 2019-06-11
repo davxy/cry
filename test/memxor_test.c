@@ -135,9 +135,9 @@ void memxor_test(void)
 {
     int i;
 
-    printf("* XOR\n");
+    TRACE("* XOR\n");
     ASSERT(USED_MAX < BUFSIZ);
     for (i = 0; i < NTESTS; i++)
         run(tests[i].name, tests[i].func, setup, NULL);
-    printf("\n");
+    TRACE("\n");
 }

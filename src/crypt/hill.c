@@ -111,7 +111,7 @@ static size_t keylen_trim(size_t *keylen)
 
     if (*keylen > CRY_HILL_KEYLEN_MAX)
         *keylen = CRY_HILL_KEYLEN_MAX;
-    for (n = 1; (z=n*n) < *keylen; n++) {
+    for (n = 1; (z = n*n) < *keylen; n++) {
     }
     if (z > *keylen) {
         n--;
@@ -125,7 +125,6 @@ static void hill_operate(struct cry_hill_ctx *ctx, unsigned char *out,
                          const unsigned char *key)
 {
     unsigned char v[CRY_HILL_KEYDIM_MAX];
-
     size_t n;
 
     while (len > 0) {
@@ -141,7 +140,7 @@ static void hill_operate(struct cry_hill_ctx *ctx, unsigned char *out,
 }
 
 void cry_hill_encrypt(struct cry_hill_ctx *ctx, unsigned char *out,
-                  const unsigned char *in, size_t len)
+                      const unsigned char *in, size_t len)
 {
     hill_operate(ctx, out, in, len, ctx->key);
 }
@@ -158,8 +157,7 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
                   unsigned int trials)
 {
     int res = -1;
-    unsigned long det;
-    unsigned long idet;
+    unsigned char det, idet;
     size_t n;
 
     n = keylen_trim(&keylen);
@@ -176,7 +174,7 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
          * should be odd, since if gcd(det, 256)=1 -> is invertible
          */
         if ((det & 1) != 0) {
-            idet = cry_long_inv(det, 256);
+            idet = (unsigned char)cry_long_inv(det, 256);
             mtx_invert(ikey, key, n, idet);
             res = 0;
             trials = 0;
@@ -187,10 +185,10 @@ static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
 }
 
 int cry_hill_init(struct cry_hill_ctx *ctx, const unsigned char *key,
-              const unsigned char *ikey, size_t keylen)
+                  const unsigned char *ikey, size_t keylen)
 {
     int res = 0;
-    int trials = 0;
+    unsigned int trials = 0;
 
     memset(ctx, 0, sizeof(*ctx));
 

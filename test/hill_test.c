@@ -72,13 +72,13 @@ static void dispatch(int argc, char *argv[])
     else if (strcmp(test, "hill_decrypt") == 0)
         hill_decrypt(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 
 void hill_test(void)
 {
-    printf("* HILL Test\n");
+    TRACE("* HILL Test\n");
     func_test("hill_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

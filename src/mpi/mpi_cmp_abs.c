@@ -17,12 +17,12 @@ int cry_mpi_cmp_abs(const cry_mpi *a, const cry_mpi *b)
     ap = &a->data[i - 1];
     bp = &b->data[i - 1];
     while (i-- > 0) {
-       if (*ap < *bp)
-           return -1;
-       if (*ap > *bp)
-           return 1;
-       ap--;
-       bp--;
+        if (*ap < *bp)
+            return -1;
+        if (*ap > *bp)
+            return 1;
+        ap--;
+        bp--;
     }
     return 0;
 }

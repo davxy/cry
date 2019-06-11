@@ -1,13 +1,12 @@
-libcry := ../libcry.a
-
 CC := gcc
 
 CFLAGS := -O0 -g3 -Wall
 CPPFLAGS = -I. -I../include -I../src
-LDFLAGS := --coverage -Wl,--wrap=malloc,--wrap=realloc,--wrap=free
+LDFLAGS := --coverage -Wl,--wrap=malloc,--wrap=realloc,--wrap=calloc,--wrap=free
 
+libcry := ../libcry.a
 
-objs := \
+objects := \
 	test.o \
 	malloc_mock.o \
 	version_test.o \
@@ -26,21 +25,26 @@ objs := \
 	md5_test.o \
 	sha1_test.o \
 	sha256_test.o \
+	ecp_test.o \
 #	rand_test.o \
 	dh_test.o \
 	dsa_test.o \
-	ecp_test.o \
 	ecdsa_test.o \
 	ecdh_test.o \
 
 .PHONY: all clean 
 
-all: $(objs) $(libcry)
+all: $(objects) $(libcry)
 	$(CC) $(LDFLAGS) -o test $^
 
 clean:
-	$(RM) $(objs) test
+	$(RM) $(objects) test
 	$(RM) `find . -type f \( -name \*.gcda -o -name \*.gcno -o -name \*.gcov \)`
+
+$(libcry):
+	$(MAKE) -C ..
+
+$(objects): ../include/cry/config.h
 
 coverage: test
 	@mkdir -p out/coverage

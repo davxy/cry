@@ -274,14 +274,14 @@ static void dispatch(int argc, char *argv[])
     else if (strcmp(test, "aes_gcm_decrypt") == 0)
         aes_gcm_decrypt(argc, argv);
     else
-        printf("Test '%s' not defined\n", test);
+        TRACE("Test '%s' not defined\n", test);
 }
 
 void aes_test(void)
 {
-    printf("* AES NIST AESAVS KAT\n");
+    TRACE("* AES NIST AESAVS KAT\n");
     func_test("aes_kat_test.data", dispatch);
-    printf("* AES GCM NIST Validation\n");
+    TRACE("* AES GCM NIST Validation\n");
     func_test("aes_gcm_test.data", dispatch);
-    printf("\n");
+    TRACE("\n");
 }

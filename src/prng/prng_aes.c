@@ -6,10 +6,10 @@
 #define BLOCK_SIZ 16
 
 struct prng_bc_ctx {
-    cry_aes_ctx     aes;
-    unsigned char   ctr[16];
-    unsigned char   lo[16];
-    unsigned int    ix;
+    cry_aes_ctx aes;
+    size_t ix;
+    unsigned char ctr[16];
+    unsigned char lo[16];
 };
 
 static struct prng_bc_ctx prng_ctx;
@@ -51,7 +51,7 @@ int cry_prng_aes_rand(unsigned char *buf, size_t siz)
         cry_prng_aes_init(NULL, 0);
 
     /* eventually store the previous call residual */
-    for ( ; prng_ctx.ix && siz; siz--) {
+    for (; prng_ctx.ix && siz; siz--) {
         *buf++ = prng_ctx.lo[prng_ctx.ix++];
         prng_ctx.ix %= BLOCK_SIZ;
     }

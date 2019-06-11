@@ -43,10 +43,19 @@ int raw_init(unsigned char *raw, size_t rawlen, const char *asc);
 void run(const char *name, void (* test)(void),
          void (* setup)(void), void (* teardown)(void));
 
+#define RUN(test) run(#test, test, NULL, NULL)
+
+
+#define TRACE(...) do { \
+    fprintf(stdout, __VA_ARGS__); \
+    fflush(stdout); \
+} while(0)
+
+
 #define ASSERT(test) do { \
     if ((test) == 0) { \
         g_fails++; \
-        printf("!!! ASSERTION FAIL (%s:%d): %s\n", \
+        TRACE("!!! ASSERTION FAIL (%s:%d): %s\n", \
                 __FILE__, __LINE__, #test); \
         return; \
     } \
@@ -78,16 +87,16 @@ void run(const char *name, void (* test)(void),
 #define PRINT_HEX(msg, buf, siz) do { \
     size_t __siz = siz; \
     unsigned char *__p = buf; \
-    if (msg) printf("%s: ", msg); \
-    while (__siz-- > 0) printf("%02x", *__p++); \
-    printf("\n"); \
+    if (msg) TRACE("%s: ", msg); \
+    while (__siz-- > 0) TRACE("%02x", *__p++); \
+    TRACE("\n"); \
     } while(0)
 
 #define PRINT_ASC(msg, buf, siz) \
-    printf("%s: %.*s\n", msg, (int)(siz), buf)
+    TRACE("%s: %.*s\n", msg, (int)(siz), buf)
 
 #define PRINT_MPI(msg, mpi, rad) do { \
-    printf("%s:\t", msg); \
+    TRACE("%s:\t", msg); \
     cry_mpi_print(mpi, rad); \
     } while(0)
 

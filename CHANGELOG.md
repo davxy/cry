@@ -21,6 +21,17 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
+[0.0.10] - 2019-06-08
+---------------------
+
+Added
+
+* Some NIST recommended elliptic curve domain parameters over Fp.
+* Some Brainpool standard curve domain parameters over Fp (RFC 5639).
+* Malloc mock and Valgrind used to execute CI unit-tests>
+* Uncrustify and clang-format project files.
+* Stricter compiler warnings policy wrt size types and int sign conversions.
+
 
 [0.0.9] - 2019-04-22
 --------------------

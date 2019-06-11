@@ -59,7 +59,7 @@ static void gcm_hash(unsigned char *hash, const unsigned char *key,
 }
 
 static void gcm_hash_sizes(unsigned char *hash, const unsigned char *key,
-                           unsigned long auth_size, unsigned long ciph_size)
+                           size_t auth_size, size_t ciph_size)
 {
     unsigned char buf[CRY_GCM_BLOCK_SIZE] = {0};
     uint32_t bits;
@@ -135,16 +135,18 @@ static void gcm_operate(struct cry_gcm_ctx *ctx, unsigned char *dst,
 
     if (src != dst) {
         for (; size >= CRY_GCM_BLOCK_SIZE; (size -= CRY_GCM_BLOCK_SIZE,
-               src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
+                                            src += CRY_GCM_BLOCK_SIZE,
+                                            dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, dst, ctx->ctr, CRY_GCM_BLOCK_SIZE);
             cry_memxor(dst, src, CRY_GCM_BLOCK_SIZE);
             CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     } else {
         for (; size >= CRY_GCM_BLOCK_SIZE; (size -= CRY_GCM_BLOCK_SIZE,
-               src += CRY_GCM_BLOCK_SIZE, dst += CRY_GCM_BLOCK_SIZE)) {
+                                            src += CRY_GCM_BLOCK_SIZE,
+                                            dst += CRY_GCM_BLOCK_SIZE)) {
             encrypt(ciph, buffer, ctx->ctr, CRY_GCM_BLOCK_SIZE);
-            cry_memxor2 (dst, src, buffer, CRY_GCM_BLOCK_SIZE);
+            cry_memxor2(dst, src, buffer, CRY_GCM_BLOCK_SIZE);
             CRY_INCREMENT_BE(&ctx->ctr[CRY_GCM_BLOCK_SIZE-4], 4);
         }
     }

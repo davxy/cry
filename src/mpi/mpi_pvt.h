@@ -2,19 +2,20 @@
 #define CRY_MPI_PVT_H_
 
 #include <cry/mpi.h>
+#include <cry/assert.h>
 #include <string.h> /* memset */
 #include <stdint.h>
 #include "../misc.h"
 
 /* Double precision digits */
 
-#if CRY_MPI_DIGIT_MAX == 255UL
+#if CRY_MPI_DIGIT_BYTES == 1
 typedef uint16_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 65535UL
+#elif CRY_MPI_DIGIT_BYTES == 2
 typedef uint32_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 4294967295UL
+#elif CRY_MPI_DIGIT_BYTES == 4
 typedef uint64_t cry_mpi_dword;
-#elif CRY_MPI_DIGIT_MAX == 18446744073709551615UL
+#elif CRY_MPI_DIGIT_BYTES == 8
 # if defined(_WIN32) || defined(__GNUC__)
 typedef unsigned __int128 cry_mpi_dword;
 # else
@@ -26,9 +27,7 @@ typedef uint128_t cry_mpi_dword;
 
 /* Digit max value */
 #ifndef CRY_MPI_QUANTUM
-# ifndef CRY_HAS_NO_CONFIG_H
 # include <cry/config.h>
-# endif
 # ifndef CRY_MPI_DEBUG_CONF
 # define CRY_MPI_QUANTUM 8
 # else
@@ -38,18 +37,18 @@ typedef uint128_t cry_mpi_dword;
 
 /* Bits to digits */
 #define CRY_MPI_BITS_TO_DIGS(a) \
-        ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BITS + 1) : 0)
+    ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BITS + 1) : 0)
 
 /* Octets to digits */
 #define CRY_MPI_BYTES_TO_DIGS(a) \
-        ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BYTES + 1) : 0)
+    ((a != 0) ? (((a) - 1) / CRY_MPI_DIGIT_BYTES + 1) : 0)
 
 
 int cry_mpi_grow(cry_mpi *a, size_t size);
 
-int cry_mpi_shrd(cry_mpi *a, int n);
+int cry_mpi_shrd(cry_mpi *a, size_t n);
 
-int cry_mpi_shld(cry_mpi *a, int n);
+int cry_mpi_shld(cry_mpi *a, size_t n);
 
 /* decrease used while the most significant digit is zero */
 #define cry_mpi_adjust(a) do { \

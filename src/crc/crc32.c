@@ -18,7 +18,7 @@ void cry_crc32_update(struct cry_crc32_ctx *ctx,
 uint32_t cry_crc32_final(struct cry_crc32_ctx *ctx)
 {
     if (ctx->flags & CRY_CRC_FLAG_COMPLEMENT)
-        ctx->crc ^= ~0;
+        ctx->crc ^= (uint32_t) ~0U;
     if (ctx->flags & CRY_CRC_FLAG_SWAP)
         ctx->crc = (ctx->crc & 0x000000ff) << 24 |
                    (ctx->crc & 0x0000ff00) << 8 |
@@ -32,8 +32,8 @@ void cry_crc32_digest(cry_crc32_ctx *ctx, unsigned char *out)
     uint32_t crc;
 
     crc = cry_crc32_final(ctx);
-    out[0] = (crc >> 24) & 0xFF;
-    out[1] = (crc >> 16) & 0xFF;
-    out[2] = (crc >> 8)  & 0xFF;
-    out[3] = (crc & 0xFF);
+    out[0] = (unsigned char)(crc >> 24);
+    out[1] = (unsigned char)(crc >> 16);
+    out[2] = (unsigned char)(crc >> 8);
+    out[3] = (unsigned char)(crc & 0xFF);
 }

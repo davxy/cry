@@ -18,24 +18,24 @@ struct cry_gcm_ctx {
     /** Block cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Initialization vector */
-    unsigned char              iv[CRY_GCM_BLOCK_SIZE];
+    unsigned char iv[CRY_GCM_BLOCK_SIZE];
     /** Counter. */
-    unsigned char              ctr[CRY_GCM_BLOCK_SIZE];
+    unsigned char ctr[CRY_GCM_BLOCK_SIZE];
     /** Hashing state */
-    unsigned char              hs[CRY_GCM_BLOCK_SIZE];
+    unsigned char hs[CRY_GCM_BLOCK_SIZE];
     /** Hashing subkey. */
-    unsigned char              key[CRY_GCM_BLOCK_SIZE];
+    unsigned char key[CRY_GCM_BLOCK_SIZE];
     /** Authenticated data length. */
-    size_t                     auth_len;
+    size_t auth_len;
     /** Cipher data length. */
-    size_t                     ciph_len;
+    size_t ciph_len;
 };
 
 typedef struct cry_gcm_ctx cry_gcm_ctx;
 
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**

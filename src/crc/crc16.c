@@ -18,9 +18,9 @@ void cry_crc16_update(struct cry_crc16_ctx *ctx,
 uint16_t cry_crc16_final(struct cry_crc16_ctx *ctx)
 {
     if (ctx->flags & CRY_CRC_FLAG_COMPLEMENT)
-        ctx->crc ^= ~0;
+        ctx->crc ^= (uint16_t) ~0U;
     if (ctx->flags & CRY_CRC_FLAG_SWAP)
-        ctx->crc = (ctx->crc << 8) | (ctx->crc >> 8);
+        ctx->crc = (uint16_t)(ctx->crc << 8U) | (ctx->crc >> 8U);
     return ctx->crc;
 }
 
@@ -29,6 +29,6 @@ void cry_crc16_digest(cry_crc16_ctx *ctx, unsigned char *out)
     uint16_t crc;
 
     crc = cry_crc16_final(ctx);
-    out[0] = (crc >> 8) & 0xFF;
-    out[1] = (crc & 0xFF);
+    out[0] = (unsigned char)(crc >> 8);
+    out[1] = (unsigned char)(crc & 0xFF);
 }

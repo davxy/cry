@@ -1,6 +1,5 @@
 libcry.a
 build
-include/cry/config.h
 test/test
 test/out
 doc/html

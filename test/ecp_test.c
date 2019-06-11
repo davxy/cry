@@ -1,35 +1,225 @@
 #include "test.h"
 #include <cry/ecp.h>
-#include <cry/ec.h>
 
-static cry_ec ec;
-
-#define P1X "2"
-#define P1Y "3"
-#define P2X "4"
-#define P2Y "5"
-
-void ecp_add(void)
+/*
+ * y^2 = x^3 + 2x + 2 (mod 17)
+ *
+ *  Generator point = (5, 1)
+ *  Generator order = 19
+ */
+static void simple_curve_init(cry_ecp_grp *ec)
 {
-    cry_ecp p1, p2, pr;
+    cry_mpi_init_int(&ec->a, 2);
+    cry_mpi_init_int(&ec->b, 2);
+    cry_mpi_init_int(&ec->p, 17);
+    cry_mpi_init_int(&ec->n, 19);
+    cry_mpi_init_int(&ec->g.x, 5);
+    cry_mpi_init_int(&ec->g.y, 1);
+    cry_mpi_init_int(&ec->g.z, 1);
+}
 
-    cry_ecp_init(&p1);
-    cry_ecp_init(&p2);
-    cry_ecp_init(&pr);
+/* Check that a point is on the curve */
+static void point_check(const cry_ecp *p, const cry_ecp_grp *grp)
+{
+    /* Check thay y^2 = x^3 + ax + b (mod p) */
+    cry_mpi v, t;
 
-    ASSERT_OK(cry_mpi_init_str(&p1.x, 16, P1X));
-    ASSERT_OK(cry_mpi_init_str(&p1.y, 16, P1Y));
-    ASSERT_OK(cry_mpi_init_str(&p2.x, 16, P2X));
-    ASSERT_OK(cry_mpi_init_str(&p2.y, 16, P2Y));
-    ASSERT_OK(cry_ecp_add(&pr, &p1, &p2, &ec.p));
+    if (cry_ecp_is_zero(p))
+        return;
+    cry_mpi_init_list(&v, &t, NULL);
+    cry_mpi_sqr(&t, &p->x); /* x^2 */
+    cry_mpi_mul(&t, &t, &p->x);         /* t = x^3 */
+    cry_mpi_mul(&v, &grp->a, &p->x);    /* v = ax */
+    cry_mpi_add(&v, &v, &grp->b);       /* v = ax + b */
+    cry_mpi_add(&v, &v, &t);            /* v = x^3 + ax + b */
+    cry_mpi_sqr(&t, &p->y);             /* t = y^2 */
+    cry_mpi_sub(&v, &v, &t);
+    cry_mpi_mod(&v, &v, &grp->p);
+    ASSERT(cry_mpi_is_zero(&v));
+    cry_mpi_clear_list(&v, &t, NULL);
+}
 
-    cry_ecp_clear(&p1);
-    cry_ecp_clear(&p2);
-    cry_ecp_clear(&pr);
+static void add_test(void)
+{
+    cry_ecp_grp grp;
+    cry_ecp p;
+    int i = 0;
+
+    simple_curve_init(&grp);
+    cry_ecp_init(&p);
+    do {
+        //TRACE("n = %d\n", i);
+        //cry_mpi_print(&p.x, 10);
+        //cry_mpi_print(&p.y, 10);
+        //cry_mpi_print(&p.z, 10);
+        point_check(&p, &grp);
+        //TRACE("--------------------\n");
+        cry_ecp_add(&p, &p, &grp.g, &grp);
+        i++;
+    } while (!cry_ecp_is_zero(&p));
+    cry_ecp_grp_clear(&grp);
+    cry_ecp_clear(&p);
+}
+
+static void mul_test(void)
+{
+    cry_ecp_grp grp;
+    cry_ecp p;
+    cry_mpi v;
+
+    simple_curve_init(&grp);
+    cry_ecp_init_int(&p, 9, 16);    /* p = 5g = (9, 16) */
+    cry_mpi_init_int(&v, 2);
+
+    point_check(&p, &grp);
+    cry_ecp_mul(&p, &p, &v, &grp);  /* 2p = 10g = (7,11) */
+    point_check(&p, &grp);
+
+    cry_ecp_grp_clear(&grp);
+    cry_ecp_clear(&p);
+    cry_mpi_clear(&v);
+}
+
+static void secp192r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP192R1);
+
+    ASSERT(res == 0);
+}
+
+static void secp224r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP224R1);
+
+    ASSERT(res == 0);
+}
+
+static void secp256r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP256R1);
+
+    ASSERT(res == 0);
+}
+
+static void secp384r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP384R1);
+
+    ASSERT(res == 0);
+}
+
+static void secp521r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP521R1);
+
+    ASSERT(res == 0);
+}
+
+static void secp192k1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP192K1);
+
+    ASSERT(res == 0);
+}
+
+static void secp224k1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP224K1);
+
+    ASSERT(res == 0);
+}
+
+static void secp256k1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_SECP256K1);
+
+    ASSERT(res == 0);
+}
+
+static void bp256r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_BP256R1);
+
+    ASSERT(res == 0);
+}
+
+static void bp384r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_BP384R1);
+
+    ASSERT(res == 0);
+}
+
+static void bp512r1_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, CRY_ECP_GRP_BP512R1);
+
+    ASSERT(res == 0);
+}
+
+static void bad_curve_load_test(void)
+{
+    int res;
+    cry_ecp_grp grp;
+
+    res = cry_ecp_grp_load(&grp, 0xFFFF);
+
+    ASSERT(res != 0);
+}
+
+static void curve_params_load(void)
+{
+    RUN(secp192r1_load_test);
+    RUN(secp224r1_load_test);
+    RUN(secp256r1_load_test);
+    RUN(secp384r1_load_test);
+    RUN(secp521r1_load_test);
+    RUN(secp192k1_load_test);
+    RUN(secp224k1_load_test);
+    RUN(secp256k1_load_test);
+    RUN(bp256r1_load_test);
+    RUN(bp384r1_load_test);
+    RUN(bp512r1_load_test);
+    RUN(bad_curve_load_test);
 }
 
 void ecp_test(void)
 {
-    ASSERT_OK(cry_ec_init_nist_p256(&ec));
-    RUN(ecp_add);
+    TRACE("* ECP load curves parameters\n");
+    curve_params_load();
+    add_test();
+    mul_test();
 }

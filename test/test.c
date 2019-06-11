@@ -17,6 +17,7 @@ void rsa_test(void);
 void md5_test(void);
 void sha1_test(void);
 void sha256_test(void);
+void ecp_test(void);
 
 static int g_runs;
 int g_fails;
@@ -48,13 +49,13 @@ struct sub_test g_tests[] = {
     SUB_TEST(md5),
     SUB_TEST(sha1),
     SUB_TEST(sha256),
+    SUB_TEST(ecp),
 #if 0
-   TEST_ELEM(rand),
-   TEST_ELEM(dh),
-   TEST_ELEM(dsa),
-   TEST_ELEM(ecp),
-   TEST_ELEM(ecdh),
-   TEST_ELEM(ecdsa),
+    SUB_TEST(rand),
+    SUB_TEST(dh),
+    SUB_TEST(dsa),
+    SUB_TEST(ecdh),
+    SUB_TEST(ecdsa),
 #endif
 };
 
@@ -92,7 +93,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
 
     file = fopen(datafile, "r");
     if (file == NULL) {
-        printf("Error: data file \"%s\" not found\n", datafile);
+        TRACE("Error: data file \"%s\" not found\n", datafile);
         return;
     }
 
@@ -104,7 +105,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
             continue;
         left = sizeof(argbuf);
         if (g_verbose != 0)
-            printf("    %s\n", argbuf);
+            TRACE("    %s\n", argbuf);
         /* Collect test function name and parameters */
         cnt = strlen(argbuf) + 1;
         curr = argbuf + cnt;
@@ -116,7 +117,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
             params[i] = curr;
             cnt = strlen(params[i]) + 1;
             if (cnt > left) {
-                printf("Args buffer memory exhausted... skip test set\n");
+                TRACE("Args buffer memory exhausted... skip test set\n");
                 fclose(file);
                 return;
             }
@@ -128,7 +129,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
         dispatch(i, params);
         g_runs++;
         if (g_fails != fails)
-            printf("      %s\n", argbuf);
+            TRACE("      %s\n", argbuf);
     }
     fclose(file);
 }
@@ -141,13 +142,13 @@ void run(const char *name, void (* test)(void),
 
     g_runs++;
     if (g_verbose != 0)
-        printf("    %s\n", name);
+        TRACE("    %s\n", name);
     if (setup != NULL)
         setup();
     fails = g_fails;
     test();
     if (g_fails != fails)
-        printf("      %s\n", name);
+        TRACE("      %s\n", name);
     if (teardown != NULL)
         teardown();
 }
@@ -158,10 +159,10 @@ void malloc_fail_tests(struct malloc_fail_args *args, size_t num,
     size_t i, fail_after;
 
     if (g_verbose != 0)
-        printf("    Malloc fails\n");
+        TRACE("    Malloc fails\n");
     for (i = 0; i < num; i++) {
         if (g_verbose != 0)
-            printf("      %s \n", args[i].argv[0]);
+            TRACE("      %s \n", args[i].argv[0]);
         fail_after = 0;
         do {
             g_malloc_mock_state = MALLOC_MOCK_READY;
@@ -169,7 +170,7 @@ void malloc_fail_tests(struct malloc_fail_args *args, size_t num,
             dispatch(args[i].argc - 1, args[i].argv + 1);
         } while (g_malloc_mock_state == MALLOC_MOCK_FAILED);
         if (g_verbose != 0)
-            printf("        fail-counter: %u\n", (unsigned)fail_after);
+            TRACE("        fail-counter: %u\n", (unsigned)fail_after);
     }
     g_malloc_mock_state = MALLOC_MOCK_STOPPED;
 }
@@ -228,12 +229,12 @@ int raw_init(unsigned char *raw, size_t rawlen, const char *asc)
 static void help(const char *arg)
 {
     if (arg != NULL)
-        printf("Error: unsupported option '%s'\n", arg);
-    printf("\nUsage: test [options] [tests]\n");
-    printf("  -h    help\n");
-    printf("  -l    show cases\n");
-    printf("  -v    verbose\n");
-    printf("\n");
+        TRACE("Error: unsupported option '%s'\n", arg);
+    TRACE("\nUsage: test [options] [tests]\n");
+    TRACE("  -h    help\n");
+    TRACE("  -l    show cases\n");
+    TRACE("  -v    verbose\n");
+    TRACE("\n");
     exit(0);
 }
 
@@ -241,10 +242,10 @@ static void show_cases(void)
 {
     int i;
 
-    printf("\nTest cases:\n");
+    TRACE("\nTest cases:\n");
     for (i = 0; i < NTESTS; i++)
-        printf("  %s\n", g_tests[i].name);
-    printf("\n");
+        TRACE("  %s\n", g_tests[i].name);
+    TRACE("\n");
     exit(0);
 }
 
@@ -278,6 +279,12 @@ static void parse_args(int argc, char *argv[])
     }
 }
 
+void cry_assert_fail(const char *cond, const char *file, int line)
+{
+    TRACE("Assert fail: %s @ %s:%d\n", cond, file, line);
+    g_fails++;
+}
+
 int main(int argc, char *argv[])
 {
     int i;
@@ -290,17 +297,17 @@ int main(int argc, char *argv[])
     /* Parse arguments */
     parse_args(argc, argv);
 
-    printf("\nC  R  Y  T  E  S  T\n\n");
+    TRACE("\nC  R  Y  T  E  S  T\n\n");
 
     for (i = 0; i < NTESTS; i++) {
         if (g_test_skip[i] == 0)
             g_tests[i].func();
     }
 
-    printf("\n");
-    printf("|| Tests: %d\n", g_runs);
-    printf("|| Fails: %d\n", g_fails);
-    printf("\n-------------------------------------\n\n");
+    TRACE("\n");
+    TRACE("|| Tests: %d\n", g_runs);
+    TRACE("|| Fails: %d\n", g_fails);
+    TRACE("\n-------------------------------------\n\n");
 
     return (g_fails != 0);
 }

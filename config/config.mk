@@ -9,10 +9,10 @@
 ################################################################################
 
 CRY_DEBUG=y
-#CRY_OMIT_FRAME_POINTER=y
 #CRY_SMALL_SIZE=y
-#CRY_STACK_PROTECTOR=y
-CRY_COVERAGE=y
+#CRY_OMIT_FRAME_POINTER=y
+#CRY_NO_STACK_PROTECTOR=y
+#CRY_COVERAGE=y
 
 ################################################################################
 # Platform
@@ -22,7 +22,7 @@ CRY_COVERAGE=y
 #CRY_ARCH_x86=y
 
 ################################################################################
-# Algorithms
+# Algorithms tweaks
 ################################################################################
 
 # Use Extended Euclidean Algorithm to compute inverse.
@@ -49,8 +49,25 @@ CRY_ECP_MUL_WIN=y
 CRY_ECP_MUL_SLIDING_WIN=y
 
 ################################################################################
+# Elliptic curves group parameters
+################################################################################
+
+CRY_ECP_GRP_SECP192R1_ENABLE=y
+CRY_ECP_GRP_SECP224R1_ENABLE=y
+CRY_ECP_GRP_SECP256R1_ENABLE=y
+CRY_ECP_GRP_SECP384R1_ENABLE=y
+CRY_ECP_GRP_SECP521R1_ENABLE=y
+CRY_ECP_GRP_SECP192K1_ENABLE=y
+CRY_ECP_GRP_SECP224K1_ENABLE=y
+CRY_ECP_GRP_SECP256K1_ENABLE=y
+CRY_ECP_GRP_BP256R1_ENABLE=y
+CRY_ECP_GRP_BP384R1_ENABLE=y
+CRY_ECP_GRP_BP512R1_ENABLE=y
+
+################################################################################
 # Miscelanea configurations
 ################################################################################
 
-CRY_MPI_DEBUG_CONF=y
+#CRY_MPI_DEBUG_CONF=y
+#CRY_ASSERT_CHECK=y
 

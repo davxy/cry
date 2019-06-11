@@ -24,8 +24,8 @@
  */
 struct cry_crc16_ctx {
     const uint16_t *tab;
-    uint16_t        crc;
-    unsigned char   flags;
+    uint16_t crc;
+    unsigned char flags;
 };
 
 typedef struct cry_crc16_ctx cry_crc16_ctx;
@@ -35,14 +35,14 @@ typedef struct cry_crc16_ctx cry_crc16_ctx;
  */
 struct cry_crc32_ctx {
     const uint32_t *tab;
-    uint32_t        crc;
-    unsigned char   flags;
+    uint32_t crc;
+    unsigned char flags;
 };
 
 typedef struct cry_crc32_ctx cry_crc32_ctx;
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 /**
@@ -140,7 +140,7 @@ void cry_crc16_dnp_init(cry_crc16_ctx *ctx);
  * @param n     Number of octets in the buffer.
  * @return      CRC value.
  */
-uint16_t cry_crc16_dnp(const uint8_t *in, size_t n);
+uint16_t cry_crc16_dnp(const unsigned char *in, size_t n);
 
 /**
  * Initialize a generic CRC-32 algoritm context.
