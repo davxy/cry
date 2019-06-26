@@ -8,9 +8,9 @@ struct affine_param {
     unsigned char keyb[CRY_AFFINE_KEYMAX];
     unsigned char src[CRY_AFFINE_KEYMAX];
     unsigned char dst[CRY_AFFINE_KEYMAX];
-    size_t        keylen;
-    size_t        srclen;
-    size_t        dstlen;
+    size_t keylen;
+    size_t srclen;
+    size_t dstlen;
 };
 
 static void param_init(struct affine_param *par, char *argv[])

@@ -26,7 +26,8 @@ static void mpi_setup(void)
 
 static void mpi_teardown(void)
 {
-    cry_mpi_clear_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, g_mpi_r1, g_mpi_r2, NULL);
+    cry_mpi_clear_list(g_mpi0, g_mpi1, g_mpi2, g_mpi3, g_mpi_r1, g_mpi_r2,
+                       NULL);
     free(g_mpi_buf);
 }
 
@@ -184,7 +185,7 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
 
 
 typedef int (* binary_mod_op_f)(cry_mpi *r, const cry_mpi *a,
-        const cry_mpi *b, const cry_mpi *m);
+                                const cry_mpi *b, const cry_mpi *m);
 
 static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
 {
@@ -274,10 +275,18 @@ static void mpi_dispatch(int argc, char *argv[])
 
 
 static struct malloc_fail_args g_malloc_fail_tests[] = {
-    { 5, { "Multiply Baseline", "mpi_mul_baseline", "12345678", "12345678", "14b66dc1df4d840" }},
-    { 5, { "Multiply Comba", "mpi_mul_comba", "12345678", "12345678", "14b66dc1df4d840" }},
-    { 5, { "Multiply Karatsuba", "mpi_mul_karatsuba", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
-    { 5, { "Multiply Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+    { 5,
+      { "Multiply Baseline", "mpi_mul_baseline", "12345678", "12345678",
+        "14b66dc1df4d840" }},
+    { 5,
+      { "Multiply Comba", "mpi_mul_comba", "12345678", "12345678",
+        "14b66dc1df4d840" }},
+    { 5,
+      { "Multiply Karatsuba", "mpi_mul_karatsuba", "FFFFFFFFFFFFFFFF",
+        "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+    { 5,
+      { "Multiply Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF",
+          "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
 };
 
 
@@ -286,6 +295,6 @@ void mpi_test(void)
     TRACE("* MPI\n");
     func_test("mpi_test.data", mpi_dispatch);
     malloc_fail_tests(g_malloc_fail_tests,
-            ARLEN(g_malloc_fail_tests), mpi_dispatch);
+                      ARLEN(g_malloc_fail_tests), mpi_dispatch);
     TRACE("\n");
 }

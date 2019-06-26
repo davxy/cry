@@ -28,7 +28,7 @@ static int mock_update(void)
 
 struct mem_head {
     unsigned long magic;
-    size_t        size;
+    size_t size;
 };
 
 typedef struct mem_head mem_head_t;

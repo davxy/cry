@@ -109,8 +109,8 @@ static const unsigned char en_60870_5_1_pattern[] = {
 struct binary_test {
     char                *name;
     const unsigned char *pattern;
-    size_t               pattern_size;
-    unsigned short       expected;
+    size_t pattern_size;
+    unsigned short expected;
 };
 
 static const struct binary_test brs[] = {
@@ -127,7 +127,7 @@ static void crc16_dnp_test(void)
     int i;
     uint16_t crc;
 
-    for(i = 0; i < sizeof(brs)/sizeof(*brs); ++i) {
+    for (i = 0; i < sizeof(brs)/sizeof(*brs); ++i) {
         crc = cry_crc16_dnp(brs[i].pattern, brs[i].pattern_size);
         ASSERT_EQ(crc, brs[i].expected);
     }

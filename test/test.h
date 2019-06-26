@@ -25,7 +25,7 @@ void func_test(const char *datafile, dispatch_func_t dispatch);
 
 
 struct malloc_fail_args {
-    int   argc;
+    int argc;
     char *argv[10];
 };
 
