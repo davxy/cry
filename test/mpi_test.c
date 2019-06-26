@@ -139,7 +139,7 @@ static void mpi_shift(int argc, char *argv[], int left)
 }
 
 
-typedef int (* unary_op_f)(cry_mpi *r, const cry_mpi *a);
+typedef int (*unary_op_f)(cry_mpi *r, const cry_mpi *a);
 
 static void mpi_unary_op(int argc, char *argv[], unary_op_f op)
 {
@@ -167,7 +167,7 @@ static void mpi_unary_op(int argc, char *argv[], unary_op_f op)
 } while (0)
 
 
-typedef int (* binary_op_f)(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
+typedef int (*binary_op_f)(cry_mpi *r, const cry_mpi *a, const cry_mpi *b);
 
 static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
 {
@@ -184,8 +184,8 @@ static void mpi_binary_op(int argc, char *argv[], binary_op_f op)
 }
 
 
-typedef int (* binary_mod_op_f)(cry_mpi *r, const cry_mpi *a,
-                                const cry_mpi *b, const cry_mpi *m);
+typedef int (*binary_mod_op_f)(cry_mpi *r, const cry_mpi *a,
+                               const cry_mpi *b, const cry_mpi *m);
 
 static void mpi_binary_mod_op(int argc, char *argv[], binary_mod_op_f op)
 {

@@ -17,14 +17,14 @@ extern "C" {
  *
  * @param ctx   Cipher context
  */
-typedef void (* cry_ciph_init_f)(void *ctx);
+typedef void (*cry_ciph_init_f)(void *ctx);
 
 /**
  * Context cleanup function pointer type.
  *
  * @param ctx   Cipher context
  */
-typedef void (* cry_ciph_clean_f)(void *ctx);
+typedef void (*cry_ciph_clean_f)(void *ctx);
 
 /**
  * Key set function pointer type.
@@ -33,11 +33,11 @@ typedef void (* cry_ciph_clean_f)(void *ctx);
  * @param key   Cipher key.
  * @param size  Key size.
  */
-typedef void (* cry_ciph_key_set_f)(void *ctx, const unsigned char *key,
-                                    size_t size);
-
-typedef void (* cry_ciph_iv_set_f)(void *ctx, const unsigned char *iv,
+typedef void (*cry_ciph_key_set_f)(void *ctx, const unsigned char *key,
                                    size_t size);
+
+typedef void (*cry_ciph_iv_set_f)(void *ctx, const unsigned char *iv,
+                                  size_t size);
 
 /**
  * Encrypt function pointer type.
@@ -47,9 +47,9 @@ typedef void (* cry_ciph_iv_set_f)(void *ctx, const unsigned char *iv,
  * @param src   Source buffer.
  * @param size  Size of source/destination buffers.
  */
-typedef void (* cry_ciph_encrypt_f)(void *ctx, unsigned char *dst,
-                                    const unsigned char *src,
-                                    size_t size);
+typedef void (*cry_ciph_encrypt_f)(void *ctx, unsigned char *dst,
+                                   const unsigned char *src,
+                                   size_t size);
 
 /**
  * Decrypt function pointer type.
@@ -59,9 +59,9 @@ typedef void (* cry_ciph_encrypt_f)(void *ctx, unsigned char *dst,
  * @param src   Source buffer.
  * @param size  Size of source/destination buffers.
  */
-typedef void (* cry_ciph_decrypt_f)(void *ctx, unsigned char *dst,
-                                    const unsigned char *src,
-                                    size_t size);
+typedef void (*cry_ciph_decrypt_f)(void *ctx, unsigned char *dst,
+                                   const unsigned char *src,
+                                   size_t size);
 
 #ifdef __cplusplus
 }

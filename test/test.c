@@ -133,8 +133,8 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
 }
 
 
-void run(const char *name, void (* test)(void),
-         void (* setup)(void), void (* teardown)(void))
+void run(const char *name, void (*test)(void),
+         void (*setup)(void), void (*teardown)(void))
 {
     int fails;
 

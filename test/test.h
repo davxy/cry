@@ -11,7 +11,7 @@ extern int g_fails;
 extern unsigned char g_buf[BIGBUF_SIZ];
 
 
-typedef void (* test_func_t)(void);
+typedef void (*test_func_t)(void);
 
 struct test_case {
     const char *name;
@@ -19,7 +19,7 @@ struct test_case {
 };
 
 
-typedef void (* dispatch_func_t)(int argc, char *argv[]);
+typedef void (*dispatch_func_t)(int argc, char *argv[]);
 
 void func_test(const char *datafile, dispatch_func_t dispatch);
 
@@ -40,8 +40,8 @@ int raw_init(unsigned char *raw, size_t rawlen, const char *asc);
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
 
-void run(const char *name, void (* test)(void),
-         void (* setup)(void), void (* teardown)(void));
+void run(const char *name, void (*test)(void),
+         void (*setup)(void), void (*teardown)(void));
 
 #define RUN(test) run(#test, test, NULL, NULL)
 
