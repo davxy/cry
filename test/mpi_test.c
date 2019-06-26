@@ -286,7 +286,7 @@ static struct malloc_fail_args g_malloc_fail_tests[] = {
         "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
     { 5,
       { "Multiply Toom-3", "mpi_mul_toom3", "FFFFFFFFFFFFFFFF",
-          "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
+        "FFFFFFFFFFFFFFFF", "fffffffffffffffe0000000000000001" }},
 };
 
 
