@@ -22,7 +22,7 @@
  */
 struct cry_cfb_ctx {
     /** Cipher context. */
-    void                      *ciph_ctx;
+    void *ciph_ctx;
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Initialization vector length */

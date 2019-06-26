@@ -107,7 +107,7 @@ static const unsigned char en_60870_5_1_pattern[] = {
 };
 
 struct binary_test {
-    char                *name;
+    char *name;
     const unsigned char *pattern;
     size_t pattern_size;
     unsigned short expected;
