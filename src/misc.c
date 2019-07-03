@@ -51,6 +51,7 @@ int cry_list_init(cry_list_elem_init_f init, cry_list_elem_clear_f clear,
             break;
         }
     }
+    va_end(copy);
     return res;
 }
 

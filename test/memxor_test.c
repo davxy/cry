@@ -124,9 +124,12 @@ static struct test_case tests[] = {
     { "M1 > M2", memxor2_mem1_after_mem2 },
     { "M1 < M2 and overlap", memxor2_mem1_before_mem2_overlap },
     { "M1 > M2 and overlap", memxor2_mem1_after_mem2_overlap },
-    { "M1 < M2 and M1.end <= dst <= M2", memxor2_mem1_before_mem2_dst_in_the_gap_after_mem1_end },
-    { "M1 < M2 and M1 <= dst <= M1.end", memxor2_mem1_before_mem2_dst_in_the_gap_before_mem1_end },
-    { "M1 < M2 and M1.end <= dst <= M2", memxor2_mem1_before_mem2_dst_in_the_mid }
+    { "M1 < M2 and M1.end <= dst <= M2",
+      memxor2_mem1_before_mem2_dst_in_the_gap_after_mem1_end },
+    { "M1 < M2 and M1 <= dst <= M1.end",
+      memxor2_mem1_before_mem2_dst_in_the_gap_before_mem1_end },
+    { "M1 < M2 and M1.end <= dst <= M2",
+      memxor2_mem1_before_mem2_dst_in_the_mid }
 };
 
 #define NTESTS (sizeof(tests)/sizeof(tests[0]))

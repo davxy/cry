@@ -8,6 +8,9 @@
 #include <stdint.h>
 #include <stdarg.h>
 
+/** Nop to prevent some warnings */
+#define NOP do {} while (0)
+
 /** Statically get array number of elements */
 #define CRY_ARRAY_LEN(ar) (sizeof(ar)/sizeof((ar)[0]))
 
@@ -177,8 +180,8 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
 } while (0)
 
 
-typedef int (* cry_list_elem_init_f)(void *elem, ...);
-typedef void (* cry_list_elem_clear_f)(void *elem, ...);
+typedef int (*cry_list_elem_init_f)(void *elem, ...);
+typedef void (*cry_list_elem_clear_f)(void *elem, ...);
 
 int cry_list_init(cry_list_elem_init_f init, cry_list_elem_clear_f clear,
                   void *first, va_list arg);

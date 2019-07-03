@@ -75,7 +75,7 @@ int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_signature *sign,
         len = ctx->ec.n.used * CRY_MPI_DIGIT_BYTES;
     CHK1(cry_mpi_load_bin(&z, in, len));
 
-    /* u1 = (z * w) mod n  */
+    /* u1 = (z * w) mod n */
     CHK1(cry_mpi_mul(&z, &z, &w));
     CHK1(cry_mpi_mod(&z, &z, &ctx->ec.n));
 

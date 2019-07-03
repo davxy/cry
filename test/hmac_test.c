@@ -25,10 +25,10 @@ static void sha256_clean(void *ctx)
 }
 
 static const struct cry_hash_itf sha256_itf = {
-    (cry_hash_init_f)   cry_sha256_init,
-    (cry_hash_clean_f)  sha256_clean,
-    (cry_hash_update_f) cry_sha256_update,
-    (cry_hash_digest_f) cry_sha256_digest,
+    (cry_hash_init_f)cry_sha256_init,
+    (cry_hash_clean_f)sha256_clean,
+    (cry_hash_update_f)cry_sha256_update,
+    (cry_hash_digest_f)cry_sha256_digest,
 };
 
 static void hmac_digest(int argc, char *argv[])

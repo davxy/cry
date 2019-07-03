@@ -29,7 +29,7 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         t = (*ap++ + c);
         c = (t < c);  /* check for wrap, on overflow t is 0 */
         l = (t + *bp++);
-        c += (l < t); /* check for wrap, if t is 0 then l >= t  */
+        c += (l < t); /* check for wrap, if t is 0 then l >= t */
         *rp++ = l;
     }
 

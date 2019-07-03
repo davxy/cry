@@ -5,9 +5,9 @@
 static const struct cry_ciph_itf aes_itf = {
     .init = NULL,
     .clean = NULL,
-    .key_set = (cry_ciph_key_set_f) cry_aes_key_set,
-    .encrypt = (cry_ciph_encrypt_f) cry_aes_encrypt,
-    .decrypt = (cry_ciph_decrypt_f) cry_aes_decrypt
+    .key_set = (cry_ciph_key_set_f)cry_aes_key_set,
+    .encrypt = (cry_ciph_encrypt_f)cry_aes_encrypt,
+    .decrypt = (cry_ciph_decrypt_f)cry_aes_decrypt
 };
 
 void cry_aes_128_gcm_encrypt(unsigned char *dst,
@@ -57,14 +57,13 @@ void cry_aes_128_gcm_decrypt(unsigned char *dst,
 }
 
 
-
 void gcm_test(void)
 {
     char *msg = "This file is part of CRY software.";
-    char key[] = {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15 };
-    char iv[] =  {  0, 1, 2, 3, 4, 5, 6, 7,
-                    8, 9,10,11,12,13,14,15 };
+    char key[] = {  0, 1,  2,  3,  4,  5,  6,  7,
+                    8, 9, 10, 11, 12, 13, 14, 15 };
+    char iv[] =  {  0, 1,  2,  3,  4,  5,  6,  7,
+                    8, 9, 10, 11, 12, 13, 14, 15 };
     char *aad = "Hello";
     int msglen = strlen(msg);
     int aadlen = strlen(aad);

@@ -23,9 +23,9 @@ static void param_init(struct cmac_param *par, int argc, char *argv[])
 static const struct cry_ciph_itf g_aes_itf = {
     NULL, /* init */
     NULL, /* clean */
-    (cry_ciph_key_set_f) cry_aes_key_set,
+    (cry_ciph_key_set_f)cry_aes_key_set,
     NULL, /* ivset */
-    (cry_ciph_encrypt_f) cry_aes_encrypt,
+    (cry_ciph_encrypt_f)cry_aes_encrypt,
     NULL /* decrypt */
 };
 
@@ -95,6 +95,7 @@ static void cmac_aes_first_sliced1(void)
         { (unsigned char *)MSG, 3 },
         { (unsigned char *)MSG + 3, LEN - 3 }
     };
+
     cmac_aes_sliced(slices, 2, (unsigned char *)MAC);
 }
 
@@ -108,6 +109,7 @@ static void cmac_aes_first_sliced2(void)
         { (unsigned char *)MSG + 3, 10 },
         { (unsigned char *)MSG + 13, LEN - 13 },
     };
+
     cmac_aes_sliced(slices, 3, (unsigned char *)MAC);
 }
 
@@ -120,6 +122,7 @@ static void cmac_aes_mid_sliced(void)
         { (unsigned char *)MSG, 19 },
         { (unsigned char *)MSG + 19, LEN - 19 }
     };
+
     cmac_aes_sliced(slices, 2, (unsigned char *)MAC);
 }
 
@@ -132,6 +135,7 @@ static void cmac_aes_last_sliced(void)
         { (unsigned char *)MSG, 35 },
         { (unsigned char *)MSG + 35, LEN - 35 }
     };
+
     cmac_aes_sliced(slices, 2, (unsigned char *)MAC);
 }
 
@@ -144,9 +148,9 @@ static void cmac_aes_last_incomplete(void)
         { (unsigned char *)MSG, 19 },
         { (unsigned char *)MSG + 19, LEN - 19 - 13 }
     };
+
     cmac_aes_sliced(slices, 2, (unsigned char *)MAC2);
 }
-
 
 
 void cmac_test(void)

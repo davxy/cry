@@ -13,8 +13,8 @@
 
 struct cry_sha1_ctx {
     unsigned char data[64]; /**< Data block being processed */
-    uint32_t len[2];        /**< Number of data bytes processed  */
-    uint32_t state[5];      /**< Intermediate digest state  */
+    uint32_t len[2];        /**< Number of data bytes processed */
+    uint32_t state[5];      /**< Intermediate digest state */
 };
 
 typedef struct cry_sha1_ctx cry_sha1_ctx;

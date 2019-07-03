@@ -14,7 +14,7 @@
 /** GCM context. */
 struct cry_gcm_ctx {
     /** Block cipher context. */
-    void                      *ciph_ctx;
+    void *ciph_ctx;
     /** Block cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Initialization vector */

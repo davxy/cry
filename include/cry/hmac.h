@@ -11,8 +11,8 @@
 #define CRY_HMAC_BLOCK_MAX     64
 
 struct cry_hmac_ctx {
-    void                *hash_ctx;
-    const cry_hash_itf  *hash_itf;
+    void *hash_ctx;
+    const cry_hash_itf *hash_itf;
     size_t hash_len;
     unsigned char key[CRY_HMAC_BLOCK_MAX];
     size_t key_len;

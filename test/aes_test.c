@@ -7,9 +7,9 @@
 
 
 static const cry_ciph_itf aes_itf = {
-    .key_set = (cry_ciph_key_set_f) cry_aes_key_set,
-    .encrypt = (cry_ciph_encrypt_f) cry_aes_encrypt,
-    .decrypt = (cry_ciph_decrypt_f) cry_aes_decrypt,
+    .key_set = (cry_ciph_key_set_f)cry_aes_key_set,
+    .encrypt = (cry_ciph_encrypt_f)cry_aes_encrypt,
+    .decrypt = (cry_ciph_decrypt_f)cry_aes_decrypt,
 };
 
 struct aes_param {
@@ -26,7 +26,6 @@ struct aes_param {
     unsigned char src[128];
     unsigned char dst[128];
 };
-
 
 static void param_init(struct aes_param *par, int argc, char *argv[])
 {

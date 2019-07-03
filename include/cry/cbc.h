@@ -15,7 +15,7 @@
 /** CBC context structure. */
 struct cry_cbc_ctx {
     /** Cipher context. */
-    void                      *ciph_ctx;
+    void *ciph_ctx;
     /** Cipher interface. */
     const struct cry_ciph_itf *ciph_itf;
     /** Counter */

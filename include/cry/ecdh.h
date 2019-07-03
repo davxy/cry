@@ -9,10 +9,10 @@
 #include <cry/ecp.h>
 
 struct cry_ecdh_ctx {
-    cry_ecp_grp ec;  /**> Elliptic curve group */
-    cry_mpi d;       /**> Private key */
-    cry_ecp q;       /**> Public key */
-    cry_ecp z;       /**> Shared secret */
+    cry_ecp_grp ec;  /**< Elliptic curve group */
+    cry_mpi d;       /**< Private key */
+    cry_ecp q;       /**< Public key */
+    cry_ecp z;       /**< Shared secret */
 };
 
 typedef struct cry_ecdh_ctx cry_ecdh_ctx;

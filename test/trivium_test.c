@@ -11,7 +11,6 @@ struct trivium_param {
     unsigned char buf[512];
 };
 
-
 static void param_init(struct trivium_param *par, int argc, char *argv[])
 {
     memset(par, 0, sizeof(*par));
