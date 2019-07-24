@@ -74,7 +74,7 @@ Pseudo random numbers generators
 --------------------------------
 
 - AES-CTR CSPRNG
-- Weak fast PRNG
+- LFSR-113 fast PRNG
 
 Message authentication code
 ---------------------------
