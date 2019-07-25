@@ -11,13 +11,9 @@
 
 #define CRY_AES_BLOCK_SIZE      16
 
-#define CRY_AES_MODE_ENCRYPT    1
-#define CRY_AES_MODE_DECRYPT    2
-
 struct cry_aes_ctx {
-    uint32_t keys[60];          /** Maximum size of key schedule */
-    unsigned int nr;            /** Number of rounds */
-    int mode;                   /** Encrypt/decrypt */
+    uint32_t keys[60];  /** Maximum size of key schedule */
+    unsigned int nr;    /** Number of rounds */
 };
 
 typedef struct cry_aes_ctx cry_aes_ctx;
