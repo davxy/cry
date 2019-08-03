@@ -5,28 +5,6 @@
 #include "misc.h"
 
 
-/*
- * Compute c = m^e mod n.
- *
- * Each rsa_operate operation returns a result mod n.
- * This means that you can't encrypt blocks larger than n without losing
- * information, so you need to chop the input up into blocks of length n
- * or less.
- * RSA works on blocks of data. Each block includes a header and some
- * padding (of at least 11 bytes), so the resulting input blocks are
- * modulus_length-11 bytes minimum. The header is pretty simple:
- * it's a 0 byte, followed by a padding identifier of 0, 1, or 2.
- * For RSA encryption, always use padding identifier 2, which indicates
- * that the following bytes, up to the first 0 byte, are padding and
- * should be discarded. Everything following the first 0 byte, up to the
- * length of the modulus n in bytes, is data.
- * Note that RSA pads at the beginning of its block.
- * To encrypt a very small amount of data, or the non-aligned end of a
- * long block of data, you need to pad it to complicate brute-force attacks.
- */
-
-#include <stdio.h>
-
 static int nozero_rand(unsigned char *dst, size_t n)
 {
     int res;
@@ -40,9 +18,9 @@ static int nozero_rand(unsigned char *dst, size_t n)
     return res;
 }
 
-static int rsa_padding_add(unsigned char *dst, size_t dlen,
-                           const unsigned char *src, size_t slen,
-                           int padding)
+static int padding_add(unsigned char *dst, size_t dlen,
+                       const unsigned char *src, size_t slen,
+                       int padding, int sign)
 {
     int res = 0;
     unsigned char *p = dst;
@@ -52,25 +30,26 @@ static int rsa_padding_add(unsigned char *dst, size_t dlen,
         return -1;
 
     *(p++) = 0;
-    *(p++) = 2;     /* Public Key BT (Block Type) */
 
     /* pad out with non-zero random data */
     j = dlen - 3 - slen;
 
     switch (padding) {
-    case CRY_RSA_PADDING_PKCS1:
-        res = nozero_rand(p, j);
-        break;
-    case CRY_RSA_PADDING_PKCS1_OEAP:
-        /* not implemented yet */
-        res = -1;
-        break;
-    case CRY_RSA_PADDING_PKCS1_PSS:
-        memset(p, 0xFF, j);
-        break;
-    default:
-        res = -1;
-        break;
+        case CRY_RSA_PADDING_PKCS_V15:
+            if (sign == 0) {
+                *(p++) = 2;     /* Block Type */
+                res = nozero_rand(p, j);
+            } else {
+                *(p++) = 1;     /* Block Type */
+                memset(p, 0xFF, j);
+            }
+            break;
+        case CRY_RSA_PADDING_PKCS_V21:
+            /* not implemented yet */
+            res = -1;
+            break;
+        default:
+            break;
     }
     if (res != 0)
         return res;
@@ -80,21 +59,25 @@ static int rsa_padding_add(unsigned char *dst, size_t dlen,
     return 0;
 }
 
-static int rsa_padding_del(unsigned char *dst, size_t dlen,
-                           const unsigned char *src, size_t slen,
-                           int padding)
+static int padding_del(unsigned char *dst, size_t dlen,
+                       const unsigned char *src, size_t slen,
+                       int padding, int sign)
 {
     size_t i;
 
-    if (src[0] != 0 || src[1] != 0x02)
+    (void)padding; /* unused */
+
+    if (src[0] != 0 || (sign != 0 && src[1] != 0x01) ||
+            (sign == 0 && src[1] != 0x02))
         /* Unrecognized block type */
         return -1;
+
     /*
      * Find next 0 byte after padding type byte;
      * this signifies start of data
      */
     for (i = 2; i < slen && src[i] != 0; i++) {
-        if (padding == CRY_RSA_PADDING_PKCS1_PSS && src[i] != 0xFF)
+        if (sign != 0 && src[i] != 0xFF)
             return -1;
     }
     if(i == slen)
@@ -106,8 +89,9 @@ static int rsa_padding_del(unsigned char *dst, size_t dlen,
     return dlen;
 }
 
-static int cry_rsa_encrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
-                                 const unsigned char *in, size_t in_siz)
+static int encrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
+                         const unsigned char *in, size_t inlen,
+                         int sign)
 {
     int res;
     unsigned char *buf;
@@ -115,7 +99,7 @@ static int cry_rsa_encrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
     cry_mpi c, m;
     cry_mpi *key;
 
-    key = (ctx->padding == CRY_RSA_PADDING_PKCS1_PSS) ? &ctx->d : &ctx->e;
+    key = (sign == 0) ? &ctx->e : &ctx->d;
     mod_len = cry_mpi_count_bytes(&ctx->n);
     buf = malloc(mod_len);
     if (buf == NULL)
@@ -124,7 +108,7 @@ static int cry_rsa_encrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
     if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *)NULL)) != 0)
         goto e;
 
-    if ((res = rsa_padding_add(buf, mod_len, in, in_siz, ctx->padding)) != 0)
+    if ((res = padding_add(buf, mod_len, in, inlen, ctx->padding, sign)) != 0)
         goto e1;
 
     if ((res = cry_mpi_load_bin(&m, buf, mod_len)) != 0)
@@ -139,8 +123,9 @@ e:  free(buf);
     return res;
 }
 
-static int cry_rsa_decrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
-                                 const unsigned char *in, size_t in_siz)
+static int decrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
+                         const unsigned char *in, size_t inlen,
+                         int sign)
 {
     int res = 0;
     unsigned char *buf;
@@ -148,10 +133,9 @@ static int cry_rsa_decrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
     cry_mpi c, m;
     cry_mpi *key;
 
-    key = (ctx->padding == CRY_RSA_PADDING_PKCS1_PSS) ? &ctx->e : &ctx->d;
-
+    key = (sign == 0) ? &ctx->d : &ctx->e;
     mod_len = cry_mpi_count_bytes(&ctx->n);
-    if (in_siz != mod_len)
+    if (inlen != mod_len)
         return -1;
     buf = malloc(mod_len);
     if (buf == NULL)
@@ -167,41 +151,39 @@ static int cry_rsa_decrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
     if ((res = cry_mpi_store_bin(&m, buf, mod_len, 1)) != 0)
         goto e1;
 
-    res = rsa_padding_del(out, mod_len, buf, mod_len, ctx->padding);
+    res = padding_del(out, mod_len, buf, mod_len, ctx->padding, sign);
 
 e1: cry_mpi_clear_list(&c, &m, (cry_mpi *)NULL);
 e:  free(buf);
     return res;
 }
 
-/*
- * Encrypts a sequence of characters
- */
-int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
-                    const unsigned char *in, size_t in_siz)
+
+static int encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                   const unsigned char *in, size_t inlen, int sign)
 {
     int res;
     size_t mod_siz, block_siz;
 
     *out = NULL;
-    *out_siz = 0;
+    *outlen = 0;
     mod_siz = cry_mpi_count_bytes(&ctx->n);
 
-    while (in_siz) {
-        *out = realloc(*out, *out_siz + mod_siz);
+    while (inlen) {
+        *out = realloc(*out, *outlen + mod_siz);
         if (*out == NULL) {
             res = -1;
             break;
         }
 
-        block_siz = (in_siz < mod_siz - 11) ? in_siz : (mod_siz - 11);
+        block_siz = (inlen < mod_siz - 11) ? inlen : (mod_siz - 11);
 
-        res = cry_rsa_encrypt_block(ctx, *out + *out_siz, in, block_siz);
+        res = encrypt_block(ctx, *out + *outlen, in, block_siz, sign);
         if (res != 0)
             break;
 
-        *out_siz += mod_siz;
-        in_siz -= block_siz;
+        *outlen += mod_siz;
+        inlen -= block_siz;
         in += block_siz;
     }
 
@@ -210,38 +192,35 @@ int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
             free(*out);
             *out = NULL;
         }
-        *out_siz = 0;
+        *outlen = 0;
     }
     return res;
 }
 
-/*
- * Decrypts a sequence of characters
- */
-int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
-                    const unsigned char *in, size_t in_siz)
+static int decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                   const unsigned char *in, size_t inlen, int sign)
 {
     int res;
     size_t mod_siz;
 
     *out = NULL;
-    *out_siz = 0;
+    *outlen = 0;
     mod_siz = cry_mpi_count_bytes(&ctx->n);
 
-    while (in_siz > 0) {
-        if (in_siz < mod_siz) {
+    while (inlen > 0) {
+        if (inlen < mod_siz) {
             /* Input must be an even multiple of key modulus */
             res = -1;
             break;
         }
 
-        *out = realloc(*out, *out_siz + mod_siz);
+        *out = realloc(*out, *outlen + mod_siz);
 
-        res = cry_rsa_decrypt_block(ctx, *out, in, mod_siz);
+        res = decrypt_block(ctx, *out, in, mod_siz, sign);
         if (res < 0)
             break;
-        *out_siz += res;
-        in_siz -= mod_siz;
+        *outlen += res;
+        inlen -= mod_siz;
         in += mod_siz;
         res = 0; /* decrypt block returns the number of decrypted bytes */
     }
@@ -251,10 +230,47 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *out_siz,
             free(*out);
             *out = NULL;
         }
-        *out_siz = 0;
+        *outlen = 0;
     }
     return res;
 }
+
+
+int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                    const unsigned char *in, size_t inlen)
+{
+    return encrypt(ctx, out, outlen, in, inlen, 0);
+}
+
+int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                    const unsigned char *in, size_t inlen)
+{
+    return decrypt(ctx, out, outlen, in, inlen, 0);
+}
+
+
+int cry_rsa_sign(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
+                 const unsigned char *in, size_t inlen)
+{
+    return encrypt(ctx, out, outlen, in, inlen, 1);
+}
+
+int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
+                   const unsigned char *in, size_t inlen)
+{
+    int res;
+    unsigned char *out;
+    size_t outlen;
+
+    res = decrypt(ctx, &out, &outlen, sig, siglen, 1);
+    if (res == 0) {
+        if (outlen != inlen || memcmp(out, in, inlen) != 0)
+            res = -1;
+        free(out);
+    }
+    return res;
+}
+
 
 #define MAX_ITER    10000
 
