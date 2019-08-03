@@ -49,7 +49,17 @@ int cry_rsa_sign(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
                    const unsigned char *in, size_t inlen);
 
-int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits);
+/**
+ * Generate RSA key pair.
+ *
+ * If pubblic key exponent parameter is set to 0 then the exponent will be
+ * randomly generated.
+ *
+ * @param ctx   RSA context that will hold the key.
+ * @param bits  Size of public key in bits.
+ * @param e     public exponent (e.g. 65537).
+ */
+int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits, long e);
 
 
 #ifdef __cplusplus
