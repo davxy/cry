@@ -13,7 +13,7 @@ int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
 
     /* skip leading zeros */
     for (; size > 0 && *p == 0; p++, size--)
-        ;
+        NOP;
     if (size == 0)
         return 0;
 

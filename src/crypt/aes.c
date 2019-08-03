@@ -2,7 +2,8 @@
 #include "misc.h"
 #include <stdint.h>
 
-#define CRY_AES_KEY_SIZE        32
+/* Keeps track of key schedule type in the "nr" context element */
+#define DECRYPT_STATE       0x80U
 
 /*
  * Forward S-box
@@ -348,7 +349,7 @@ static void key_invert(cry_aes_ctx *ctx)
     unsigned int i, j, k, nr;
     uint32_t key, newkey, tmp;
 
-    nr = ctx->nr;
+    nr = ctx->nr & ~DECRYPT_STATE;
     for (i = 0, j = nr * 4; i < j; i += 4, j -= 4) {
         for (k = 0; k < 4; k++)
             CRY_SWAP(ctx->keys[i+k], ctx->keys[j+k]);
@@ -377,26 +378,18 @@ void cry_aes_key_set(cry_aes_ctx *ctx, const unsigned char *key, size_t size)
         0x20, 0x40, 0x80, 0x1b, 0x36,
     };
     const unsigned char *rp = rcon;
-    unsigned int i, nk, nr, lk;
+    unsigned int i, nk, lk;
     uint32_t tmp;
 
-    /*
-     * nk = the number of 32 bit words in a key.
-     * nr = the number of rounds in AES cipher.
-     */
-    if (size >= 32) {
+    /* nk = the number of 32 bit words in a key. */
+    if (size >= 32)
         nk = 8;
-        nr = 14;
-    } else if (size >= 24) {
+    else if (size >= 24)
         nk = 6;
-        nr = 12;
-    } else { /* size >= 16 */
+    else /* size >= 16 */
         nk = 4;
-        nr = 10;
-    }
-
-    lk = (CRY_AES_BLOCK_SIZE >> 2) * (nr + 1);
-    ctx->nr = nr;
+    ctx->nr = nk + 6;
+    lk = (CRY_AES_BLOCK_SIZE >> 2) * (ctx->nr + 1);
 
     /* The first round key is the key itself */
     for (i = 0; i < nk; i++)
@@ -411,9 +404,6 @@ void cry_aes_key_set(cry_aes_ctx *ctx, const unsigned char *key, size_t size)
             tmp = SBOX(tmp);
         ctx->keys[i] = ctx->keys[i-nk] ^ tmp;
     }
-
-    /* By default set to encrypt mode */
-    ctx->mode = CRY_AES_MODE_ENCRYPT;
 }
 
 void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
@@ -423,9 +413,9 @@ void cry_aes_encrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
     uint32_t t0, t1, t2, t3;
     size_t i;
 
-    if (ctx->mode == CRY_AES_MODE_DECRYPT) {
+    if ((ctx->nr & DECRYPT_STATE) != 0) {
         key_invert(ctx);
-        ctx->mode = CRY_AES_MODE_ENCRYPT;
+        ctx->nr &= ~DECRYPT_STATE;
     }
 
     while (size >= 16) {
@@ -473,9 +463,9 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
     uint32_t t0, t1, t2, t3;
     size_t i;
 
-    if (ctx->mode == CRY_AES_MODE_ENCRYPT) {
+    if ((ctx->nr & DECRYPT_STATE) == 0) {
         key_invert(ctx);
-        ctx->mode = CRY_AES_MODE_DECRYPT;
+        ctx->nr |= DECRYPT_STATE;
     }
 
     while (size >= 16) {
@@ -489,7 +479,7 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
         w2 ^= ctx->keys[2];
         w3 ^= ctx->keys[3];
 
-        for (i = 1; i < ctx->nr; i++) {
+        for (i = 1; i < (ctx->nr & ~DECRYPT_STATE); i++) {
             t0 = ROUND(rtab, w0, w3, w2, w1) ^ ctx->keys[4*i];
             t1 = ROUND(rtab, w1, w0, w3, w2) ^ ctx->keys[4*i + 1];
             t2 = ROUND(rtab, w2, w1, w0, w3) ^ ctx->keys[4*i + 2];

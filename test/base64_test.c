@@ -42,7 +42,6 @@ static void base64_dispatch(int argc, char *argv[])
 }
 
 
-
 void base64_test(void)
 {
     TRACE("* Base-64\n");

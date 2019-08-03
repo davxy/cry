@@ -4,9 +4,9 @@ int cry_mpi_add(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
     int ret, rsign;
 
-    CRY_VALIDATE_RET(r != NULL);
-    CRY_VALIDATE_RET(a != NULL);
-    CRY_VALIDATE_RET(b != NULL);
+    CRY_ASSERT2(r != NULL);
+    CRY_ASSERT2(a != NULL);
+    CRY_ASSERT2(b != NULL);
 
     if (a->sign == b->sign) {
         rsign = a->sign;

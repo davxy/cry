@@ -12,9 +12,9 @@ static void keygen(void)
     /* Seed the PRNG to make results predictable */
     cry_prng_aes_init(NULL, 0);
 
+    cry_rsa_init(&rsa, 0);
     ASSERT_OK(cry_rsa_keygen(&rsa, KEYGEN_BITS));
-
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+    cry_rsa_clear(&rsa);
 }
 
 static const unsigned char modulus[] = {
@@ -27,7 +27,6 @@ static const unsigned char modulus[] = {
     0x1B, 0x7D, 0xE2, 0x37, 0xEB, 0xB9, 0x57, 0xC2,
     0x06, 0x63, 0x89, 0x82, 0x50, 0x70, 0x3B, 0x3F
 };
-
 
 static const unsigned char private[] = {
     0x8a, 0x7e, 0x79, 0xf3, 0xfb, 0xfe, 0xa8, 0xeb,
@@ -48,20 +47,21 @@ static const unsigned char plain_text[] = {
     0x09
 };
 
-/* Ciphertext wether the PKCS#1 SSA padding is enabled  (SIGN flag) */
-static const unsigned char cipher_text[] = {
-    0x6a,0x2d,0x1d,0x54,0x25,0xe8,0x0d,0xd3,
-    0xdc,0xaf,0x1c,0x0b,0xe7,0x62,0x1f,0xa7,
-    0x2b,0xaa,0x3e,0xc2,0x5b,0x52,0x5b,0x8f,
-    0xfb,0x29,0xa9,0x35,0xae,0xb2,0xb5,0x96,
-    0x54,0x42,0x22,0xbf,0x96,0x17,0xee,0x9f,
-    0x15,0x8a,0x7f,0x8c,0x59,0x9d,0x4e,0x5d,
-    0xbd,0x48,0x57,0x6b,0x67,0xd4,0x07,0x09,
-    0x84,0x43,0xa2,0x3f,0xe7,0xb3,0x53,0x96
+/* Signature for RSA PKCS #1 v15 */
+static const unsigned char sign[] = {
+    0x26, 0x78, 0xbe, 0x19, 0x97, 0x95, 0x2e, 0x0a,
+    0xed, 0xb2, 0xc6, 0xe6, 0xdb, 0xbd, 0x07, 0x7d,
+    0x92, 0x1f, 0xca, 0xc0, 0x74, 0x00, 0xe5, 0x6a,
+    0x66, 0x8d, 0x95, 0x92, 0xf2, 0xad, 0xc8, 0x3b,
+    0x06, 0xda, 0x29, 0x78, 0x1f, 0x48, 0x87, 0xe2,
+    0x08, 0x40, 0x03, 0x29, 0x32, 0x78, 0xa9, 0xc6,
+    0xee, 0xf9, 0x22, 0x28, 0xce, 0x9e, 0x37, 0x97,
+    0x74, 0x46, 0x88, 0x96, 0xf6, 0x24, 0x02, 0xa0
 };
 
 #define PLAIN_LEN sizeof(plain_text)
-#define CIPHER_LEN sizeof(cipher_text)
+#define SIGN_LEN sizeof(sign)
+#define CIPHER_LEN SIGN_LEN
 
 static void encrypt_decrypt(void)
 {
@@ -70,18 +70,18 @@ static void encrypt_decrypt(void)
     unsigned char *cipher_buf;
     unsigned char *plain_buf;
 
-    cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
-    cry_mpi_init_bin(&rsa.e, public, sizeof(public));
-    cry_mpi_init_bin(&rsa.d, private, sizeof(private));
+    cry_rsa_init(&rsa, CRY_RSA_PADDING_PKCS_V15);
+    cry_mpi_load_bin(&rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&rsa.d, private, sizeof(private));
 
-    rsa.flags = 0;
     ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
                               plain_text, PLAIN_LEN));
     if (cipher_buf) {
         ASSERT_EQ(outlen, CIPHER_LEN);
 
         ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
-                                   cipher_buf, outlen));
+                                  cipher_buf, outlen));
         if (plain_buf) {
             ASSERT_EQ(outlen, PLAIN_LEN);
             ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
@@ -89,38 +89,32 @@ static void encrypt_decrypt(void)
         }
         free(cipher_buf);
     }
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+    cry_rsa_clear(&rsa);
 }
 
 
 static void sign_verify(void)
 {
     cry_rsa_ctx rsa;
-    size_t outlen;
-    unsigned char *cipher_buf;
-    unsigned char *plain_buf;
+    size_t siglen;
+    unsigned char *sig_buf;
 
-    cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
-    cry_mpi_init_bin(&rsa.e, public, sizeof(public));
-    cry_mpi_init_bin(&rsa.d, private, sizeof(private));
+    cry_rsa_init(&rsa, CRY_RSA_PADDING_PKCS_V15);
+    cry_mpi_load_bin(&rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&rsa.d, private, sizeof(private));
 
-    rsa.flags = CRY_RSA_FLAG_SIGN;
-    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
-                              plain_text, PLAIN_LEN));
-    if (cipher_buf) {
-        ASSERT_EQ(outlen, CIPHER_LEN);
-        ASSERT_EQ_BUF(cipher_buf, cipher_text, outlen);
+    ASSERT_OK(cry_rsa_sign(&rsa, &sig_buf, &siglen,
+                           plain_text, PLAIN_LEN));
+    if (sig_buf) {
+        ASSERT_EQ(siglen, CIPHER_LEN);
+        ASSERT_EQ_BUF(sig_buf, sign, siglen);
 
-        ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
-                    cipher_buf, outlen));
-        if (plain_buf) {
-            ASSERT_EQ(outlen, PLAIN_LEN);
-            ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
-            free(plain_buf);
-        }
-        free(cipher_buf);
+        ASSERT_OK(cry_rsa_verify(&rsa, sig_buf, siglen,
+                                 plain_text, PLAIN_LEN));
+        free(sig_buf);
     }
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+    cry_rsa_clear(&rsa);
 }
 
 struct rsa_param {
@@ -160,7 +154,6 @@ static void rsa_param_init(struct rsa_param *par, int argc, char *argv[])
     raw_init(par->eraw, par->elen, argv[1]);
     raw_init(par->clrraw, par->clrlen, argv[2]);
     raw_init(par->cipraw, par->ciplen, argv[3]);
-
 }
 
 static void rsa_pkcs1_encrypt(int argc, char *argv[])
@@ -172,16 +165,17 @@ static void rsa_pkcs1_encrypt(int argc, char *argv[])
 
     cry_prng_aes_init(NULL, 0);
     rsa_param_init(&par, argc, argv);
-    cry_mpi_init_bin(&rsa.m, par.mraw, par.mlen);
-    cry_mpi_init_bin(&rsa.e, par.eraw, par.elen);
-    rsa.flags = 0;
+
+    cry_rsa_init(&rsa, CRY_RSA_PADDING_PKCS_V15);
+    cry_mpi_load_bin(&rsa.n, par.mraw, par.mlen);
+    cry_mpi_load_bin(&rsa.e, par.eraw, par.elen);
 
     ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
                               par.clrraw, par.clrlen));
 
     free(par.mraw);
     free(cipher_buf);
-    cry_mpi_clear_list(&rsa.m, &rsa.e, NULL);
+    cry_rsa_clear(&rsa);
 }
 
 static void dispatch(int argc, char *argv[])

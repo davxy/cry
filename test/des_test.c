@@ -5,9 +5,9 @@
 #include <cry/gcm.h>
 
 static const cry_ciph_itf des_itf = {
-    .key_set = (cry_ciph_key_set_f) cry_des_key_set,
-    .encrypt = (cry_ciph_encrypt_f) cry_des_encrypt,
-    .decrypt = (cry_ciph_decrypt_f) cry_des_decrypt,
+    .key_set = (cry_ciph_key_set_f)cry_des_key_set,
+    .encrypt = (cry_ciph_encrypt_f)cry_des_encrypt,
+    .decrypt = (cry_ciph_decrypt_f)cry_des_decrypt,
 };
 
 struct des_param {
@@ -24,7 +24,6 @@ struct des_param {
     unsigned char src[128];
     unsigned char dst[128];
 };
-
 
 static void param_init(struct des_param *par, int argc, char *argv[])
 {

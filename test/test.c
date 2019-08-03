@@ -24,7 +24,6 @@ int g_fails;
 int g_verbose;
 unsigned char g_buf[BIGBUF_SIZ];
 
-
 struct sub_test {
     const char *name;
     test_func_t func;
@@ -63,7 +62,6 @@ struct sub_test g_tests[] = {
 
 
 static char g_test_skip[NTESTS];
-
 
 static int get_line(FILE *f, char *buf, size_t len)
 {
@@ -135,8 +133,8 @@ void func_test(const char *datafile, dispatch_func_t dispatch)
 }
 
 
-void run(const char *name, void (* test)(void),
-         void (* setup)(void), void (* teardown)(void))
+void run(const char *name, void (*test)(void),
+         void (*setup)(void), void (*teardown)(void))
 {
     int fails;
 
@@ -154,7 +152,7 @@ void run(const char *name, void (* test)(void),
 }
 
 void malloc_fail_tests(struct malloc_fail_args *args, size_t num,
-                  dispatch_func_t dispatch)
+                       dispatch_func_t dispatch)
 {
     size_t i, fail_after;
 
@@ -279,9 +277,9 @@ static void parse_args(int argc, char *argv[])
     }
 }
 
-void cry_contract_fail(const char *cond, const char *file, int line)
+void cry_assert_fail(const char *cond, const char *file, int line)
 {
-    TRACE("Contract fail: %s @ %s:%d\n", cond, file, line);
+    TRACE("Assert fail: %s @ %s:%d\n", cond, file, line);
     g_fails++;
 }
 
@@ -309,5 +307,5 @@ int main(int argc, char *argv[])
     TRACE("|| Fails: %d\n", g_fails);
     TRACE("\n-------------------------------------\n\n");
 
-    return (g_fails != 0);
+    return g_fails != 0;
 }

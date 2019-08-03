@@ -2,6 +2,7 @@
 
 objects-y := \
     ecp_core.o \
+    ecp_list.o \
     ecp_add.o \
     ecp_dbl.o \
     ecp_mul.o \

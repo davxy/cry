@@ -1,11 +1,15 @@
 /*
- * A bounch of helper macros and functions meant for internal use.
+ * A bunch of helper macros and functions for internal use.
  */
 
 #ifndef CRY_MISC_H_
 #define CRY_MISC_H_
 
 #include <stdint.h>
+#include <stdarg.h>
+
+/** Nop to prevent some warnings */
+#define NOP do {} while (0)
 
 /** Statically get array number of elements */
 #define CRY_ARRAY_LEN(ar) (sizeof(ar)/sizeof((ar)[0]))
@@ -176,55 +180,13 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
 } while (0)
 
 
-/**
- * User supplied callback function for parameter validation failure.
- *
- * This function will be called unless an alternative treatement
- * is defined through the CRY_CONTRACT_FAIL macro.
- *
- * This function can return, and the operation will be aborted, or
- * alternatively, through use of setjmp()/longjmp() can resume
- * execution in the application code.
- *
- * @param cond  Assertion that didn't hold.
- * @param file  File where the assertion failed.
- * @param line  Line in the file where the assertion failed.
- */
-void cry_contract_fail(const char *cond, const char *file, int line);
+typedef int (*cry_list_elem_init_f)(void *elem, ...);
+typedef void (*cry_list_elem_clear_f)(void *elem, ...);
 
-#ifdef CRY_CONTRACT_VALIDATE
+int cry_list_init(cry_list_elem_init_f init, cry_list_elem_clear_f clear,
+                  void *first, va_list arg);
 
-#ifndef CRY_CONTRACT_FAIL
-#define CRY_CONTRACT_FAIL(cond) \
-        cry_contract_fail(#cond, __FILE__, __LINE__)
-#endif
-
-/**
- * Contract validation.
- */
-#define CRY_VALIDATE(cond) do { \
-    if (!(cond)) { \
-        CRY_CONTRACT_FAIL(cond); \
-        return; \
-    } \
-} while (0)
-
-/**
- * Contract validation with return value.
- */
-#define CRY_VALIDATE_RET(cond) do { \
-    if (!(cond)) { \
-        CRY_CONTRACT_FAIL(cond); \
-        return -1; \
-    } \
-} while (0)
-
-#else /* !CRY_CONTRACT_VALIDATE */
-
-#define CRY_VALIDATE(cond)
-#define CRY_VALIDATE_RET(cond)
-
-#endif /* ~CRY_CONTRACT_VALIDATE */
-
+void cry_list_clear(cry_list_elem_clear_f clear,
+                    void *first, va_list args);
 
 #endif /* CRY_MISC_H_ */

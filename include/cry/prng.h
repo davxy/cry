@@ -1,16 +1,24 @@
 /**
  * @file    prng.h
- * @brief   Pseudo Random Number Generator
+ * @brief   Pseudo Random Number Generators
  */
 
 #ifndef CRY_PRNG_H_
 #define CRY_PRNG_H_
 
+#include <stddef.h>
+
+/*
+ * Defaults to the cryptographically secure PRNG.
+ */
+
+#define cry_prng_init cry_prng_aes_init
+#define cry_prng_rand cry_prng_aes_rand
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stddef.h>
 
 /**
  * Strong pseudo random number generator initialization.
@@ -35,7 +43,7 @@ int cry_prng_aes_init(const unsigned char *seed, size_t seed_siz);
 int cry_prng_aes_rand(unsigned char *buf, size_t siz);
 
 /**
- * Weak pseudo random number generator initialization.
+ * LFSR-113 pseudo random number generator initialization.
  *
  * Because very often people forget to perform initialization, other prng
  * functions will automatically check to see if this routine has been called
@@ -45,19 +53,20 @@ int cry_prng_aes_rand(unsigned char *buf, size_t siz);
  * @param   seed_siz    Seed data size.
  * @return  0 on success, -1 on failure.
  */
-int cry_prng_weak_init(const unsigned char *seed, size_t seed_siz);
+int cry_prng_lfsr113_init(const unsigned char *seed, size_t seed_siz);
 
 /**
- * Weak pseudo random number generator production.
+ * LFSR-113 pseudo random number generator production.
  *
  * @param buf   Destination buffer
  * @param siz   Destination buffer size.
  * @return      0 on success, -1 on failure.
  */
-int cry_prng_weak_rand(unsigned char *buf, size_t siz);
+int cry_prng_lfsr113_rand(unsigned char *buf, size_t siz);
 
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif /* CRY_PRNG_H_ */

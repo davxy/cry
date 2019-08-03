@@ -48,7 +48,7 @@ Public key algorithms
 
 ### Ciphers
 
-- RSA (PKCS#1 v1.5)
+- RSA (PKCS1 v1.5 padding)
 
 ### Secret exchange
 
@@ -57,7 +57,7 @@ Public key algorithms
 
 ### Digital signature
 
-- RSA (PKCS#1 v1.5)
+- RSA (PKCS1 v2.1 PSS padding)
 - DSA
 - ECDSA
 
@@ -74,7 +74,7 @@ Pseudo random numbers generators
 --------------------------------
 
 - AES-CTR CSPRNG
-- Weak fast PRNG
+- LFSR-113 fast PRNG
 
 Message authentication code
 ---------------------------

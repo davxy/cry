@@ -8,10 +8,10 @@ struct hill_param {
     unsigned char ikey[RAW_MAX];
     unsigned char src[RAW_MAX];
     unsigned char dst[RAW_MAX];
-    size_t        keylen;
-    size_t        ikeylen;
-    size_t        srclen;
-    size_t        dstlen;
+    size_t keylen;
+    size_t ikeylen;
+    size_t srclen;
+    size_t dstlen;
 };
 
 static void param_init(struct hill_param *par, char *argv[])

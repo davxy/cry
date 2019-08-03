@@ -198,7 +198,7 @@ void cry_mpi_print(const cry_mpi *a, unsigned int radix);
 #define cry_mpi_zero(a) do { \
     (a)->sign = 0;           \
     (a)->used = 0;           \
-    } while (0)
+} while (0)
 
 int cry_mpi_rand(cry_mpi *a, size_t bits);
 
