@@ -22,6 +22,8 @@ struct cry_rsa_ctx {
     cry_mpi n;      /**< Modulus */
     cry_mpi e;      /**< Public exponent */
     cry_mpi d;      /**< Private exponent */
+    cry_mpi p;      /**< First secret prime factor */
+    cry_mpi q;      /**< Second secret prime factor */
     char padding;   /**< Padding mode */
 };
 
@@ -32,6 +34,8 @@ extern "C" {
 #endif
 
 int cry_rsa_init(cry_rsa_ctx *ctc, int padding);
+
+void cry_rsa_clear(cry_rsa_ctx *ctx);
 
 int cry_rsa_encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
                     const unsigned char *in, size_t inlen);

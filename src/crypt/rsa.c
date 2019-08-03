@@ -277,41 +277,37 @@ int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
 int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
 {
     int res;
-    cry_mpi phi, p, q, p1, q1, one;
+    cry_mpi phi, p1, q1, one;
     cry_mpi_digit one_dig = 1;
     size_t hbits = bits >> 1;
     unsigned int i, j;
-
-    if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->n,
-                                 (cry_mpi *)NULL)) != 0)
-        return res;
-    if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi,
-                                 (cry_mpi *)NULL)) != 0)
-        goto e0;
-    i = MAX_ITER;
-    if ((res = cry_mpi_prime(&p, hbits, &i)) != 0)
-        goto e1;
-    for (j = 0; j < MAX_ITER; j++) {
-        i = MAX_ITER;
-        if ((res = cry_mpi_prime(&q, hbits, &i)) != 0)
-            goto e1;
-        if (cry_mpi_cmp(&q, &p) != 0)
-            break;
-    }
-    if ((res = cry_mpi_mul(&ctx->n, &p, &q)) != 0)
-        goto e1;
 
     one.alloc = 1;
     one.used = 1;
     one.sign = 0;
     one.data = &one_dig;
 
-    if ((res = cry_mpi_sub(&p1, &p, &one)) != 0)
-        goto e1;
-    if ((res = cry_mpi_sub(&q1, &q, &one)) != 0)
-        goto e1;
+    if ((res = cry_mpi_init_list(&p1, &q1, &phi, (cry_mpi *)NULL)) != 0)
+        goto e;
+    i = MAX_ITER;
+    if ((res = cry_mpi_prime(&ctx->p, hbits, &i)) != 0)
+        goto e;
+    for (j = 0; j < MAX_ITER; j++) {
+        i = MAX_ITER;
+        if ((res = cry_mpi_prime(&ctx->q, hbits, &i)) != 0)
+            goto e;
+        if (cry_mpi_cmp(&ctx->q, &ctx->p) != 0)
+            break;
+    }
+    if ((res = cry_mpi_mul(&ctx->n, &ctx->p, &ctx->q)) != 0)
+        goto e;
+
+    if ((res = cry_mpi_sub(&p1, &ctx->p, &one)) != 0)
+        goto e;
+    if ((res = cry_mpi_sub(&q1, &ctx->q, &one)) != 0)
+        goto e;
     if ((res = cry_mpi_mul(&phi, &p1, &q1)) != 0)
-        goto e1;
+        goto e;
 
     /* Find key */
     for (i = 0; i < MAX_ITER; i++) {
@@ -319,15 +315,20 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
         if ((res = cry_mpi_inv(&ctx->d, &ctx->e, &phi)) == 0)
             break;
     }
-e1: cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, (cry_mpi *)NULL);
-e0: if (res != 0)
-        cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->n, (cry_mpi *)NULL);
+e:  cry_mpi_clear_list(&p1, &q1, &phi, (cry_mpi *)NULL);
     return res;
 }
 
 int cry_rsa_init(cry_rsa_ctx *ctx, int padding)
 {
-    memset(ctx, 0, sizeof(*ctx));
     ctx->padding = padding;
-    return 0;
+    return cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->n, &ctx->p, &ctx->q,
+                             (cry_mpi *)NULL);
+}
+
+void cry_rsa_clear(cry_rsa_ctx *ctx)
+{
+    ctx->padding = 0;
+    cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->n, &ctx->p, &ctx->q,
+                       (cry_mpi *)NULL);
 }
