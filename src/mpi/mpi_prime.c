@@ -38,7 +38,6 @@ static const unsigned int small_primes[] = {
     101,  103,  107,  109,  113,  127,  131,  137,
     139,  149,  151,  157,  163,  167,  173,  179,
     181,  191,  193,  197,  199,  211,  223,  227,
-#if CRY_MPI_DIGIT_MAX != UCHAR_MAX
     229,  233,  239,  241,  251,  257,  263,  269,
     271,  277,  281,  283,  293,  307,  311,  313,
     317,  331,  337,  347,  349,  353,  359,  367,
@@ -54,7 +53,6 @@ static const unsigned int small_primes[] = {
     839,  853,  857,  859,  863,  877,  881,  883,
     887,  907,  911,  919,  929,  937,  941,  947,
     953,  967,  971,  977,  983,  991,  997, 1009
-#endif
 };
 
 
@@ -69,20 +67,15 @@ static int is_obviously_not_prime(const cry_mpi *p)
 {
     int res = 0;
     size_t i;
-    cry_mpi d, m;
-    cry_mpi_digit dig;
-
-    d.data = &dig;
-    d.used = 1;
-    d.alloc = 1;
-    d.sign = 0;
+    cry_mpi m;
 
     if ((res = cry_mpi_init(&m)) < 0)
         return res;
 
     for (i = 0; i < CRY_ARRAY_LEN(small_primes);  i++) {
-        dig = (cry_mpi_digit)small_primes[i];
-        if ((res = cry_mpi_mod(&m, p, &d)) < 0)
+        if ((res = cry_mpi_set_int(&m, small_primes[i])) != 0)
+            break;
+        if ((res = cry_mpi_mod(&m, p, &m)) < 0)
             break;
         res = cry_mpi_is_zero(&m);
         if (res)
