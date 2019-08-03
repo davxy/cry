@@ -2,20 +2,7 @@
 #include <cry/rsa.h>
 #include <cry/prng.h>
 
-/* Just for... coverage :-) */
-#define KEYGEN_BITS 256
-
-static void keygen(void)
-{
-    cry_rsa_ctx rsa;
-
-    /* Seed the PRNG to make results predictable */
-    cry_prng_aes_init(NULL, 0);
-
-    cry_rsa_init(&rsa, 0);
-    ASSERT_OK(cry_rsa_keygen(&rsa, KEYGEN_BITS));
-    cry_rsa_clear(&rsa);
-}
+static cry_rsa_ctx g_rsa;
 
 static const unsigned char modulus[] = {
     0xC4, 0xF8, 0xE9, 0xE1, 0x5D, 0xCA, 0xDF, 0x2B,
@@ -65,22 +52,20 @@ static const unsigned char sign[] = {
 
 static void encrypt_decrypt(void)
 {
-    cry_rsa_ctx rsa;
     size_t outlen;
     unsigned char *cipher_buf;
     unsigned char *plain_buf;
 
-    cry_rsa_init(&rsa, CRY_RSA_PADDING_PKCS_V15);
-    cry_mpi_load_bin(&rsa.n, modulus, sizeof(modulus));
-    cry_mpi_load_bin(&rsa.e, public, sizeof(public));
-    cry_mpi_load_bin(&rsa.d, private, sizeof(private));
+    cry_mpi_load_bin(&g_rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&g_rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&g_rsa.d, private, sizeof(private));
 
-    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+    ASSERT_OK(cry_rsa_encrypt(&g_rsa, &cipher_buf, &outlen,
                               plain_text, PLAIN_LEN));
     if (cipher_buf) {
         ASSERT_EQ(outlen, CIPHER_LEN);
 
-        ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
+        ASSERT_OK(cry_rsa_decrypt(&g_rsa, &plain_buf, &outlen,
                                   cipher_buf, outlen));
         if (plain_buf) {
             ASSERT_EQ(outlen, PLAIN_LEN);
@@ -89,32 +74,28 @@ static void encrypt_decrypt(void)
         }
         free(cipher_buf);
     }
-    cry_rsa_clear(&rsa);
 }
 
 
 static void sign_verify(void)
 {
-    cry_rsa_ctx rsa;
     size_t siglen;
     unsigned char *sig_buf;
 
-    cry_rsa_init(&rsa, CRY_RSA_PADDING_PKCS_V15);
-    cry_mpi_load_bin(&rsa.n, modulus, sizeof(modulus));
-    cry_mpi_load_bin(&rsa.e, public, sizeof(public));
-    cry_mpi_load_bin(&rsa.d, private, sizeof(private));
+    cry_mpi_load_bin(&g_rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&g_rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&g_rsa.d, private, sizeof(private));
 
-    ASSERT_OK(cry_rsa_sign(&rsa, &sig_buf, &siglen,
+    ASSERT_OK(cry_rsa_sign(&g_rsa, &sig_buf, &siglen,
                            plain_text, PLAIN_LEN));
     if (sig_buf) {
         ASSERT_EQ(siglen, CIPHER_LEN);
         ASSERT_EQ_BUF(sig_buf, sign, siglen);
 
-        ASSERT_OK(cry_rsa_verify(&rsa, sig_buf, siglen,
+        ASSERT_OK(cry_rsa_verify(&g_rsa, sig_buf, siglen,
                                  plain_text, PLAIN_LEN));
         free(sig_buf);
     }
-    cry_rsa_clear(&rsa);
 }
 
 struct rsa_param {
@@ -159,23 +140,18 @@ static void rsa_param_init(struct rsa_param *par, int argc, char *argv[])
 static void rsa_pkcs1_encrypt(int argc, char *argv[])
 {
     struct rsa_param par;
-    cry_rsa_ctx rsa;
     size_t outlen;
     unsigned char *cipher_buf;
 
-    cry_prng_aes_init(NULL, 0);
     rsa_param_init(&par, argc, argv);
+    cry_mpi_load_bin(&g_rsa.n, par.mraw, par.mlen);
+    cry_mpi_load_bin(&g_rsa.e, par.eraw, par.elen);
 
-    cry_rsa_init(&rsa, CRY_RSA_PADDING_PKCS_V15);
-    cry_mpi_load_bin(&rsa.n, par.mraw, par.mlen);
-    cry_mpi_load_bin(&rsa.e, par.eraw, par.elen);
-
-    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+    ASSERT_OK(cry_rsa_encrypt(&g_rsa, &cipher_buf, &outlen,
                               par.clrraw, par.clrlen));
 
     free(par.mraw);
     free(cipher_buf);
-    cry_rsa_clear(&rsa);
 }
 
 static void dispatch(int argc, char *argv[])
@@ -190,12 +166,41 @@ static void dispatch(int argc, char *argv[])
         TRACE("Test '%s' not defined\n", test);
 }
 
+/* Just for... coverage :-) */
+#define KEYGEN_BITS 256
+
+static void keygen_known_exp(void)
+{
+    ASSERT_OK(cry_rsa_keygen(&g_rsa, KEYGEN_BITS, 65537));
+}
+
+static void keygen_rand_exp(void)
+{
+    ASSERT_OK(cry_rsa_keygen(&g_rsa, KEYGEN_BITS, 0));
+}
+
+static void setup(void)
+{
+    /* Seed the PRNG to make results predictable */
+    cry_prng_aes_init(NULL, 0);
+    cry_rsa_init(&g_rsa, CRY_RSA_PADDING_PKCS_V15);
+}
+
+static void teardown(void)
+{
+    cry_rsa_clear(&g_rsa);
+}
+
+#define MYRUN(name, test) \
+        run(name, test, setup, teardown)
+
 void rsa_test(void)
 {
     TRACE("* RSA Test\n");
-    run("Keygen 512", keygen, NULL, NULL);
-    run("Encrypt-Decrypt", encrypt_decrypt, NULL, NULL);
-    run("Sign-Verify", sign_verify, NULL, NULL);
+    MYRUN("Keygen 512 with 65537 exponent", keygen_known_exp);
+    MYRUN("Keygen 512 with random exponent", keygen_rand_exp);
+    MYRUN("Encrypt-Decrypt", encrypt_decrypt);
+    MYRUN("Sign-Verify", sign_verify);
     func_test("rsa_test.data", dispatch);
     TRACE("\n");
 }
