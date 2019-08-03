@@ -50,6 +50,19 @@ static const unsigned char sign[] = {
 #define SIGN_LEN sizeof(sign)
 #define CIPHER_LEN SIGN_LEN
 
+
+static void setup(void)
+{
+    /* Seed the PRNG to make results predictable */
+    cry_prng_aes_init(NULL, 0);
+    cry_rsa_init(&g_rsa, CRY_RSA_PADDING_PKCS_V15);
+}
+
+static void teardown(void)
+{
+    cry_rsa_clear(&g_rsa);
+}
+
 static void encrypt_decrypt(void)
 {
     size_t outlen;
@@ -158,12 +171,14 @@ static void dispatch(int argc, char *argv[])
 {
     char *test = *argv;
 
+    setup();
     argv++;
     argc--;
     if (strcmp(test, "rsa_pkcs1_encrypt") == 0)
         rsa_pkcs1_encrypt(argc, argv);
     else
         TRACE("Test '%s' not defined\n", test);
+    teardown();
 }
 
 /* Just for... coverage :-) */
@@ -177,18 +192,6 @@ static void keygen_known_exp(void)
 static void keygen_rand_exp(void)
 {
     ASSERT_OK(cry_rsa_keygen(&g_rsa, KEYGEN_BITS, 0));
-}
-
-static void setup(void)
-{
-    /* Seed the PRNG to make results predictable */
-    cry_prng_aes_init(NULL, 0);
-    cry_rsa_init(&g_rsa, CRY_RSA_PADDING_PKCS_V15);
-}
-
-static void teardown(void)
-{
-    cry_rsa_clear(&g_rsa);
 }
 
 #define MYRUN(name, test) \
