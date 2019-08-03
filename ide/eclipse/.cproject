@@ -197,8 +197,6 @@
                 				
                 <buildCommand>make</buildCommand>
                 				
-                <buildArguments/>
-                				
                 <buildTarget>-C test coverage</buildTarget>
                 				
                 <stopOnError>true</stopOnError>
@@ -232,6 +230,22 @@
                 <buildArguments>-j4</buildArguments>
                 				
                 <buildTarget>all CONFIG=config/config-ci.mk</buildTarget>
+                				
+                <stopOnError>true</stopOnError>
+                				
+                <useDefaultCommand>true</useDefaultCommand>
+                				
+                <runAllBuilders>true</runAllBuilders>
+                			
+            </target>
+            			
+            <target name="test-ci" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+                				
+                <buildCommand>make</buildCommand>
+                				
+                <buildArguments>-j4</buildArguments>
+                				
+                <buildTarget>test CONFIG=config/config-ci.mk</buildTarget>
                 				
                 <stopOnError>true</stopOnError>
                 				
