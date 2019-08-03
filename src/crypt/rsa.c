@@ -280,23 +280,26 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
     cry_mpi phi, p, q, p1, q1, one;
     cry_mpi_digit one_dig = 1;
     size_t hbits = bits >> 1;
-    unsigned int i;
-
+    unsigned int i, j;
 
     if ((res = cry_mpi_init_list(&ctx->d, &ctx->e, &ctx->n,
                                  (cry_mpi *)NULL)) != 0)
         return res;
     if ((res = cry_mpi_init_list(&p, &q, &p1, &q1, &phi,
                                  (cry_mpi *)NULL)) != 0)
-        goto e; /* FIXME: shall release only d,e,m */
+        goto e0;
     i = MAX_ITER;
     if ((res = cry_mpi_prime(&p, hbits, &i)) != 0)
-        goto e;
-    i = MAX_ITER;
-    if ((res = cry_mpi_prime(&q, hbits, &i)) != 0)
-        goto e;
+        goto e1;
+    for (j = 0; j < MAX_ITER; j++) {
+        i = MAX_ITER;
+        if ((res = cry_mpi_prime(&q, hbits, &i)) != 0)
+            goto e1;
+        if (cry_mpi_cmp(&q, &p) != 0)
+            break;
+    }
     if ((res = cry_mpi_mul(&ctx->n, &p, &q)) != 0)
-        goto e;
+        goto e1;
 
     one.alloc = 1;
     one.used = 1;
@@ -304,11 +307,11 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
     one.data = &one_dig;
 
     if ((res = cry_mpi_sub(&p1, &p, &one)) != 0)
-        goto e;
+        goto e1;
     if ((res = cry_mpi_sub(&q1, &q, &one)) != 0)
-        goto e;
+        goto e1;
     if ((res = cry_mpi_mul(&phi, &p1, &q1)) != 0)
-        goto e;
+        goto e1;
 
     /* Find key */
     for (i = 0; i < MAX_ITER; i++) {
@@ -316,8 +319,8 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits)
         if ((res = cry_mpi_inv(&ctx->d, &ctx->e, &phi)) == 0)
             break;
     }
-e:  cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, (cry_mpi *)NULL);
-    if (res != 0)
+e1: cry_mpi_clear_list(&p, &q, &p1, &q1, &phi, (cry_mpi *)NULL);
+e0: if (res != 0)
         cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->n, (cry_mpi *)NULL);
     return res;
 }
