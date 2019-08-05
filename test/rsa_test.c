@@ -122,6 +122,7 @@ static void encrypt_decrypt_sb(void)
     ASSERT_EQ_BUF(plain_buf, plain_text, plain_len);
     free(plain_buf);
     free(cipher_buf);
+    free(plain_text);
 }
 
 static void sign_verify(void)
