@@ -80,7 +80,7 @@ static int padding_del(unsigned char *dst, size_t dlen,
         if (sign != 0 && src[i] != 0xFF)
             return -1;
     }
-    if(i == slen)
+    if (i == slen)
         return -1;
     i++; /* skip zero */
     if (slen - i < dlen)
