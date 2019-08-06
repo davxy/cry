@@ -14,6 +14,7 @@ objects-y := \
 	ecdh.o \
 	cmac.o \
 	hmac.o \
+	elgamal.o \
 	dsa.o \
 	ecdsa.o \
 	base64.o \

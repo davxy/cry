@@ -26,6 +26,8 @@ objects := \
 	sha1_test.o \
 	sha256_test.o \
 	ecp_test.o \
+	elgamal_test.o
+
 #	rand_test.o \
 	dh_test.o \
 	dsa_test.o \
