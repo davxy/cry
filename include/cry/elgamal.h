@@ -36,10 +36,10 @@ int cry_elgamal_init(cry_elgamal_ctx *ctx);
 
 void cry_elgamal_clear(cry_elgamal_ctx *ctx);
 
-int cry_elgamal_sign(cry_dsa_ctx *ctx, cry_elgamal_sig *sign,
+int cry_elgamal_sign(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
                      const unsigned char *in, size_t len);
 
-int cry_elgamal_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
+int cry_elgamal_verify(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
                        const unsigned char *in, size_t len);
 
 #ifdef __cplusplus
