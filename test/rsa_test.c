@@ -2,20 +2,7 @@
 #include <cry/rsa.h>
 #include <cry/prng.h>
 
-/* Just for... coverage :-) */
-#define KEYGEN_BITS 256
-
-static void keygen(void)
-{
-    cry_rsa_ctx rsa;
-
-    /* Seed the PRNG to make results predictable */
-    cry_prng_aes_init(NULL, 0);
-
-    ASSERT_OK(cry_rsa_keygen(&rsa, KEYGEN_BITS));
-
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
-}
+static cry_rsa_ctx g_rsa;
 
 static const unsigned char modulus[] = {
     0xC4, 0xF8, 0xE9, 0xE1, 0x5D, 0xCA, 0xDF, 0x2B,
@@ -47,79 +34,135 @@ static const unsigned char plain_text[] = {
     0x09
 };
 
-/* Ciphertext wether the PKCS#1 SSA padding is enabled  (SIGN flag) */
-static const unsigned char cipher_text[] = {
-    0x6a, 0x2d, 0x1d, 0x54, 0x25, 0xe8, 0x0d, 0xd3,
-    0xdc, 0xaf, 0x1c, 0x0b, 0xe7, 0x62, 0x1f, 0xa7,
-    0x2b, 0xaa, 0x3e, 0xc2, 0x5b, 0x52, 0x5b, 0x8f,
-    0xfb, 0x29, 0xa9, 0x35, 0xae, 0xb2, 0xb5, 0x96,
-    0x54, 0x42, 0x22, 0xbf, 0x96, 0x17, 0xee, 0x9f,
-    0x15, 0x8a, 0x7f, 0x8c, 0x59, 0x9d, 0x4e, 0x5d,
-    0xbd, 0x48, 0x57, 0x6b, 0x67, 0xd4, 0x07, 0x09,
-    0x84, 0x43, 0xa2, 0x3f, 0xe7, 0xb3, 0x53, 0x96
+/* Signature for RSA PKCS #1 v15 */
+static const unsigned char sign[] = {
+    0x26, 0x78, 0xbe, 0x19, 0x97, 0x95, 0x2e, 0x0a,
+    0xed, 0xb2, 0xc6, 0xe6, 0xdb, 0xbd, 0x07, 0x7d,
+    0x92, 0x1f, 0xca, 0xc0, 0x74, 0x00, 0xe5, 0x6a,
+    0x66, 0x8d, 0x95, 0x92, 0xf2, 0xad, 0xc8, 0x3b,
+    0x06, 0xda, 0x29, 0x78, 0x1f, 0x48, 0x87, 0xe2,
+    0x08, 0x40, 0x03, 0x29, 0x32, 0x78, 0xa9, 0xc6,
+    0xee, 0xf9, 0x22, 0x28, 0xce, 0x9e, 0x37, 0x97,
+    0x74, 0x46, 0x88, 0x96, 0xf6, 0x24, 0x02, 0xa0
+};
+
+/* Signature for Schoolbook RSA */
+static const unsigned char sign_sb[] = {
+    0xc0, 0x3c, 0x32, 0x14, 0xb1, 0x81, 0x43, 0xbf,
+    0xdd, 0xd9, 0x2b, 0x69, 0xe0, 0x1c, 0xd5, 0x19,
+    0xa0, 0x06, 0x95, 0xac, 0xdb, 0xc7, 0x16, 0x2d,
+    0xd0, 0xac, 0x31, 0x8b, 0x97, 0x78, 0x17, 0x14,
+    0x11, 0xf9, 0x57, 0x0b, 0x4a, 0x11, 0x8a, 0x4a,
+    0x60, 0xf0, 0xcd, 0xf3, 0xc0, 0x5e, 0xe2, 0xb9,
+    0x5c, 0x47, 0x95, 0xa4, 0xd8, 0x73, 0xc2, 0x29,
+    0x9d, 0x58, 0x77, 0x47, 0xf3, 0x05, 0x78, 0x79
 };
 
 #define PLAIN_LEN sizeof(plain_text)
-#define CIPHER_LEN sizeof(cipher_text)
+#define SIGN_LEN sizeof(sign)
+#define CIPHER_LEN SIGN_LEN
+
+static void setup(void)
+{
+    /* Seed the PRNG to make results predictable */
+    cry_prng_aes_init(NULL, 0);
+    cry_rsa_init(&g_rsa, CRY_RSA_PADDING_PKCS_V15);
+}
+
+static void teardown(void)
+{
+    cry_rsa_clear(&g_rsa);
+}
 
 static void encrypt_decrypt(void)
 {
-    cry_rsa_ctx rsa;
     size_t outlen;
     unsigned char *cipher_buf;
     unsigned char *plain_buf;
 
-    cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
-    cry_mpi_init_bin(&rsa.e, public, sizeof(public));
-    cry_mpi_init_bin(&rsa.d, private, sizeof(private));
+    cry_mpi_load_bin(&g_rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&g_rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&g_rsa.d, private, sizeof(private));
 
-    rsa.flags = 0;
-    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+    ASSERT_OK(cry_rsa_encrypt(&g_rsa, &cipher_buf, &outlen,
                               plain_text, PLAIN_LEN));
-    if (cipher_buf) {
-        ASSERT_EQ(outlen, CIPHER_LEN);
+    ASSERT_EQ(outlen, CIPHER_LEN);
 
-        ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
-                                  cipher_buf, outlen));
-        if (plain_buf) {
-            ASSERT_EQ(outlen, PLAIN_LEN);
-            ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
-            free(plain_buf);
-        }
-        free(cipher_buf);
-    }
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+    ASSERT_OK(cry_rsa_decrypt(&g_rsa, &plain_buf, &outlen,
+                              cipher_buf, outlen));
+    ASSERT_EQ(outlen, PLAIN_LEN);
+    ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
+    free(plain_buf);
+    free(cipher_buf);
 }
 
+static void encrypt_decrypt_sb(void)
+{
+    size_t outlen, plain_len;
+    unsigned char *cipher_buf;
+    unsigned char *plain_buf;
+    unsigned char *plain_text;
+
+    cry_mpi_load_bin(&g_rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&g_rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&g_rsa.d, private, sizeof(private));
+
+    g_rsa.padding = CRY_RSA_PADDING_NONE;
+
+    plain_len = 10;
+    plain_text = malloc(plain_len);
+    memset(plain_text, 'A', plain_len);
+    ASSERT_OK(cry_rsa_encrypt(&g_rsa, &cipher_buf, &outlen,
+                              plain_text, plain_len));
+    ASSERT_EQ(outlen, CIPHER_LEN);
+
+    ASSERT_OK(cry_rsa_decrypt(&g_rsa, &plain_buf, &outlen,
+                              cipher_buf, outlen));
+    ASSERT_EQ(outlen, cry_mpi_count_bytes(&g_rsa.n));
+    ASSERT_EQ_BUF(plain_buf, plain_text, plain_len);
+    free(plain_buf);
+    free(cipher_buf);
+    free(plain_text);
+}
 
 static void sign_verify(void)
 {
-    cry_rsa_ctx rsa;
-    size_t outlen;
-    unsigned char *cipher_buf;
-    unsigned char *plain_buf;
+    size_t siglen;
+    unsigned char *sig_buf;
 
-    cry_mpi_init_bin(&rsa.m, modulus, sizeof(modulus));
-    cry_mpi_init_bin(&rsa.e, public, sizeof(public));
-    cry_mpi_init_bin(&rsa.d, private, sizeof(private));
+    cry_mpi_load_bin(&g_rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&g_rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&g_rsa.d, private, sizeof(private));
 
-    rsa.flags = CRY_RSA_FLAG_SIGN;
-    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
-                              plain_text, PLAIN_LEN));
-    if (cipher_buf) {
-        ASSERT_EQ(outlen, CIPHER_LEN);
-        ASSERT_EQ_BUF(cipher_buf, cipher_text, outlen);
+    ASSERT_OK(cry_rsa_sign(&g_rsa, &sig_buf, &siglen,
+                           plain_text, PLAIN_LEN));
+    ASSERT_EQ(siglen, CIPHER_LEN);
+    ASSERT_EQ_BUF(sig_buf, sign, siglen);
 
-        ASSERT_OK(cry_rsa_decrypt(&rsa, &plain_buf, &outlen,
-                                  cipher_buf, outlen));
-        if (plain_buf) {
-            ASSERT_EQ(outlen, PLAIN_LEN);
-            ASSERT_EQ_BUF(plain_buf, plain_text, outlen);
-            free(plain_buf);
-        }
-        free(cipher_buf);
-    }
-    cry_mpi_clear_list(&rsa.m, &rsa.e, &rsa.d, NULL);
+    ASSERT_OK(cry_rsa_verify(&g_rsa, sig_buf, siglen,
+                             plain_text, PLAIN_LEN));
+    free(sig_buf);
+}
+
+static void sign_verify_sb(void)
+{
+    size_t siglen;
+    unsigned char *sig_buf;
+
+    cry_mpi_load_bin(&g_rsa.n, modulus, sizeof(modulus));
+    cry_mpi_load_bin(&g_rsa.e, public, sizeof(public));
+    cry_mpi_load_bin(&g_rsa.d, private, sizeof(private));
+
+    g_rsa.padding = CRY_RSA_PADDING_NONE;
+
+    ASSERT_OK(cry_rsa_sign(&g_rsa, &sig_buf, &siglen,
+                           plain_text, PLAIN_LEN));
+    ASSERT_EQ(siglen, CIPHER_LEN);
+    ASSERT_EQ_BUF(sig_buf, sign_sb, siglen);
+
+    ASSERT_OK(cry_rsa_verify(&g_rsa, sig_buf, siglen,
+                             plain_text, PLAIN_LEN));
+    free(sig_buf);
 }
 
 struct rsa_param {
@@ -164,42 +207,59 @@ static void rsa_param_init(struct rsa_param *par, int argc, char *argv[])
 static void rsa_pkcs1_encrypt(int argc, char *argv[])
 {
     struct rsa_param par;
-    cry_rsa_ctx rsa;
     size_t outlen;
     unsigned char *cipher_buf;
 
-    cry_prng_aes_init(NULL, 0);
     rsa_param_init(&par, argc, argv);
-    cry_mpi_init_bin(&rsa.m, par.mraw, par.mlen);
-    cry_mpi_init_bin(&rsa.e, par.eraw, par.elen);
-    rsa.flags = 0;
+    cry_mpi_load_bin(&g_rsa.n, par.mraw, par.mlen);
+    cry_mpi_load_bin(&g_rsa.e, par.eraw, par.elen);
 
-    ASSERT_OK(cry_rsa_encrypt(&rsa, &cipher_buf, &outlen,
+    ASSERT_OK(cry_rsa_encrypt(&g_rsa, &cipher_buf, &outlen,
                               par.clrraw, par.clrlen));
 
     free(par.mraw);
     free(cipher_buf);
-    cry_mpi_clear_list(&rsa.m, &rsa.e, NULL);
 }
 
 static void dispatch(int argc, char *argv[])
 {
     char *test = *argv;
 
+    setup();
     argv++;
     argc--;
     if (strcmp(test, "rsa_pkcs1_encrypt") == 0)
         rsa_pkcs1_encrypt(argc, argv);
     else
         TRACE("Test '%s' not defined\n", test);
+    teardown();
 }
+
+/* Just for... coverage :-) */
+#define KEYGEN_BITS 256
+
+static void keygen_known_exp(void)
+{
+    ASSERT_OK(cry_rsa_keygen(&g_rsa, KEYGEN_BITS, 65537));
+}
+
+static void keygen_rand_exp(void)
+{
+    ASSERT_OK(cry_rsa_keygen(&g_rsa, KEYGEN_BITS, 0));
+}
+
+#define MYRUN(name, test) \
+        run(name, test, setup, teardown)
 
 void rsa_test(void)
 {
     TRACE("* RSA Test\n");
-    run("Keygen 512", keygen, NULL, NULL);
-    run("Encrypt-Decrypt", encrypt_decrypt, NULL, NULL);
-    run("Sign-Verify", sign_verify, NULL, NULL);
+    MYRUN("Keygen 512 with 65537 exponent", keygen_known_exp);
+    MYRUN("Keygen 512 with random exponent", keygen_rand_exp);
+    MYRUN("Encrypt-Decrypt Schoolbook", encrypt_decrypt_sb);
+    MYRUN("Encrypt-Decrypt PKCS v15", encrypt_decrypt);
+    MYRUN("Sign-Verify Schoolbook", sign_verify_sb);
+    MYRUN("Sign-Verify PKCS v15", sign_verify);
     func_test("rsa_test.data", dispatch);
     TRACE("\n");
 }

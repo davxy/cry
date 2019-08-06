@@ -6,14 +6,15 @@
  */
 static size_t cry_mpi_lsb(struct cry_mpi *x)
 {
-    size_t i, j, count = 0;
+    size_t i, j, cnt = 0;
 
-    for (i = 0; i < x->used; i++) {
-        for (j = 0; j < CRY_MPI_DIGIT_BITS; j++, count++)
-            if (((x->data[i] >> j) & 1) != 0)
-                break;
+    for (i = 0; i < x->used && x->data[i] == 0; i++, cnt += CRY_MPI_DIGIT_BITS)
+        NOP;
+    for (j = 0; j < CRY_MPI_DIGIT_BITS; j++, cnt++) {
+        if (((x->data[i] >> j) & 1) != 0)
+            break;
     }
-    return count;
+    return cnt;
 }
 
 /*
