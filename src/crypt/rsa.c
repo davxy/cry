@@ -13,7 +13,7 @@ static int nozero_rand(unsigned char *dst, size_t n)
         return res;
     while (n-- > 0) {
         if (dst[n] == 0)
-            dst[n] = (n != 0) ? n : 1;
+            dst[n] = 1;
     }
     return res;
 }
