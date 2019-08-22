@@ -21,12 +21,8 @@ static void param_init(struct cmac_param *par, int argc, char *argv[])
 }
 
 static const struct cry_ciph_itf g_aes_itf = {
-    NULL, /* init */
-    NULL, /* clean */
-    (cry_ciph_key_set_f)cry_aes_key_set,
-    NULL, /* ivset */
-    (cry_ciph_encrypt_f)cry_aes_encrypt,
-    NULL /* decrypt */
+    .key_set = (cry_ciph_key_set_f)cry_aes_key_set,
+    .encrypt =  (cry_ciph_encrypt_f)cry_aes_encrypt,
 };
 
 static void cmac_aes_digest(int argc, char *argv[])
