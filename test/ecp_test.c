@@ -222,4 +222,5 @@ void ecp_test(void)
     curve_params_load();
     add_test();
     mul_test();
+    TRACE("\n");
 }
