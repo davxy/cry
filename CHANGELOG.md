@@ -28,6 +28,7 @@ Added
 
 * RSA sign/verify functions
 * Schoolbook RSA
+* AES Key Wrap (RFC-3394)
 
 Changed
 

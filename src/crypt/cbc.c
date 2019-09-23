@@ -9,9 +9,18 @@
 void cry_cbc_init(struct cry_cbc_ctx *ctx, void *ciph_ctx,
                   const cry_ciph_itf *ciph_itf)
 {
-    memset(ctx->ctr, 0, sizeof(ctx->ctr));
+    memset(ctx, 0, sizeof(*ctx));
     ctx->ciph_ctx = ciph_ctx;
     ctx->ciph_itf = ciph_itf;
+    if (ciph_itf->init != NULL)
+        ciph_itf->init(ciph_ctx);
+}
+
+void cry_cbc_clear(struct cry_cbc_ctx *ctx)
+{
+    if (ctx->ciph_itf->clear != NULL)
+        ctx->ciph_itf->clear(ctx->ciph_ctx);
+    memset(ctx, 0, sizeof(*ctx));
 }
 
 void cry_cbc_key_set(struct cry_cbc_ctx *ctx, const unsigned char *key,
