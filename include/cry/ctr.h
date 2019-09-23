@@ -49,6 +49,13 @@ void cry_ctr_init(struct cry_ctr_ctx *ctx, void *ciph_ctx,
                   const struct cry_ciph_itf *ciph_itf);
 
 /**
+ * Context cleanup.
+ *
+ * @param ctx       CTR context.
+ */
+void cry_ctr_clear(struct cry_ctr_ctx *ctx);
+
+/**
  * Set the cipher key in the cipher context.
  *
  * @param ctx   CTR context.

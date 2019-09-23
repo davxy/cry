@@ -4,7 +4,7 @@
 
 static const struct cry_ciph_itf aes_itf = {
     .init = NULL,
-    .clean = NULL,
+    .clear = NULL,
     .key_set = (cry_ciph_key_set_f)cry_aes_key_set,
     .encrypt = (cry_ciph_encrypt_f)cry_aes_encrypt,
     .decrypt = (cry_ciph_decrypt_f)cry_aes_decrypt
