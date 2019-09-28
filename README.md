@@ -40,6 +40,7 @@ Symmetric ciphers
 
 ### Stream ciphers
 
+- ARC4
 - Trivium
 
 
