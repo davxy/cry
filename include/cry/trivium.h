@@ -1,5 +1,6 @@
 /**
  * @file    trivium.h
+ *
  * @brief   Trivium stream cipher.
  *
  * Trivium is a synchronous stream cipher designed to provide a flexible
@@ -31,11 +32,12 @@
 #define CRY_TRIVIUM_KEYLEN  10  /* 80-bit */
 #define CRY_TRIVIUM_IVLEN   10  /* 80-bit */
 
+/**
+ * Trivium cipher context.
+ */
 struct cry_trivium_ctx {
-    size_t keylen;
-    size_t ivlen;
-    uint8_t s[40];
-    uint8_t key[CRY_TRIVIUM_KEYLEN];
+    uint8_t key[CRY_TRIVIUM_KEYLEN]; /** Key */
+    uint8_t s[40]; /** State */
 };
 
 typedef struct cry_trivium_ctx cry_trivium_ctx;
@@ -63,6 +65,9 @@ void cry_trivium_key_set(cry_trivium_ctx *ctx, const unsigned char *key,
 
 /**
  * Set the initialization vector.
+ *
+ * Setting a new IV resets the cipher state, the key is maintained between
+ * resets.
  *
  * @param ctx   Trivium context.
  * @param iv    Initialization vector.

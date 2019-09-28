@@ -70,9 +70,10 @@ void cry_trivium_key_set(cry_trivium_ctx *ctx, const unsigned char *key,
 {
     size_t i;
 
-    ctx->keylen = (size <= CRY_TRIVIUM_KEYLEN) ? size : CRY_TRIVIUM_KEYLEN;
+    if (size > CRY_TRIVIUM_KEYLEN)
+        size = CRY_TRIVIUM_KEYLEN;
 
-    for (i = 0; i < ctx->keylen; i++)
+    for (i = 0; i < size; i++)
         ctx->key[i] = key[i];
     for (; i < CRY_TRIVIUM_KEYLEN; i++)
         ctx->key[i] = 0;
@@ -87,25 +88,29 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
     uint32_t s31, s32, s33, s34;
     uint32_t t1, t2, t3;
 
-    ctx->ivlen = (size <= CRY_TRIVIUM_IVLEN) ? size : CRY_TRIVIUM_IVLEN;
+    if (size > CRY_TRIVIUM_IVLEN)
+        size = CRY_TRIVIUM_IVLEN;
 
     /*
      * S initialized as:
-     *  [ key || 0 ] ||      (96 bits)
-     *  [  iv || 0 ] ||      (96 bits)
-     *  [ 0 ... 0 || 0x70 || 0 ... 0 ]  (128 bits)
+     *  [ key || 0 ] ||  ( 96 bits, last  3 bits not used)
+     *  [  iv || 0 ] ||  ( 96 bits, last  9 bits not used)
+     *  [   0 || 0x70 ]  (128 bits, last 17 bits not used)
      *
      * The last byte of the second FSR and the last two bytes of the
      * third FSR are not used.
      */
-    for (i = 0; i < ctx->keylen; i++)
+    /* First register */
+    for (i = 0; i < CRY_TRIVIUM_KEYLEN; i++)
         ctx->s[i] = ctx->key[i];
-    for (; i < 12; i++)
-        ctx->s[i] = 0;
-    for (i = 0; i < ctx->ivlen; i++)
+    ctx->s[10] = 0;
+    ctx->s[11] = 0;
+    /* Second register */
+    for (i = 0; i < size; i++)
         ctx->s[12 + i] = iv[i];
     for (; i < 12; i++)
         ctx->s[12 + i] = 0;
+    /* Third register */
     for (i = 0; i < 13; i++)
         ctx->s[24 + i] = 0;
     ctx->s[24 + 13] = 0x70;
