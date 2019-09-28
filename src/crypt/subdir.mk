@@ -8,8 +8,9 @@ objects-y := \
     ctr.o \
     cfb.o \
     gcm.o \
-	rsa.o \
+	arc4.o \
 	trivium.o \
+	rsa.o \
 	dh.o \
 	ecdh.o \
 	cmac.o \

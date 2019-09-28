@@ -27,7 +27,6 @@
 #define CRY_TRIVIUM_H_
 
 #include <stddef.h>
-#include <stdint.h>
 
 #define CRY_TRIVIUM_KEYLEN  10  /* 80-bit */
 #define CRY_TRIVIUM_IVLEN   10  /* 80-bit */
@@ -36,8 +35,8 @@
  * Trivium cipher context.
  */
 struct cry_trivium_ctx {
-    uint8_t key[CRY_TRIVIUM_KEYLEN]; /** Key */
-    uint8_t s[40]; /** State */
+    unsigned char key[CRY_TRIVIUM_KEYLEN];  /** Key */
+    unsigned char s[40];                    /** State */
 };
 
 typedef struct cry_trivium_ctx cry_trivium_ctx;
@@ -49,9 +48,16 @@ extern "C" {
 /**
  * Context initialization.
  *
- * @param ctx       Trivium context.
+ * @param ctx   Trivium context.
  */
 void cry_trivium_init(cry_trivium_ctx *ctx);
+
+/**
+ * Context cleanup.
+ *
+ * @param ctx   Trivium context.
+ */
+void cry_trivium_clear(cry_trivium_ctx *ctx);
 
 /**
  * Set the cipher key.
@@ -77,29 +83,21 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
                         size_t size);
 
 /**
- * Encryption function.
+ * Encryption/Decryption function.
  *
  * @param ctx   Trivium context.
- * @param dst   Destination buffer (ciphertext).
- * @param src   Source buffer (cleartext).
+ * @param dst   Destination buffer.
+ * @param src   Source buffer. 
  * @param size  Number of bytes.
  */
-void cry_trivium_encrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, size_t size);
-
-/**
- * Decryption function.
- *
- * @param ctx   Trivium context.
- * @param dst   Destination buffer (cleartext).
- * @param src   Source buffer (ciphertext).
- * @param size  Number of bytes.
- */
-void cry_trivium_decrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, size_t size);
+void cry_trivium_crypt(cry_trivium_ctx *ctx, unsigned char *dst,
+                       const unsigned char *src, size_t size);
 
 #ifdef __cplusplus
 }
 #endif
+
+#define cry_trivium_encrypt cry_trivium_crypt
+#define cry_trivium_decrypt cry_trivium_crypt
 
 #endif /* CRY_TRIVIUM_H_ */

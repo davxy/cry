@@ -65,6 +65,11 @@ void cry_trivium_init(cry_trivium_ctx *ctx)
     memset(ctx, 0, sizeof(*ctx));
 }
 
+void cry_trivium_clear(cry_trivium_ctx *ctx)
+{
+    cry_memset(ctx, 0, sizeof(*ctx));
+}
+
 void cry_trivium_key_set(cry_trivium_ctx *ctx, const unsigned char *key,
                          size_t size)
 {
@@ -125,8 +130,8 @@ void cry_trivium_iv_set(cry_trivium_ctx *ctx, const unsigned char *iv,
 }
 
 
-static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
-                    const unsigned char *src, size_t size)
+void cry_trivium_crypt(cry_trivium_ctx *ctx, unsigned char *dst,
+                       const unsigned char *src, size_t size)
 
 {
     size_t i;
@@ -162,16 +167,4 @@ static void operate(cry_trivium_ctx *ctx, unsigned char *dst,
     }
 
     STORE(ctx->s);
-}
-
-void cry_trivium_encrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, size_t size)
-{
-    operate(ctx, dst, src, size);
-}
-
-void cry_trivium_decrypt(cry_trivium_ctx *ctx, unsigned char *dst,
-                         const unsigned char *src, size_t size)
-{
-    operate(ctx, dst, src, size);
 }

@@ -16,6 +16,7 @@ objects := \
 	des_test.o \
 	aes_test.o \
 	trivium_test.o \
+	arc4_test.o \
 	hill_test.o \
 	affine_test.o \
 	crc_test.o \

@@ -7,6 +7,7 @@ void base64_test(void);
 void mpi_test(void);
 void des_test(void);
 void aes_test(void);
+void arc4_test(void);
 void trivium_test(void);
 void hill_test(void);
 void affine_test(void);
@@ -39,6 +40,7 @@ struct sub_test g_tests[] = {
     SUB_TEST(mpi),
     SUB_TEST(des),
     SUB_TEST(aes),
+    SUB_TEST(arc4),
     SUB_TEST(trivium),
     SUB_TEST(hill),
     SUB_TEST(affine),
