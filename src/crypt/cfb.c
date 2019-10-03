@@ -6,9 +6,18 @@
 void cry_cfb_init(struct cry_cfb_ctx *ctx, void *ciph_ctx,
                   const struct cry_ciph_itf *ciph_itf)
 {
-    memset(ctx->v, 0, sizeof(ctx->v));
+    memset(ctx, 0, sizeof(*ctx));
     ctx->ciph_ctx = ciph_ctx;
     ctx->ciph_itf = ciph_itf;
+    if (ciph_itf->init != NULL)
+        ciph_itf->init(ciph_ctx);
+}
+
+void cry_cfb_clear(struct cry_cfb_ctx *ctx)
+{
+    if (ctx->ciph_itf->clear != NULL)
+        ctx->ciph_itf->clear(ctx->ciph_ctx);
+    memset(ctx, 0, sizeof(*ctx));
 }
 
 void cry_cfb_key_set(struct cry_cfb_ctx *ctx, const unsigned char *key,

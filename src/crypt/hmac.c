@@ -22,8 +22,8 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
             hash_itf->init(ctx->hash_ctx);
         hash_itf->update(ctx->hash_ctx, key, key_len);
         hash_itf->digest(ctx->hash_ctx, ctx->key);
-        if (hash_itf->clean)
-            hash_itf->clean(ctx->hash_ctx);
+        if (hash_itf->clear)
+            hash_itf->clear(ctx->hash_ctx);
         ctx->key_len = ctx->hash_len;
     }
 
@@ -47,8 +47,8 @@ void cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac)
     const cry_hash_itf *hash_itf = ctx->hash_itf;
 
     hash_itf->digest(ctx->hash_ctx, mac);
-    if (hash_itf->clean)
-        hash_itf->clean(ctx->hash_ctx);
+    if (hash_itf->clear)
+        hash_itf->clear(ctx->hash_ctx);
 
     memset(pad, 0x5C, BLOCK_SIZE);
     for (i = 0; i < ctx->key_len; i++)
@@ -58,6 +58,6 @@ void cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac)
     hash_itf->update(ctx->hash_ctx, pad, BLOCK_SIZE);
     hash_itf->update(ctx->hash_ctx, mac, ctx->hash_len);
     hash_itf->digest(ctx->hash_ctx, mac);
-    if (hash_itf->clean)
-        hash_itf->clean(ctx->hash_ctx);
+    if (hash_itf->clear)
+        hash_itf->clear(ctx->hash_ctx);
 }

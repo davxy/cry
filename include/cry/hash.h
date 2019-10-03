@@ -16,17 +16,16 @@ extern "C" {
 /**
  * Context initialization.
  *
- * @param ctx   Crypto context
+ * @param ctx   Hash context
  */
 typedef void (*cry_hash_init_f)(void *ctx);
 
 /**
  * Context cleanup.
- * Eventually release resources allocated by the init.
  *
  * @param ctx   Hash context
  */
-typedef void (*cry_hash_clean_f)(void *ctx);
+typedef void (*cry_hash_clear_f)(void *ctx);
 
 /**
  * Digest update
@@ -51,7 +50,7 @@ typedef void (*cry_hash_digest_f)(void *ctx, uint8_t *digest);
  */
 struct cry_hash_itf {
     cry_hash_init_f init;       /**< Initialize (optional) */
-    cry_hash_clean_f clean;     /**< Clean (optional) */
+    cry_hash_clear_f clear;     /**< Clear (optional) */
     cry_hash_update_f update;   /**< Update */
     cry_hash_digest_f digest;   /**< Digest (finalize) */
 };

@@ -13,7 +13,7 @@ static int nozero_rand(unsigned char *dst, size_t n)
         return res;
     while (n-- > 0) {
         if (dst[n] == 0)
-            dst[n] = (n != 0) ? n : 1;
+            dst[n] = 1;
     }
     return res;
 }
@@ -80,7 +80,7 @@ static int padding_del(unsigned char *dst, size_t dlen,
         if (sign != 0 && src[i] != 0xFF)
             return -1;
     }
-    if(i == slen)
+    if (i == slen)
         return -1;
     i++; /* skip zero */
     if (slen - i < dlen)

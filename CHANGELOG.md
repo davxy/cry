@@ -21,13 +21,23 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
-[0.1.0] - Unreleased
+
+[0.1.1] - Unreleased
+--------------------
+
+Added
+
+* ARC4 stream cipher
+
+
+[0.1.0] - 2019-09-23
 --------------------
 
 Added
 
 * RSA sign/verify functions
 * Schoolbook RSA
+* AES Key Wrap (RFC-3394)
 
 Changed
 

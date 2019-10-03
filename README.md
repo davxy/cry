@@ -40,6 +40,7 @@ Symmetric ciphers
 
 ### Stream ciphers
 
+- ARC4
 - Trivium
 
 
@@ -112,5 +113,6 @@ Classical ciphers
 Utilities
 ---------
 
+- AES Key Wrap (RFC-3394)
 - Base64 encoder/decoder
 - Memxor
