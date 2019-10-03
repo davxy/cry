@@ -15,7 +15,7 @@ struct cry_elgamal_ctx {
     cry_mpi p;  /**< Prime */
     cry_mpi g;  /**< Group generator */
     cry_mpi y;  /**< g^x mod p */
-    cry_mpi x;  /**< secret exponent */
+    cry_mpi d;  /**< Secret exponent */
 };
 
 typedef struct cry_elgamal_ctx cry_elgamal_ctx;
