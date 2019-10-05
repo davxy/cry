@@ -44,7 +44,7 @@ e:  cry_mpi_clear(&r);
     return res;
 }
 
-int cry_elgamal_sign(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
+int cry_elgamal_sign2(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
                      const unsigned char *in, size_t len)
 {
     int res;
@@ -84,7 +84,7 @@ e:  cry_mpi_clear_list(&k, &z, &t, (cry_mpi *)NULL);
     return res;
 }
 
-int cry_elgamal_verify(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
+int cry_elgamal_verify2(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
                        const unsigned char *in, size_t len)
 {
     int res;
@@ -109,5 +109,45 @@ int cry_elgamal_verify(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
         res = -1;
 
 e:  cry_mpi_clear_list(&r, &z, (cry_mpi *)NULL);
+    return res;
+}
+
+int cry_elgamal_sign(cry_elgamal_ctx *ctx, unsigned char *sign,
+                      const unsigned char *in, size_t len)
+{
+    int res;
+    cry_elgamal_sig s;
+    size_t siz;
+
+    if ((res = cry_mpi_init_list(&s.r, &s.s, (cry_mpi *)NULL)) != 0)
+        return res;
+    res = cry_elgamal_sign2(ctx, &s, in, len);
+    if (res == 0) {
+        siz = cry_mpi_count_bytes(&ctx->p);
+        res = cry_mpi_store_bin(&s.r, sign, siz, 1);
+        if (res == 0)
+            res = cry_mpi_store_bin(&s.s, sign + siz, siz, 1);
+    }
+    cry_mpi_clear_list(&s.r, &s.s, (cry_mpi *)NULL);
+    return res;
+}
+
+int cry_elgamal_verify(cry_elgamal_ctx *ctx, const unsigned char *sign,
+                        const unsigned char *in, size_t len)
+{
+    int res;
+    cry_elgamal_sig s;
+    size_t siz;
+
+    if ((res = cry_mpi_init_list(&s.r, &s.s, (cry_mpi *)NULL)) != 0)
+        return res;
+    siz = cry_mpi_count_bytes(&ctx->p);
+    res = cry_mpi_load_bin(&s.r, sign, siz);
+    if (res == 0) {
+        res = cry_mpi_load_bin(&s.s, sign + siz, siz);
+        if (res == 0)
+            res = cry_elgamal_verify2(ctx, &s, in, len);
+    }
+    cry_mpi_clear_list(&s.r, &s.s, (cry_mpi *)NULL);
     return res;
 }

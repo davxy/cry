@@ -1,5 +1,6 @@
 #include "test.h"
 #include <cry/elgamal.h>
+#include <cry/prng.h>
 
 
 cry_elgamal_ctx g_elg;
@@ -25,16 +26,16 @@ static void sign_verify(int argc, char *argv[])
 {
     int res;
     struct elg_param par;
-    cry_elgamal_sig sig;
     cry_mpi min, max;
     size_t msg_len;
     unsigned char msg_raw[512];
+    unsigned char sig[128];
 
     ASSERT(argc == 2);
 
     param_init(&par, argc, argv);
 
-    ASSERT_OK(cry_mpi_init_list(&min, &max, &sig.r, &sig.s, NULL));
+    ASSERT_OK(cry_mpi_init_list(&min, &max, NULL));
 
     ASSERT_OK(cry_mpi_load_bin(&g_elg.p, par.p, par.plen));
     ASSERT_OK(cry_mpi_load_bin(&g_elg.g, par.g, par.glen));
@@ -53,20 +54,21 @@ static void sign_verify(int argc, char *argv[])
     res = cry_mpi_store_bin(&min, msg_raw, msg_len, 0);
 
     /* Sign */
-    res = cry_elgamal_sign(&g_elg, &sig, msg_raw, msg_len);
+    res = cry_elgamal_sign(&g_elg, sig, msg_raw, msg_len);
 
     /* Set the public key of the signer */
     res = cry_mpi_mod_exp(&g_elg.y, &g_elg.g, &g_elg.d, &g_elg.p);
     /* Verify */
-    res = cry_elgamal_verify(&g_elg, &sig, msg_raw, msg_len);
+    res = cry_elgamal_verify(&g_elg, sig, msg_raw, msg_len);
 
-    cry_mpi_clear_list(&min, &max, &sig.r, &sig.s, NULL);
+    cry_mpi_clear_list(&min, &max, NULL);
 
     ASSERT(res == 0);
 }
 
 static void setup(void)
 {
+    cry_prng_init(RAND_SEED_RAW, RAND_SEED_SIZ);
     cry_elgamal_init(&g_elg);
 }
 
