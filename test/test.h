@@ -8,7 +8,7 @@
 #define BIGBUF_SIZ  8192
 
 /* Constant seed to make "rand" results predictable */
-#define RAND_SEED_RAW  "RANDSEED"
+#define RAND_SEED_RAW  ((unsigned char *)"RANDSEED")
 #define RAND_SEED_SIZ  (sizeof(RAND_SEED_RAW) - 1)
 
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
