@@ -27,6 +27,7 @@ objects := \
 	sha1_test.o \
 	sha256_test.o \
 	ecp_test.o \
+	elgamal_test.o \
 	utils_test.o
 
 #	rand_test.o \
