@@ -1,8 +1,8 @@
 #include <cry/dsa.h>
-#include "mpi/mpi_pvt.h"
+#include "../misc.h"
 
-#define CHK(exp) do { if ((res = (exp)) != 0) \
-                          goto e; } while (0)
+
+#define CHK(exp) CRY_CHK(exp, e)
 
 /*
  * c = rand()

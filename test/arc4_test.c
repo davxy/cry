@@ -51,7 +51,7 @@ static void dispatch(int argc, char *argv[])
 
 void arc4_test(void)
 {
-    TRACE("* ARC4 Vectors\n");
+    TRACE("* ARC4 IETF RFC6229 Vectors\n");
     func_test("arc4_test.data", dispatch);
     TRACE("\n");
 }

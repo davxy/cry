@@ -43,7 +43,7 @@ static void dispatch(int argc, char *argv[])
 
 void sha256_test(void)
 {
-    TRACE("* SHA256 NIST CAVS Vectors\n");
+    TRACE("* SHA256 NIST CAVS\n");
     func_test("sha256_test.data", dispatch);
     TRACE("\n");
 }

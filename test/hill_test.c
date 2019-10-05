@@ -78,7 +78,7 @@ static void dispatch(int argc, char *argv[])
 
 void hill_test(void)
 {
-    TRACE("* HILL Test\n");
+    TRACE("* Hill\n");
     func_test("hill_test.data", dispatch);
     TRACE("\n");
 }
