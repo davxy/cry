@@ -51,6 +51,9 @@ int cry_elgamal_sign(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
     cry_mpi one, k, z, t;
     cry_mpi_digit dig = 1;
 
+    if (len > cry_mpi_count_bytes(&ctx->p))
+        return -1;
+
     one.sign = 0;
     one.used = 1;
     one.alloc = 1;
@@ -65,15 +68,11 @@ int cry_elgamal_sign(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
     /* gcd(k, p-1) = 1 */
     CHK(secret_gen(&k, &t, &one));
 
-    /* z = buf truncated to the size of p */
-    if (cry_mpi_count_bytes(&ctx->p) < len)
-        len = cry_mpi_count_bytes(&ctx->p);
-    CHK(cry_mpi_load_bin(&z, in, len));
-
     /* r */
     CHK(cry_mpi_mod_exp(&sign->r, &ctx->g, &k, &ctx->p));
 
     /* s */
+    CHK(cry_mpi_load_bin(&z, in, len));
     CHK(cry_mpi_mul(&sign->s, &ctx->d, &sign->r));
     CHK(cry_mpi_sub(&sign->s, &z, &sign->s));
     CHK(cry_mpi_mod(&sign->s, &sign->s, &t));
@@ -91,6 +90,9 @@ int cry_elgamal_verify(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
     int res;
     cry_mpi r, z;
 
+    if (len > cry_mpi_count_bytes(&ctx->p))
+        return -1;
+
     if ((res = cry_mpi_init_list(&r, &z, (cry_mpi *)NULL)) != 0)
         return res;
 
@@ -99,10 +101,8 @@ int cry_elgamal_verify(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
     CHK(cry_mpi_mul(&r, &r, &z));
     CHK(cry_mpi_mod(&r, &r, &ctx->p));
 
-    /* z = buf truncated to the size of p */
-    if (cry_mpi_count_bytes(&ctx->p) < len)
-        len = cry_mpi_count_bytes(&ctx->p);
     CHK(cry_mpi_load_bin(&z, in, len));
+    CHK(cry_mpi_mod_exp(&z, &ctx->g, &z, &ctx->p));
 
     res = cry_mpi_cmp(&r, &z);
     if (res != 0)

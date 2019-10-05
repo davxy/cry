@@ -9,8 +9,8 @@ cry_elgamal_ctx g_elg;
 struct elg_param {
     unsigned int plen;
     unsigned int glen;
-    unsigned char p[128];
-    unsigned char g[128];
+    unsigned char p[512];
+    unsigned char g[512];
 };
 
 static void param_init(struct elg_param *par, int argc, char *argv[])
@@ -28,31 +28,36 @@ static void sign_verify(int argc, char *argv[])
     cry_elgamal_sig sig;
     cry_mpi min, max;
     size_t msg_len;
-    unsigned char msg_raw[128];
+    unsigned char msg_raw[512];
 
     ASSERT(argc == 2);
 
     param_init(&par, argc, argv);
 
-    cry_mpi_load_bin(&g_elg.p, par.p, par.plen);
-    cry_mpi_load_bin(&g_elg.g, par.g, par.glen);
+    ASSERT_OK(cry_mpi_load_bin(&g_elg.p, par.p, par.plen));
+    ASSERT_OK(cry_mpi_load_bin(&g_elg.g, par.g, par.glen));
 
     /* Random stuff */
-    cry_mpi_init_int(&min, 2);
-    cry_mpi_init(&max);
-    cry_mpi_sub(&max, &g_elg.p, &min);
+    ASSERT_OK(cry_mpi_init_int(&min, 2));
+    ASSERT_OK(cry_mpi_init(&max));
+    ASSERT_OK(cry_mpi_sub(&max, &g_elg.p, &min));
     do {
-        cry_mpi_rand_range(&g_elg.d, &max);
+        ASSERT_OK(cry_mpi_rand_range(&g_elg.d, &max));
     } while (cry_mpi_cmp(&min, &g_elg.d) > 0);
 
-    cry_mpi_set_int(&min, 1);
-    cry_mpi_sub(&max, &g_elg.p, &min);
-    cry_mpi_rand_range(&min, &max);
+    res = cry_mpi_set_int(&min, 1);
+    res = cry_mpi_sub(&max, &g_elg.p, &min);
+    res = cry_mpi_rand_range(&min, &max);
     msg_len = cry_mpi_count_bytes(&min);
-    cry_mpi_store_bin(&min, msg_raw, msg_len, 0);
+    res = cry_mpi_store_bin(&min, msg_raw, msg_len, 0);
 
-    cry_mpi_init_list(&sig.r, &sig.s, NULL);
-    cry_elgamal_sign(&g_elg, &sig, msg_raw, msg_len);
+    /* Sign */
+    res = cry_mpi_init_list(&sig.r, &sig.s, NULL);
+    res = cry_elgamal_sign(&g_elg, &sig, msg_raw, msg_len);
+
+    /* Set the public key of the signer */
+    res = cry_mpi_mod_exp(&g_elg.y, &g_elg.g, &g_elg.d, &g_elg.p);
+    /* Verify */
     res = cry_elgamal_verify(&g_elg, &sig, msg_raw, msg_len);
     cry_mpi_clear_list(&sig.r, &sig.s, NULL);
 
@@ -87,7 +92,7 @@ static void dispatch(int argc, char *argv[])
 
 void elgamal_test(void)
 {
-    TRACE("* ElGamal Digital Signature Test\n");
+    TRACE("* ElGamal Digital Signature\n");
     func_test("elgamal_test.data", dispatch);
     TRACE("\n");
 }
