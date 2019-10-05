@@ -1,5 +1,6 @@
 #include "mpi_pvt.h"
 #include <cry/prng.h>
+#include <stdlib.h>
 
 /*
  * Generate a random integer with a given number of bits.
@@ -7,40 +8,40 @@
 int cry_mpi_rand(cry_mpi *r, size_t bits)
 {
     int res;
-    size_t digs, msb;
+    size_t digs, msb, siz;
+    unsigned char *bin;
 
-    digs = CRY_MPI_BITS_TO_DIGS(bits);
-    if (digs == 0) {
+    if (bits == 0) {
         cry_mpi_zero(r);
         return 0;
     }
-    if (r->alloc < digs) {
-        if ((res = cry_mpi_grow(r, digs)) != 0)
-            return res;
-    }
-    r->used = digs;
+    siz = (bits + 7) >> 3;
+    if ((bin = malloc(siz)) == NULL)
+        return -1;
+    if ((res = cry_prng_aes_rand(bin, siz)) != 0)
+        goto e;
+    if ((res = cry_mpi_load_bin(r, bin, siz)) != 0)
+        goto e;
 
-    res = cry_prng_aes_rand((unsigned char *)r->data,
-                            digs * sizeof(cry_mpi_digit));
-    if (res != 0)
-        return res;
-
+    digs = CRY_MPI_BITS_TO_DIGS(bits);
     msb = bits - CRY_MPI_DIGIT_BITS * (digs - 1);
     if (msb < CRY_MPI_DIGIT_BITS)
-        r->data[digs-1] &= ((cry_mpi_digit)1 << msb) - 1; /* Clean extra bits */
+        r->data[digs-1] &= ((cry_mpi_digit)1 << msb) - 1; /* Clear extra bits */
     r->data[digs-1] |= ((cry_mpi_digit)1 << (msb - 1));   /* Set the msb */
-    return 0;
+
+e:  free(bin);
+    return res;
 }
 
 int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max)
 {
-    int ret;
+    int res;
     size_t n;
 
     n = cry_mpi_count_bits(max);
-    if ((ret = cry_mpi_rand(a, n)) == 0) {
+    if ((res = cry_mpi_rand(a, n)) == 0) {
         if (cry_mpi_cmp_abs(a, max) >= 0)
-            ret = cry_mpi_mod(a, a, max);
+            res = cry_mpi_mod(a, a, max);
     }
-    return ret;
+    return res;
 }

@@ -164,10 +164,10 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
  * @param len   Destination buffer size.
  */
 #define cry_memset(dst, val, len) do { \
-    volatile unsigned char *__dst = (unsigned char*)dst; \
-    size_t __len = len; \
-    while (__len--) \
-        *__dst++ = (val); \
+    volatile unsigned char *__p = (unsigned char*)(dst); \
+    size_t __n = (len); \
+    while (__n--) \
+        *__p++ = (val); \
 } while (0)
 
 /**

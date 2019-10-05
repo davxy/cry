@@ -38,7 +38,6 @@ static const unsigned int small_primes[] = {
     101,  103,  107,  109,  113,  127,  131,  137,
     139,  149,  151,  157,  163,  167,  173,  179,
     181,  191,  193,  197,  199,  211,  223,  227,
-#if CRY_MPI_DIGIT_MAX != UCHAR_MAX
     229,  233,  239,  241,  251,  257,  263,  269,
     271,  277,  281,  283,  293,  307,  311,  313,
     317,  331,  337,  347,  349,  353,  359,  367,
@@ -54,38 +53,36 @@ static const unsigned int small_primes[] = {
     839,  853,  857,  859,  863,  877,  881,  883,
     887,  907,  911,  919,  929,  937,  941,  947,
     953,  967,  971,  977,  983,  991,  997, 1009
-#endif
 };
 
 
 /*
- * Try simple division with all our small primes. This is, for each prime,
- * if it evenly divides p, return 0. Note that this obviously doesn't work
- * if we're checking a prime number that's in the list!
- *
+ * Try simple division with all our small primes
+ * If p is in the small primes list (p is prime) returns 2.
+ * If one of the primes divides p (p is not prime) returns 1.
+ * If none of the primes divides p (more tests are required) returns 0.
  * On error returns -1
  */
 static int is_obviously_not_prime(const cry_mpi *p)
 {
     int res = 0;
     size_t i;
-    cry_mpi d, m;
-    cry_mpi_digit dig;
-
-    d.data = &dig;
-    d.used = 1;
-    d.alloc = 1;
-    d.sign = 0;
+    cry_mpi m;
 
     if ((res = cry_mpi_init(&m)) < 0)
         return res;
 
     for (i = 0; i < CRY_ARRAY_LEN(small_primes);  i++) {
-        dig = (cry_mpi_digit)small_primes[i];
-        if ((res = cry_mpi_mod(&m, p, &d)) < 0)
+        if ((res = cry_mpi_set_int(&m, small_primes[i])) != 0)
+            break;
+        if (cry_mpi_cmp(&m, p) == 0) {
+            res = 2;
+            break;
+        }
+        if ((res = cry_mpi_mod(&m, p, &m)) < 0)
             break;
         res = cry_mpi_is_zero(&m);
-        if (res)
+        if (res == 1)
             break;
     }
     cry_mpi_clear(&m);
@@ -198,14 +195,26 @@ int cry_mpi_is_prime(const cry_mpi *p)
 {
     int i, res;
 
-    if ((res = is_obviously_not_prime(p)) < 0)
-        return res;
-    else if (res == 1)
-        return 0;
-    /* Is not obviously prime, proceed to Miller Rabin test */
-    for (i = 0; i < MILLER_ITER_NO; i++) {
-        if ((res = passes_miller_rabin(p)) <= 0)
-            break; /* -1 on error; 0 if test is not passed */
+    res = is_obviously_not_prime(p);
+    switch (res) {
+    case 0:
+        /* Is not obviously prime, proceed to Miller Rabin test */
+        for (i = 0; i < MILLER_ITER_NO; i++) {
+            if ((res = passes_miller_rabin(p)) <= 0)
+                break; /* -1 on error; 0 if test is not passed */
+        }
+        break;
+    case 2:
+         /* Part of the small primes list */
+        res = 1;
+        break;
+    case 1:
+        /* Divisible by one of the small primes */
+        res = 0;
+        break;
+    default:
+        res = -1;
+        break;
     }
     return res;
 }

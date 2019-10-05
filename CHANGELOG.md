@@ -21,6 +21,40 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
+
+[0.1.1] - Unreleased
+--------------------
+
+Added
+
+* ARC4 stream cipher
+* Elgamal digital signature
+
+Fixed
+
+* MPI "is_prime" function was not working for primes < 1010 (decimal)
+
+
+[0.1.0] - 2019-09-23
+--------------------
+
+Added
+
+* RSA sign/verify functions
+* Schoolbook RSA
+* AES Key Wrap (RFC-3394)
+
+Changed
+
+* RSA padding schemes correction
+* MPI random prime generation sequence independence from MPI digit size
+* Weak PRNG properly renamed to LFSR-113
+
+Fixed
+
+* MPI bit-set macro was setting the wrong bit when using 64-bit digits
+
+
 [0.0.10] - 2019-06-08
 ---------------------
 

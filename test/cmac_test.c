@@ -22,7 +22,7 @@ static void param_init(struct cmac_param *par, int argc, char *argv[])
 
 static const struct cry_ciph_itf g_aes_itf = {
     NULL, /* init */
-    NULL, /* clean */
+    NULL, /* clear */
     (cry_ciph_key_set_f)cry_aes_key_set,
     NULL, /* ivset */
     (cry_ciph_encrypt_f)cry_aes_encrypt,
@@ -155,7 +155,7 @@ static void cmac_aes_last_incomplete(void)
 
 void cmac_test(void)
 {
-    TRACE("* CMAC Tests\n");
+    TRACE("* CMAC\n");
     run("CMAC-AES First Sliced #1", cmac_aes_first_sliced1, NULL, NULL);
     run("CMAC-AES First Sliced #2", cmac_aes_first_sliced2, NULL, NULL);
     run("CMAC-AES Mid Sliced #1", cmac_aes_mid_sliced, NULL, NULL);

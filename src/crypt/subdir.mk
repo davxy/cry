@@ -8,12 +8,14 @@ objects-y := \
     ctr.o \
     cfb.o \
     gcm.o \
-	rsa.o \
+	arc4.o \
 	trivium.o \
+	rsa.o \
 	dh.o \
 	ecdh.o \
 	cmac.o \
 	hmac.o \
+	elgamal.o \
 	dsa.o \
 	ecdsa.o \
 	base64.o \

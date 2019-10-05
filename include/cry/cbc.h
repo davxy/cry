@@ -41,6 +41,13 @@ void cry_cbc_init(struct cry_cbc_ctx *ctx, void *ciph_ctx,
                   const cry_ciph_itf *ciph_itf);
 
 /**
+ * Context cleanup.
+ *
+ * @param ctx       CBC context.
+ */
+void cry_cbc_clear(struct cry_cbc_ctx *ctx);
+
+/**
  * Set the cipher key.
  *
  * @param ctx   CBC context.
