@@ -10,18 +10,6 @@ a good collection of ciphers, hash functions, pseudo-random number generators
 and multi-precision integers algorithms.
 
 
-Multiple precision integers
----------------------------
-
-- Basic arithmentic (add,sub,mul,div,mod,abs,exp,sqr)
-- Modular exponentiation
-- Modular inverse (Euclidean)
-- GCD and LCM
-- Probabilistic prime numbers generator (Miller-Rabin)
-- Random mpi generator
-- Comba, Karatsuba and Toom-Cook-3 multipliers
-
-
 Symmetric ciphers
 -----------------
 
@@ -61,6 +49,7 @@ Public key algorithms
 - RSA (PKCS1 v2.1 PSS padding)
 - DSA
 - ECDSA
+- Elgamal
 
 
 Elliptic Curve
@@ -108,6 +97,18 @@ Classical ciphers
 
 - Hill cipher
 - Polyalphabetic Affine cipher
+
+
+Multiple precision integers
+---------------------------
+
+- Basic arithmentic (add,sub,mul,div,mod,abs,exp,sqr)
+- Modular exponentiation
+- Modular inverse (Euclidean)
+- GCD and LCM
+- Probabilistic prime numbers generator (Miller-Rabin)
+- Random mpi generator
+- Comba, Karatsuba and Toom-Cook-3 multipliers
 
 
 Utilities

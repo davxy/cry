@@ -28,6 +28,11 @@ Given a version number MAJOR.MINOR.PATCH
 Added
 
 * ARC4 stream cipher
+* Elgamal digital signature
+
+Fixed
+
+* MPI "is_prime" function was not working for primes < 1010 (decimal)
 
 
 [0.1.0] - 2019-09-23
