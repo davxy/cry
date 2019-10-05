@@ -34,12 +34,13 @@ static void sign_verify(int argc, char *argv[])
 
     param_init(&par, argc, argv);
 
+    ASSERT_OK(cry_mpi_init_list(&min, &max, &sig.r, &sig.s, NULL));
+
     ASSERT_OK(cry_mpi_load_bin(&g_elg.p, par.p, par.plen));
     ASSERT_OK(cry_mpi_load_bin(&g_elg.g, par.g, par.glen));
 
     /* Random stuff */
-    ASSERT_OK(cry_mpi_init_int(&min, 2));
-    ASSERT_OK(cry_mpi_init(&max));
+    ASSERT_OK(cry_mpi_set_int(&min, 2));
     ASSERT_OK(cry_mpi_sub(&max, &g_elg.p, &min));
     do {
         ASSERT_OK(cry_mpi_rand_range(&g_elg.d, &max));
@@ -52,14 +53,14 @@ static void sign_verify(int argc, char *argv[])
     res = cry_mpi_store_bin(&min, msg_raw, msg_len, 0);
 
     /* Sign */
-    res = cry_mpi_init_list(&sig.r, &sig.s, NULL);
     res = cry_elgamal_sign(&g_elg, &sig, msg_raw, msg_len);
 
     /* Set the public key of the signer */
     res = cry_mpi_mod_exp(&g_elg.y, &g_elg.g, &g_elg.d, &g_elg.p);
     /* Verify */
     res = cry_elgamal_verify(&g_elg, &sig, msg_raw, msg_len);
-    cry_mpi_clear_list(&sig.r, &sig.s, NULL);
+
+    cry_mpi_clear_list(&min, &max, &sig.r, &sig.s, NULL);
 
     ASSERT(res == 0);
 }
