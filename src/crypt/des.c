@@ -1,4 +1,7 @@
 #include <cry/des.h>
+#include "misc.h"
+#include <string.h>
+
 
 #define EXPANSION_BLOCK_SIZE    6
 #define PC1_KEY_SIZE            7
@@ -337,4 +340,14 @@ void cry_des_key_set(cry_des_ctx *ctx, const unsigned char *key,
         size = CRY_DES_BLOCK_SIZE*3;
     ctx->keylen = size;
     memcpy(ctx->key, key, size);
+}
+
+void cry_des_init(cry_des_ctx *ctx)
+{
+    memset(ctx, 0, sizeof(*ctx));
+}
+
+void cry_des_clear(cry_des_ctx *ctx)
+{
+    cry_memset(ctx, 0, sizeof(*ctx));
 }

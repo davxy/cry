@@ -1,6 +1,6 @@
 #include <cry/trivium.h>
-#include <string.h>
 #include "misc.h"
+#include <string.h>
 
 
 #define S(a, n) (s ## a ## n)
