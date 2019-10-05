@@ -13,24 +13,24 @@ extern "C" {
 #endif
 
 /**
- * Context initialization function pointer type.
+ * Context initialization.
  *
  * @param ctx   Cipher context
  */
 typedef void (*cry_ciph_init_f)(void *ctx);
 
 /**
- * Context cleanup function pointer type.
+ * Context cleanup.
  *
  * @param ctx   Cipher context
  */
-typedef void (*cry_ciph_clean_f)(void *ctx);
+typedef void (*cry_ciph_clear_f)(void *ctx);
 
 /**
- * Key set function pointer type.
+ * Key set.
  *
  * @param ctx   Cipher context.
- * @param key   Cipher key.
+ * @param key   Key.
  * @param size  Key size.
  */
 typedef void (*cry_ciph_key_set_f)(void *ctx, const unsigned char *key,
@@ -69,7 +69,7 @@ typedef void (*cry_ciph_decrypt_f)(void *ctx, unsigned char *dst,
  */
 struct cry_ciph_itf {
     cry_ciph_init_f init;
-    cry_ciph_clean_f clean;
+    cry_ciph_clear_f clear;
     cry_ciph_key_set_f key_set;
     cry_ciph_encrypt_f encrypt;
     cry_ciph_decrypt_f decrypt;

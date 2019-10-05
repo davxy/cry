@@ -33,7 +33,8 @@ static void trivium_operate(int argc, char *argv[])
     cry_trivium_init(&ctx);
     cry_trivium_key_set(&ctx, par.key, par.keylen);
     cry_trivium_iv_set(&ctx, par.iv, par.ivlen);
-    cry_trivium_encrypt(&ctx, dst, src, 512);
+    cry_trivium_crypt(&ctx, dst, src, 512);
+    cry_trivium_clear(&ctx);
 
     ASSERT_EQ_BUF(dst, par.buf, 512);
 }

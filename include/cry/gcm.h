@@ -49,6 +49,13 @@ void cry_gcm_init(struct cry_gcm_ctx *ctx, void *ciph_ctx,
                   const struct cry_ciph_itf *ciph_itf);
 
 /**
+ * Context cleanup.
+ *
+ * @param ctx       GCM context.
+ */
+void cry_gcm_clear(struct cry_gcm_ctx *ctx);
+
+/**
  * Set the key in the gcm and in the cipher context.
  *
  * @param ctx   GCM context.

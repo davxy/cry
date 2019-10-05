@@ -80,7 +80,7 @@ void affine_test(void)
     cry_affine_encrypt(&ctx, ciphertext, (unsigned char *)"HelloWorld", 10);
     cry_affine_decrypt(&ctx, cleartext, ciphertext, 10);
 
-    TRACE("* Affine Test\n");
+    TRACE("* Affine\n");
     func_test("affine_test.data", dispatch);
     TRACE("\n");
 }

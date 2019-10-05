@@ -76,9 +76,18 @@ static void gcm_hash_sizes(unsigned char *hash, const unsigned char *key,
 void cry_gcm_init(struct cry_gcm_ctx *ctx, void *ciph_ctx,
                   const struct cry_ciph_itf *ciph_itf)
 {
-    memset(ctx, 0, sizeof(struct cry_gcm_ctx));
+    memset(ctx, 0, sizeof(*ctx));
     ctx->ciph_ctx = ciph_ctx;
     ctx->ciph_itf = ciph_itf;
+    if (ciph_itf->init != NULL)
+        ciph_itf->init(ciph_ctx);
+}
+
+void cry_gcm_clear(struct cry_gcm_ctx *ctx)
+{
+    if (ctx->ciph_itf->clear != NULL)
+        ctx->ciph_itf->clear(ctx->ciph_ctx);
+    memset(ctx, 0, sizeof(*ctx));
 }
 
 void cry_gcm_key_set(struct cry_gcm_ctx *gcm, const unsigned char *key,

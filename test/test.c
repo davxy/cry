@@ -7,6 +7,7 @@ void base64_test(void);
 void mpi_test(void);
 void des_test(void);
 void aes_test(void);
+void arc4_test(void);
 void trivium_test(void);
 void hill_test(void);
 void affine_test(void);
@@ -18,6 +19,8 @@ void md5_test(void);
 void sha1_test(void);
 void sha256_test(void);
 void ecp_test(void);
+void elgamal_test(void);
+void utils_test(void);
 
 static int g_runs;
 int g_fails;
@@ -38,6 +41,7 @@ struct sub_test g_tests[] = {
     SUB_TEST(mpi),
     SUB_TEST(des),
     SUB_TEST(aes),
+    SUB_TEST(arc4),
     SUB_TEST(trivium),
     SUB_TEST(hill),
     SUB_TEST(affine),
@@ -49,6 +53,8 @@ struct sub_test g_tests[] = {
     SUB_TEST(sha1),
     SUB_TEST(sha256),
     SUB_TEST(ecp),
+    SUB_TEST(elgamal),
+    SUB_TEST(utils),
 #if 0
     SUB_TEST(rand),
     SUB_TEST(dh),

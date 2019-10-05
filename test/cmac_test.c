@@ -151,7 +151,7 @@ static void cmac_aes_last_incomplete(void)
 
 void cmac_test(void)
 {
-    TRACE("* CMAC Tests\n");
+    TRACE("* CMAC\n");
     run("CMAC-AES First Sliced #1", cmac_aes_first_sliced1, NULL, NULL);
     run("CMAC-AES First Sliced #2", cmac_aes_first_sliced2, NULL, NULL);
     run("CMAC-AES Mid Sliced #1", cmac_aes_mid_sliced, NULL, NULL);

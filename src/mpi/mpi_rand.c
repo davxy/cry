@@ -26,22 +26,22 @@ int cry_mpi_rand(cry_mpi *r, size_t bits)
     digs = CRY_MPI_BITS_TO_DIGS(bits);
     msb = bits - CRY_MPI_DIGIT_BITS * (digs - 1);
     if (msb < CRY_MPI_DIGIT_BITS)
-        r->data[digs-1] &= ((cry_mpi_digit)1 << msb) - 1; /* Clean extra bits */
+        r->data[digs-1] &= ((cry_mpi_digit)1 << msb) - 1; /* Clear extra bits */
     r->data[digs-1] |= ((cry_mpi_digit)1 << (msb - 1));   /* Set the msb */
 
 e:  free(bin);
-    return 0;
+    return res;
 }
 
 int cry_mpi_rand_range(cry_mpi *a, const cry_mpi *max)
 {
-    int ret;
+    int res;
     size_t n;
 
     n = cry_mpi_count_bits(max);
-    if ((ret = cry_mpi_rand(a, n)) == 0) {
+    if ((res = cry_mpi_rand(a, n)) == 0) {
         if (cry_mpi_cmp_abs(a, max) >= 0)
-            ret = cry_mpi_mod(a, a, max);
+            res = cry_mpi_mod(a, a, max);
     }
-    return ret;
+    return res;
 }
