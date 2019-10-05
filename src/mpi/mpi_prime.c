@@ -57,10 +57,10 @@ static const unsigned int small_primes[] = {
 
 
 /*
- * Try simple division with all our small primes. This is, for each prime,
- * if it evenly divides p, return 0. Note that this obviously doesn't work
- * if we're checking a prime number that's in the list!
- *
+ * Try simple division with all our small primes
+ * If p is in the small primes list (p is prime) returns 2.
+ * If one of the primes divides p (p is not prime) returns 1.
+ * If none of the primes divides p (more tests are required) returns 0.
  * On error returns -1
  */
 static int is_obviously_not_prime(const cry_mpi *p)
@@ -75,10 +75,14 @@ static int is_obviously_not_prime(const cry_mpi *p)
     for (i = 0; i < CRY_ARRAY_LEN(small_primes);  i++) {
         if ((res = cry_mpi_set_int(&m, small_primes[i])) != 0)
             break;
+        if (cry_mpi_cmp(&m, p) == 0) {
+            res = 2;
+            break;
+        }
         if ((res = cry_mpi_mod(&m, p, &m)) < 0)
             break;
         res = cry_mpi_is_zero(&m);
-        if (res)
+        if (res == 1)
             break;
     }
     cry_mpi_clear(&m);
@@ -191,14 +195,26 @@ int cry_mpi_is_prime(const cry_mpi *p)
 {
     int i, res;
 
-    if ((res = is_obviously_not_prime(p)) < 0)
-        return res;
-    else if (res == 1)
-        return 0;
-    /* Is not obviously prime, proceed to Miller Rabin test */
-    for (i = 0; i < MILLER_ITER_NO; i++) {
-        if ((res = passes_miller_rabin(p)) <= 0)
-            break; /* -1 on error; 0 if test is not passed */
+    res = is_obviously_not_prime(p);
+    switch (res) {
+    case 0:
+        /* Is not obviously prime, proceed to Miller Rabin test */
+        for (i = 0; i < MILLER_ITER_NO; i++) {
+            if ((res = passes_miller_rabin(p)) <= 0)
+                break; /* -1 on error; 0 if test is not passed */
+        }
+        break;
+    case 2:
+         /* Part of the small primes list */
+        res = 1;
+        break;
+    case 1:
+        /* Divisible by one of the small primes */
+        res = 0;
+        break;
+    default:
+        res = -1;
+        break;
     }
     return res;
 }
