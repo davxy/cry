@@ -1,5 +1,5 @@
 /**
- * @file    sha.h
+ * @file    sha1.h
  * @brief   SHA1 message digest algorithm
  */
 
@@ -57,9 +57,9 @@ void cry_sha1_digest(cry_sha1_ctx *ctx, unsigned char *out);
 /**
  * SHA-1 computation of a given input.
  *
- * @out  SHA-1 result buffer (shall be at least 20 bytes).
- * @data Input data buffer.
- * @len  Input data length.
+ * @param out   SHA-1 result buffer (shall be at least 20 bytes).
+ * @param data  Input data buffer.
+ * @param len   Input data length.
  */
 void cry_sha1(unsigned char *out, const unsigned char *data, size_t len);
 
