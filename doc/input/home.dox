@@ -1,0 +1,12 @@
+/**
+ * @file home.dox
+ *
+ * @brief Main page documentation file.
+ *
+ * @mainpage CRY $VERSION$ source code documentation
+ *
+ * This documentation describes the API of the CRY crypto library.
+ *
+ * CRY provides an implementation of a number of cryptographic an security
+ * related primitives.
+ */
