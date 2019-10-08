@@ -1,14 +1,36 @@
 image: davxy/linux-builder
 
 stages:
+    - build
+    - test
     - deploy
 
-# Deploy
+# Build
+build:
+    stage: build
+    script:
+        - make
+
+# Test
+test:
+    stage: test
+    dependencies:
+        - build
+    script:
+        - make test CONFIG=config/config-ci.mk
+        - (cd test; valgrind --leak-check=full --error-exitcode=2 ./test)
+        - gcovr --exclude test -r . | grep TOTAL
+
+# Publish API Documentation
 pages:
     stage: deploy
+    dependencies:
+        - test
     script:
         - make doc
         - mv doc/html/ public/
     artifacts:
         paths:
             - public
+    only:
+        - tags
