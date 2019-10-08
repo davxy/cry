@@ -26,7 +26,11 @@ deploy:
     stage: deploy
     dependencies:
         - test
-    only:
-        - tags
     script:
         - make doc
+        - mv doc/html public
+    artifacts:
+        paths:
+            - public
+    #only:
+        #- tags
