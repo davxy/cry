@@ -2,7 +2,7 @@ libcry.a
 build
 test/test
 test/out
-doc/html
+doc/doxy/html
 .scannerwork
 *.o
 *.gcda
