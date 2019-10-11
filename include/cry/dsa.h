@@ -29,6 +29,10 @@ typedef struct cry_dsa_signature cry_dsa_signature;
 extern "C" {
 #endif
 
+int cry_dsa_init(cry_dsa_ctx *ctx);
+
+void cry_dsa_clear(cry_dsa_ctx *ctx);
+
 int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
                  const unsigned char *in, size_t len);
 

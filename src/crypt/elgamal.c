@@ -6,18 +6,6 @@
 
 #define CHK(exp) CRY_CHK(res = exp, e)
 
-int cry_elgamal_init(cry_elgamal_ctx *ctx)
-{
-    return cry_mpi_init_list(&ctx->p, &ctx->d, &ctx->g, &ctx->y,
-                             (cry_mpi *)NULL);
-}
-
-void cry_elgamal_clear(cry_elgamal_ctx *ctx)
-{
-    cry_mpi_clear_list(&ctx->p, &ctx->d, &ctx->g, &ctx->y, (cry_mpi *)NULL);
-    cry_memset(ctx, 0, sizeof(*ctx));
-}
-
 /*
  * Generate a random secret k, such that gcd(k, p-1) = 1
  */
@@ -151,3 +139,16 @@ int cry_elgamal_verify(cry_elgamal_ctx *ctx, const unsigned char *sign,
     cry_mpi_clear_list(&s.r, &s.s, (cry_mpi *)NULL);
     return res;
 }
+
+int cry_elgamal_init(cry_elgamal_ctx *ctx)
+{
+    return cry_mpi_init_list(&ctx->p, &ctx->d, &ctx->g, &ctx->y,
+                             (cry_mpi *)NULL);
+}
+
+void cry_elgamal_clear(cry_elgamal_ctx *ctx)
+{
+    cry_mpi_clear_list(&ctx->p, &ctx->d, &ctx->g, &ctx->y, (cry_mpi *)NULL);
+    cry_memset(ctx, 0, sizeof(*ctx));
+}
+

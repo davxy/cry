@@ -35,7 +35,7 @@ int cry_dh_get_tok(cry_dh_ctx *ctx, unsigned char *out, size_t out_len);
 
 int cry_dh_set_tok(cry_dh_ctx *ctx, unsigned char *in, size_t in_len);
 
-int cry_dh_get_key(cry_dh_ctx *ctx, unsigned char *out, size_t out_len);
+int cry_dh_get_sec(cry_dh_ctx *ctx, unsigned char *out, size_t out_len);
 
 #ifdef __cplusplus
 }

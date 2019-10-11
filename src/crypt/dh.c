@@ -1,45 +1,41 @@
 #include <cry/dh.h>
+#include "misc.h"
 
-int cry_dh_init(cry_dh_ctx *dh)
+
+int cry_dh_init(cry_dh_ctx *ctx)
 {
-    cry_mpi_init(&dh->p);
-    cry_mpi_init(&dh->g);
-    cry_mpi_init(&dh->e);
-    cry_mpi_init(&dh->Y);
-    cry_mpi_init(&dh->Z);
-    return 0;
+    return cry_mpi_init_list(&ctx->p, &ctx->g, &ctx->e, &ctx->Y, &ctx->Z,
+                             (cry_mpi *) NULL);
 }
 
-void cry_dh_clear(cry_dh_ctx *dh)
+void cry_dh_clear(cry_dh_ctx *ctx)
 {
-    cry_mpi_clear(&dh->p);
-    cry_mpi_clear(&dh->g);
-    cry_mpi_clear(&dh->e);
-    cry_mpi_clear(&dh->Y);
-    cry_mpi_clear(&dh->Z);
+    cry_mpi_clear_list(&ctx->p, &ctx->g, &ctx->e, &ctx->Y, &ctx->Z,
+                       (cry_mpi *) NULL);
+    cry_memset(ctx, 0, sizeof(*ctx));
 }
 
-int cry_dh_agree(cry_dh_ctx *dh)
+int cry_dh_agree(cry_dh_ctx *ctx)
 {
-    return cry_mpi_mod_exp(&dh->Y, &dh->g, &dh->e, &dh->p);
+    return cry_mpi_mod_exp(&ctx->Y, &ctx->g, &ctx->e, &ctx->p);
 }
 
-int cry_dh_finalize(cry_dh_ctx *dh)
+int cry_dh_finalize(cry_dh_ctx *ctx)
 {
-    return cry_mpi_mod_exp(&dh->Z, &dh->Y, &dh->e, &dh->p);
+    return cry_mpi_mod_exp(&ctx->Z, &ctx->Y, &ctx->e, &ctx->p);
 }
 
-int cry_dh_get_tok(cry_dh_ctx *dh, unsigned char *out, size_t out_len)
+int cry_dh_get_tok(cry_dh_ctx *ctx, unsigned char *out, size_t out_len)
 {
-    return cry_mpi_store_bin(&dh->Y, out, out_len, 0);
+    return cry_mpi_store_bin(&ctx->Y, out, out_len, 1);
 }
 
-int cry_dh_set_tok(cry_dh_ctx *dh, unsigned char *in, size_t in_len)
+int cry_dh_set_tok(cry_dh_ctx *ctx, unsigned char *in, size_t in_len)
 {
-    return cry_mpi_load_bin(&dh->Y, in, in_len);
+    return cry_mpi_load_bin(&ctx->Y, in, in_len);
 }
 
-int cry_dh_get_key(cry_dh_ctx *dh, unsigned char *out, size_t out_len)
+int cry_dh_get_sec(cry_dh_ctx *ctx, unsigned char *out, size_t out_len)
 {
-    return cry_mpi_store_bin(&dh->Z, out, out_len, 0);
+    return cry_mpi_store_bin(&ctx->Z, out, out_len, 1);
 }
