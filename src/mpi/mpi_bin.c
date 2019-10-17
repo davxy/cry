@@ -14,8 +14,10 @@ int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
     /* skip leading zeros */
     for (; size > 0 && *p == 0; p++, size--)
         NOP;
-    if (size == 0)
+    if (size == 0) {
+        cry_mpi_zero(x);
         return 0;
+    }
 
     i = ((size - 1) / CRY_MPI_DIGIT_BYTES) + 1; /* Number of required octets */
     m =  (size - 1) % CRY_MPI_DIGIT_BYTES;      /* Remainder */

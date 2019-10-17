@@ -7,6 +7,12 @@
 
 #define BIGBUF_SIZ  8192
 
+/* Constant seed to make "rand" results predictable */
+#define RAND_SEED_RAW  ((unsigned char *)"RANDSEED")
+#define RAND_SEED_SIZ  (sizeof(RAND_SEED_RAW) - 1)
+
+#define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
+
 extern int g_fails;
 extern unsigned char g_buf[BIGBUF_SIZ];
 
@@ -36,8 +42,6 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
 
 int raw_init(unsigned char *raw, size_t rawlen, const char *asc);
 
-
-#define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
 
 void run(const char *name, void (*test)(void),
@@ -73,24 +77,22 @@ void run(const char *name, void (*test)(void),
 #define ASSERT_NE_BUF(b1, b2, len) \
     ASSERT(memcmp(b1, b2, len) != 0)
 
-#define ASSERT_EQ_MPI(mpi, bin, siz) do { \
-    ASSERT_EQ(cry_mpi_count_bytes(mpi), siz); \
-    ASSERT_EQ(BUFSIZ >= siz, 1); \
-    cry_mpi_store_bin(mpi, (char *)g_buf, BUFSIZ, 0); \
-    ASSERT(memcmp((char *)g_buf, bin, siz) == 0); \
-    } while (0)
-
 #define ASSERT_OK(e) \
     ASSERT_EQ((e), 0)
 
+/******************************************************************************
+ * Print utilities
+ ******************************************************************************/
 
 #define PRINT_HEX(msg, buf, siz) do { \
     size_t __siz = siz; \
     unsigned char *__p = buf; \
-    if (msg) TRACE("%s: ", msg); \
-    while (__siz-- > 0) TRACE("%02x", *__p++); \
+    if (msg) \
+        TRACE("%s: ", msg); \
+    while (__siz-- > 0) \
+        TRACE("%02x", *__p++); \
     TRACE("\n"); \
-    } while(0)
+} while(0)
 
 #define PRINT_ASC(msg, buf, siz) \
     TRACE("%s: %.*s\n", msg, (int)(siz), buf)
@@ -98,10 +100,7 @@ void run(const char *name, void (*test)(void),
 #define PRINT_MPI(msg, mpi, rad) do { \
     TRACE("%s:\t", msg); \
     cry_mpi_print(mpi, rad); \
-    } while(0)
+} while(0)
 
-/* Constant seed to make "rand" results predictable */
-#define RAND_SEED_RAW  "RANDSEED"
-#define RAND_SEED_SIZ  (sizeof(RAND_SEED_RAW) - 1)
 
 #endif /* _TEST_H_ */

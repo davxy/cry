@@ -8,8 +8,8 @@
 #define H(x, y, z) ((x) ^ (y) ^ (z))
 #define I(x, y, z) ((y) ^ ((x) | (~z)))
 
-/* ROTATE_LEFT rotates x left n bits */
-#define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32-(n))))
+/* Rotates x left n bits */
+#define ROL(x, n) (((x) << (n)) | ((x) >> (32-(n))))
 
 /*
  * FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4
@@ -17,26 +17,26 @@
  */
 
 #define FF(a, b, c, d, x, s, ac) do { \
-    (a) += F ((b), (c), (d)) + (x) + (uint32_t)(ac); \
-    (a) = ROTATE_LEFT ((a), (s)); \
+    (a) += F((b), (c), (d)) + (x) + (uint32_t)(ac); \
+    (a) = ROL((a), (s)); \
     (a) += (b); \
     } while (0)
 
 #define GG(a, b, c, d, x, s, ac) do { \
-    (a) += G ((b), (c), (d)) + (x) + (uint32_t)(ac); \
-    (a) = ROTATE_LEFT ((a), (s)); \
+    (a) += G((b), (c), (d)) + (x) + (uint32_t)(ac); \
+    (a) = ROL((a), (s)); \
     (a) += (b); \
     } while (0)
 
 #define HH(a, b, c, d, x, s, ac) do { \
-    (a) += H ((b), (c), (d)) + (x) + (uint32_t)(ac); \
-    (a) = ROTATE_LEFT ((a), (s)); \
+    (a) += H((b), (c), (d)) + (x) + (uint32_t)(ac); \
+    (a) = ROL((a), (s)); \
     (a) += (b); \
     } while (0)
 
 #define II(a, b, c, d, x, s, ac) do { \
-    (a) += I ((b), (c), (d)) + (x) + (uint32_t)(ac); \
-    (a) = ROTATE_LEFT ((a), (s)); \
+    (a) += I((b), (c), (d)) + (x) + (uint32_t)(ac); \
+    (a) = ROL((a), (s)); \
     (a) += (b); \
     } while (0)
 

@@ -1,5 +1,6 @@
 /**
  * @file    aes.h
+ *
  * @brief   AES block cipher.
  */
 
@@ -21,6 +22,20 @@ typedef struct cry_aes_ctx cry_aes_ctx;
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * Context initialization.
+ *
+ * @param ctx   AES context.
+ */
+void cry_aes_init(cry_aes_ctx *ctx);
+
+/**
+ * Context cleanup.
+ *
+ * @param ctx   AES context.
+ */
+void cry_aes_clear(cry_aes_ctx *ctx);
 
 /**
  * Set the AES key.

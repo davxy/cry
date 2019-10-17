@@ -1,6 +1,8 @@
 #include <cry/aes.h>
 #include "misc.h"
 #include <stdint.h>
+#include <string.h>
+
 
 /* Keeps track of key schedule type in the "nr" context element */
 #define DECRYPT_STATE       0x80U
@@ -505,3 +507,14 @@ void cry_aes_decrypt(struct cry_aes_ctx *ctx, unsigned char *dst,
         src += CRY_AES_BLOCK_SIZE;
     }
 }
+
+void cry_aes_init(cry_aes_ctx *ctx)
+{
+    memset(ctx, 0, sizeof(*ctx));
+}
+
+void cry_aes_clear(cry_aes_ctx *ctx)
+{
+    cry_memset(ctx, 0, sizeof(*ctx));
+}
+

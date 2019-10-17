@@ -54,17 +54,17 @@ void cry_md5_update(struct cry_md5_ctx *ctx, const unsigned char *data,
 /**
  * Finalize the MD5 hash.
  *
- * @param ctx       MD5 context.
- * @param digest    Destination buffer where the 16 octets hash will be stored.
+ * @param ctx   MD5 context.
+ * @param out   Destination buffer where the 16 octets hash will be stored.
  */
-void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *digest);
+void cry_md5_digest(struct cry_md5_ctx *ctx, unsigned char *out);
 
 /**
  * MD5 computation of a given input.
  *
- * @out     MD5 result buffer (shall be at least 16 bytes).
- * @data    Input data buffer.
- * @len     Input data length.
+ * @param out   MD5 result buffer (shall be at least 16 bytes).
+ * @param data  Input data buffer.
+ * @param len   Input data length.
  */
 void cry_md5(unsigned char *out, const unsigned char *data, size_t len);
 

@@ -355,4 +355,5 @@ void cry_rsa_clear(cry_rsa_ctx *ctx)
     ctx->padding = 0;
     cry_mpi_clear_list(&ctx->d, &ctx->e, &ctx->n, &ctx->p, &ctx->q,
                        (cry_mpi *)NULL);
+    cry_memset(ctx, 0, sizeof(*ctx));
 }

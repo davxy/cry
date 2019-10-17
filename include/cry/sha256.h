@@ -46,7 +46,7 @@ void cry_sha256_clear(cry_sha256_ctx *ctx);
  * @param len   Length of the input data.
  */
 void cry_sha256_update(struct cry_sha256_ctx *ctx, const unsigned char *data,
-                       size_t size);
+                       size_t len);
 
 /**
  * Final digest.
@@ -54,14 +54,14 @@ void cry_sha256_update(struct cry_sha256_ctx *ctx, const unsigned char *data,
  * @param ctx   SHA-256 context
  * @param out   SHA-256 result
  */
-void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *digest);
+void cry_sha256_digest(struct cry_sha256_ctx *ctx, unsigned char *out);
 
 /**
  * SHA-256 computation of a given input.
  *
- * @out  SHA-256 result buffer (shall be at least 32 bytes).
- * @data Input data buffer.
- * @len  Input data length.
+ * @param out   SHA-256 result buffer (shall be at least 32 bytes).
+ * @param data  Input data buffer.
+ * @param len   Input data length.
  */
 void cry_sha256(unsigned char *out, const unsigned char *data, size_t len);
 

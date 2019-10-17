@@ -43,7 +43,7 @@ static void dispatch(int argc, char *argv[])
 
 void md5_test(void)
 {
-    TRACE("* MD5 RFC 1321 Vectors\n");
+    TRACE("* MD5 RFC 1321\n");
     func_test("md5_test.data", dispatch);
     TRACE("\n");
 }

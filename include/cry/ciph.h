@@ -37,16 +37,6 @@ typedef void (*cry_ciph_key_set_f)(void *ctx, const unsigned char *key,
                                    size_t size);
 
 /**
- * Initialization vector set.
- *
- * @param ctx   Cipher context.
- * @param iv    Initialization vector.
- * @param size  Initialization vector length.
- */
-typedef void (*cry_ciph_iv_set_f)(void *ctx, const unsigned char *iv,
-                                  size_t size);
-
-/**
  * Encrypt function pointer type.
  *
  * @param ctx   Cipher context.
@@ -81,7 +71,6 @@ struct cry_ciph_itf {
     cry_ciph_init_f init;
     cry_ciph_clear_f clear;
     cry_ciph_key_set_f key_set;
-    cry_ciph_iv_set_f iv_set;
     cry_ciph_encrypt_f encrypt;
     cry_ciph_decrypt_f decrypt;
 };

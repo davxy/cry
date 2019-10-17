@@ -1,8 +1,8 @@
 #include <cry/dsa.h>
-#include "mpi/mpi_pvt.h"
+#include "../misc.h"
 
-#define CHK(exp) do { if ((res = (exp)) != 0) \
-                          goto e; } while (0)
+
+#define CHK(exp) CRY_CHK(exp, e)
 
 /*
  * c = rand()
@@ -102,4 +102,17 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
     res = (cry_mpi_cmp_abs(&u1, &sign->r) == 0) ? 0 : -1;
 e:  cry_mpi_clear_list(&z, &w, &u1, &u2, (cry_mpi *)NULL);
     return res;
+}
+
+int cry_dsa_init(cry_dsa_ctx *ctx)
+{
+    return cry_mpi_init_list(&ctx->p, &ctx->q, &ctx->g, &ctx->pvt, &ctx->pvt,
+                             (cry_mpi *)NULL);
+}
+
+void cry_dsa_clear(cry_dsa_ctx *ctx)
+{
+    cry_mpi_clear_list(&ctx->p, &ctx->q, &ctx->g, &ctx->pvt, &ctx->pvt,
+                       (cry_mpi *)NULL);
+    cry_memset(ctx, 0, sizeof(*ctx));
 }

@@ -32,12 +32,16 @@ sonar:
     script:
         - make sonar CONFIG=config/config-ci.mk
 
-# Deploy
-deploy:
+# Publish API Documentation
+pages:
     stage: deploy
     dependencies:
         - test
-    only:
-        - tags
     script:
         - make doc
+        - mv doc/doxy/html/ public/
+    artifacts:
+        paths:
+            - public
+    only:
+        - tags

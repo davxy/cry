@@ -1,5 +1,6 @@
 /**
  * @file    des.h
+ *
  * @brief   DES block cipher.
  */
 
@@ -22,6 +23,20 @@ typedef struct cry_des_ctx cry_des_ctx;
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * Context initialization.
+ *
+ * @param ctx   DES context.
+ */
+void cry_des_init(cry_des_ctx *ctx);
+
+/**
+ * Context cleanup.
+ *
+ * @param ctx   DES context.
+ */
+void cry_des_clear(cry_des_ctx *ctx);
 
 /**
  * Set the DES key.
