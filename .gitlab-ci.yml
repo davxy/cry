@@ -10,6 +10,8 @@ pages:
         - make doc
         - mv doc/doxy/html/ public/
         - pwd
+        - echo ~
+        - scp -r public/ tsm@10.0.0.37:doc/TSC/
     artifacts:
         paths:
             - public
