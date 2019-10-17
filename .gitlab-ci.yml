@@ -11,7 +11,7 @@ pages:
         - mv doc/doxy/html/ public/
         - pwd
         - echo ~
-        - ls .ssh
+        - ls -al
         - scp -r public/ tsm@10.0.0.37:doc/TSC/
     artifacts:
         paths:
