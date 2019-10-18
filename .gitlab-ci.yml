@@ -28,7 +28,7 @@ pages:
         - test
     script:
         - make doc
-        - mv doc/doxy/html/ public/
+        - mv doc/doxy/html/* public/
     artifacts:
         paths:
             - public
