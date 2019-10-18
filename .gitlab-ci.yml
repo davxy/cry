@@ -7,12 +7,10 @@ stages:
 pages:
     stage: deploy
     script:
-        - ln -s /docs public
         - make doc
-        - mv doc/doxy/html/ public/
-        - pwd
-        - ls -al
-        - ls public/
+        - mv doc/doxy/html/* public/
     artifacts:
         paths:
             - public
+    before_script:
+        - ln -s /docs public
