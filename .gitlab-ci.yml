@@ -10,7 +10,6 @@ pages:
         - make doc
         - mv doc/doxy/html/ public/
         - pwd
-        - echo ~
         - ls -al
         - ls public/
     artifacts:
