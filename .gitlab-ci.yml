@@ -1,7 +1,36 @@
 image: davxy/sonar-builder
 
 stages:
-    - deploy
+    - build
+    - test
+    - sonar
+    - pages
+
+# Build
+build:
+    stage: build
+    script:
+        - make
+
+# Test
+test:
+    stage: test
+    dependencies:
+        - build
+    script:
+        - make test CONFIG=config/config-ci.mk
+        - (cd test; valgrind --leak-check=full --error-exitcode=2 ./test)
+        - gcovr --exclude test -r . | grep TOTAL
+
+# Sonar
+sonar:
+    stage: sonar
+    dependencies:
+        - test
+    only:
+        - tsc
+    script:
+        - make sonar CONFIG=config/config-ci.mk
 
 # Publish API Documentation
 pages:
@@ -12,6 +41,8 @@ pages:
     artifacts:
         paths:
             - public
+    only:
+        tags
     before_script:
         - ln -s /docs public
         - rm -rf public/*
