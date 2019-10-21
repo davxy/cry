@@ -33,7 +33,7 @@ e:  cry_mpi_clear(&r);
 }
 
 int cry_elgamal_sign2(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
-                     const unsigned char *in, size_t len)
+                      const unsigned char *in, size_t len)
 {
     int res;
     cry_mpi one, k, z, t;
@@ -73,7 +73,7 @@ e:  cry_mpi_clear_list(&k, &z, &t, (cry_mpi *)NULL);
 }
 
 int cry_elgamal_verify2(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
-                       const unsigned char *in, size_t len)
+                        const unsigned char *in, size_t len)
 {
     int res;
     cry_mpi r, z;
@@ -101,7 +101,7 @@ e:  cry_mpi_clear_list(&r, &z, (cry_mpi *)NULL);
 }
 
 int cry_elgamal_sign(cry_elgamal_ctx *ctx, unsigned char *sign,
-                      const unsigned char *in, size_t len)
+                     const unsigned char *in, size_t len)
 {
     int res;
     cry_elgamal_sig s;
@@ -121,7 +121,7 @@ int cry_elgamal_sign(cry_elgamal_ctx *ctx, unsigned char *sign,
 }
 
 int cry_elgamal_verify(cry_elgamal_ctx *ctx, const unsigned char *sign,
-                        const unsigned char *in, size_t len)
+                       const unsigned char *in, size_t len)
 {
     int res;
     cry_elgamal_sig s;
@@ -151,4 +151,3 @@ void cry_elgamal_clear(cry_elgamal_ctx *ctx)
     cry_mpi_clear_list(&ctx->p, &ctx->d, &ctx->g, &ctx->y, (cry_mpi *)NULL);
     cry_memset(ctx, 0, sizeof(*ctx));
 }
-

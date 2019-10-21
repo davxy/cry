@@ -43,7 +43,6 @@ void asc_to_raw(const char *asc, size_t size, unsigned char *raw);
 int raw_init(unsigned char *raw, size_t rawlen, const char *asc);
 
 
-
 void run(const char *name, void (*test)(void),
          void (*setup)(void), void (*teardown)(void));
 
@@ -53,6 +52,24 @@ void run(const char *name, void (*test)(void),
 #define TRACE(...) do { \
     fprintf(stdout, __VA_ARGS__); \
     fflush(stdout); \
+} while(0)
+
+#define PRINT_HEX(msg, buf, siz) do { \
+    size_t __siz = siz; \
+    unsigned char *__p = buf; \
+    if (msg) \
+        TRACE("%s: ", msg); \
+    while (__siz-- > 0) \
+        TRACE("%02x", *__p++); \
+    TRACE("\n"); \
+} while(0)
+
+#define PRINT_ASC(msg, buf, siz) \
+    TRACE("%s: %.*s\n", msg, (int)(siz), buf)
+
+#define PRINT_MPI(msg, mpi, rad) do { \
+    TRACE("%s:\t", msg); \
+    cry_mpi_print(mpi, rad); \
 } while(0)
 
 
@@ -79,28 +96,6 @@ void run(const char *name, void (*test)(void),
 
 #define ASSERT_OK(e) \
     ASSERT_EQ((e), 0)
-
-/******************************************************************************
- * Print utilities
- ******************************************************************************/
-
-#define PRINT_HEX(msg, buf, siz) do { \
-    size_t __siz = siz; \
-    unsigned char *__p = buf; \
-    if (msg) \
-        TRACE("%s: ", msg); \
-    while (__siz-- > 0) \
-        TRACE("%02x", *__p++); \
-    TRACE("\n"); \
-} while(0)
-
-#define PRINT_ASC(msg, buf, siz) \
-    TRACE("%s: %.*s\n", msg, (int)(siz), buf)
-
-#define PRINT_MPI(msg, mpi, rad) do { \
-    TRACE("%s:\t", msg); \
-    cry_mpi_print(mpi, rad); \
-} while(0)
 
 
 #endif /* _TEST_H_ */
