@@ -29,6 +29,7 @@ Added
 
 * ARC4 stream cipher
 * Elgamal digital signature
+* SHA-512 and SHA-384
 
 Fixed
 
