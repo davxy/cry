@@ -176,6 +176,7 @@ static int encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 {
     int res;
     size_t mod_siz, block_siz;
+    void *newptr;
 
     *out = NULL;
     *outlen = 0;
@@ -186,11 +187,12 @@ static int encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
         if (inlen < block_siz)
             block_siz = inlen;
 
-        *out = realloc(*out, *outlen + mod_siz);
-        if (*out == NULL) {
+        newptr = realloc(*out, *outlen + mod_siz);
+        if (newptr == NULL) {
             res = -1;
             break;
         }
+        *out = newptr;
 
         res = encrypt_block(ctx, *out + *outlen, in, block_siz, sign);
         if (res != 0)
@@ -216,6 +218,7 @@ static int decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 {
     int res;
     size_t mod_siz;
+    void *newptr;
 
     *out = NULL;
     *outlen = 0;
@@ -228,7 +231,12 @@ static int decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
             break;
         }
 
-        *out = realloc(*out, *outlen + mod_siz);
+        newptr = realloc(*out, *outlen + mod_siz);
+        if (newptr == NULL) {
+            res = -1;
+            break;
+        }
+        *out = newptr;
 
         res = decrypt_block(ctx, *out, in, mod_siz, sign);
         if (res < 0)
