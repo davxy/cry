@@ -19,6 +19,7 @@
 #define CRY_ECP_GRP_BP256R1     8
 #define CRY_ECP_GRP_BP384R1     9
 #define CRY_ECP_GRP_BP512R1     10
+
 /**
  * EC point
  */

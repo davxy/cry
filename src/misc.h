@@ -11,6 +11,8 @@
 /** Nop to prevent some warnings */
 #define NOP do {} while (0)
 
+#define CRY_UNUSED(v) (void)(v)
+
 /** Statically get array number of elements */
 #define CRY_ARRAY_LEN(ar) (sizeof(ar)/sizeof((ar)[0]))
 

@@ -9,9 +9,9 @@
 #include <cry/mpi.h>
 
 struct cry_dsa_ctx {
-    cry_mpi g;
-    cry_mpi p;
-    cry_mpi q;
+    cry_mpi p;    /**< Prime modulus  */
+    cry_mpi q;    /**< Prime modulus subgroup (prime divisor of p-1) */
+    cry_mpi g;    /**< Subgroup generator */
     cry_mpi pvt;  /**< Private signing key */
     cry_mpi pub;  /**< Public verification key */
 };
@@ -19,8 +19,8 @@ struct cry_dsa_ctx {
 typedef struct cry_dsa_ctx cry_dsa_ctx;
 
 struct cry_dsa_signature {
-    cry_mpi r;
-    cry_mpi s;
+    cry_mpi r;  /**< Signature first component */
+    cry_mpi s;  /**< Signature second component */
 };
 
 typedef struct cry_dsa_signature cry_dsa_signature;
@@ -38,6 +38,8 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
 
 int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
                    const unsigned char *in, size_t len);
+
+int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l);
 
 #ifdef __cplusplus
 }
