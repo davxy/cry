@@ -13,8 +13,6 @@ static const unsigned char sha[] = {
 
 static void keygen(unsigned int l)
 {
-    ASSERT_OK(cry_mpi_init_list(&sig.r, &sig.s, NULL));
-
     ASSERT_OK(cry_dsa_keygen(&dsa, l));
 
     ASSERT_OK(cry_dsa_sign(&dsa, &sig, sha, sizeof(sha)));

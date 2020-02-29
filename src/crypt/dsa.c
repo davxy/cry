@@ -105,13 +105,13 @@ e:  cry_mpi_clear_list(&z, &w, &u1, &u2, (cry_mpi *)NULL);
 
 int cry_dsa_init(cry_dsa_ctx *ctx)
 {
-    return cry_mpi_init_list(&ctx->p, &ctx->q, &ctx->g, &ctx->pvt, &ctx->pvt,
+    return cry_mpi_init_list(&ctx->p, &ctx->q, &ctx->g, &ctx->pub, &ctx->pvt,
                              (cry_mpi *)NULL);
 }
 
 void cry_dsa_clear(cry_dsa_ctx *ctx)
 {
-    cry_mpi_clear_list(&ctx->p, &ctx->q, &ctx->g, &ctx->pvt, &ctx->pvt,
+    cry_mpi_clear_list(&ctx->p, &ctx->q, &ctx->g, &ctx->pub, &ctx->pvt,
                        (cry_mpi *)NULL);
     cry_memset(ctx, 0, sizeof(*ctx));
 }
