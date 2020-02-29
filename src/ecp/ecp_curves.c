@@ -621,21 +621,18 @@ static void ecp_grp_load(cry_ecp_grp *grp,
                          const cry_mpi_digit *gy, size_t gylen,
                          const cry_mpi_digit *n,  size_t nlen)
 {
+    static const cry_mpi_digit one = 0x01;
     static const cry_mpi_digit three = 0x03;
 
     ecp_mpi_load(&grp->p, p, plen);
-    if (a != NULL) {
+    if (a != NULL)
         ecp_mpi_load(&grp->a, a, alen);
-    } else {
-        grp->a.data  = (cry_mpi_digit *)&three;
-        grp->a.alloc = 1;
-        grp->a.used  = 1;
-        grp->a.sign  = 1;
-    }
+    else
+        ecp_mpi_load(&grp->a, &three, sizeof(three));
     ecp_mpi_load(&grp->b, b, blen);
     ecp_mpi_load(&grp->g.x, gx, gxlen);
     ecp_mpi_load(&grp->g.y, gy, gylen);
-    (void)cry_mpi_init_size(&grp->g.z, 0);
+    ecp_mpi_load(&grp->g.z, &one, sizeof(one));
     ecp_mpi_load(&grp->n, n, nlen);
 }
 
