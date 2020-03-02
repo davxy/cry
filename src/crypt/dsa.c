@@ -40,18 +40,17 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_sig *sig,
     if ((res = cry_mpi_init_list(&k, &z, (cry_mpi *)NULL)) != 0)
         return res;
 
+    /* z = input buffer is eventually truncated to the size of q */
+    if (ctx->q.used * CRY_MPI_DIGIT_BYTES < len)
+        len = ctx->q.used * CRY_MPI_DIGIT_BYTES;
+    CHK(cry_mpi_load_bin(&z, in, len));
+
     /* k = c mod (q-1) + 1 */
     CHK(secret_gen(&k, &ctx->q));
 
     /* r = (g^k mod p) mod q */
     CHK(cry_mpi_mod_exp(&sig->r, &ctx->g, &k, &ctx->p));
     CHK(cry_mpi_mod(&sig->r, &sig->r, &ctx->q));
-
-    /* z = buf truncated to the size of q */
-    /* TODO: double check... the book do strange stuff here */
-    if (ctx->q.used * CRY_MPI_DIGIT_BYTES < len)
-        len = ctx->q.used * CRY_MPI_DIGIT_BYTES;
-    CHK(cry_mpi_load_bin(&z, in, len));
 
     /* s = (inv(k) * (z + d*r)) mod q */
     CHK(cry_mpi_inv(&k, &k, &ctx->q));
@@ -73,14 +72,14 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_sig *sig,
     if ((res = cry_mpi_init_list(&z, &w, &u1, &u2, (cry_mpi *)NULL)) != 0)
         return res;
 
-    /* w = inv(s) mod q */
-    CHK(cry_mpi_copy(&w, &sig->s));
-    CHK(cry_mpi_inv(&w, &w, &ctx->q));
-
-    /* z = buf truncated to the size of q */
+    /* z = input buffer is eventually truncated to the size of q */
     if (ctx->q.used * CRY_MPI_DIGIT_BYTES < len)
         len = ctx->q.used * CRY_MPI_DIGIT_BYTES;
     CHK(cry_mpi_load_bin(&z, in, len));
+
+    /* w = inv(s) mod q */
+    CHK(cry_mpi_copy(&w, &sig->s));
+    CHK(cry_mpi_inv(&w, &w, &ctx->q));
 
     /* u1 = (z * w) mod q */
     CHK(cry_mpi_mul(&z, &z, &w));
@@ -119,6 +118,15 @@ void cry_dsa_clear(cry_dsa_ctx *ctx)
 #define ITER_MAX_OUT    1024
 #define ITER_MAX_IN     4096
 
+/*
+ * Assume l=8
+ * 1. Generate a random prime q such that 2^150 < q < 2^160
+ * 2. Generate a random integer M with 2^1023 < M < 2^1024
+ * 3. Mr = M (mod 2q)
+ * 4. p-1 = M-Mr (mod 2q)  (note that M-Mr is a multiple of 2q, thus is even)
+ * 5. If p is prime return (p,q) else repeat from 2.
+ * The entire algorithm is repeated at most ITER_MAX_OUT times.
+ */
 int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l)
 {
     int res = -1;
