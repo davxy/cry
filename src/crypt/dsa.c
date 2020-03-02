@@ -16,7 +16,7 @@ static int secret_gen(cry_mpi *k, const cry_mpi *q)
 
     one.sign = 0;
     one.used = 1;
-    one.alloc = 1;
+    one.alloc = 0;
     one.data = &dig;
 
     if ((res = cry_mpi_init(&t)) != 0)
@@ -31,7 +31,7 @@ e:  cry_mpi_clear(&t);
     return res;
 }
 
-int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
+int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_sig *sig,
                  const unsigned char *in, size_t len)
 {
     int res;
@@ -44,8 +44,8 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
     CHK(secret_gen(&k, &ctx->q));
 
     /* r = (g^k mod p) mod q */
-    CHK(cry_mpi_mod_exp(&sign->r, &ctx->g, &k, &ctx->p));
-    CHK(cry_mpi_mod(&sign->r, &sign->r, &ctx->q));
+    CHK(cry_mpi_mod_exp(&sig->r, &ctx->g, &k, &ctx->p));
+    CHK(cry_mpi_mod(&sig->r, &sig->r, &ctx->q));
 
     /* z = buf truncated to the size of q */
     /* TODO: double check... the book do strange stuff here */
@@ -55,16 +55,16 @@ int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
 
     /* s = (inv(k) * (z + d*r)) mod q */
     CHK(cry_mpi_inv(&k, &k, &ctx->q));
-    CHK(cry_mpi_mul(&sign->s, &ctx->pvt, &sign->r));
-    CHK(cry_mpi_add(&sign->s, &sign->s, &z));
-    CHK(cry_mpi_mul(&sign->s, &sign->s, &k));
-    CHK(cry_mpi_mod(&sign->s, &sign->s, &ctx->q));
+    CHK(cry_mpi_mul(&sig->s, &ctx->pvt, &sig->r));
+    CHK(cry_mpi_add(&sig->s, &sig->s, &z));
+    CHK(cry_mpi_mul(&sig->s, &sig->s, &k));
+    CHK(cry_mpi_mod(&sig->s, &sig->s, &ctx->q));
 
 e:  cry_mpi_clear_list(&k, &z, (cry_mpi *)NULL);
     return res;
 }
 
-int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
+int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_sig *sig,
                    const unsigned char *in, size_t len)
 {
     int res;
@@ -74,7 +74,7 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
         return res;
 
     /* w = inv(s) mod q */
-    CHK(cry_mpi_copy(&w, &sign->s));
+    CHK(cry_mpi_copy(&w, &sig->s));
     CHK(cry_mpi_inv(&w, &w, &ctx->q));
 
     /* z = buf truncated to the size of q */
@@ -87,7 +87,7 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
     CHK(cry_mpi_mod(&z, &z, &ctx->q));
 
     /* u2 = (r * w) mod q */
-    CHK(cry_mpi_mul(&w, &sign->r, &w));
+    CHK(cry_mpi_mul(&w, &sig->r, &w));
     CHK(cry_mpi_mod(&w, &w, &ctx->q));
 
     /* v = (((g^u1) mod p * (y^u2) mod p) mod p) mod q */
@@ -98,7 +98,7 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
     CHK(cry_mpi_mod(&u1, &u1, &ctx->q));
 
     /* Check to see if v and sig match */
-    res = (cry_mpi_cmp_abs(&u1, &sign->r) == 0) ? 0 : -1;
+    res = (cry_mpi_cmp_abs(&u1, &sig->r) == 0) ? 0 : -1;
 e:  cry_mpi_clear_list(&z, &w, &u1, &u2, (cry_mpi *)NULL);
     return res;
 }

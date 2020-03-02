@@ -18,12 +18,12 @@ struct cry_dsa_ctx {
 
 typedef struct cry_dsa_ctx cry_dsa_ctx;
 
-struct cry_dsa_signature {
+struct cry_dsa_sig {
     cry_mpi r;  /**< Signature first component */
     cry_mpi s;  /**< Signature second component */
 };
 
-typedef struct cry_dsa_signature cry_dsa_signature;
+typedef struct cry_dsa_sig cry_dsa_sig;
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,10 +33,10 @@ int cry_dsa_init(cry_dsa_ctx *ctx);
 
 void cry_dsa_clear(cry_dsa_ctx *ctx);
 
-int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_signature *sign,
+int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_sig *sig,
                  const unsigned char *in, size_t len);
 
-int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_signature *sign,
+int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_sig *sig,
                    const unsigned char *in, size_t len);
 
 int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l);

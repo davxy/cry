@@ -2,7 +2,7 @@
 #include <cry/dsa.h>
 
 static cry_dsa_ctx dsa;
-static cry_dsa_signature sig;
+static cry_dsa_sig sig;
 
 static const unsigned char sha[] = {
     0x97, 0x7f, 0x2b, 0x13, 0xa2, 0xc3, 0x46, 0x38,
