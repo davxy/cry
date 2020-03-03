@@ -80,7 +80,7 @@ static const unsigned char G[] = {
     0x99, 0xd8, 0xa8, 0x19, 0x96, 0xf7, 0x7f, 0x99
 };
 
-void sign_verify(void)
+static void sign_verify(void)
 {
     ASSERT_OK(cry_mpi_load_bin(&dsa.g, G, sizeof(G)));
     ASSERT_OK(cry_mpi_load_bin(&dsa.p, P, sizeof(P)));

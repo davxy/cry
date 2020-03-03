@@ -5,8 +5,27 @@
 #define CHK(exp) CRY_CHK(exp, e)
 
 /*
- * c = rand()
- * k = (c mod (q-1)) + 1
+ * Generate a non zero random secret k less than q.
+ * (i.e. generate a random less than q-1 then add 1).
+ *
+ * k = (rand() mod (q-1)) + 1
+ *
+ * Is extremely important to don't reuse the same ephemeral key k.
+ *
+ * If the ephemeral key k is reused then DSA signature is subject
+ * to a trivial attack:
+ *
+ * If two signatures (r1,s1) and (r2,s2) are generated using the same
+ * ephemeral key k, then r = r1 = r2.
+ * (An attacker can easily detect the situation)
+ *
+ * The private key d can be easily found:
+ *
+ * s1 = (M1 - d*r) * k^-1 (mod q)
+ * s2 = (M2 - d*r) * k^-1 (mod q)
+ * s1 - s2 = (M1 - M2) * k^-1 (mod q)
+ * k = (M1 - M2) / (s1 - s2) (mod q)
+ * d = (M1 - k*s1) / r (mod q)
  */
 static int secret_gen(cry_mpi *k, const cry_mpi *q)
 {
@@ -137,7 +156,9 @@ int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l)
     CHK(cry_mpi_set_int(&one, 1));
 
     for (i = 0; i < ITER_MAX_OUT; i++) {
+        /* Generate a 160-bit prime q */
         CHK(cry_mpi_prime(&ctx->q, 160, NULL));
+        /* Generate a prime p betweeb 512 and 1024 bits such that q | (p-1) */
         for (j = 0; j < ITER_MAX_IN; j++) {
             CHK(cry_mpi_rand(&ctx->p, 512 + l*64));
             CHK(cry_mpi_add(&r, &ctx->q, &ctx->q));
@@ -148,20 +169,22 @@ int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l)
                 break;
         }
         if (j == ITER_MAX_IN)
-            continue;
-
+            continue; /* Retry */
+        /* Select a generator g of the unique cyclic group of order q in Zp */
         CHK(cry_mpi_sub(&p1, &ctx->p, &one));
         CHK(cry_mpi_div(&q, NULL, &p1, &ctx->q));
-        CHK(cry_mpi_sub(&p1, &ctx->p, &one));
+        CHK(cry_mpi_sub(&p1, &ctx->p, &one)); /* Required? */
         for (j = 0; j < ITER_MAX_IN; j++) {
+            /* Get a random in Zp\{0} */
             CHK(cry_mpi_rand_range(&r, &p1));
+            CHK(cry_mpi_add(&r, &r, &one));
             CHK(cry_mpi_mod_exp(&ctx->g, &r, &q, &ctx->p));
             if (cry_mpi_cmp_abs(&ctx->g, &one) > 0)
                 break;
         }
         if (j == ITER_MAX_IN)
-            continue;
-
+            continue; /* Retry */
+        /* Finally compute public and public keys */
         cry_mpi_rand_range(&ctx->pvt, &q);
         cry_mpi_mod_exp(&ctx->pub, &ctx->g, &ctx->pvt, &ctx->p);
         res = 0;
