@@ -20,7 +20,6 @@ static const unsigned char sha[] = {
     0x92, 0x48, 0xcd, 0xc1,
 };
 
-
 static void sign_verify(void)
 {
     /* Load a well known curve params */
