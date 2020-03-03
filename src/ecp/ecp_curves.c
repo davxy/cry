@@ -625,10 +625,12 @@ static void ecp_grp_load(cry_ecp_grp *grp,
     static const cry_mpi_digit three = 0x03;
 
     ecp_mpi_load(&grp->p, p, plen);
-    if (a != NULL)
+    if (a != NULL) {
         ecp_mpi_load(&grp->a, a, alen);
-    else
+    } else {
         ecp_mpi_load(&grp->a, &three, sizeof(three));
+        grp->a.sign = 1;
+    }
     ecp_mpi_load(&grp->b, b, blen);
     ecp_mpi_load(&grp->g.x, gx, gxlen);
     ecp_mpi_load(&grp->g.y, gy, gylen);
