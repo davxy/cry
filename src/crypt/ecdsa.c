@@ -21,8 +21,7 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
     CHK1(cry_mpi_load_bin(&z, in, len));
 
     /* This should be a random number between 0 and n-1 */
-#if 1
-#if 1
+#if 0
     unsigned char K[] = {
         0x9E, 0x56, 0xF5, 0x09, 0x19, 0x67, 0x84, 0xD9, 0x63, 0xD1, 0xC0,
         0xA4, 0x01, 0x51, 0x0E, 0xE7, 0xAD, 0xA3, 0xDC, 0xC5, 0xDE, 0xE0,
@@ -30,16 +29,12 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
     };
     CHK1(cry_mpi_load_bin(&k, K, sizeof(K)));
 #else
-    CHK1(cry_mpi_set_int(&k, 10));
-#endif
-#else
     CHK1(cry_mpi_rand_range(&k, &ctx->grp.n));
 #endif
 
     CHK1(cry_ecp_mul(&X, &ctx->grp.g, &k, &ctx->grp));
 
     /* r = x mod n */
-    //CHK1(cry_mpi_mod(&sig->r, &X.x, &ctx->grp.n)); // modulo inutile
     cry_mpi_swap(&sig->r, &X.x);
 
     /* s = (inv(k) * (z + r*d)) mod n */
