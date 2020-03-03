@@ -1,8 +1,8 @@
 #include <cry/ecdsa.h>
 #include "mpi/mpi_pvt.h"
 
-#define CHK0(exp) CRY_CHK(exp, e0)
-#define CHK1(exp) CRY_CHK(exp, e1)
+#define CHK0(exp) CRY_CHK(res = (exp), e0)
+#define CHK1(exp) CRY_CHK(res = (exp), e1)
 
 int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
                    const unsigned char *in, size_t len)
@@ -96,20 +96,25 @@ int cry_ecdsa_init(cry_ecdsa_ctx *ctx, int grp_id)
 {
     int res;
 
-    res = cry_mpi_init_list(&ctx->d, &ctx->q, (cry_mpi *)NULL);
-    if (res == 0) {
-        res = cry_ecp_grp_init(&ctx->grp);
-        if (grp_id != -1)
-            res = cry_ecp_grp_load(&ctx->grp, grp_id);
-        if (res != 0)
-            cry_mpi_clear_list(&ctx->d, &ctx->q, (cry_mpi *)NULL);
-    }
+    res = cry_mpi_init(&ctx->d);
+    if (res != 0)
+        return res;
+    CHK0(cry_ecp_init(&ctx->q));
+    if (grp_id != -1)
+        CHK1(cry_ecp_grp_load(&ctx->grp, grp_id));
+    else
+        CHK1(cry_ecp_grp_init(&ctx->grp));
+    return 0;
+
+e1: cry_ecp_clear(&ctx->q);
+e0: cry_mpi_clear(&ctx->d);
     return res;
 }
 
 void cry_ecdsa_clear(cry_ecdsa_ctx *ctx)
 {
-    cry_mpi_clear_list(&ctx->d, &ctx->q, (cry_mpi *)NULL);
+    cry_mpi_clear(&ctx->d);
+    cry_ecp_clear(&ctx->q);
     cry_ecp_grp_clear(&ctx->grp);
     cry_memset(ctx, 0, sizeof(*ctx));
 }

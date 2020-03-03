@@ -24,6 +24,7 @@ static const unsigned char sha[] = {
 static void sign_verify(void)
 {
     /* Load a well known curve params */
+    cry_ecp_grp_clear(&ecdsa.grp);
     ASSERT_OK(cry_ecp_grp_load(&ecdsa.grp, CRY_ECP_GRP_SECP224R1));
 
 #if 0
@@ -92,7 +93,7 @@ static void teardown(void)
 
 void ecdsa_test(void)
 {
-    TRACE("* ECDSA (TODO)\n");
+    TRACE("* ECDSA\n");
     MYRUN("Sign and verify (trivially small)", sign_verify_small);
     MYRUN("Sign and verify", sign_verify);
     TRACE("\n");
