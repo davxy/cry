@@ -32,7 +32,7 @@ struct cry_ecp {
 typedef struct cry_ecp cry_ecp;
 
 /*
- * EC point group equation parameters
+ * EC group equation parameters.
  * y^2 = (x^3 + ax + b) % p
  */
 struct cry_ecp_grp {
@@ -89,9 +89,9 @@ void cry_ecp_clear_list(cry_ecp *p, ... /* (cry_ecp *)NULL */);
     cry_mpi_swap(&(a)->z, &(b)->z); \
 } while (0)
 
-int cry_ecp_grp_init(cry_ecp_grp *ec);
+int cry_ecp_grp_init(cry_ecp_grp *grp);
 
-void cry_ecp_grp_clear(cry_ecp_grp *ec);
+void cry_ecp_grp_clear(cry_ecp_grp *grp);
 
 int cry_ecp_grp_load(cry_ecp_grp *grp, int grp_id);
 
