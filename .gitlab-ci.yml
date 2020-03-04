@@ -10,8 +10,6 @@ build:
     stage: build
     script:
         - make
-    tags:
-        - gcc
 
 # Test
 test:
@@ -22,8 +20,6 @@ test:
         - make test CONFIG=config/config-ci.mk
         - (cd test; valgrind --leak-check=full --error-exitcode=2 ./test)
         - gcovr --exclude test -r . | grep TOTAL
-    tags:
-        - gcc
 
 # Publish API Documentation
 pages:
