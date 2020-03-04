@@ -26,12 +26,20 @@ static void keygen_512(void)
 
 static void keygen_768(void)
 {
+#ifndef SKIP_SLOW
     keygen(4);
+#else
+    TRACE2("      (skip)\n");
+#endif
 }
 
 static void keygen_1024(void)
 {
+#ifndef SKIP_SLOW
     keygen(8);
+#else
+    TRACE2("      (skip)\n");
+#endif
 }
 
 static const unsigned char pvt[] = {

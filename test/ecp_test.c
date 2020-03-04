@@ -242,66 +242,69 @@ static void mul_test2(int argc, char *argv[])
     ASSERT(cry_mpi_cmp(&Q.z, &Q1.z) == 0);
 }
 
-
-#define SECP192R1_PX \
-    "188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012"
-#define SECP192R1_PY \
-    "07192B95FFC8DA78631011ED6B24CDD573F977A11E794811"
-
 static void secp192r1_set_start_point(void)
 {
-    cry_mpi_load_str(&P.x, 16, SECP192R1_PX);
-    cry_mpi_load_str(&P.y, 16, SECP192R1_PY);
+    const char *x = "188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012";
+    const char *y = "07192B95FFC8DA78631011ED6B24CDD573F977A11E794811";
+
+    cry_mpi_load_str(&P.x, 16, x);
+    cry_mpi_load_str(&P.y, 16, y);
     cry_mpi_set_int(&P.z, 1);
 }
 
-#define SECP224R1_PX \
-    "B70E0CBD6BB4BF7F321390B94A03C1D356C21122343280D6115C1D21"
-#define SECP224R1_PY \
-    "BD376388B5F723FB4C22DFE6CD4375A05A07476444D5819985007E34"
-
+#ifndef SKIP_SLOW
 static void secp224r1_set_start_point(void)
 {
-    cry_mpi_load_str(&P.x, 16, SECP224R1_PX);
-    cry_mpi_load_str(&P.y, 16, SECP224R1_PY);
+    const char *x = "B70E0CBD6BB4BF7F321390B94A03C1D356C21122343280D6115C1D21";
+    const char *y = "BD376388B5F723FB4C22DFE6CD4375A05A07476444D5819985007E34";
+
+    cry_mpi_load_str(&P.x, 16, x);
+    cry_mpi_load_str(&P.y, 16, y);
     cry_mpi_set_int(&P.z, 1);
 }
+#endif
 
-#define SECP256R1_PX \
-    "6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296"
-#define SECP256R1_PY \
-    "4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5"
-
+#ifndef SKIP_SLOW
 static void secp256r1_set_start_point(void)
 {
-    cry_mpi_load_str(&P.x, 16, SECP256R1_PX);
-    cry_mpi_load_str(&P.y, 16, SECP256R1_PY);
+    const char *x =
+            "6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296";
+    const char *y =
+            "4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5";
+
+    cry_mpi_load_str(&P.x, 16, x);
+    cry_mpi_load_str(&P.y, 16, y);
     cry_mpi_set_int(&P.z, 1);
 }
+#endif
 
-#define SECP384R1_PX \
-    "AA87CA22BE8B05378EB1C71EF320AD746E1D3B628BA79B9859F741E082542A385502F25DBF55296C3A545E3872760AB7"
-#define SECP384R1_PY \
-    "3617DE4A96262C6F5D9E98BF9292DC29F8F41DBD289A147CE9DA3113B5F0B8C00A60B1CE1D7E819D7A431D7C90EA0E5F"
-
+#ifndef SKIP_SLOW
 static void secp384r1_set_start_point(void)
 {
-    cry_mpi_load_str(&P.x, 16, SECP384R1_PX);
-    cry_mpi_load_str(&P.y, 16, SECP384R1_PY);
+    const char *x =
+            "AA87CA22BE8B05378EB1C71EF320AD746E1D3B628BA79B9859F741E082542A385502F25DBF55296C3A545E3872760AB7";
+    const char *y =
+            "3617DE4A96262C6F5D9E98BF9292DC29F8F41DBD289A147CE9DA3113B5F0B8C00A60B1CE1D7E819D7A431D7C90EA0E5F";
+
+    cry_mpi_load_str(&P.x, 16, x);
+    cry_mpi_load_str(&P.y, 16, y);
     cry_mpi_set_int(&P.z, 1);
 }
+#endif
 
-#define SECP521R1_PX \
-    "00C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66"
-#define SECP521R1_PY \
-    "011839296A789A3BC0045C8A5FB42C7D1BD998F54449579B446817AFBD17273E662C97EE72995EF42640C550B9013FAD0761353C7086A272C24088BE94769FD16650"
-
+#ifndef SKIP_SLOW
 static void secp521r1_set_start_point(void)
 {
-    cry_mpi_load_str(&P.x, 16, SECP521R1_PX);
-    cry_mpi_load_str(&P.y, 16, SECP521R1_PY);
+    const char *x =
+            "00C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66";
+    const char *y =
+            "011839296A789A3BC0045C8A5FB42C7D1BD998F54449579B446817AFBD17273E662C97EE72995EF42640C550B9013FAD0761353C7086A272C24088BE94769FD16650";
+
+    cry_mpi_load_str(&P.x, 16, x);
+    cry_mpi_load_str(&P.y, 16, y);
     cry_mpi_set_int(&P.z, 1);
 }
+#endif
 
 static void setup(void)
 {
@@ -329,17 +332,33 @@ static void dispatch(int argc, char *argv[])
         curve = CRY_ECP_GRP_SECP192R1;
         secp192r1_set_start_point();
     } else if (strcmp(test, "secp224r1") == 0) {
+#ifndef SKIP_SLOW
         curve = CRY_ECP_GRP_SECP224R1;
         secp224r1_set_start_point();
+#else
+        TRACE2("      (skip)\n");
+#endif
     } else if (strcmp(test, "secp256r1") == 0) {
+#ifndef SKIP_SLOW
         curve = CRY_ECP_GRP_SECP256R1;
         secp256r1_set_start_point();
+#else
+        TRACE2("      (skip)\n");
+#endif
     } else if (strcmp(test, "secp384r1") == 0) {
+#ifndef SKIP_SLOW
         curve = CRY_ECP_GRP_SECP384R1;
         secp384r1_set_start_point();
+#else
+        TRACE2("      (skip)\n");
+#endif
     } else if (strcmp(test, "secp521r1") == 0) {
+#ifndef SKIP_SLOW
         curve = CRY_ECP_GRP_SECP521R1;
         secp521r1_set_start_point();
+#else
+        TRACE2("      (skip)\n");
+#endif
     } else {
         TRACE("Test '%s' not defined\n", test);
     }
