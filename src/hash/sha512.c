@@ -227,3 +227,23 @@ void cry_sha512_digest(cry_sha512_ctx *ctx, unsigned char *out)
         CRY_WRITE64_BE(ctx->state[7], out + 56);
     }
 }
+
+void cry_sha512(unsigned char *out, const unsigned char *data, size_t len)
+{
+    cry_sha512_ctx ctx;
+
+    cry_sha512_init(&ctx, 0);
+    cry_sha512_update(&ctx, data, len);
+    cry_sha512_digest(&ctx, out);
+    cry_sha512_clear(&ctx);
+}
+
+void cry_sha384(unsigned char *out, const unsigned char *data, size_t len)
+{
+    cry_sha512_ctx ctx;
+
+    cry_sha512_init(&ctx, 1);
+    cry_sha512_update(&ctx, data, len);
+    cry_sha512_digest(&ctx, out);
+    cry_sha512_clear(&ctx);
+}

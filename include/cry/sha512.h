@@ -11,7 +11,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-
 #define CRY_SHA512_DIGEST_SIZE 64
 
 struct cry_sha512_ctx {
@@ -64,11 +63,20 @@ void cry_sha512_digest(struct cry_sha512_ctx *ctx, unsigned char *out);
 /**
  * SHA-512 computation of a given input.
  *
- * @param out   SHA-512 result buffer (shall be at least 32 bytes).
+ * @param out   SHA-512 result buffer (shall be at least 64 bytes).
  * @param data  Input data buffer.
  * @param len   Input data length.
  */
 void cry_sha512(unsigned char *out, const unsigned char *data, size_t len);
+
+/**
+ * SHA-384 computation of a given input.
+ *
+ * @param out   SHA-384 result buffer (shall be at least 48 bytes).
+ * @param data  Input data buffer.
+ * @param len   Input data length.
+ */
+void cry_sha384(unsigned char *out, const unsigned char *data, size_t len);
 
 #ifdef __cplusplus
 }
