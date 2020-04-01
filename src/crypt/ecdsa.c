@@ -123,7 +123,7 @@ int cry_ecdsa_keygen(cry_ecdsa_ctx *ctx)
 {
     int res;
 
-    if ((res = cry_mpi_rand_range(&ctx->d, &ctx->grp.p)) == 0)
+    if ((res = cry_mpi_rand_range(&ctx->d, &ctx->grp.n)) == 0)
         res = cry_ecp_mul(&ctx->q, &ctx->grp.g, &ctx->d, &ctx->grp);
     return res;
 }
