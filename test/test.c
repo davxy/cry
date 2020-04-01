@@ -18,6 +18,7 @@ void rsa_test(void);
 void md5_test(void);
 void sha1_test(void);
 void sha256_test(void);
+void sha512_test(void);
 void ecp_test(void);
 void elgamal_test(void);
 void dsa_test(void);
@@ -54,6 +55,7 @@ struct sub_test g_tests[] = {
     SUB_TEST(md5),
     SUB_TEST(sha1),
     SUB_TEST(sha256),
+    SUB_TEST(sha512),
     SUB_TEST(ecp),
     SUB_TEST(elgamal),
     SUB_TEST(dsa),

@@ -22,7 +22,7 @@ Given a version number MAJOR.MINOR.PATCH
 * PATCH incremented for bug fixes
 
 
-[0.1.1] - 2020-03-03
+[0.1.1] - 2020-04-01
 --------------------
 
 Added
@@ -31,6 +31,7 @@ Added
 * Elgamal digital signature.
 * Elliptic curve group arithmetics exhaustive unit tests (add/mul).
 * DSA key parameters generator.
+* SHA-512 and SHA-384
 
 Fixed
 
