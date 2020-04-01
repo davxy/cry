@@ -35,7 +35,7 @@ Added
 Fixed
 
 * MPI "is_prime" function was not working for primes < 1010 (decimal).
-* ECDSA major fix in one of the NIST curves parameters..
+* ECDSA major fix in one of the NIST curves parameters.
 
 
 [0.1.0] - 2019-09-23
