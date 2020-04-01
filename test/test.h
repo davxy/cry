@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <cry/config.h>
 
 #define BIGBUF_SIZ  8192
 
@@ -13,9 +14,14 @@
 
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
+/* Skip tests that are extremely slow when using 1 byte digits */
+#ifdef CRY_MPI_DEBUG_CONF
+#define SKIP_SLOW
+#endif
+
 extern int g_fails;
 extern unsigned char g_buf[BIGBUF_SIZ];
-
+extern int g_verbose;
 
 typedef void (*test_func_t)(void);
 
@@ -52,6 +58,11 @@ void run(const char *name, void (*test)(void),
 #define TRACE(...) do { \
     fprintf(stdout, __VA_ARGS__); \
     fflush(stdout); \
+} while(0)
+
+#define TRACE2(...) do { \
+    if (g_verbose) \
+        TRACE(__VA_ARGS__); \
 } while(0)
 
 #define PRINT_HEX(msg, buf, siz) do { \

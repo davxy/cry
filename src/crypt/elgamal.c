@@ -8,6 +8,27 @@
 
 /*
  * Generate a random secret k, such that gcd(k, p-1) = 1
+ * (should be invertible modulo p-1).
+ *
+ * Is extremely important to don't reuse the same ephemeral key k.
+ *
+ * If the ephemeral key K is reused then Elgamal signature is subject
+ * to a trivial attack:
+ *
+ * If two signatures (r1,s1) and (r2,s2) are generated using the same
+ * ephemeral key k, then r = r1 = r2.
+ * (An attacker can easily detect the situation)
+ *
+ * The private key d can be easily found:
+ *
+ * s1 = (M1 - d*r) * k^-1 (mod p-1)
+ * s2 = (M2 - d*r) * k^-1 (mod p-1)
+ * s1 - s2 = (M1 - M2) * k^-1 (mod p-1)
+ * k = (M1 - M2) / (s1 - s2) (mod p-1)
+ * d = (M1 - k*s1) / r (mod p-1)
+ *
+ * Note: if gcd(s1-s2, p-1) <> 1 then there are multiple solutions and the
+ * attacker needs to check for the correct one (not a big issue for him).
  */
 static int secret_gen(cry_mpi *k, const cry_mpi *t, const cry_mpi *one)
 {
