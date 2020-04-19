@@ -6,11 +6,6 @@
 
 int cry_mpi_sqr(cry_mpi *r, const cry_mpi *a)
 {
-    if (cry_mpi_is_zero(a)) {
-        cry_mpi_zero(r);
-        return 0;
-    }
-
 #ifdef CRY_MPI_MUL_KARATSUBA
     if (a->used > KARATSUBA_CUTOFF)
         return cry_mpi_sqr_karatsuba(r, a);

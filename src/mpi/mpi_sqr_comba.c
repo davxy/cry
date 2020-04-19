@@ -9,6 +9,11 @@ int cry_mpi_sqr_comba(cry_mpi *r, const cry_mpi *a)
     cry_mpi tmp, *dst;
     cry_mpi_dword cc;
 
+    if (cry_mpi_is_zero(a)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
     pa = a->used + a->used;
     if (r == a) {
         if ((res = cry_mpi_init_size(&tmp, pa)) != 0)

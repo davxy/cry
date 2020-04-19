@@ -6,6 +6,11 @@ int cry_mpi_sqr_karatsuba(cry_mpi *r, const cry_mpi *a)
     size_t B, hB;
     cry_mpi x0, x1, z0, z1, z2;
 
+    if (cry_mpi_is_zero(a)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
     /* Number of digits */
     B = a->used;
     /* Divide by two */

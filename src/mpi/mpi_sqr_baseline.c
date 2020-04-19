@@ -8,6 +8,11 @@ int cry_mpi_sqr_baseline(cry_mpi *r, const cry_mpi *a)
     cry_mpi_dword dd, c, ch;
     cry_mpi_digit tmpx, *tmpt;
 
+    if (cry_mpi_is_zero(a)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
     pa = a->used;
     if ((res = cry_mpi_init_size(&t, 2*pa + 1)) != 0)
         return res;
