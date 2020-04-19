@@ -74,7 +74,7 @@ int cry_mpi_shld(cry_mpi *a, size_t n);
 
 #if defined(CRY_ARCH_X86)
 
-#define MULADD(i, j) asm(                           \
+#define MULADD(c0, c1, c2, i, j) asm(               \
      "movl  %6, %%eax    \n\t"                      \
      "mull  %7           \n\t"                      \
      "addl  %%eax, %0    \n\t"                      \
@@ -86,7 +86,7 @@ int cry_mpi_shld(cry_mpi *a, size_t n);
 
 #elif defined(CRY_ARCH_X86_64)
 
-#define MULADD(i, j) asm(                           \
+#define MULADD(c0, c1, c2, i, j) asm(               \
      "movq  %6, %%rax    \n\t"                      \
      "mulq  %7           \n\t"                      \
      "addq  %%rax, %0    \n\t"                      \
@@ -98,7 +98,7 @@ int cry_mpi_shld(cry_mpi *a, size_t n);
 
 #elif defined(CRY_ARCH_ARM)
 
-#define MULADD(i, j) asm(                           \
+#define MULADD(c0, c1, c2, i, j) asm(               \
     "umull  r0, r1, %6, %7  \n\t"                   \
     "adds   %0, %0, r0      \n\t"                   \
     "adcs   %1, %1, r1      \n\t"                   \
@@ -109,13 +109,13 @@ int cry_mpi_shld(cry_mpi *a, size_t n);
 
 #else /* ANSI C code */
 
-#define MULADD(i, j) do {                           \
-   cry_mpi_dword _t;                                \
-   _t = (cry_mpi_dword)c0 + ((cry_mpi_dword)(i)) * ((cry_mpi_dword)(j)); \
-   c0 = (cry_mpi_digit) _t;                         \
-   _t = (cry_mpi_dword)c1 + (_t >> CRY_MPI_DIGIT_BITS); \
-   c1 = (cry_mpi_digit) _t;                         \
-   c2 += (cry_mpi_digit) (_t >> CRY_MPI_DIGIT_BITS); \
+#define MULADD(c0, c1, c2, i, j) do { \
+   cry_mpi_dword _t; \
+   _t = (cry_mpi_dword)(c0) + ((cry_mpi_dword)(i)) * ((cry_mpi_dword)(j)); \
+   (c0) = (cry_mpi_digit) _t;                       \
+   _t = (cry_mpi_dword)(c1) + (_t >> CRY_MPI_DIGIT_BITS); \
+   (c1) = (cry_mpi_digit) _t;                       \
+   (c2) += (cry_mpi_digit) (_t >> CRY_MPI_DIGIT_BITS); \
    } while (0);
 
 #endif

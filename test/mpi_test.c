@@ -218,10 +218,6 @@ static void mpi_div(int argc, char *argv[])
     }
 }
 
-void mpi_print(cry_mpi *a)
-{
-    cry_mpi_print(a, 16);
-}
 
 static void mpi_dispatch(int argc, char *argv[])
 {

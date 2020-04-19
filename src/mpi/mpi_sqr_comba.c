@@ -5,8 +5,9 @@ int cry_mpi_sqr_comba(cry_mpi *r, const cry_mpi *a)
 {
     int res;
     size_t ix, iy, iz, tx, ty, pa;
-    cry_mpi_digit c0, c1, c2, *tmpx, *tmpy;
+    cry_mpi_digit c0, c1, c2, t0, t1, t2, *tmpx, *tmpy;
     cry_mpi tmp, *dst;
+    cry_mpi_dword cc;
 
     pa = a->used + a->used;
     if (r == a) {
@@ -44,22 +45,31 @@ int cry_mpi_sqr_comba(cry_mpi *r, const cry_mpi *a)
         c1 = c2;
         c2 = 0;
 
-        /* Execute loop */
-        for (iz = 0; iz < iy; iz++) {
-            MULADD(*tmpx, *tmpy);
-            tmpx++;
-            tmpy--;
+        if (iy != 0) {
+            /* Execute loop */
+            t0 = t1 = t2 = 0;
+            for (iz = 0; iz < iy; iz++) {
+                MULADD(t0, t1, t2, *tmpx, *tmpy);
+                tmpx++;
+                tmpy--;
+            }
+            /* Double the inner product */
+            t2 = (t2 << 1) | (t1 >> (CRY_MPI_DIGIT_BITS - 1));
+            t1 = (t1 << 1) | (t0 >> (CRY_MPI_DIGIT_BITS - 1));
+            t0 <<= 1;
+            /* Add to accumulator */
+            cc = (cry_mpi_dword)c0 + t0;
+            c0 = (cry_mpi_digit)cc;
+            cc = (cry_mpi_dword)c1 + t1 + (cc >> CRY_MPI_DIGIT_BITS);
+            c1 = (cry_mpi_digit)cc;
+            cc = (cry_mpi_dword)c2 + t2 + (cc >> CRY_MPI_DIGIT_BITS);
+            c2 = (cry_mpi_digit)cc;
         }
-        /* FIXME: cannot work... this generates souble shifts... */
-        /* Double the inner product */
-        c2 = (c2 << 1) | (c1 >> (CRY_MPI_DIGIT_BITS - 1));
-        c1 = (c1 << 1) | (c0 >> (CRY_MPI_DIGIT_BITS - 1));
-        c0 <<= 1;
 
         /* Even columns have the square term in them */
         if ((ix & 1) == 0) {
             tmpx = a->data + (ix >> 1);
-            MULADD(*tmpx, *tmpx);
+            MULADD(c0, c1, c2, *tmpx, *tmpx);
         }
 
         /* Store term */
@@ -71,5 +81,6 @@ int cry_mpi_sqr_comba(cry_mpi *r, const cry_mpi *a)
         cry_mpi_clear(dst);
     }
     cry_mpi_adjust(r);
+
     return res;
 }

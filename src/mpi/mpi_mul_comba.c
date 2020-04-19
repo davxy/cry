@@ -48,7 +48,7 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 
         /* execute loop */
         for (iz = 0; iz < iy; iz++) {
-            MULADD(*tmpx, *tmpy);
+            MULADD(c0, c1, c2, *tmpx, *tmpy);
             tmpx++;
             tmpy--;
         }
