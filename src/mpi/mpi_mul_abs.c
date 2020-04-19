@@ -1,6 +1,5 @@
 #include "mpi_pvt.h"
 #include "misc.h"
-#include <stdio.h>
 #include <cry/config.h>
 
 #define KARATSUBA_CUTOFF 64
@@ -8,6 +7,11 @@
 
 int cry_mpi_mul_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
+    if (cry_mpi_is_zero(a)) {
+        cry_mpi_zero(r);
+        return 0;
+    }
+
 #ifdef CRY_MPI_MUL_TOOM3
     if (CRY_MIN(a->used, b->used) > TOOM3_CUTOFF)
         return cry_mpi_mul_toom3(r, a, b);
