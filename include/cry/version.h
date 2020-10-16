@@ -16,12 +16,15 @@
 #ifndef CRY_VERSION_H_
 #define CRY_VERSION_H_
 
+/** Library pre-release string */
+#define CRY_PRE_RELEASE "alpha.1"
+
 /** Library version major number */
 #define CRY_MAJOR   0
 /** Library version minor number */
 #define CRY_MINOR   1
 /** Library version patch number */
-#define CRY_PATCH   1
+#define CRY_PATCH   2
 
 /** Stable version */
 #ifdef CRY_PRE_RELEASE
