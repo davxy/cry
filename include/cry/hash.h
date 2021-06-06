@@ -6,12 +6,11 @@
 #ifndef CRY_HASH_H_
 #define CRY_HASH_H_
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stdlib.h>
-#include <stdint.h>
 
 /**
  * Context initialization.
@@ -34,7 +33,7 @@ typedef void (*cry_hash_clear_f)(void *ctx);
  * @param data  Input data
  * @param suze  Input size
  */
-typedef void (*cry_hash_update_f)(void *ctx, const uint8_t *data,
+typedef void (*cry_hash_update_f)(void *ctx, const unsigned char *data,
                                   size_t size);
 
 /**
@@ -43,7 +42,11 @@ typedef void (*cry_hash_update_f)(void *ctx, const uint8_t *data,
  * @param ctx    Hash context
  * @param digest Preallocated output buffer
  */
-typedef void (*cry_hash_digest_f)(void *ctx, uint8_t *digest);
+typedef void (*cry_hash_digest_f)(void *ctx, unsigned char *digest);
+
+#ifdef __cplusplus
+}
+#endif
 
 /**
  * Hash algorithm generic interface
@@ -56,9 +59,5 @@ struct cry_hash_itf {
 };
 
 typedef struct cry_hash_itf cry_hash_itf;
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* CRY_HASH_H_ */

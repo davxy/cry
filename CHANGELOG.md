@@ -22,7 +22,7 @@ Given a version number MAJOR.MINOR.PATCH
 * PATCH incremented for bug fixes
 
 
-[0.1.2] - Unreleased
+[0.1.2] - 2021-06-06
 --------------------
 
 Added
