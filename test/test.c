@@ -293,8 +293,8 @@ void cry_assert_fail(const char *cond, const char *file, int line)
 void build_info(void)
 {
     FILE *fp;
-    char *line = NULL;
-    size_t len = 0;
+    char *line;
+    size_t len;
     int read;
 
     TRACE("Build information\n");
@@ -304,10 +304,14 @@ void build_info(void)
         TRACE("WARNING: config file not found\n");
         return;
     }
+
+    line = malloc(1024);
+    len = 1024;
     while ((read = getline(&line, &len, fp)) != -1) {
         if (memcmp("#define", line, 7) == 0)
             printf("  %s", line + 8);
     }
+    free(line);
     fclose(fp);
     TRACE("\n");
 }
