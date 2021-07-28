@@ -21,7 +21,7 @@ typedef struct cry_ecdh_ctx cry_ecdh_ctx;
 extern "C" {
 #endif
 
-int cry_ecdh_init(cry_ecdh_ctx *ctx);
+int cry_ecdh_init(cry_ecdh_ctx *ctx, int grp_id);
 
 void cry_ecdh_clear(cry_ecdh_ctx *ctx);
 

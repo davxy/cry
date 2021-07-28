@@ -1,12 +1,27 @@
 #include <cry/ecdh.h>
+#include "mpi/mpi_pvt.h"
 
-int cry_ecdh_init(cry_ecdh_ctx *ctx)
+#define CHK0(exp) CRY_CHK(res = (exp), e0)
+#define CHK1(exp) CRY_CHK(res = (exp), e1)
+
+int cry_ecdh_init(cry_ecdh_ctx *ctx, int grp_id)
 {
-    cry_ecp_grp_init(&ctx->grp);
-    cry_mpi_init(&ctx->d);
-    cry_ecp_init(&ctx->q);
-    cry_ecp_init(&ctx->z);
+    int res;
+
+    res = cry_mpi_init(&ctx->d);
+    if (res != 0)
+        return res;
+    CHK0(cry_ecp_init_list(&ctx->q, &ctx->z, NULL));
+    if (grp_id != -1) {
+        CHK1(cry_ecp_grp_load(&ctx->grp, grp_id));
+    } else {
+        CHK1(cry_ecp_grp_init(&ctx->grp));
+    }
     return 0;
+
+e1: cry_ecp_clear_list(&ctx->q, &ctx->z, NULL);
+e0: cry_mpi_clear(&ctx->d);
+    return res;
 }
 
 void cry_ecdh_clear(cry_ecdh_ctx *ctx)

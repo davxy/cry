@@ -11,16 +11,14 @@ void secret_exchange(void)
 
     /* Alice */
 
-    ASSERT_OK(cry_ecdh_init(&dh1));
-    ASSERT_OK(cry_ecp_grp_load(&dh1.grp, CRY_ECP_GRP_SECP256R1));
+    ASSERT_OK(cry_ecdh_init(&dh1, CRY_ECP_GRP_SECP256R1));
     ASSERT_OK(cry_mpi_rand(&dh1.d, 256));
     ASSERT_OK(cry_ecdh_agree(&dh1)); /* gen pub key */
     ASSERT_OK(cry_ecp_copy(&q1, &dh1.q));
 
     /* Bob */
 
-    ASSERT_OK(cry_ecdh_init(&dh2));
-    ASSERT_OK(cry_ecp_grp_load(&dh2.grp, CRY_ECP_GRP_SECP256R1));
+    ASSERT_OK(cry_ecdh_init(&dh2, CRY_ECP_GRP_SECP256R1));
     ASSERT_OK(cry_mpi_rand(&dh2.d, 256));
     ASSERT_OK(cry_ecdh_agree(&dh2)); /* gen pub key */
     ASSERT_OK(cry_ecp_copy(&q2, &dh2.q));
