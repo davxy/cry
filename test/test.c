@@ -24,6 +24,7 @@ void ecp_test(void);
 void elgamal_test(void);
 void dsa_test(void);
 void ecdsa_test(void);
+void ecdh_test(void);
 void utils_test(void);
 
 static int g_runs;
@@ -61,12 +62,12 @@ struct sub_test g_tests[] = {
     SUB_TEST(elgamal),
     SUB_TEST(dsa),
     SUB_TEST(ecdsa),
+    SUB_TEST(ecdh),
     SUB_TEST(utils),
 #if 0
     SUB_TEST(rand),
     SUB_TEST(dh),
     SUB_TEST(dsa),
-    SUB_TEST(ecdh),
 #endif
 };
 

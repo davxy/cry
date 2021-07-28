@@ -31,13 +31,13 @@ objects := \
 	elgamal_test.o \
 	dsa_test.o \
 	ecdsa_test.o \
+	ecdh_test.o \
 	utils_test.o
 
 #	rand_test.o \
 	dh_test.o \
-	ecdh_test.o \
 
-.PHONY: all clean 
+.PHONY: all clean
 
 all: $(objects) $(libcry)
 	$(CC) $(LDFLAGS) -o test $^
@@ -58,7 +58,7 @@ coverage: test
 	@./test -v $(TESTS)
 	@lcov -q -c -d ../build -o cry.info
 	@lcov -q -a base.info -a cry.info -o cry.info
-	@genhtml -q -o out/coverage cry.info 
+	@genhtml -q -o out/coverage cry.info
 	@rm base.info cry.info
 
 valgrind: all
@@ -69,4 +69,3 @@ valgrind: all
 	@echo "</pre></html>" >> valgrind.html
 	@mv valgrind.html out/valgrind/index.html
 	@rm val.log
-

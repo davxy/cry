@@ -21,6 +21,12 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
+[0.1.3] - Unreleased
+--------------------
+
+Fixed
+
+* ECDH unit test was using obsolete functions.
 
 [0.1.2] - 2021-06-06
 --------------------

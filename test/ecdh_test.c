@@ -1,7 +1,7 @@
 #include "test.h"
 #include <cry/ecdh.h>
 
-void ecdh_test(void)
+void secret_exchange(void)
 {
     cry_ecdh_ctx dh1, dh2;
     cry_ecp q1, q2;
@@ -12,7 +12,7 @@ void ecdh_test(void)
     /* Alice */
 
     ASSERT_OK(cry_ecdh_init(&dh1));
-    ASSERT_OK(cry_ec_set_nist_p256(&dh1.ec));
+    ASSERT_OK(cry_ecp_grp_load(&dh1.grp, CRY_ECP_GRP_SECP256R1));
     ASSERT_OK(cry_mpi_rand(&dh1.d, 256));
     ASSERT_OK(cry_ecdh_agree(&dh1)); /* gen pub key */
     ASSERT_OK(cry_ecp_copy(&q1, &dh1.q));
@@ -20,7 +20,7 @@ void ecdh_test(void)
     /* Bob */
 
     ASSERT_OK(cry_ecdh_init(&dh2));
-    ASSERT_OK(cry_ec_set_nist_p256(&dh2.ec));
+    ASSERT_OK(cry_ecp_grp_load(&dh2.grp, CRY_ECP_GRP_SECP256R1));
     ASSERT_OK(cry_mpi_rand(&dh2.d, 256));
     ASSERT_OK(cry_ecdh_agree(&dh2)); /* gen pub key */
     ASSERT_OK(cry_ecp_copy(&q2, &dh2.q));
@@ -42,4 +42,13 @@ void ecdh_test(void)
     cry_ecdh_clear(&dh2);
     cry_ecp_clear(&q1);
     cry_ecp_clear(&q2);
+}
+
+#define MYRUN(name, test) run(name, test, NULL, NULL)
+
+void ecdh_test(void)
+{
+    TRACE("* ECDH\n");
+    MYRUN("Secret exchange", secret_exchange);
+    TRACE("\n");
 }
