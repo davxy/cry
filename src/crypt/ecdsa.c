@@ -5,7 +5,8 @@
 #define CHK1(exp) CRY_CHK(res = (exp), e1)
 
 int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
-                   const unsigned char *in, size_t len)
+                   const unsigned char *in, size_t len,
+                   cry_ecdsa_rand_gen rand_gen)
 {
     int res;
     cry_mpi k, z;
@@ -21,16 +22,14 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
     CHK1(cry_mpi_load_bin(&z, in, len));
 
     /* This should be a random number between 0 and n-1 */
-#if 0
-    unsigned char K[] = {
-        0x9E, 0x56, 0xF5, 0x09, 0x19, 0x67, 0x84, 0xD9, 0x63, 0xD1, 0xC0,
-        0xA4, 0x01, 0x51, 0x0E, 0xE7, 0xAD, 0xA3, 0xDC, 0xC5, 0xDE, 0xE0,
-        0x4B, 0x15, 0x4B, 0xF6, 0x1A, 0xF1, 0xD5, 0xA6, 0xDE, 0xCE
-    };
-    CHK1(cry_mpi_load_bin(&k, K, sizeof(K)));
-#else
-    CHK1(cry_mpi_rand_range(&k, &ctx->grp.n));
-#endif
+    if (rand_gen != NULL) {
+        unsigned char buf[32];
+        memset(buf, 0, sizeof(buf));
+        rand_gen(buf, sizeof(buf));
+        CHK1(cry_mpi_load_bin(&k, buf, sizeof(buf)));
+    } else {
+        CHK1(cry_mpi_rand_range(&k, &ctx->grp.n));
+    }
 
     CHK1(cry_ecp_mul(&X, &ctx->grp.g, &k, &ctx->grp));
 

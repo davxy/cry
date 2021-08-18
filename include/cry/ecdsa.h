@@ -27,8 +27,11 @@ typedef struct cry_ecdsa_sig cry_ecdsa_sig;
 extern "C" {
 #endif
 
+typedef void (* cry_ecdsa_rand_gen)(unsigned char *buf, size_t len);
+
 int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
-                   const unsigned char *in, size_t len);
+                   const unsigned char *in, size_t len,
+                   cry_ecdsa_rand_gen rand_gen);
 
 int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_sig *sig,
                      const unsigned char *in, size_t len);

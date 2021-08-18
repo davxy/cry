@@ -14,6 +14,8 @@
 
 #define ARLEN(ar) (sizeof(ar)/sizeof(ar[0]))
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
 /* Skip tests that are extremely slow when using 1 byte digits */
 #ifdef CRY_MPI_DEBUG_CONF
 #define SKIP_SLOW
