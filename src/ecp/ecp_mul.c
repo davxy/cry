@@ -118,8 +118,6 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
     int res, i, j, w, paf = 1;
     struct cry_ecp r, *win = NULL;
     cry_mpi_digit msk;
-    cry_mpi *a = &grp->a;
-    cry_mpi *p = &grp->p;
 
     if (cry_ecp_is_zero(p1))
         return (pr != p1) ? cry_ecp_copy(pr, p1) : 0;
@@ -140,21 +138,21 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
             goto e1;
         }
     }
-    CHK(cry_ecp_copy(&win[1], p1));                     /* 1P */
-    CHK(cry_ecp_dbl(&win[2],  &win[1], a, p));          /* 2P */
-    CHK(cry_ecp_add(&win[3],  &win[2], &win[1], p));    /* 3P */
-    CHK(cry_ecp_dbl(&win[4],  &win[2], a, p));          /* 4P */
-    CHK(cry_ecp_add(&win[5],  &win[4], &win[1], p));    /* 5P */
-    CHK(cry_ecp_add(&win[6],  &win[5], &win[1], p));    /* 6P */
-    CHK(cry_ecp_add(&win[7],  &win[6], &win[1], p));    /* 7P */
-    CHK(cry_ecp_dbl(&win[8],  &win[4], a, p));          /* 8P */
-    CHK(cry_ecp_add(&win[9],  &win[8], &win[1], p));    /* 9P */
-    CHK(cry_ecp_add(&win[10], &win[9], &win[1], p));    /* 10P */
-    CHK(cry_ecp_add(&win[11], &win[10], &win[1], p));   /* 11P */
-    CHK(cry_ecp_add(&win[12], &win[11], &win[1], p));   /* 12P */
-    CHK(cry_ecp_add(&win[13], &win[12], &win[1], p));   /* 13P */
-    CHK(cry_ecp_add(&win[14], &win[13], &win[1], p));   /* 14P */
-    CHK(cry_ecp_add(&win[15], &win[14], &win[1], p));   /* 15P */
+    CHK(cry_ecp_copy(&win[1], p1));                         /* 1P */
+    CHK(cry_ecp_dbl(&win[2],  &win[1], grp));               /* 2P */
+    CHK(cry_ecp_add(&win[3],  &win[2], &win[1], grp));      /* 3P */
+    CHK(cry_ecp_dbl(&win[4],  &win[2], grp));               /* 4P */
+    CHK(cry_ecp_add(&win[5],  &win[4], &win[1], grp));      /* 5P */
+    CHK(cry_ecp_add(&win[6],  &win[5], &win[1], grp));      /* 6P */
+    CHK(cry_ecp_add(&win[7],  &win[6], &win[1], grp));      /* 7P */
+    CHK(cry_ecp_dbl(&win[8],  &win[4], grp));               /* 8P */
+    CHK(cry_ecp_add(&win[9],  &win[8], &win[1], grp));      /* 9P */
+    CHK(cry_ecp_add(&win[10], &win[9], &win[1], grp));      /* 10P */
+    CHK(cry_ecp_add(&win[11], &win[10], &win[1], grp));     /* 11P */
+    CHK(cry_ecp_add(&win[12], &win[11], &win[1], grp));     /* 12P */
+    CHK(cry_ecp_add(&win[13], &win[12], &win[1], grp));     /* 13P */
+    CHK(cry_ecp_add(&win[14], &win[13], &win[1], grp));     /* 14P */
+    CHK(cry_ecp_add(&win[15], &win[14], &win[1], grp));     /* 15P */
     /*
      * END window generation
      */
@@ -168,14 +166,14 @@ int cry_ecp_mul(cry_ecp *pr, const cry_ecp *p1, const cry_mpi *k,
         while (j > 0) {
             if (!paf) {
                 for (w = 0; w < WINSIZ; w++)
-                    CHK(cry_ecp_dbl(&r, &r, a, p));
+                    CHK(cry_ecp_dbl(&r, &r, grp));
             }
 
             j -= WINSIZ;
             w = (k->data[i] & msk) >> j;
             if (w > 0) {
                 if (!paf) {
-                    CHK(cry_ecp_add(&r, &r, &win[w], p));
+                    CHK(cry_ecp_add(&r, &r, &win[w], grp));
                 } else {
                     paf = 0; /* First addition */
                     CHK(cry_ecp_copy(&r, &win[w]));
