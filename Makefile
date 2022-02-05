@@ -2,7 +2,7 @@ CONFIG := config/config.mk
 
 include $(CONFIG)
 
-CC := clang
+CC := gcc
 AR := ar
 AWK := awk
 CP := cp
