@@ -22,12 +22,14 @@ Given a version number MAJOR.MINOR.PATCH
 * PATCH incremented for bug fixes
 
 
-[0.1.3] - Unreleased
+[0.1.3] - 2022-02-05
 --------------------
 
 Fixed
 
 * ECDH unit test was using obsolete functions.
+* EC multiplication with simple windowed algorithm (CRY_ECP_MUL_WIN) was using
+  outdated EC add and dbl functions definitions.
 
 Changed
 
