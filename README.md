@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/crylib/cry.svg?branch=master)](https://travis-ci.com/crylib/cry)
+[![Build Status](https://gitlab.com/davxy/cry/badges/master/pipeline.svg)](https://gitlab.com/davxy/cry/-/pipelines)
 [![Coverage Status](https://coveralls.io/repos/github/crylib/cry/badge.svg?branch=master)](https://coveralls.io/github/crylib/cry?branch=master)
 
 
