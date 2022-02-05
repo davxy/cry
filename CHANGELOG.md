@@ -31,13 +31,13 @@ Added
 
 Fixed
 
-* ECDH unit test was using obsolete functions.
-* EC multiplication with simple windowed algorithm (CRY_ECP_MUL_WIN) was using
-  outdated EC add and dbl functions definitions.
+* ECDH unit test was using outdated EC points functions.
+* EC multiplication with simple windowed algorithm (CRY_ECP_MUL_WIN) was
+  using outdated EC points functions.
 
 Changed
 
-* ECDSA sign function accepts a random number provider function pointer.
+* ECDSA sign function now takes a functions pointer to a RNG provider.
 
 
 [0.1.1] - 2020-04-01
