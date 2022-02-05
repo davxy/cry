@@ -2,7 +2,7 @@ CONFIG := config/config.mk
 
 include $(CONFIG)
 
-CC := gcc
+CC := clang
 AR := ar
 AWK := awk
 CP := cp
@@ -26,8 +26,6 @@ target = $(binary_dir)/libcry.a
 
 warnings := -Wall -Wextra -Wshadow -Wstrict-prototypes -Wmissing-prototypes
 
-#-Wpedantic
-#-Wconversion
 includes-y := -Iinclude -Isrc
 
 cflags-y := -MMD -MP $(warnings)
@@ -47,22 +45,18 @@ cflags-y += -O3
 endif
 endif
 
-objects-y :=
-paths-y	:=
-objects_list :=
-
 define include_subdir
 $(shell mkdir -p $(call src_to_bin_dir,$1))
-subdirs-y :=
 current := $1
+subdirs-y :=
 objects-y :=
 include $1/subdir.mk
 objects_list += $$(if $$(objects-y),$$(addprefix $1/,$$(objects-y)))
-paths-y += $$(current)
 subdirs-y := $$(addprefix $$(current)/, $$(subdirs-y))
 $$(foreach subdir, $$(subdirs-y),$$(eval $$(call include_subdir,$$(subdir))))
 endef
 
+objects_list :=
 $(eval $(call include_subdir,src))
 
 objects = $(call src_to_bin_dir,$(objects_list))
@@ -79,7 +73,6 @@ LDFLAGS  := $(lflags-y)
 
 .PHONY: all clean config test testclean doc
 
-# Force serial run
 all:
 	$(MAKE) config
 	$(MAKE) $(target)
@@ -110,7 +103,7 @@ $(binary_dir)/%.o: $(source_dir)/%.c
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 test: all
-	$(MAKE) -C test
+	$(MAKE) CC=$(CC) -C test
 
 testclean:
 	$(MAKE) -C test clean
