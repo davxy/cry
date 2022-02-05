@@ -24,7 +24,7 @@
 /** Library version minor number */
 #define CRY_MINOR   1
 /** Library version patch number */
-#define CRY_PATCH   3
+#define CRY_PATCH   2
 
 /** Stable version */
 #ifdef CRY_PRE_RELEASE

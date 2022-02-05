@@ -22,8 +22,12 @@ Given a version number MAJOR.MINOR.PATCH
 * PATCH incremented for bug fixes
 
 
-[0.1.3] - 2022-02-05
+[0.1.2] - 2022-02-05
 --------------------
+
+Added
+
+* MPI fast square using Comba and Karatsuba methods.
 
 Fixed
 
@@ -34,14 +38,6 @@ Fixed
 Changed
 
 * ECDSA sign function accepts a random number provider function pointer.
-
-
-[0.1.2] - 2021-06-06
---------------------
-
-Added
-
-* MPI fast square using Comba and Karatsuba methods.
 
 
 [0.1.1] - 2020-04-01
