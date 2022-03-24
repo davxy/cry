@@ -9,9 +9,6 @@ CRY is a small, comprehensive and portable cryptographic library prividing
 a good collection of ciphers, hash functions, pseudo-random number generators
 and multi-precision integers algorithms.
 
-API Doxygen documentation [here](https://crylib.gitlab.io/cry/).
-
-
 Symmetric ciphers
 -----------------
 
