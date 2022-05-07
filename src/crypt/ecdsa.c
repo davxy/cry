@@ -87,7 +87,7 @@ int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_sig *sig,
     res = (cry_mpi_cmp_abs(&G.x, &sig->r) == 0) ? 0 : -1;
 
 e1: cry_ecp_clear_list(&G, &Q, (cry_ecp *)NULL);
-e0: cry_mpi_clear_list(&z, &w, &G.x, &G.y, &Q.x, &Q.y, (cry_mpi *)NULL);
+e0: cry_mpi_clear_list(&z, &w, (cry_mpi *)NULL);
     return res;
 }
 
