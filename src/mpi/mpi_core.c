@@ -25,16 +25,7 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
 
 int cry_mpi_init(cry_mpi *a)
 {
-    /* allocate required memory and clear it */
-    a->data = (cry_mpi_digit *)malloc(sizeof(cry_mpi_digit) * CRY_MPI_QUANTUM);
-    if (a->data == NULL)
-        return -1;
-
-    /* finalize the initialization */
-    a->used = 0;
-    a->alloc = CRY_MPI_QUANTUM;
-    a->sign = 0;
-    return 0;
+    return cry_mpi_init_size(CRY_MPI_QUANTUM);
 }
 
 /*
