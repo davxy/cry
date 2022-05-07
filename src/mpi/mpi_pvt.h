@@ -71,6 +71,12 @@ int cry_mpi_shld(cry_mpi *a, size_t n);
     (((n)->data[(bit) / CRY_MPI_DIGIT_BITS] & \
         ((cry_mpi_digit)1 << ((bit) % CRY_MPI_DIGIT_BITS))) != 0)
 
+#define cry_mpi_static_init(n, digits, num_digits) do { \
+    (n)->data  = (cry_mpi_digit *)(digits); \
+    (n)->alloc = 0; \
+    (n)->used  = (num_digits); \
+    (n)->sign  = 0; \
+    } while(0)
 
 #if defined(CRY_ARCH_X86)
 

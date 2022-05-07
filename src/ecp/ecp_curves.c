@@ -1,5 +1,6 @@
 #include <cry/ecp.h>
 #include <cry/config.h>
+#include "mpi/mpi_pvt.h"
 
 #if CRY_MPI_DIGIT_MAX == 255UL
 
@@ -604,15 +605,6 @@ static const cry_mpi_digit brainpoolP512r1_n[] = {
 
 #endif /* ~CRY_ECP_GRP_BP512R1_ENABLE */
 
-
-static void ecp_mpi_load(cry_mpi *n, const cry_mpi_digit *d, size_t dlen)
-{
-    n->data  = (cry_mpi_digit *)d;
-    n->alloc = 0;
-    n->used  = dlen / sizeof(cry_mpi_digit);
-    n->sign  = 0;
-}
-
 static void ecp_grp_load(cry_ecp_grp *grp,
                          const cry_mpi_digit *p,  size_t plen,
                          const cry_mpi_digit *a,  size_t alen,
@@ -624,27 +616,29 @@ static void ecp_grp_load(cry_ecp_grp *grp,
     static const cry_mpi_digit one = 0x01;
     static const cry_mpi_digit three = 0x03;
 
-    ecp_mpi_load(&grp->p, p, plen);
+    cry_mpi_static_init(&grp->p, p, plen);
     if (a != NULL) {
-        ecp_mpi_load(&grp->a, a, alen);
+        cry_mpi_static_init(&grp->a, a, alen);
     } else {
-        ecp_mpi_load(&grp->a, &three, sizeof(three));
+        cry_mpi_static_init(&grp->a, &three, 1);
         grp->a.sign = 1;
     }
-    ecp_mpi_load(&grp->b, b, blen);
-    ecp_mpi_load(&grp->g.x, gx, gxlen);
-    ecp_mpi_load(&grp->g.y, gy, gylen);
-    ecp_mpi_load(&grp->g.z, &one, sizeof(one));
-    ecp_mpi_load(&grp->n, n, nlen);
+    cry_mpi_static_init(&grp->b, b, blen);
+    cry_mpi_static_init(&grp->g.x, gx, gxlen);
+    cry_mpi_static_init(&grp->g.y, gy, gylen);
+    cry_mpi_static_init(&grp->g.z, &one, 1);
+    cry_mpi_static_init(&grp->n, n, nlen);
 }
 
+#define digits_count(bytes) (sizeof(bytes) / sizeof(cry_mpi_digit))
+
 #define GRP_LOAD(name) ecp_grp_load(grp, \
-                           name ## _p,  sizeof(name ## _p),  \
-                           name ## _a,  sizeof(name ## _a),  \
-                           name ## _b,  sizeof(name ## _b),  \
-                           name ## _gx, sizeof(name ## _gx), \
-                           name ## _gy, sizeof(name ## _gy), \
-                           name ## _n,  sizeof(name ## _n))
+                           name ## _p,  digits_count(name ## _p),  \
+                           name ## _a,  digits_count(name ## _a),  \
+                           name ## _b,  digits_count(name ## _b),  \
+                           name ## _gx, digits_count(name ## _gx), \
+                           name ## _gy, digits_count(name ## _gy), \
+                           name ## _n,  digits_count(name ## _n))
 
 int cry_ecp_grp_load(cry_ecp_grp *grp, int grp_id)
 {
