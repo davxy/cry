@@ -97,19 +97,13 @@ static int is_obviously_not_prime(const cry_mpi *p)
 static int calc_b_and_m(cry_mpi *m, const cry_mpi *p)
 {
     int ret = 0;
-    cry_mpi one;
-    cry_mpi_digit dig = 1;
-
-    one.data = &dig;
-    one.used = 1;
-    one.alloc = 1;
-    one.sign = 0;
 
     if ((ret = cry_mpi_copy(m, p)) < 0)
         return ret;
 
-    if ((ret = cry_mpi_sub(m, m, &one)) < 0)
+    if ((ret = cry_mpi_sub(m, m, &g_one)) < 0) {
         return ret;
+    }
 
     for (ret = 0; !cry_mpi_is_odd(m); ret++) {
         if (cry_mpi_shr(m, m, 1) < 0) { /* div by 2 */
@@ -126,17 +120,10 @@ static int passes_miller_rabin(const cry_mpi *p)
 {
     int res;
     cry_mpi a, m, z, tmp;
-    cry_mpi one;
-    cry_mpi_digit dig = 1;
     unsigned int b, i;
 
     if ((res = cry_mpi_init_list(&a, &m, &z, &tmp, (cry_mpi *)NULL)) < 0)
         return res;
-
-    one.data = &dig;
-    one.used = 1;
-    one.alloc = 1;
-    one.sign = 0;
 
     b = (unsigned int)calc_b_and_m(&m, p);
     if ((int)b < 0) {
@@ -167,7 +154,7 @@ static int passes_miller_rabin(const cry_mpi *p)
         /* if z = p - 1, pass! */
         if ((res = cry_mpi_copy(&tmp, &z)) < 0)
             goto e;
-        if ((res = cry_mpi_add(&tmp, &tmp, &one)) < 0)
+        if ((res = cry_mpi_add(&tmp, &tmp, &g_one)) < 0)
             goto e;
         if ((res = cry_mpi_cmp(&tmp, p)) == 0) {
             res = 1;
@@ -182,7 +169,7 @@ static int passes_miller_rabin(const cry_mpi *p)
     }
 
     /* If z = p-1, pass! */
-    if ((res = cry_mpi_add(&z, &z, &one)) < 0)
+    if ((res = cry_mpi_add(&z, &z, &g_one)) < 0)
         goto e;
     res = (cry_mpi_cmp(&z, p) == 0) ? 1 : 0;
 e:  cry_mpi_clear_list(&a, &m, &z, &tmp, (cry_mpi *)NULL);

@@ -58,7 +58,7 @@ static void mpi_init_size(int argc, char *argv[])
     ASSERT_EQ(argc, 1);
     ASSERT_OK(cry_mpi_init_size(&tmp, atol(argv[0])));
 
-    ASSERT_EQ(tmp.alloc, atol(argv[0]));
+    ASSERT(tmp.alloc >= atol(argv[0]));
 
     cry_mpi_clear(&tmp);
 }

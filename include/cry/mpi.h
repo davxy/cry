@@ -63,6 +63,9 @@ struct cry_mpi {
 
 typedef struct cry_mpi cry_mpi;
 
+extern const cry_mpi g_zero;
+extern const cry_mpi g_one;
+extern const cry_mpi g_three;
 #ifdef __cplusplus
 extern "C" {
 #endif

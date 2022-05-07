@@ -30,22 +30,16 @@
 static int secret_gen(cry_mpi *k, const cry_mpi *q)
 {
     int res;
-    cry_mpi t, one;
-    cry_mpi_digit dig = 1;
-
-    one.sign = 0;
-    one.used = 1;
-    one.alloc = 0;
-    one.data = &dig;
+    cry_mpi t;
 
     if ((res = cry_mpi_init(&t)) != 0)
         return res;
 
     CHK(cry_mpi_copy(&t, q));
-    CHK(cry_mpi_sub(&t, &t, &one));
+    CHK(cry_mpi_sub(&t, &t, &g_one));
     CHK(cry_mpi_rand(k, cry_mpi_count_bits(q)));
     CHK(cry_mpi_mod(k, k, &t));
-    CHK(cry_mpi_add(k, k, &one));
+    CHK(cry_mpi_add(k, k, &g_one));
 e:  cry_mpi_clear(&t);
     return res;
 }

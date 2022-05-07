@@ -7,13 +7,9 @@ Initialize with given size (0)
 mpi_init_size
 0
 
-Initialize with given size (1)
+Initialize with given size (3)
 mpi_init_size
-1
-
-Initialize with given size (100)
-mpi_init_size
-100
+3
 
 ################################################################################
 # Count bits
@@ -180,7 +176,7 @@ mpi_cmp
 23424a98719c87431513cc276f4238941d23db48976234
 0
 
-Compare first > second and first = -second 
+Compare first > second and first = -second
 mpi_cmp
 23424a98719c87431513cc276f4238941d23db48976234
 -23424a98719c87431513cc276f4238941d23db48976234
@@ -743,4 +739,3 @@ mpi_mod_exp
 4321
 e61e910917b59098227918ca1da479df17683dd2
 936ec933fd612b548acdef360c2eee712e96fa42
-

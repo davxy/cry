@@ -30,7 +30,7 @@
  * Note: if gcd(s1-s2, p-1) <> 1 then there are multiple solutions and the
  * attacker needs to check for the correct one (not a big issue for him).
  */
-static int secret_gen(cry_mpi *k, const cry_mpi *t, const cry_mpi *one)
+static int secret_gen(cry_mpi *k, const cry_mpi *t)
 {
     int res;
     size_t iter = 0;
@@ -43,7 +43,7 @@ static int secret_gen(cry_mpi *k, const cry_mpi *t, const cry_mpi *one)
     do {
         CHK(cry_mpi_rand_range(k, t));
         CHK(cry_mpi_gcd(&r, k, t));
-        if (cry_mpi_cmp(&r, one) == 0) {
+        if (cry_mpi_cmp(&r, &g_one) == 0) {
             res = 0;
             break;
         }
@@ -57,25 +57,19 @@ int cry_elgamal_sign2(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
                       const unsigned char *in, size_t len)
 {
     int res;
-    cry_mpi one, k, z, t;
-    cry_mpi_digit dig = 1;
+    cry_mpi k, z, t;
 
     if (len > cry_mpi_count_bytes(&ctx->p))
         return -1;
-
-    one.sign = 0;
-    one.used = 1;
-    one.alloc = 1;
-    one.data = &dig;
 
     if ((res = cry_mpi_init_list(&k, &z, &t, (cry_mpi *)NULL)) != 0)
         return res;
 
     CHK(cry_mpi_copy(&t, &ctx->p));
-    CHK(cry_mpi_sub(&t, &t, &one));
+    CHK(cry_mpi_sub(&t, &t, &g_one));
 
     /* gcd(k, p-1) = 1 */
-    CHK(secret_gen(&k, &t, &one));
+    CHK(secret_gen(&k, &t));
 
     /* r */
     CHK(cry_mpi_mod_exp(&sign->r, &ctx->g, &k, &ctx->p));

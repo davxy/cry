@@ -302,14 +302,8 @@ int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
 int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits, long e)
 {
     int res;
-    cry_mpi phi, p1, q1, g, one;
-    cry_mpi_digit one_dig = 1;
+    cry_mpi phi, p1, q1, g;
     unsigned int i, j;
-
-    one.alloc = 1;
-    one.used = 1;
-    one.sign = 0;
-    one.data = &one_dig;
 
     if (e != 0) {
         if ((res = cry_mpi_set_int(&ctx->e, e)) != 0)
@@ -334,9 +328,9 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits, long e)
         if (cry_mpi_count_bits(&ctx->n) != bits)
             continue;
 
-        if ((res = cry_mpi_sub(&p1, &ctx->p, &one)) != 0)
+        if ((res = cry_mpi_sub(&p1, &ctx->p, &g_one)) != 0)
             break;
-        if ((res = cry_mpi_sub(&q1, &ctx->q, &one)) != 0)
+        if ((res = cry_mpi_sub(&q1, &ctx->q, &g_one)) != 0)
             break;
         if ((res = cry_mpi_mul(&phi, &p1, &q1)) != 0)
             break;
@@ -346,7 +340,7 @@ int cry_rsa_keygen(cry_rsa_ctx *ctx, size_t bits, long e)
         }
         if ((res = cry_mpi_gcd(&g, &ctx->e, &phi)) != 0)
             break;
-    } while (cry_mpi_cmp(&g, &one) != 0 && ++j < MAX_ITER);
+    } while (cry_mpi_cmp(&g, &g_one) != 0 && ++j < MAX_ITER);
 
     cry_mpi_clear_list(&p1, &q1, &g, &phi, (cry_mpi *)NULL);
     return res;

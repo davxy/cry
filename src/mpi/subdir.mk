@@ -2,6 +2,7 @@
 
 objects-y := \
     mpi_core.o \
+    mpi_const.o \
     mpi_list.o \
     mpi_abs.o \
     mpi_cmp.o \
