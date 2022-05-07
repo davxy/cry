@@ -29,7 +29,7 @@ typedef struct cry_cmac_ctx cry_cmac_ctx;
 
 void cry_cmac_init(cry_cmac_ctx *ctx, void *ciph_ctx,
                    const cry_ciph_itf *ciph_itf,
-                   unsigned char *key, size_t keylen);
+                   const unsigned char *key, size_t keylen);
 
 void cry_cmac_update(cry_cmac_ctx *ctx, const unsigned char *data, size_t len);
 

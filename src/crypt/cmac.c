@@ -43,7 +43,7 @@ static void cbc_compute_subkeys(cry_cmac_ctx *ctx,
 
 void cry_cmac_init(cry_cmac_ctx *ctx, void *ciph_ctx,
                    const cry_ciph_itf *ciph_itf,
-                   unsigned char *key, size_t keylen)
+                   const unsigned char *key, size_t keylen)
 {
     memset(ctx, 0, sizeof(*ctx));
     ctx->ciph_ctx = ciph_ctx;
