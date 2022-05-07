@@ -25,7 +25,7 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
 
 int cry_mpi_init(cry_mpi *a)
 {
-    return cry_mpi_init_size(CRY_MPI_QUANTUM);
+    return cry_mpi_init_size(a, CRY_MPI_QUANTUM);
 }
 
 /*
