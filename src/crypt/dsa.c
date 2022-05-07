@@ -146,7 +146,9 @@ int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l)
     cry_mpi p1, q, r, one;
     unsigned int i, j;
 
-    cry_mpi_init_list(&p1, &q, &r, &one, NULL);
+    if ((res = cry_mpi_init_list(&p1, &q, &r, &one, NULL)) != 0) {
+        return res;
+    }
     CHK(cry_mpi_set_int(&one, 1));
 
     for (i = 0; i < ITER_MAX_OUT; i++) {
