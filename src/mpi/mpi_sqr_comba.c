@@ -5,7 +5,8 @@ int cry_mpi_sqr_comba(cry_mpi *r, const cry_mpi *a)
 {
     int res;
     size_t ix, iy, iz, tx, ty, pa;
-    cry_mpi_digit c0, c1, c2, t0, t1, t2, *tmpx, *tmpy;
+    cry_mpi_digit c0, c1, c2, t0, t1, t2;
+    const cry_mpi_digit *tmpx, *tmpy;
     cry_mpi tmp, *dst;
     cry_mpi_dword cc;
 

@@ -6,7 +6,7 @@
 int cry_mpi_cmp_abs(const cry_mpi *a, const cry_mpi *b)
 {
     size_t i;
-    cry_mpi_digit *ap, *bp;
+    const cry_mpi_digit *ap, *bp;
 
     if (a->used < b->used)
         return -1;

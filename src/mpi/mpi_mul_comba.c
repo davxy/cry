@@ -5,7 +5,8 @@ int cry_mpi_mul_comba(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
 {
     int res;
     size_t ix, iy, iz, tx, ty, pa;
-    cry_mpi_digit c0, c1, c2, *tmpx, *tmpy;
+    cry_mpi_digit c0, c1, c2;
+    const cry_mpi_digit *tmpx, *tmpy;
     cry_mpi tmp, *dst;
 
     if (cry_mpi_is_zero(a) || cry_mpi_is_zero(b)) {
