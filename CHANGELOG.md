@@ -21,19 +21,36 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
-
-[0.1.2] - 2022-02-05
+[0.1.3] - Unreleased
 --------------------
+
+Fixed
+
+* Remove potential MPI double free in ecdsa-verify function.
+* Skipped error check in DSA keygen.
+* Fix CMAC function prototype.
 
 Added
 
-* MPI fast square using Comba and Karatsuba methods.
+* Introduce error codes in place of -1 generic errors.
+
+Changed
+
+* Use static constant data for well known ECC parameters.
+
+
+[0.1.2] - 2022-02-05
+--------------------
 
 Fixed
 
 * ECDH unit test was using outdated EC points functions.
 * EC multiplication with simple windowed algorithm (CRY_ECP_MUL_WIN) was
   using outdated EC points functions.
+
+Added
+
+* MPI fast square using Comba and Karatsuba methods.
 
 Changed
 
@@ -43,6 +60,11 @@ Changed
 [0.1.1] - 2020-04-01
 --------------------
 
+Fixed
+
+* MPI "is_prime" function was not working for primes < 1010 (decimal).
+* ECDSA major fix in one of the NIST curves parameters.
+
 Added
 
 * ARC4 stream cipher.
@@ -51,14 +73,13 @@ Added
 * DSA key parameters generator.
 * SHA-512 and SHA-384
 
-Fixed
-
-* MPI "is_prime" function was not working for primes < 1010 (decimal).
-* ECDSA major fix in one of the NIST curves parameters.
-
 
 [0.1.0] - 2019-09-23
 --------------------
+
+Fixed
+
+* MPI bit-set macro was setting the wrong bit when using 64-bit digits.
 
 Added
 
@@ -71,10 +92,6 @@ Changed
 * RSA padding schemes correction.
 * MPI random prime generation sequence independence from MPI digit size.
 * Weak PRNG renamed to LFSR-113.
-
-Fixed
-
-* MPI bit-set macro was setting the wrong bit when using 64-bit digits.
 
 
 [0.0.10] - 2019-06-08
@@ -92,6 +109,12 @@ Added
 [0.0.9] - 2019-04-22
 --------------------
 
+Fixed
+
+* MPI product of negative value by zero returning negative zero.
+* MPI potential uninitialized memory access when digit size is 1.
+* MPI square unhandled integer overflow when digit size is 1.
+
 Added
 
 * SHA1 message digest
@@ -103,15 +126,13 @@ Changed
 * Configurable MPI digit size and memory alloc quantum.
 * MPI exponentiation refactory.
 
-Fixed
-
-* MPI product of negative value by zero returning negative zero.
-* MPI potential uninitialized memory access when digit size is 1.
-* MPI square unhandled integer overflow when digit size is 1.
-
 
 [0.0.8] - 2019-03-16
 --------------------
+
+Fixed
+
+* MPI and RSA not initialized values.
 
 Added
 
@@ -127,10 +148,6 @@ Removed
 
 * Trivial LRC and 8-bit checksum.
 * System dependent PRNG.
-
-Fixed
-
-* MPI and RSA not initialized values.
 
 
 [0.0.7] - 2018-12-26

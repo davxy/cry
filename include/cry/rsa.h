@@ -46,6 +46,11 @@ int cry_rsa_decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 int cry_rsa_sign(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
                  const unsigned char *in, size_t inlen);
 
+/**
+ * RSA signature verification.
+ *
+ * Returns 1 on signature verification success, 0 on verification failure, <0 on error.
+ */
 int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
                    const unsigned char *in, size_t inlen);
 

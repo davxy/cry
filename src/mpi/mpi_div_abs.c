@@ -12,7 +12,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
 
     /* is divisor zero ? */
     if (cry_mpi_is_zero(b))
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     /* if a < b then q=0, r=a */
     if (cry_mpi_cmp_abs(a, b) < 0) {
@@ -83,9 +83,9 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
 
     /* is divisor zero ? */
     if (cry_mpi_is_zero(b))
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
-    /* if a < b then q=0, r = a */
+    /* if a < b then q = 0, r = a */
     if (cry_mpi_cmp_abs(a, b) < 0) {
         if (rr != NULL)
             res = cry_mpi_copy(rr, a);
@@ -207,7 +207,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
         cry_mpi_swap(&x, rr);
         rr->sign = 0;
     }
-    res = 0;
+    return 0;
 
 e5: cry_mpi_clear(&y);
 e4: cry_mpi_clear(&x);

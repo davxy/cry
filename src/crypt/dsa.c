@@ -2,7 +2,7 @@
 #include "../misc.h"
 
 
-#define CHK(exp) CRY_CHK(exp, e)
+#define CHK(exp) CRY_CHK(res = (exp), e)
 
 /*
  * Generate a non zero random secret k less than q.
@@ -110,7 +110,8 @@ int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_sig *sig,
     CHK(cry_mpi_mod(&u1, &u1, &ctx->q));
 
     /* Check to see if v and sig match */
-    res = (cry_mpi_cmp_abs(&u1, &sig->r) == 0) ? 0 : -1;
+    res = (cry_mpi_cmp_abs(&u1, &sig->r) == 0);
+
 e:  cry_mpi_clear_list(&z, &w, &u1, &u2, (cry_mpi *)NULL);
     return res;
 }
@@ -142,7 +143,7 @@ void cry_dsa_clear(cry_dsa_ctx *ctx)
  */
 int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l)
 {
-    int res = -1;
+    int res;
     cry_mpi p1, q, r, one;
     unsigned int i, j;
 
@@ -186,6 +187,10 @@ int cry_dsa_keygen(cry_dsa_ctx *ctx, unsigned int l)
         res = 0;
         break;
     }
+    if (i == ITER_MAX_OUT) {
+        res = CRY_ERROR_OTHER;
+    }
+
 e:  cry_mpi_clear_list(&p1, &q, &r, &one, NULL);
     return res;
 }

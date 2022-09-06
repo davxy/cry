@@ -84,7 +84,7 @@ int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_sig *sig,
     /* r = x1 mod n */
     CHK1(cry_mpi_mod(&G.x, &G.x, &ctx->grp.n)); // inutile
 
-    res = (cry_mpi_cmp_abs(&G.x, &sig->r) == 0) ? 0 : -1;
+    res = (cry_mpi_cmp_abs(&G.x, &sig->r) == 0);
 
 e1: cry_ecp_clear_list(&G, &Q, (cry_ecp *)NULL);
 e0: cry_mpi_clear_list(&z, &w, (cry_mpi *)NULL);

@@ -1,11 +1,12 @@
 #include <cry/base64.h>
+#include <cry/error.h>
 
 static const char *base64 =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-size_t cry_base64_encode(char *out, const char *in, size_t len)
+int cry_base64_encode(char *out, const char *in, size_t len)
 {
-    size_t i, outlen = 0;
+    int i, outlen = 0;
 
     do {
         outlen += 4;
@@ -37,6 +38,7 @@ size_t cry_base64_encode(char *out, const char *in, size_t len)
         in += 3;
         len -= 3;
     } while (len != 0);
+
     return outlen;
 }
 
@@ -59,18 +61,18 @@ static const unsigned char unbase64[] = {
      49,  50,  51, 255, 255, 255, 255, 255,
 };
 
-size_t cry_base64_decode(char *out, const char *in, size_t len)
+int cry_base64_decode(char *out, const char *in, size_t len)
 {
-    size_t i, outlen = 0;
+    int i, outlen = 0;
 
     if (len & 0x03)
-        return -1; /* should be a multiple of 4 */
+        return CRY_ERROR_BAD_DATA; /* should be a multiple of 4 */
 
     do {
         for (i = 0; i < 4; i++) {
             /* check for illegal base64 characters */
             if (in[i] < 0 || unbase64[(int)in[i]] == 255)
-                return -1;
+                return CRY_ERROR_BAD_DATA;
         }
 
         *out++ = unbase64[(int)in[0]] << 2 |
@@ -92,5 +94,6 @@ size_t cry_base64_decode(char *out, const char *in, size_t len)
         in += 4;
         len -= 4;
     } while (len != 0);
+
     return outlen;
 }

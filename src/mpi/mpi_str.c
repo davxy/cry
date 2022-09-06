@@ -24,7 +24,7 @@ static int load_str_hex(cry_mpi *a, const char *s)
     }
     bin = malloc(siz);
     if (bin == NULL)
-        return -1;
+        return CRY_ERROR_OUT_OF_MEMORY;
     if (first != 0)
         bin[i++] = ASC_TO_RAW_CHAR(first);
 
@@ -80,7 +80,7 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
 
     /* max base 36 ('z') */
     if (radix > 36)
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     cry_mpi_zero(a);
 
@@ -100,11 +100,11 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
         return ret;
     }
 
-    if (cry_mpi_init_int(&base, (long)radix) < 0)
-        return -1;
-    if (cry_mpi_init_int(&tmp, 1) < 0) {
+    if ((ret = cry_mpi_init_int(&base, (long)radix)) != 0)
+        return ret;
+    if ((ret = cry_mpi_init_int(&tmp, 1)) != 0) {
         cry_mpi_clear(&base);
-        return -1;
+        return ret;
     }
 
     /* Skip leading zeros */
@@ -124,7 +124,7 @@ int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s)
     }
     if (*s != '\0') { /* If all the string has not been fed */
         cry_mpi_clear(a);
-        ret = -1;
+        ret = CRY_ERROR_BAD_DATA;
     }
     a->sign = cry_mpi_is_zero(a) ? 0 : sign;
     cry_mpi_clear(&base);
@@ -140,7 +140,7 @@ int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s)
     unsigned int i = 0, j, d;
 
     if (radix < 2 || radix > 16)
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     if (cry_mpi_is_zero(a) != 0) {
         s[i++] = '0';
@@ -193,10 +193,8 @@ int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s)
 {
     int res;
 
-    res = cry_mpi_init(a);
-    if (res == 0) {
-        res = cry_mpi_load_str(a, radix, s);
-        if (res != 0)
+    if ((res = cry_mpi_init(a)) == 0) {
+        if ((res = cry_mpi_load_str(a, radix, s)) != 0)
             cry_mpi_clear(a);
     }
     return res;

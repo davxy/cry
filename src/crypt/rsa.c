@@ -27,7 +27,7 @@ static int padding_add(unsigned char *dst, size_t dlen,
     size_t j;
 
     if (slen > (dlen - 11))
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     *(p++) = 0;
 
@@ -46,7 +46,7 @@ static int padding_add(unsigned char *dst, size_t dlen,
         break;
     case CRY_RSA_PADDING_PKCS_V21:
         /* not implemented yet */
-        res = -1;
+        res = CRY_ERROR_NOT_IMPLEMENTED;
         break;
     default:
         break;
@@ -56,6 +56,7 @@ static int padding_add(unsigned char *dst, size_t dlen,
     p += j;
     *(p++) = '\0';
     memcpy(p, src, slen);
+
     return 0;
 }
 
@@ -70,7 +71,7 @@ static int padding_del(unsigned char *dst, size_t dlen,
     if (src[0] != 0 || (sign != 0 && src[1] != 0x01) ||
         (sign == 0 && src[1] != 0x02))
         /* Unrecognized block type */
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     /*
      * Find next 0 byte after padding type byte;
@@ -78,14 +79,16 @@ static int padding_del(unsigned char *dst, size_t dlen,
      */
     for (i = 2; i < slen && src[i] != 0; i++) {
         if (sign != 0 && src[i] != 0xFF)
-            return -1;
+            return CRY_ERROR_BAD_DATA;
     }
     if (i == slen)
-        return -1;
+        return CRY_ERROR_BAD_DATA;
+
     i++; /* skip zero */
     if (slen - i < dlen)
         dlen = slen - i;
     memcpy(dst, src + i, dlen);
+
     return dlen;
 }
 
@@ -103,7 +106,7 @@ static int encrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
     mod_len = cry_mpi_count_bytes(&ctx->n);
     buf = malloc(mod_len);
     if (buf == NULL)
-        return -1;
+        return CRY_ERROR_OUT_OF_MEMORY;
 
     if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *)NULL)) != 0)
         goto e;
@@ -143,10 +146,10 @@ static int decrypt_block(cry_rsa_ctx *ctx, unsigned char *out,
     key = (sign == 0) ? &ctx->d : &ctx->e;
     mod_len = cry_mpi_count_bytes(&ctx->n);
     if (inlen != mod_len)
-        return -1;
+        return CRY_ERROR_BAD_DATA;
     buf = malloc(mod_len);
     if (buf == NULL)
-        return -1;
+        return CRY_ERROR_OUT_OF_MEMORY;
 
     if ((res = cry_mpi_init_list(&c, &m, (cry_mpi *)NULL)) != 0)
         goto e;
@@ -189,7 +192,7 @@ static int encrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
 
         newptr = realloc(*out, *outlen + mod_siz);
         if (newptr == NULL) {
-            res = -1;
+            res = CRY_ERROR_OUT_OF_MEMORY;
             break;
         }
         *out = newptr;
@@ -227,13 +230,13 @@ static int decrypt(cry_rsa_ctx *ctx, unsigned char **out, size_t *outlen,
     while (inlen > 0) {
         if (inlen < mod_siz) {
             /* Input must be an even multiple of key modulus */
-            res = -1;
+            res = CRY_ERROR_BAD_DATA;
             break;
         }
 
         newptr = realloc(*out, *outlen + mod_siz);
         if (newptr == NULL) {
-            res = -1;
+            res = CRY_ERROR_OUT_OF_MEMORY;
             break;
         }
         *out = newptr;
@@ -287,10 +290,11 @@ int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
     res = decrypt(ctx, &out, &outlen, sig, siglen, 1);
     if (res == 0) {
         if ((ctx->padding == CRY_RSA_PADDING_NONE && outlen < inlen) ||
-            (ctx->padding != CRY_RSA_PADDING_NONE && outlen != inlen) ||
-            memcmp(out, in, inlen) != 0) {
-            res = -1;
+            (ctx->padding != CRY_RSA_PADDING_NONE && outlen != inlen)) {
+            /* Not the expected len */
+            return CRY_ERROR_BAD_DATA;
         }
+        res = (memcmp(out, in, inlen) == 0);
         free(out);
     }
     return res;

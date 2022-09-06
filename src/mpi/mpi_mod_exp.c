@@ -6,12 +6,12 @@
 int cry_mpi_mod_exp(cry_mpi *r, const cry_mpi *b, const cry_mpi *e,
                     const cry_mpi *m)
 {
-    int res = 0;
+    int res;
     size_t bits;
     cry_mpi exp;
 
     if (cry_mpi_is_neg(e) || (m != NULL && cry_mpi_is_neg(m)))
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     res = cry_mpi_init_int(&exp, 1);
     bits = cry_mpi_count_bits(e);

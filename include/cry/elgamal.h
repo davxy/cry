@@ -39,12 +39,22 @@ void cry_elgamal_clear(cry_elgamal_ctx *ctx);
 int cry_elgamal_sign(cry_elgamal_ctx *ctx, unsigned char *sign,
                      const unsigned char *in, size_t len);
 
+/**
+ * Elgamal signature verification.
+ *
+ * Returns 1 on signature verification success, 0 on verification failure, <0 on error.
+ */
 int cry_elgamal_verify(cry_elgamal_ctx *ctx, const unsigned char *sign,
                        const unsigned char *in, size_t len);
 
 int cry_elgamal_sign2(cry_elgamal_ctx *ctx, cry_elgamal_sig *sign,
                       const unsigned char *in, size_t len);
 
+/**
+ * Elgamal signature verification.
+ *
+ * Returns 1 on verification success, 0 on verification failure, <0 on error.
+ */
 int cry_elgamal_verify2(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
                         const unsigned char *in, size_t len);
 

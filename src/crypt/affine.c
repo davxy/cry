@@ -1,4 +1,5 @@
 #include <cry/affine.h>
+#include <cry/error.h>
 #include "misc.h"
 #include <string.h>
 
@@ -44,9 +45,9 @@ int cry_affine_init(struct cry_affine_ctx *ctx, const unsigned char *keya,
     ctx->keylen = keylen;
     /* Compute key inverse */
     for (i = 0; i < keylen; i++) {
-        /* sould be odd  to have gcd(256, val)=1 */
+        /* Should be odd to have gcd(256, val)=1 */
         if ((ctx->keya[i] & 1) != 1) {
-            res = -1;
+            res = CRY_ERROR_BAD_DATA;
             break;
         }
         ctx->inva[i] = (unsigned char)cry_long_inv(ctx->keya[i], 256);

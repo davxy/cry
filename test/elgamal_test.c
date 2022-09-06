@@ -63,7 +63,7 @@ static void sign_verify(int argc, char *argv[])
 
     cry_mpi_clear_list(&min, &max, NULL);
 
-    ASSERT(res == 0);
+    ASSERT(res == 1);
 }
 
 static void setup(void)

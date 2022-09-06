@@ -8,6 +8,7 @@
 
 #include <stddef.h>
 #include <limits.h>
+#include <cry/error.h>
 
 /* Digit max value */
 #ifndef CRY_MPI_DIGIT_MAX
@@ -90,20 +91,49 @@ int cry_mpi_set_int(cry_mpi *a, long val);
 
 int cry_mpi_get_int(cry_mpi *a, long *val);
 
+/*
+ * Initialize from a memory buffer in big endian byte order.
+ */
 int cry_mpi_init_bin(cry_mpi *a, const void *b, size_t size);
 
+/*
+ * Load integer data from a memory buffer in big endian byte order.
+ * Destination integer should have been already initialized.
+ */
 int cry_mpi_load_bin(cry_mpi *a, const void *b, size_t size);
 
+/*
+ * Store integer data to a memory buffer in big endian byte order.
+ * Sign is lost.
+ */
 int cry_mpi_store_bin(const cry_mpi *a, void *b, size_t size, int pad);
 
+/*
+ * Initialize integer from a string big endian byte order.
+ */
 int cry_mpi_init_str(cry_mpi *a, unsigned int radix, const char *s);
 
+/*
+ * Load from a string in big endian byte order.
+ * Destination should have been already initialized.
+ */
 int cry_mpi_load_str(cry_mpi *a, unsigned int radix, const char *s);
 
+/*
+ * Store integer data to a string in big endian byte order.
+ */
 int cry_mpi_store_str(const cry_mpi *a, unsigned int radix, char *s);
 
+/*
+ * Initialize multiple integers.
+ * The list should be `NULL` terminated.
+ */
 int cry_mpi_init_list(cry_mpi *a, ... /* (cry_mpi *)NULL */);
 
+/*
+ * Clear multiple integers.
+ * The list should be `NULL` terminated.
+ */
 void cry_mpi_clear_list(cry_mpi *a, ... /* (cry_mpi *)NULL */);
 
 /*
@@ -172,12 +202,26 @@ int cry_mpi_sqr_karatsuba(cry_mpi *r, const cry_mpi *a);
  * Utilities
  */
 
+/*
+ * Compare two big numbers absolute values.
+ * Returns: -1 if a < b, 1 if a > b, 0 if a == b.
+ */
 int cry_mpi_cmp_abs(const cry_mpi *a, const cry_mpi *b);
 
+/*
+ * Compare two big numbers.
+ * Returns: -1 if a < b, 1 if a > b, 0 if a == b.
+ */
 int cry_mpi_cmp(const cry_mpi *a, const cry_mpi *b);
 
+/*
+ * Count number of bits used by a number.
+ */
 size_t cry_mpi_count_bits(const cry_mpi *a);
 
+/*
+ * Count number of bytes used by a number.
+ */
 #define cry_mpi_count_bytes(a) \
     ((cry_mpi_count_bits(a) + 7) / 8)
 

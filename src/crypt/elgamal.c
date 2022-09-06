@@ -4,7 +4,7 @@
 
 #define MAX_ITER 1024
 
-#define CHK(exp) CRY_CHK(res = exp, e)
+#define CHK(exp) CRY_CHK(res = (exp), e)
 
 /*
  * Generate a random secret k, such that gcd(k, p-1) = 1
@@ -39,7 +39,7 @@ static int secret_gen(cry_mpi *k, const cry_mpi *t)
     if ((res = cry_mpi_init(&r)) != 0)
         return res;
 
-    res = -1;
+    res = CRY_ERROR_OTHER;
     do {
         CHK(cry_mpi_rand_range(k, t));
         CHK(cry_mpi_gcd(&r, k, t));
@@ -94,7 +94,7 @@ int cry_elgamal_verify2(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
     cry_mpi r, z;
 
     if (len > cry_mpi_count_bytes(&ctx->p))
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     if ((res = cry_mpi_init_list(&r, &z, (cry_mpi *)NULL)) != 0)
         return res;
@@ -108,8 +108,7 @@ int cry_elgamal_verify2(cry_elgamal_ctx *ctx, const cry_elgamal_sig *sign,
     CHK(cry_mpi_mod_exp(&z, &ctx->g, &z, &ctx->p));
 
     res = cry_mpi_cmp(&r, &z);
-    if (res != 0)
-        res = -1;
+    res = (res == 0);
 
 e:  cry_mpi_clear_list(&r, &z, (cry_mpi *)NULL);
     return res;

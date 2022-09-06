@@ -701,7 +701,7 @@ int cry_ecp_grp_load(cry_ecp_grp *grp, int grp_id)
         break;
 #endif
     default:
-        res = -1;
+        res = CRY_ERROR_BAD_DATA;
         break;
     }
     return res;

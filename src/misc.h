@@ -182,8 +182,8 @@ unsigned long cry_long_inv(unsigned long val, unsigned long mod);
  * Check CRY operation result.
  * If not zero result jump to label.
  */
-#define CRY_CHK(res, label) do { \
-    if ((res) != 0) \
+#define CRY_CHK(expr, label) do { \
+    if ((expr) != 0) \
         goto label; \
 } while (0)
 

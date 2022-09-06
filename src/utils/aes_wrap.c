@@ -12,6 +12,7 @@
 
 #include <cry/utils.h>
 #include <cry/aes.h>
+#include <cry/error.h>
 #include <string.h>
 
 
@@ -82,7 +83,7 @@ int cry_aes_unwrap(unsigned char *out, const unsigned char *in, size_t len,
     for (i = 0; i < 8; i++) {
         if (b[i] != INIT_VAL) {
             memset(out, 0, len);
-            res = -1;
+            res = CRY_ERROR_BAD_DATA;
             break;
         }
     }

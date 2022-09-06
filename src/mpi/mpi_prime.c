@@ -61,7 +61,7 @@ static const unsigned int small_primes[] = {
  * If p is in the small primes list (p is prime) returns 2.
  * If one of the primes divides p (p is not prime) returns 1.
  * If none of the primes divides p (more tests are required) returns 0.
- * On error returns -1
+ * On error returns an error kind.
  */
 static int is_obviously_not_prime(const cry_mpi *p)
 {
@@ -69,7 +69,7 @@ static int is_obviously_not_prime(const cry_mpi *p)
     size_t i;
     cry_mpi m;
 
-    if ((res = cry_mpi_init(&m)) < 0)
+    if ((res = cry_mpi_init(&m)) != 0)
         return res;
 
     for (i = 0; i < CRY_ARRAY_LEN(small_primes);  i++) {
@@ -79,7 +79,7 @@ static int is_obviously_not_prime(const cry_mpi *p)
             res = 2;
             break;
         }
-        if ((res = cry_mpi_mod(&m, p, &m)) < 0)
+        if ((res = cry_mpi_mod(&m, p, &m)) != 0)
             break;
         res = cry_mpi_is_zero(&m);
         if (res == 1)
@@ -96,22 +96,22 @@ static int is_obviously_not_prime(const cry_mpi *p)
  */
 static int calc_b_and_m(cry_mpi *m, const cry_mpi *p)
 {
-    int ret = 0;
+    int res;
+    int b;
 
-    if ((ret = cry_mpi_copy(m, p)) < 0)
-        return ret;
+    if ((res = cry_mpi_copy(m, p)) < 0)
+        return res;
 
-    if ((ret = cry_mpi_sub(m, m, &g_one)) < 0) {
-        return ret;
+    if ((res = cry_mpi_sub(m, m, &g_one)) < 0) {
+        return res;
     }
 
-    for (ret = 0; !cry_mpi_is_odd(m); ret++) {
-        if (cry_mpi_shr(m, m, 1) < 0) { /* div by 2 */
-            ret = -1;
-            break;
+    for (b = 0; !cry_mpi_is_odd(m); b++) {
+        if ((res = cry_mpi_shr(m, m, 1)) < 0) { /* div by 2 */
+            return res;
         }
     }
-    return ret;
+    return b;
 }
 
 /* 0 <= r < max */
@@ -127,7 +127,7 @@ static int passes_miller_rabin(const cry_mpi *p)
 
     b = (unsigned int)calc_b_and_m(&m, p);
     if ((int)b < 0) {
-        res = -1;
+        res = (int)b;
         goto e;
     }
 
@@ -188,7 +188,7 @@ int cry_mpi_is_prime(const cry_mpi *p)
         /* Is not obviously prime, proceed to Miller Rabin test */
         for (i = 0; i < MILLER_ITER_NO; i++) {
             if ((res = passes_miller_rabin(p)) <= 0)
-                break; /* -1 on error; 0 if test is not passed */
+                break; /* <0 on error; 0 if test is not passed */
         }
         break;
     case 2:
@@ -198,9 +198,6 @@ int cry_mpi_is_prime(const cry_mpi *p)
     case 1:
         /* Divisible by one of the small primes */
         res = 0;
-        break;
-    default:
-        res = -1;
         break;
     }
     return res;
@@ -215,11 +212,11 @@ int cry_mpi_is_prime(const cry_mpi *p)
  */
 int cry_mpi_prime(cry_mpi *p, size_t bits, unsigned int *iter)
 {
-    int res = -1;
+    int res = CRY_ERROR_OTHER;
     unsigned int i, itermax;
 
     if ((bits & 0x07) || bits == 0)
-        return -1; /* Not a multiple of 8 bit */
+        return CRY_ERROR_BAD_DATA; /* Not a multiple of 8 bit */
 
     itermax = (iter) ? *iter : ITERMAX;
     i = 0;
@@ -248,7 +245,7 @@ int cry_mpi_prime(cry_mpi *p, size_t bits, unsigned int *iter)
         }
     }
     if (i == itermax)
-        res = -1;
+        res = CRY_ERROR_OTHER;
     if (iter)
         *iter = i;
     return res;

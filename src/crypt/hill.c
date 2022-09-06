@@ -1,5 +1,6 @@
 #include <cry/hill.h>
 #include <cry/prng.h>
+#include <cry/error.h>
 #include "misc.h"
 #include <string.h>
 
@@ -156,7 +157,7 @@ void cry_hill_decrypt(struct cry_hill_ctx *ctx, unsigned char *out,
 static int keygen(unsigned char *key, unsigned char *ikey, size_t keylen,
                   unsigned int trials)
 {
-    int res = -1;
+    int res = CRY_ERROR_OTHER;
     unsigned char det, idet;
     size_t n;
 
@@ -204,6 +205,6 @@ int cry_hill_init(struct cry_hill_ctx *ctx, const unsigned char *key,
     else if (key != NULL)
         memcpy(ctx->ikey, ikey, keylen);
     else
-        res = -1;
+        res = CRY_ERROR_BAD_DATA;
     return res;
 }

@@ -161,7 +161,8 @@ static void mpi_unary_op(int argc, char *argv[], unary_op_f op)
         g_malloc_mock_state = MALLOC_MOCK_ACTIVE; \
     test; \
     if (g_malloc_mock_state == MALLOC_MOCK_FAILED) { \
-        ASSERT(res == -1); \
+        /* FIXME: this shoud always be OUT_OF_MEM */ \
+        ASSERT(res < 0); \
         return; \
     } \
 } while (0)

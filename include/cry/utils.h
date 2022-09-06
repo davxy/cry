@@ -19,7 +19,7 @@
  * @param len    Length of the plain-text (in).
  * @param key    Key-Encryption Key (KEK).
  * @param keylen KEK length.
- * @return       0 on success, -1 on failure
+ * @return       Operation result.
  */
 int cry_aes_wrap(unsigned char *out, const unsigned char *in, size_t len,
                  const unsigned char *key, size_t keylen);
@@ -34,7 +34,7 @@ int cry_aes_wrap(unsigned char *out, const unsigned char *in, size_t len,
  * @param len    Length of the plain-text (out).
  * @param key    Key-Encryption Key (KEK).
  * @param keylen KEK length.
- * @return       0 on success, -1 on failure
+ * @return       Operation result.
  */
 int cry_aes_unwrap(unsigned char *out, const unsigned char *in, size_t len,
                    const unsigned char *key, size_t keylen);
