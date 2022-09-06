@@ -2,7 +2,7 @@
 #include "../misc.h"
 
 
-#define CHK(exp) CRY_CHK(exp, e)
+#define CHK(exp) CRY_CHK(res = (exp), e)
 
 /*
  * Generate a non zero random secret k less than q.

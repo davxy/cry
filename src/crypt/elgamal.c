@@ -4,7 +4,7 @@
 
 #define MAX_ITER 1024
 
-#define CHK(exp) CRY_CHK(res = exp, e)
+#define CHK(exp) CRY_CHK(res = (exp), e)
 
 /*
  * Generate a random secret k, such that gcd(k, p-1) = 1
