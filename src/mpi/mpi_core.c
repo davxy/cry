@@ -6,6 +6,11 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
 {
     cry_mpi_digit *tmp;
 
+    if (a->alloc == STATIC_MAGIC) {
+        /* The integer data is not owned by us */
+        return CRY_ERROR_BAD_DATA;
+    }
+
     if (digs <= a->alloc)
         return 0;
 
@@ -14,7 +19,7 @@ int cry_mpi_grow(cry_mpi *a, size_t digs)
     /* reallocate the array */
     tmp = (cry_mpi_digit *)realloc(a->data, sizeof(cry_mpi_digit) * digs);
     if (tmp == NULL)
-        return -1;
+        return CRY_ERROR_OUT_OF_MEMORY;
     a->data = tmp;
 
     /* zero excess digits */
@@ -36,7 +41,7 @@ int cry_mpi_init_size(cry_mpi *a, size_t size)
     if (size != 0) {
         a->data = malloc(sizeof(cry_mpi_digit) * size);
         if (a->data == NULL)
-            return -1;
+            return CRY_ERROR_OUT_OF_MEMORY;
     } else {
         a->data = NULL;
     }
@@ -95,8 +100,8 @@ int cry_mpi_get_int(cry_mpi *a, long *val)
 
     used = cry_mpi_count_bits(a);
     /* consider the sign bit */
-    if (used > 8*sizeof(long) - ((a->sign == 0) ? 1 : 0))
-        return -1;
+    if (used > 8 * sizeof(long) - ((a->sign == 0) ? 1 : 0))
+        return CRY_ERROR_BAD_DATA;
     i = a->used;
     while (i-- > 0) {
 #if CRY_MPI_DIGIT_MAX != ULONG_MAX
@@ -105,13 +110,15 @@ int cry_mpi_get_int(cry_mpi *a, long *val)
         rval |= a->data[i];
     }
     *val = (a->sign == 0) ? rval : -rval;
+
     return 0;
 }
 
 void cry_mpi_clear(cry_mpi *a)
 {
     if (a->data != NULL) {
-        if (a->alloc != 0) /* do not free non malloced data */
+        /* Don't free non malloced data */
+        if (a->alloc != STATIC_MAGIC)
             free(a->data);
         a->data = NULL;
     }
@@ -132,8 +139,7 @@ int cry_mpi_copy(cry_mpi *d, const cry_mpi *s)
 
     /* grow dest */
     if (d->alloc < s->used) {
-        res = cry_mpi_grow(d, s->used);
-        if (res != 0)
+        if ((res = cry_mpi_grow(d, s->used)) < 0)
             return res;
     }
 
@@ -142,6 +148,7 @@ int cry_mpi_copy(cry_mpi *d, const cry_mpi *s)
         d->data[i] = s->data[i];
     d->used = s->used;
     d->sign = s->sign;
+
     return 0;
 }
 

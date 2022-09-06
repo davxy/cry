@@ -15,7 +15,6 @@
 #define cry_prng_init cry_prng_aes_init
 #define cry_prng_rand cry_prng_aes_rand
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -29,7 +28,7 @@ extern "C" {
  *
  * @param   seed        Seed data.
  * @param   seed_siz    Seed data size.
- * @return  0 on success, -1 on failure.
+ * @return              Operation result.
  */
 int cry_prng_aes_init(const unsigned char *seed, size_t seed_siz);
 
@@ -38,7 +37,7 @@ int cry_prng_aes_init(const unsigned char *seed, size_t seed_siz);
  *
  * @param buf   Destination buffer
  * @param siz   Destination buffer size.
- * @return      0 on success, -1 on failure.
+ * @return      Operation result.
  */
 int cry_prng_aes_rand(unsigned char *buf, size_t siz);
 
@@ -51,7 +50,7 @@ int cry_prng_aes_rand(unsigned char *buf, size_t siz);
  *
  * @param   seed        Seed data.
  * @param   seed_siz    Seed data size.
- * @return  0 on success, -1 on failure.
+ * @return              Operation result.
  */
 int cry_prng_lfsr113_init(const unsigned char *seed, size_t seed_siz);
 
@@ -60,7 +59,7 @@ int cry_prng_lfsr113_init(const unsigned char *seed, size_t seed_siz);
  *
  * @param buf   Destination buffer
  * @param siz   Destination buffer size.
- * @return      0 on success, -1 on failure.
+ * @return      Operation result.
  */
 int cry_prng_lfsr113_rand(unsigned char *buf, size_t siz);
 

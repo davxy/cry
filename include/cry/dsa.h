@@ -36,6 +36,11 @@ void cry_dsa_clear(cry_dsa_ctx *ctx);
 int cry_dsa_sign(cry_dsa_ctx *ctx, cry_dsa_sig *sig,
                  const unsigned char *in, size_t len);
 
+/**
+ * DSA signature verification.
+ *
+ * Returns 1 on signature verification success, 0 on verification failure, <0 on error.
+ */
 int cry_dsa_verify(cry_dsa_ctx *ctx, const cry_dsa_sig *sig,
                    const unsigned char *in, size_t len);
 

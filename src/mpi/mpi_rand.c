@@ -17,7 +17,7 @@ int cry_mpi_rand(cry_mpi *r, size_t bits)
     }
     siz = (bits + 7) >> 3;
     if ((bin = malloc(siz)) == NULL)
-        return -1;
+        return CRY_ERROR_OUT_OF_MEMORY;
     if ((res = cry_prng_aes_rand(bin, siz)) != 0)
         goto e;
     if ((res = cry_mpi_load_bin(r, bin, siz)) != 0)

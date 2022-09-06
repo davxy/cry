@@ -42,7 +42,7 @@ static void sign_verify(void)
     cry_ecp_mul(&ecdsa.q, &ecdsa.grp.g, &ecdsa.d, &ecdsa.grp);
 
     ASSERT_OK(cry_ecdsa_sign(&ecdsa, &sig, sha, sizeof(sha), NULL));
-    ASSERT_OK(cry_ecdsa_verify(&ecdsa, &sig, sha, sizeof(sha)));
+    ASSERT_EQ(cry_ecdsa_verify(&ecdsa, &sig, sha, sizeof(sha)), 1);
 }
 
 
@@ -63,7 +63,7 @@ static void sign_verify_small_rand_param(cry_ecdsa_rand_gen rand_gen)
     cry_ecp_mul(&ecdsa.q, &ecdsa.grp.g, &ecdsa.d, &ecdsa.grp);
 
     ASSERT_OK(cry_ecdsa_sign(&ecdsa, &sig, &v, 1, rand_gen));
-    ASSERT_OK(cry_ecdsa_verify(&ecdsa, &sig, &v, 1));
+    ASSERT_EQ(cry_ecdsa_verify(&ecdsa, &sig, &v, 1), 1);
 }
 
 static void sign_verify_small(void)

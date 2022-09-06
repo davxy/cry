@@ -8,8 +8,7 @@ int cry_ecdh_init(cry_ecdh_ctx *ctx, int grp_id)
 {
     int res;
 
-    res = cry_mpi_init(&ctx->d);
-    if (res != 0)
+    if ((res = cry_mpi_init(&ctx->d)) < 0)
         return res;
     CHK0(cry_ecp_init_list(&ctx->q, &ctx->z, NULL));
     if (grp_id != -1) {

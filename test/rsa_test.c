@@ -139,8 +139,7 @@ static void sign_verify(void)
     ASSERT_EQ(siglen, CIPHER_LEN);
     ASSERT_EQ_BUF(sig_buf, sign, siglen);
 
-    ASSERT_OK(cry_rsa_verify(&g_rsa, sig_buf, siglen,
-                             plain_text, PLAIN_LEN));
+    ASSERT_EQ(cry_rsa_verify(&g_rsa, sig_buf, siglen, plain_text, PLAIN_LEN), 1);
     free(sig_buf);
 }
 
@@ -160,8 +159,7 @@ static void sign_verify_sb(void)
     ASSERT_EQ(siglen, CIPHER_LEN);
     ASSERT_EQ_BUF(sig_buf, sign_sb, siglen);
 
-    ASSERT_OK(cry_rsa_verify(&g_rsa, sig_buf, siglen,
-                             plain_text, PLAIN_LEN));
+    ASSERT_EQ(cry_rsa_verify(&g_rsa, sig_buf, siglen, plain_text, PLAIN_LEN), 1);
     free(sig_buf);
 }
 

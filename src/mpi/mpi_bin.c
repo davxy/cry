@@ -1,9 +1,6 @@
 #include "mpi_pvt.h"
 #include <string.h>
 
-/*
- * Initialize a big number from big endian binary data.
- */
 int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
 {
     int res;
@@ -43,9 +40,6 @@ int cry_mpi_load_bin(cry_mpi *x, const void *buf, size_t size)
     return 0;
 }
 
-/*
- * Write a big number to a memory buffer in big endian byte order.
- */
 int cry_mpi_store_bin(const cry_mpi *x, void *buf,
                       size_t bufsiz, int pad)
 {
@@ -55,7 +49,7 @@ int cry_mpi_store_bin(const cry_mpi *x, void *buf,
 
     i = cry_mpi_count_bytes(x);
     if (bufsiz < i)
-        return -1;  /* Do not silently truncate */
+        return CRY_ERROR_BAD_DATA;  /* Do not silently truncate */
     if (!pad)
         bufsiz = i;
     /* Add leading zeroes if necessary */

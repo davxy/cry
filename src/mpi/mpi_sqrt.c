@@ -54,7 +54,7 @@ int cry_mpi_sqrt(cry_mpi *r, const cry_mpi *a)
     cry_mpi t1, t2;
 
     if (a->sign != 0)
-        return -1;
+        return CRY_ERROR_BAD_DATA;
 
     if (cry_mpi_is_zero(a) != 0) {
         cry_mpi_zero(r);

@@ -33,6 +33,11 @@ int cry_ecdsa_sign(cry_ecdsa_ctx *ctx, cry_ecdsa_sig *sig,
                    const unsigned char *in, size_t len,
                    cry_ecdsa_rand_gen rand_gen);
 
+/**
+ * ECDSA signature verification.
+ *
+ * Returns 1 on signature verification success, 0 on verification failure, <0 on error.
+ */
 int cry_ecdsa_verify(cry_ecdsa_ctx *ctx, const cry_ecdsa_sig *sig,
                      const unsigned char *in, size_t len);
 

@@ -5,7 +5,7 @@ int cry_mpi_shrd(cry_mpi *a, size_t n)
     size_t x;
     cry_mpi_digit *bottom, *top;
 
-    if (n == 0 || cry_mpi_is_zero(a) != 0)
+    if (n == 0 || cry_mpi_is_zero(a))
         return 0;
 
     if (a->used <= n) {
@@ -38,11 +38,11 @@ int cry_mpi_shr(cry_mpi *c, const cry_mpi *a, size_t n)
 
     /* copy */
     if (a != c) {
-        if ((res = cry_mpi_copy(c, a)) != 0)
+        if ((res = cry_mpi_copy(c, a)) < 0)
             return res;
     }
 
-    if (n == 0 || cry_mpi_is_zero(a) != 0)
+    if (n == 0 || cry_mpi_is_zero(a))
         return 0;
 
     /* shift by as many digits in the bit count */

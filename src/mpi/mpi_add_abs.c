@@ -5,6 +5,7 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     size_t min, max, i;
     cry_mpi_digit t, l, c, *rp;
     const cry_mpi_digit *ap, *bp;
+    int res;
 
     if (a->used < b->used) {
         const cry_mpi *swp = a;
@@ -15,8 +16,8 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     min = b->used;
 
     if (r->alloc < (max + 1)) {
-        if (cry_mpi_grow(r, max + 1) != 0)
-            return -1;
+        if ((res = cry_mpi_grow(r, max + 1)) < 0)
+            return res;
     }
     r->used = max;
     r->sign = 0;
@@ -45,5 +46,6 @@ int cry_mpi_add_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         for (; i < max; i++)
             *rp++ = *ap++;
     }
+
     return 0;
 }

@@ -5,16 +5,17 @@ int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
     size_t min, max, i;
     cry_mpi_digit c, t1, t2, *rp;
     const cry_mpi_digit *ap, *bp;
+    int res;
 
     if (cry_mpi_cmp_abs(a, b) < 0)
-        return -1; /* negative results are not allowed */
+        return CRY_ERROR_BAD_DATA; /* negative results are not allowed */
 
     max = a->used;
     min = b->used;
 
     if (r->alloc < max) {
-        if (cry_mpi_grow(r, max) != 0)
-            return -1;
+        if ((res = cry_mpi_grow(r, max)) < 0)
+            return res;
     }
     r->used = max;
     r->sign = 0;
@@ -40,9 +41,10 @@ int cry_mpi_sub_abs(cry_mpi *r, const cry_mpi *a, const cry_mpi *b)
         *rp++ = *ap++ - 1;
     }
     if (c)
-        return -1; /* negative result not allowed */
+        return CRY_ERROR_BAD_DATA; /* negative result not allowed */
     for (; i < max; i++)
         *rp++ = *ap++;
     cry_mpi_adjust(r); /* Adjust used counter */
+
     return 0;
 }

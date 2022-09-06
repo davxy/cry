@@ -16,7 +16,7 @@ static void keygen(unsigned int l)
     ASSERT_OK(cry_dsa_keygen(&dsa, l));
 
     ASSERT_OK(cry_dsa_sign(&dsa, &sig, sha, sizeof(sha)));
-    ASSERT_OK(cry_dsa_verify(&dsa, &sig, sha, sizeof(sha)));
+    ASSERT_EQ(cry_dsa_verify(&dsa, &sig, sha, sizeof(sha)), 1);
 }
 
 static void keygen_512(void)
@@ -97,7 +97,7 @@ static void sign_verify(void)
     ASSERT_OK(cry_mpi_load_bin(&dsa.pub, pub, sizeof(pub)));
 
     ASSERT_OK(cry_dsa_sign(&dsa, &sig, sha, sizeof(sha)));
-    ASSERT_OK(cry_dsa_verify(&dsa, &sig, sha, sizeof(sha)));
+    ASSERT_EQ(cry_dsa_verify(&dsa, &sig, sha, sizeof(sha)), 1);
 }
 
 static void setup(void)
