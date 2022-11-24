@@ -72,7 +72,7 @@ int cry_mpi_shld(cry_mpi *a, size_t n);
         ((cry_mpi_digit)1 << ((bit) % CRY_MPI_DIGIT_BITS))) != 0)
 
 /* Magic number to mark a number as statically allocated */
-#define STATIC_MAGIC    ((size_t)-1)
+#define STATIC_MAGIC    ((size_t)0xcafebabe)
 
 #define cry_mpi_static_init(n, digits, num_digits) do { \
     (n)->data  = (cry_mpi_digit *)(digits); \

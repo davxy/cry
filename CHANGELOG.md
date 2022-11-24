@@ -21,7 +21,7 @@ Given a version number MAJOR.MINOR.PATCH
 * MINOR incremented for new functionalities
 * PATCH incremented for bug fixes
 
-[0.1.3] - Unreleased
+[0.1.3] - 2022-11-24
 --------------------
 
 Fixed
@@ -29,6 +29,7 @@ Fixed
 * Remove potential MPI double free in ecdsa-verify function.
 * Skipped error check in DSA keygen.
 * Fix CMAC function prototype.
+* Memory leak in mpi abs div
 
 Added
 

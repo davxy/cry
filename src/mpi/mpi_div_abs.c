@@ -207,7 +207,7 @@ int cry_mpi_div_abs(cry_mpi *rq, cry_mpi *rr, const cry_mpi *a,
         cry_mpi_swap(&x, rr);
         rr->sign = 0;
     }
-    return 0;
+    res = 0;
 
 e5: cry_mpi_clear(&y);
 e4: cry_mpi_clear(&x);

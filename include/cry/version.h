@@ -17,7 +17,7 @@
 #define CRY_VERSION_H_
 
 /** Library pre-release string */
-#define CRY_PRE_RELEASE "rc1"
+//#define CRY_PRE_RELEASE "rc1"
 
 /** Library version major number */
 #define CRY_MAJOR   0
