@@ -292,9 +292,10 @@ int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
         if ((ctx->padding == CRY_RSA_PADDING_NONE && outlen < inlen) ||
             (ctx->padding != CRY_RSA_PADDING_NONE && outlen != inlen)) {
             /* Not the expected len */
-            return CRY_ERROR_BAD_DATA;
+            res = CRY_ERROR_BAD_DATA;
         }
-        res = (memcmp(out, in, inlen) == 0);
+		if (res == 0)
+            res = (memcmp(out, in, inlen) == 0);
         free(out);
     }
     return res;
