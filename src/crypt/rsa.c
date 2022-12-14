@@ -294,7 +294,7 @@ int cry_rsa_verify(cry_rsa_ctx *ctx, const unsigned char *sig, size_t siglen,
             /* Not the expected len */
             res = CRY_ERROR_BAD_DATA;
         }
-	    if (res == 0)
+        if (res == 0)
             res = (memcmp(out, in, inlen) == 0);
         free(out);
     }
