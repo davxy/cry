@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 BUILD_DIR=
 VERSION=
 MACHINE=

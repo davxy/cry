@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Linter implemented via uncrustify tool.
+#
+# Takes an optional parameter to specify the folders to parse.
 
 # Checks that are missing in uncrustify
 mycheck()
@@ -21,7 +25,6 @@ mycheck()
     sed -i 's|\([a-zA-Z0-9]\)   *\(\*[\^s]\)|\1 \2|g' $file
 }
 
-
 dirs=$1
 
 if [[ $dirs == "" ]]
@@ -37,5 +40,3 @@ do
     uncrustify -c uncrustify.cfg --no-backup -f $file -o $file
     #clang-format -style=file -i -verbose
 done
-
-

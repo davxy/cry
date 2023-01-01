@@ -1,4 +1,0 @@
-gcc
-%h
--Isrc
--Iinclude

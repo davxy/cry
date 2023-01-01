@@ -9,6 +9,17 @@ CRY is a small, comprehensive and portable cryptographic library prividing
 a good collection of ciphers, hash functions, pseudo-random number generators
 and multi-precision integers algorithms.
 
+### ⚠️ WARNING ⚠️
+
+The code has never been audited by any third party nor has been developed
+with the intent to be used for any serious application.
+
+Main focus was personal research.
+
+The implementations are not constant time.
+
+**USE IT AT YOUR OWN RISK!!!**
+
 Symmetric ciphers
 -----------------
 
