@@ -44,7 +44,10 @@ static void hmac_digest(int argc, char *argv[])
     cry_hmac_init(&hmac, &sha256, &sha256_itf, 32, par.key, par.keylen);
     cry_hmac_update(&hmac, par.msg, par.msglen);
     cry_hmac_digest(&hmac, mac);
+
     ASSERT(memcmp(mac, par.mac, par.maclen) == 0);
+
+    cry_hmac_clear(&hmac);
 }
 
 

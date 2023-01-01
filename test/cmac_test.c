@@ -40,6 +40,8 @@ static void cmac_aes_digest(int argc, char *argv[])
     cry_cmac_digest(&cmac, mac);
 
     ASSERT(memcmp(mac, par.mac, par.maclen) == 0);
+
+    cry_cmac_clear(&cmac);
 }
 
 static void dispatch(int argc, char *argv[])

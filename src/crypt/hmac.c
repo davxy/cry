@@ -1,5 +1,6 @@
 #include <cry/hmac.h>
 #include <string.h>
+#include "misc.h"
 
 #define BLOCK_SIZE  CRY_HMAC_BLOCK_MAX
 
@@ -33,6 +34,14 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
     if (hash_itf->init)
         hash_itf->init(ctx->hash_ctx);
     hash_itf->update(ctx->hash_ctx, pad, BLOCK_SIZE);
+}
+
+void cry_hmac_clear(cry_hmac_ctx *ctx)
+{
+    if (ctx->hash_itf->clear != NULL) {
+        ctx->hash_itf->clear(ctx->hash_ctx);
+    }
+    cry_memset(ctx, 0, sizeof(*ctx));
 }
 
 void cry_hmac_update(cry_hmac_ctx *ctx, const unsigned char *in, size_t in_len)

@@ -24,6 +24,8 @@ void cry_hmac_init(cry_hmac_ctx *ctx, void *hash_ctx,
                    const cry_hash_itf *hash_itf, size_t hash_len,
                    const unsigned char *key, size_t key_len);
 
+void cry_hmac_clear(cry_hmac_ctx *ctx);
+
 void cry_hmac_update(cry_hmac_ctx *ctx, const unsigned char *in, size_t in_len);
 
 void cry_hmac_digest(cry_hmac_ctx *ctx, unsigned char *mac);

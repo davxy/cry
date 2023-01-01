@@ -41,6 +41,14 @@ static void cbc_compute_subkeys(cry_cmac_ctx *ctx,
         k2[CRY_CMAC_BLOCK_SIZE-1] ^= 0x87;
 }
 
+void cry_cmac_clear(cry_cmac_ctx *ctx)
+{
+    if (ctx->ciph_itf->clear != NULL) {
+        ctx->ciph_itf->clear(ctx->ciph_ctx);
+    }
+    cry_memset(ctx, 0, sizeof(*ctx));
+}
+
 void cry_cmac_init(cry_cmac_ctx *ctx, void *ciph_ctx,
                    const cry_ciph_itf *ciph_itf,
                    const unsigned char *key, size_t keylen)
