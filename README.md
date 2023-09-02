@@ -14,9 +14,9 @@ and multi-precision integers algorithms.
 The code has never been audited by any third party nor has been developed
 with the intent to be used for any serious application.
 
-Main focus was personal research.
+Main focus was personal research and fun.
 
-The implementations are not constant time.
+The implementations are not constant time nor efficient.
 
 **USE IT AT YOUR OWN RISK!!!**
 
